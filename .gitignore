@@ -1,6 +1,9 @@
 # Ignore cached models (too large for git)
 models/roberta-large/
 
+# File system
+**/.DS_Store
+
 # Python
 __pycache__/
 *.py[cod]
