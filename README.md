@@ -1,6 +1,6 @@
 # Federal Survey Concept Mapper
 
-A semantic analysis system for mapping and categorizing questions across 49 U.S. federal demographic surveys.
+A semantic analysis system for mapping and categorizing questions across 48 U.S. federal demographic surveys.
 
 ## Overview
 
@@ -14,13 +14,13 @@ This project analyzes 7,417 survey questions from federal demographic surveys to
 ## Data Source
 
 Survey questions compiled from public federal demographic surveys including:
-- Survey of Income and Program Participation (SIPP) - 1,319 questions
-- Consumer Expenditure Survey (CE) - 1,106 questions
-- American Housing Survey (AHS) - 965 questions
-- National Health Interview Survey (NHIS) - 782 questions
-- Current Population Survey (CPS) - 232 questions
-- American Community Survey (ACS) - 121 questions
-- And 43 additional federal surveys
+- Survey of Income and Program Participation (SIPP)
+- Consumer Expenditure Survey (CE)
+- American Housing Survey (AHS)
+- National Health Interview Survey (NHIS)
+- Current Population Survey (CPS)
+- American Community Survey (ACS)
+- And 42 additional federal surveys
 
 All data is from publicly available survey instruments.
 
