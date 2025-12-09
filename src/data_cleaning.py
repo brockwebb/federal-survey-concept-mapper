@@ -11,6 +11,7 @@ def clean_survey_data(input_path, output_path=None):
     1. Remove empty/unnamed columns
     2. Clean column names and question text
     3. Remove rows with missing questions
+    4. Remove duplicate rows (data entry errors)
     
     Args:
         input_path: Path to raw CSV
@@ -59,10 +60,21 @@ def clean_survey_data(input_path, output_path=None):
     
     rows_after = len(df)
     print(f"   Removed {rows_before - rows_after} rows with empty questions")
+    
+    # 4. Remove duplicate rows (data entry errors)
+    print(f"\n4. Removing duplicate rows...")
+    rows_before = len(df)
+    
+    # Drop exact duplicate rows across all columns
+    df = df.drop_duplicates()
+    
+    rows_after = len(df)
+    duplicates_removed = rows_before - rows_after
+    print(f"   Removed {duplicates_removed} duplicate rows (data entry errors)")
     print(f"   Remaining questions: {rows_after}")
     
-    # 4. Verify data - count non-null values in survey columns
-    print(f"\n4. Verification...")
+    # 5. Verify data - count non-null values in survey columns
+    print(f"\n5. Verification...")
     survey_counts = {}
     for col in survey_cols:
         count = df[col].notna().sum()
@@ -78,9 +90,9 @@ def clean_survey_data(input_path, output_path=None):
         survey_name = survey[:50] + '...' if len(survey) > 50 else survey
         print(f"     {survey_name}: {count}")
     
-    # 5. Save if output path provided
+    # 6. Save if output path provided
     if output_path:
-        print(f"\n5. Saving cleaned data...")
+        print(f"\n6. Saving cleaned data...")
         Path(output_path).parent.mkdir(parents=True, exist_ok=True)
         df.to_csv(output_path, index=False)
         print(f"   ✓ Saved to: {output_path}")
