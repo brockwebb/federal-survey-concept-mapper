@@ -14,7 +14,7 @@ Both models received identical structured prompts containing six components:
 ```
 You are a survey methodologist specializing in federal demographic surveys. 
 Your task is to categorize the following survey question according to the 
-Census Bureau's official taxonomy.
+Census Bureau's published taxonomy at https://www.census.gov/data/data-tools/survey-explorer/topics.html.
 ```
 
 **2. Taxonomy Structure**
@@ -414,11 +414,11 @@ Full implementation available at:
 ## 6.8 Summary
 
 The categorization implementation combined:
-- ✅ Carefully engineered prompts with few-shot examples
-- ✅ Parallel processing (12 concurrent API calls) reducing time by 80%
-- ✅ Robust error handling (3-strategy JSON parsing, exponential backoff)
-- ✅ Checkpointing for interruption resilience
-- ✅ Thread-safe file operations preventing output corruption
-- ✅ Comprehensive validation catching edge cases
+- Carefully engineered prompts with few-shot examples
+- Parallel processing (12 concurrent API calls) reducing time by 80%
+- obust error handling (3-strategy JSON parsing, exponential backoff)
+- Checkpointing for interruption resilience
+- Thread-safe file operations preventing output corruption
+- Comprehensive validation catching edge cases
 
 This infrastructure enabled reliable, efficient processing of 6,987 questions with minimal manual intervention. The same codebase can be reused for future survey concept mapping with minimal modifications (update taxonomy, provide new question dataset, run pipeline).

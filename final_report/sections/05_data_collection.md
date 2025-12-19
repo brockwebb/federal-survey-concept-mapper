@@ -2,7 +2,7 @@
 
 ## 5.1 Source Data
 
-Survey question data were obtained from the Census Bureau's internal Public Survey Questions repository, a manually compiled collection of questions from major federal demographic surveys. The dataset was provided in wide-format CSV:
+Survey question data were obtained and compiled from published federal demographic surveys that the US Census Bureau conducts.The dataset was consolidated in wide-format CSV:
 - **Rows**: 6,987 unique questions
 - **Columns**: 49 survey identifiers (46 actual surveys + metadata columns)
 - **Values**: Binary indicators (1 = question appears in survey, 0/blank = does not appear)

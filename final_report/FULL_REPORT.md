@@ -3,7 +3,7 @@
 
 ---
 
-**Report Date**: December 18, 2025
+**Report Date**: December 19, 2025
 **Project**: Federal Survey Concept Mapping Study
 
 ---
@@ -12,11 +12,11 @@
 
 - **Total Questions Analyzed**: 6,987
 - **Federal Surveys Covered**: 46
-- **Taxonomy**: Census Bureau Official (5 topics, 152 subtopics)
+- **Taxonomy**: U.S. Census Bureau Survey Explorer Topics
 - **Methodology**: Dual-LLM categorization with arbitration
 - **Success Rate**: 99.5%
 - **Processing Time**: ~3 hours
-- **Cost**: ~$15
+- **Production Cost**: ~$15
 
 ---
 
@@ -536,7 +536,7 @@ This methodology represents a scalable, cost-effective approach to survey concep
 
 ## 5.1 Source Data
 
-Survey question data were obtained from the Census Bureau's internal Public Survey Questions repository, a manually compiled collection of questions from major federal demographic surveys. The dataset was provided in wide-format CSV:
+Survey question data were obtained and compiled from published federal demographic surveys that the US Census Bureau conducts.The dataset was consolidated in wide-format CSV:
 - **Rows**: 6,987 unique questions
 - **Columns**: 49 survey identifiers (46 actual surveys + metadata columns)
 - **Values**: Binary indicators (1 = question appears in survey, 0/blank = does not appear)
@@ -747,7 +747,7 @@ Both models received identical structured prompts containing six components:
 ```
 You are a survey methodologist specializing in federal demographic surveys. 
 Your task is to categorize the following survey question according to the 
-Census Bureau's official taxonomy.
+Census Bureau's published taxonomy at https://www.census.gov/data/data-tools/survey-explorer/topics.html.
 ```
 
 **2. Taxonomy Structure**
@@ -1147,12 +1147,12 @@ Full implementation available at:
 ## 6.8 Summary
 
 The categorization implementation combined:
-- ✅ Carefully engineered prompts with few-shot examples
-- ✅ Parallel processing (12 concurrent API calls) reducing time by 80%
-- ✅ Robust error handling (3-strategy JSON parsing, exponential backoff)
-- ✅ Checkpointing for interruption resilience
-- ✅ Thread-safe file operations preventing output corruption
-- ✅ Comprehensive validation catching edge cases
+- Carefully engineered prompts with few-shot examples
+- Parallel processing (12 concurrent API calls) reducing time by 80%
+- obust error handling (3-strategy JSON parsing, exponential backoff)
+- Checkpointing for interruption resilience
+- Thread-safe file operations preventing output corruption
+- Comprehensive validation catching edge cases
 
 This infrastructure enabled reliable, efficient processing of 6,987 questions with minimal manual intervention. The same codebase can be reused for future survey concept mapping with minimal modifications (update taxonomy, provide new question dataset, run pipeline).
 
@@ -2908,3 +2908,10 @@ The federal statistical system's next chapter will be shaped by how it answers t
 
 
 \newpage
+
+# References
+
+Landis, J. R., & Koch, G. G. (1977). The measurement of observer agreement for categorical data. *Biometrics*, *33*(1), 159-174. https://doi.org/10.2307/2529310
+
+U.S. Census Bureau. (n.d.). *Survey Explorer: Topics*. Retrieved December 19, 2025, from https://www.census.gov/data/data-tools/survey-explorer/topics.html
+

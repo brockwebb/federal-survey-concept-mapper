@@ -25,7 +25,8 @@ SECTIONS = [
     '11_limitations.md',
     '12_recommendations.md',
     '13_conclusion.md',
-    '14_appendices.md'
+    '14_appendices.md',
+    'references.md'
 ]
 
 def assemble_report():
@@ -50,11 +51,11 @@ def assemble_report():
     content.append("")
     content.append("- **Total Questions Analyzed**: 6,987")
     content.append("- **Federal Surveys Covered**: 46")
-    content.append("- **Taxonomy**: Census Bureau Official (5 topics, 152 subtopics)")
+    content.append("- **Taxonomy**: U.S. Census Bureau Survey Explorer Topics")
     content.append("- **Methodology**: Dual-LLM categorization with arbitration")
     content.append("- **Success Rate**: 99.5%")
     content.append("- **Processing Time**: ~3 hours")
-    content.append("- **Cost**: ~$15")
+    content.append("- **Production Cost**: ~$15")
     content.append("")
     content.append("---")
     content.append("")
@@ -69,15 +70,18 @@ def assemble_report():
             print(f"⚠️  WARNING: {section_file} not found!")
             continue
         
-        print(f"  [{i:2d}/14] Adding {section_file}...")
+        print(f"  [{i:2d}/15] Adding {section_file}...")
         
         with open(section_path, 'r', encoding='utf-8') as f:
             section_content = f.read()
         
         content.append(section_content)
         content.append("")
-        content.append("\\newpage")
-        content.append("")
+        
+        # Don't add page break after references (it's the last section)
+        if section_file != 'references.md':
+            content.append("\\newpage")
+            content.append("")
     
     # Write assembled report
     full_content = '\n'.join(content)
