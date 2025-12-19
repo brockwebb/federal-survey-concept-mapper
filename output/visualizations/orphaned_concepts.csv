@@ -1,0 +1,31 @@
+concept,topic,subtopic,question_count
+Economic.Construction,Economic,Construction,0
+Economic.Gross Margins,Economic,Gross Margins,0
+Economic.Manufacturing,Economic,Manufacturing,0
+Economic.Mining,Economic,Mining,0
+Economic.Production,Economic,Production,0
+Economic.Residential,Economic,Residential,0
+Economic.Selected Service Industries,Economic,Selected Service Industries,0
+Economic.Shipments,Economic,Shipments,0
+Economic.Trade,Economic,Trade,0
+Government.Expenditures,Government,Expenditures,0
+Government.Expenses,Government,Expenses,0
+Government.Fishing,Government,Fishing,0
+Government.International,Government,International,0
+Government.Recreation,Government,Recreation,0
+Government.Redistricting,Government,Redistricting,0
+Government.Research and Development,Government,Research and Development,0
+Government.Revenue,Government,Revenue,0
+Government.Tribal Areas,Government,Tribal Areas,0
+Government.Wildlife,Government,Wildlife,0
+Social.Ancestry,Social,Ancestry,0
+Social.HIV/AIDS,Social,HIV/AIDS,0
+Social.Inmates,Social,Inmates,0
+Social.Jails,Social,Jails,0
+Social.Life Expectancy,Social,Life Expectancy,0
+Social.Marital Status,Social,Marital Status,0
+Social.Parole,Social,Parole,0
+Social.Parolees,Social,Parolees,0
+Social.Probationers,Social,Probationers,0
+Social.Total Correctional Population,Social,Total Correctional Population,0
+Social.Wildlife,Social,Wildlife,0

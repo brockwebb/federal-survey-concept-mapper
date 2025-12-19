@@ -1,0 +1,16 @@
+Metric,Value
+Total Questions,6987
+Successfully Categorized,"6949 (99.5%)"
+Primary Topic Agreement,"6218 (89.4%)"
+Primary Subtopic Agreement,"4778 (68.7%)"
+Cohen's Kappa (Topics),0.842
+Cohen's Kappa (Subtopics),0.692
+Mean Confidence (OpenAI),0.894
+Mean Confidence (Claude),0.893
+Total Disagreements (Topic or Subtopic),2189
+Disagreements Arbitrated,2189
+Processing Time (Total),"~3 hours"
+Processing Time (Claude),"~12 minutes"
+Processing Time (OpenAI),"~67 minutes"
+Processing Time (Arbitration),"~52 minutes"
+API Cost (Estimated),"$50-60"

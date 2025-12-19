@@ -1,0 +1,57 @@
+topic,subtopic,survey_count,status,surveys,questions
+Economic,Construction,0,Orphan,NONE,
+Economic,Gross Margins,0,Orphan,NONE,
+Economic,Manufacturing,0,Orphan,NONE,
+Economic,Mining,0,Orphan,NONE,
+Economic,Production,0,Orphan,NONE,
+Economic,Residential,0,Orphan,NONE,
+Economic,Selected Service Industries,0,Orphan,NONE,
+Economic,Shipments,0,Orphan,NONE,
+Economic,Trade,0,Orphan,NONE,
+Government,Expenditures,0,Orphan,NONE,
+Government,Expenses,0,Orphan,NONE,
+Government,Fishing,0,Orphan,NONE,
+Government,International,0,Orphan,NONE,
+Government,Recreation,0,Orphan,NONE,
+Government,Redistricting,0,Orphan,NONE,
+Government,Research and Development,0,Orphan,NONE,
+Government,Revenue,0,Orphan,NONE,
+Government,Tribal Areas,0,Orphan,NONE,
+Government,Wildlife,0,Orphan,NONE,
+Social,Ancestry,0,Orphan,NONE,
+Social,HIV/AIDS,0,Orphan,NONE,
+Social,Inmates,0,Orphan,NONE,
+Social,Jails,0,Orphan,NONE,
+Social,Life Expectancy,0,Orphan,NONE,
+Social,Marital Status,0,Orphan,NONE,
+Social,Parole,0,Orphan,NONE,
+Social,Parolees,0,Orphan,NONE,
+Social,Probationers,0,Orphan,NONE,
+Social,Total Correctional Population,0,Orphan,NONE,
+Social,Wildlife,0,Orphan,NONE,
+Demographic,Ancestry,1,Unique,American Community Survey (ACS),1.0
+Demographic,Ethnicity,1,Unique,National Health Interview Survey (NHIS),4.0
+Demographic,International,1,Unique,American Time Use Survey (ATUS),1.0
+Economic,Emergency,1,Unique,Household Trends and Outlook Pulse Survey (HTOPS),8.0
+Economic,Energy,1,Unique,Survey of Income and Program Participation (SIPP),4.0
+Economic,Firm Age,1,Unique,National Survey of College Graduates (NSCG),1.0
+Economic,Inventory,1,Unique,Medical Expenditure Panel Survey Insurance Component,1.0
+Economic,NAICS,1,Unique,Medical Expenditure Panel Survey Insurance Component,1.0
+Economic,Nurses,1,Unique,National Sample Survey of Registered Nurses (NSSRN),86.0
+Economic,Permits,1,Unique,Business Enterprise Research and Development Survey,1.0
+Economic,Retirement Plans,1,Unique,Survey of Income and Program Participation (SIPP),1.0
+Economic,Transportation,1,Unique,Consumer Expenditure Survey (CE),1.0
+Economic,Wholesale,1,Unique,Medical Expenditure Panel Survey Insurance Component,2.0
+Government,Hunting,1,Unique,Food Acquisition and Purchase Survey (FoodAPS) Initial Interview/Household Survey,1.0
+Government,Jurisdiction,1,Unique,Business Enterprise Research and Development Survey,2.0
+Government,Local Government,1,Unique,National Health Interview Survey (NHIS),1.0
+Government,State Government,1,Unique,Survey of State Government Finances Finances of Insurance Trust Systems,4.0
+Housing,Moving,1,Unique,American Housing Survey (AHS),1.0
+Social,Expenses,1,Unique,National Sample Survey of Registered Nurses (NSSRN),1.0
+Social,Food Stamps (SNAP),1,Unique,Survey of Income and Program Participation (SIPP),1.0
+Social,International,1,Unique,Teacher Follow-Up Survey (TFS) Current Teacher Survey,1.0
+Social,Mortality,1,Unique,Survey of Income and Program Participation (SIPP),6.0
+Social,Nurses,1,Unique,National Sample Survey of Registered Nurses (NSSRN),7.0
+Social,Police,1,Unique,School Survey on Crime and Safety (SSOCS),13.0
+Social,Prisoners,1,Unique,National Health Interview Survey (NHIS),1.0
+Social,Teacher,1,Unique,National Teacher and Principal Survey (NTPS) Private School Teacher Questionnaire,8.0

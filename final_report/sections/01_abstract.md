@@ -1,0 +1,13 @@
+# 1. Abstract
+
+**Background**: The U.S. federal statistical system fields dozens of demographic surveys annually, but systematic analysis of conceptual overlap and coverage gaps has been infeasible due to resource constraints. Manual expert review would require ~70 hours (assuming 100 questions/hour, a conservative estimate for expert manual categorization) to map 6,987 survey questions to standardized taxonomies.
+
+**Methods**: We developed a dual-model Large Language Model (LLM) categorization pipeline using gpt-5-mini and Claude Haiku 4.5 to independently categorize 6,987 questions from 46 federal surveys to the Census Bureau's official taxonomy (5 topics, 152 subtopics). Disagreements were resolved through confidence-based arbitration using Claude Sonnet 4.5. Inter-rater reliability was assessed using Cohen's Kappa.
+
+**Results**: The pipeline achieved 99.5% successful categorization (6,949/6,987 questions) in 3 hours at $15 cost. Topic-level agreement between models reached 89.4% (Cohen's κ = 0.842, "almost perfect agreement"), exceeding typical human inter-coder reliability. Coverage analysis revealed extreme concentration: 10 concepts (6.6% of taxonomy) account for 39.4% of all questions. Survey overlap analysis identified 4 pairs with ≥80% conceptual similarity (immediate merger candidates) and 11 pairs with 50-79% similarity (harmonization opportunities). Conservative consolidation scenarios suggest 25-32% burden reduction (1,758 questions) is achievable; aggressive scenarios estimate 52% reduction (3,658 questions). Critical gaps include 30 orphaned concepts with zero coverage and 26 concepts measured by only one survey.
+
+**Conclusions**: LLM-based concept mapping enables systematic survey ecosystem analysis at ~23× faster speed and 98% lower cost than manual approaches. Specific consolidation opportunities exist: National Survey of Children's Health age-specific questionnaires show 100% overlap (immediate merge candidate), while the major economic survey triad (SIPP-CE-AHS) shows 51-58% overlap representing 5,120 total questions. The methodology is reproducible and scalable, supporting regular longitudinal tracking of federal survey evolution. Key recommendations include merging highest-overlap survey pairs, creating standardized modules for shared content, filling policy-relevant coverage gaps, and establishing periodic concept mapping as routine statistical practice.
+
+**Keywords**: survey methodology, concept mapping, large language models, artificial intelligence, federal statistics, survey harmonization, respondent burden, Census Bureau
+
+**Word Count**: 324 words
