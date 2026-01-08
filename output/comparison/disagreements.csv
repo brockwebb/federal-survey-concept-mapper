@@ -1,0 +1,749 @@
+id,primary_topic_openai,primary_subtopic_openai,confidence_openai,primary_topic_claude,primary_subtopic_claude,confidence_claude
+8,Social,School Enrollment,0.93,Demographic,Age,0.97
+51,Demographic,Relationship,0.9,Social,Crime,0.9
+58,Demographic,Race,0.85,Social,Crime,0.9
+82,Social,Crime,0.85,Economic,Income,0.75
+86,Social,Crime,0.85,Economic,Income,0.7
+20,Economic,Commute/Commuting,0.9,Social,Schools,0.75
+21,Economic,Commute/Commuting,0.9,Social,Schools,0.75
+116,Government,Police,0.95,Social,Crime,0.93
+117,Government,Police,0.95,Social,Crime,0.93
+118,Government,Police,0.95,Social,Crime,0.9
+119,Government,Police,0.95,Social,Crime,0.91
+120,Government,Police,0.9,Social,Crime,0.92
+140,Economic,Expenses,0.9,Social,Crime,0.92
+141,Economic,Expenses,0.9,Social,Crime,0.9
+132,Demographic,Relationship,0.9,Social,Crime,0.9
+133,Economic,Expenses,0.85,Social,Crime,0.85
+134,Economic,Expenses,0.9,Social,Crime,0.85
+135,Economic,Expenses,0.9,Social,Crime,0.8
+136,Economic,Expenses,0.75,Social,Crime,0.85
+137,Economic,Expenses,0.75,Social,Crime,0.85
+138,Economic,"Hours/Week, Weeks/Year",0.9,Social,Crime,0.85
+162,Demographic,Relationship,0.95,Social,Crime,0.93
+163,Demographic,Sex,0.98,Social,Crime,0.9
+164,Demographic,Sex,0.98,Social,Crime,0.9
+165,Demographic,Age,0.98,Social,Crime,0.9
+166,Demographic,Hispanic Origin,0.98,Social,Crime,0.9
+167,Demographic,Hispanic Origin,0.98,Social,Crime,0.9
+168,Demographic,Race,0.98,Social,Crime,0.9
+169,Demographic,Race,0.98,Social,Crime,0.9
+184,Government,Police,0.9,Social,Crime,0.93
+185,Government,Police,0.85,Social,Crime,0.93
+186,Government,Police,0.85,Social,Crime,0.93
+194,Government,Local Government,0.9,Social,Crime,0.85
+222,Economic,"Hours/Week, Weeks/Year",0.9,Social,Crime,0.88
+225,Social,Children,0.95,Demographic,Children,0.92
+226,Social,Children,0.95,Demographic,Children,0.93
+229,Social,Children,0.9,Demographic,Population,0.7
+257,Social,Fertility,0.8,Demographic,Age,0.88
+379,Demographic,Relationship,0.96,Social,Household,0.88
+392,Housing,Occupancy,0.9,Social,Household,0.93
+393,Demographic,Relationship,0.9,Social,Household,0.94
+364,Government,Recreation,0.65,Social,Household,0.85
+485,Demographic,Foreign Born,0.95,Social,Migration,0.85
+499,Government,Federal Government,0.85,Economic,Income,0.85
+521,Social,Household,0.95,Demographic,Relationship,0.95
+535,Demographic,Relationship,0.9,Social,Household,0.95
+631,Demographic,Foreign Born,0.92,Social,Migration,0.9
+651,Housing,Occupancy,0.9,Social,Moving,0.92
+652,Social,Recreation,0.75,Government,Geography,0.85
+682,Housing,Occupancy,0.93,Social,Household,0.95
+687,Government,State Government,0.9,Economic,Occupation,0.85
+688,Social,Migration,0.9,Demographic,Foreign Born,0.85
+689,Government,State Government,0.9,Economic,Occupation,0.85
+700,Social,Nurses,0.9,Economic,Nurses,0.95
+701,Social,Nurses,0.8,Economic,Nurses,0.92
+702,Social,Nurses,0.9,Economic,Nurses,0.95
+703,Social,Nurses,0.8,Economic,Nurses,0.92
+712,Economic,Occupation,0.9,Social,Post-Secondary Education,0.88
+715,Economic,Expenses,0.93,Social,Post-Secondary Education,0.89
+716,Economic,Expenses,0.93,Social,Post-Secondary Education,0.91
+729,Government,Geography,0.85,Economic,Occupation,0.88
+733,Government,State Government,0.8,Economic,Nurses,0.9
+747,Social,Medical Care,0.93,Economic,Technology,0.85
+748,Social,Medical Care,0.93,Economic,Technology,0.85
+749,Social,Medical Care,0.92,Economic,Technology,0.85
+755,Social,Medical Care,0.9,Economic,Nurses,0.88
+756,Social,Medical Care,0.9,Economic,Nurses,0.88
+757,Social,Medical Care,0.9,Economic,Nurses,0.87
+758,Social,Medical Care,0.9,Economic,Nurses,0.86
+759,Social,Medical Care,0.9,Economic,Nurses,0.87
+774,Social,COVID-19 Data,0.8,Economic,Nurses,0.83
+760,Social,Nurses,0.9,Economic,Nurses,0.95
+761,Social,Nurses,0.9,Economic,Nurses,0.95
+762,Social,Nurses,0.9,Economic,Nurses,0.95
+763,Social,Nurses,0.88,Economic,Nurses,0.9
+764,Social,Medical Care,0.85,Economic,Nurses,0.85
+765,Social,Medical Care,0.88,Economic,Nurses,0.85
+791,Government,Jurisdiction,0.8,Economic,Nurses,0.85
+793,Social,Nurses,0.85,Economic,Nurses,0.9
+795,Social,Nurses,0.8,Economic,Nurses,0.85
+806,Social,Medical Care,0.9,Economic,Nurses,0.85
+807,Social,Medical Care,0.9,Economic,Nurses,0.88
+808,Social,Medical Care,0.9,Economic,Nurses,0.87
+809,Social,Medical Care,0.9,Economic,Nurses,0.82
+839,Government,Geography,0.75,Economic,Commute/Commuting,0.72
+853,Government,Federal Government,0.75,Social,Occupation,0.75
+854,Government,Federal Government,0.8,Social,Occupation,0.8
+855,Economic,Employment Status,0.75,Social,Occupation,0.85
+856,Economic,Employer,0.85,Social,Occupation,0.75
+844,Economic,Employment Status,0.92,Social,COVID-19 Data,0.93
+847,Social,Nurses,0.85,Economic,Nurses,0.88
+815,Demographic,Race,0.9,Social,Medical Care,0.85
+917,Social,Schools,0.05,Unknown,Unknown,0.0
+930,Social,Schools,0.75,Government,Geography,0.6
+931,Social,Schools,0.8,Government,Geography,0.5
+932,Social,Schools,0.75,Government,Geography,0.5
+938,Demographic,Sex,0.95,Social,School Enrollment,0.95
+960,Social,Schools,0.9,Housing,Structure,0.92
+966,Economic,Revenue,0.9,Social,Schools,0.88
+980,Economic,Teacher,0.85,Social,Schools,0.85
+1003,Social,Schools,0.75,Government,Public Employment,0.75
+1004,Social,Schools,0.8,Government,Public Employment,0.85
+1005,Social,Schools,0.7,Government,Public Employment,0.7
+1006,Social,Schools,0.9,Government,School Districts,0.75
+1010,Social,Schools,0.75,Government,School Districts,0.65
+1011,Social,Schools,0.75,Government,School Districts,0.65
+1016,Social,Schools,0.9,Economic,Tenure,0.85
+1017,Social,Occupation,0.9,Economic,Tenure,0.85
+1053,Social,Occupation,0.85,Economic,Occupation,0.8
+1055,Social,Schools,0.9,Economic,Tenure,0.85
+1056,Social,Occupation,0.9,Economic,Tenure,0.85
+1048,Social,Household,0.3,Government,Geography,0.25
+1049,Social,Household,0.3,Government,Geography,0.25
+1060,Social,Schools,0.9,Economic,Teacher,0.95
+1061,Social,Schools,0.85,Economic,Teacher,0.95
+1062,Social,Schools,0.92,Economic,Teacher,0.92
+1072,Economic,Teacher,0.9,Social,Education,0.85
+1074,Economic,Teacher,0.9,Social,Education,0.85
+1075,Economic,Teacher,0.88,Social,Education,0.9
+1081,Social,Schools,0.8,Economic,Tenure,0.85
+1087,Government,Research and Development,0.4,Social,Schools,0.45
+1088,Government,Research and Development,0.4,Social,Schools,0.45
+1089,Government,Research and Development,0.35,Social,Schools,0.4
+1101,Economic,Teacher,0.82,Social,Occupation,0.88
+1102,Economic,Teacher,0.82,Social,Education,0.85
+1109,Economic,Teacher,0.86,Social,Education,0.86
+1121,Economic,Employer,0.85,Social,Education,0.92
+1140,Economic,Teacher,0.9,Social,Education,0.92
+1141,Economic,Teacher,0.9,Social,Education,0.93
+1130,Economic,Teacher,0.9,Social,Education,0.95
+1131,Economic,Teacher,0.9,Social,Education,0.92
+1132,Economic,Teacher,0.9,Social,Education,0.92
+1133,Economic,Teacher,0.92,Social,Education,0.93
+1150,Economic,Teacher,0.9,Social,Education,0.92
+1151,Economic,Teacher,0.9,Social,Education,0.9
+1152,Economic,Teacher,0.85,Social,Education,0.88
+1153,Economic,Teacher,0.9,Social,Education,0.93
+1154,Economic,Teacher,0.9,Social,Education,0.91
+1186,Government,Pension,0.9,Economic,Pension,0.98
+1187,Social,Education,0.8,Economic,Income,0.75
+1189,Social,Education,0.85,Economic,Income,0.72
+1191,Economic,Expenses,0.75,Social,Expenses,0.75
+1202,Social,Household,0.6,Government,Federal Government,0.35
+1203,Economic,Occupation,0.95,Social,Occupation,0.85
+1204,Economic,Teacher,0.95,Social,Schools,0.8
+1210,Social,Schools,0.8,Economic,Occupation,0.85
+1214,Social,Education,0.85,Economic,Occupation,0.88
+1250,Economic,Teacher,0.92,Social,Education,0.92
+1251,Economic,Teacher,0.92,Social,Education,0.9
+1252,Economic,Teacher,0.9,Social,Education,0.88
+1253,Economic,Teacher,0.93,Social,Education,0.91
+1254,Economic,Teacher,0.9,Social,Education,0.89
+1255,Economic,Teacher,0.93,Social,Education,0.9
+1256,Economic,Teacher,0.91,Social,Education,0.88
+1257,Economic,Teacher,0.92,Social,Education,0.92
+1258,Economic,Teacher,0.93,Social,Education,0.91
+1259,Economic,Teacher,0.9,Social,Education,0.89
+1261,Social,Teacher,0.9,Economic,Tenure,0.88
+1270,Economic,Teacher,0.9,Social,Schools,0.85
+1271,Economic,Teacher,0.8,Social,Schools,0.85
+1272,Economic,Teacher,0.9,Social,Schools,0.85
+1273,Economic,Teacher,0.9,Social,Schools,0.85
+1319,Social,Household,0.4,Government,Geography,0.5
+1320,Government,Research and Development,0.4,Social,Schools,0.45
+1321,Demographic,Population,0.85,Social,Schools,0.4
+1322,Social,Occupation,0.9,Economic,Teacher,0.92
+1324,Social,Occupation,0.9,Economic,Occupation,0.9
+1328,Social,Occupation,0.95,Economic,Occupation,0.96
+1329,Social,Occupation,0.9,Economic,Occupation,0.92
+1287,Social,Schools,0.86,Economic,Teacher,0.86
+1336,Government,Pension,0.9,Economic,Pension,0.95
+1305,Government,Pension,0.95,Economic,Pension,0.95
+1306,Social,Post-Secondary Education,0.9,Economic,Income,0.85
+1308,Social,Post-Secondary Education,0.8,Economic,Income,0.8
+1355,Demographic,Population,0.2,Unknown,Unknown,0.0
+1370,Government,Research and Development,0.4,Social,Schools,0.65
+1377,Economic,Teacher,0.85,Social,Education,0.85
+1378,Social,Schools,0.9,Economic,Teacher,0.88
+1389,Social,Moving,0.8,Economic,Tenure,0.85
+1392,Social,Schools,0.9,Government,Geography,0.88
+1429,Government,Pension,0.95,Economic,Earnings,0.91
+1412,Economic,Teacher,0.85,Social,COVID-19 Data,0.95
+1417,Economic,Teacher,0.95,Social,Post-Secondary Education,0.89
+1484,Economic,Teacher,0.85,Social,Schools,0.85
+1485,Economic,Employment Status,0.8,Social,Schools,0.85
+1489,Economic,Business Opening/Closing,0.8,Social,Schools,0.75
+1498,Demographic,Sex,0.98,Social,School Enrollment,0.9
+1477,Social,Schools,0.9,Economic,"Hours/Week, Weeks/Year",0.75
+1510,Social,Schools,0.8,Housing,Residential,0.85
+1519,Social,Schools,0.6,Government,Geography,0.4
+1524,Social,Household,0.6,Demographic,Relationship,0.7
+1529,Social,Children,0.9,Demographic,Children,0.85
+1546,Government,Geography,0.88,Demographic,Population,0.82
+1547,Social,Household,0.85,Demographic,Population,0.8
+1551,Social,Vehicles,0.9,Economic,Vehicle,0.85
+1607,Demographic,Age,0.92,Social,Medical Care,0.9
+1712,Social,Veterans,0.8,Economic,Health Insurance,0.95
+1748,Social,Medical Care,0.9,Economic,Health Insurance,0.9
+1749,Social,Medical Care,0.9,Economic,Health Insurance,0.9
+1730,Economic,Expenses,0.9,Social,Medical Care,0.95
+1731,Economic,Expenses,0.9,Social,Medical Care,0.95
+1732,Economic,Expenses,0.88,Social,Medical Care,0.92
+1760,Economic,Health Insurance,0.9,Social,Medical Care,0.92
+1770,Economic,Health Insurance,0.9,Social,Medical Care,0.92
+1871,Economic,Recreation,0.76,Social,Recreation,0.88
+1872,Economic,Recreation,0.76,Social,Recreation,0.9
+1915,Social,Household,0.95,Demographic,Relationship,0.9
+1934,Social,Migration,0.9,Demographic,Foreign Born,0.93
+1953,Economic,Employment Status,0.9,Social,Disability,0.85
+1984,Housing,Utilities,0.7,Social,Computer & Internet Use,0.7
+1988,Government,Federal Government,0.7,Demographic,Population,0.72
+1989,Government,Federal Government,0.9,Social,Medical Care,0.78
+1995,Social,Medical Care,0.9,Demographic,Relationship,0.7
+1997,Social,Medical Care,0.9,Demographic,Relationship,0.75
+2136,Government,Federal Government,0.9,Economic,Health Insurance,0.88
+2154,Social,Medical Care,0.85,Economic,Health Insurance,0.9
+2155,Social,Medical Care,0.85,Economic,Health Insurance,0.9
+2156,Social,Medical Care,0.8,Economic,Health Insurance,0.9
+2174,Social,Medical Care,0.85,Economic,Health Insurance,0.92
+2175,Social,Medical Care,0.9,Economic,Health Insurance,0.92
+2178,Social,Medical Care,0.85,Economic,Health Insurance,0.92
+2179,Social,Medical Care,0.9,Economic,Health Insurance,0.92
+2194,Social,Medical Care,0.9,Economic,Health Insurance,0.9
+2195,Social,Medical Care,0.9,Economic,Health Insurance,0.9
+2269,Government,Geography,0.8,Demographic,Foreign Born,0.9
+2257,Social,Household,0.95,Demographic,Relationship,0.93
+2280,Economic,Income,0.8,Social,Disability,0.92
+2294,Economic,Food Stamps (SNAP),0.7,Social,Children,0.85
+2320,Social,Medical Care,0.85,Economic,Technology,0.85
+2321,Social,Medical Care,0.88,Economic,Technology,0.85
+2302,Government,Federal Government,0.7,Demographic,Population,0.65
+2303,Government,Research and Development,0.6,Demographic,Population,0.6
+2304,Social,Household,0.7,Demographic,Population,0.65
+2308,Social,Medical Care,0.8,Economic,Selected Service Industries,0.8
+2309,Social,Medical Care,0.9,Economic,Selected Service Industries,0.8
+2310,Social,Medical Care,0.95,Economic,Receipts,0.45
+2334,Economic,Employment Status,0.7,Social,Occupation,0.65
+2335,Economic,Employment Status,0.7,Social,Occupation,0.65
+2370,Economic,Occupation,0.8,Social,Education,0.85
+2360,Social,Occupation,0.9,Economic,Occupation,0.85
+2361,Economic,Grants,0.8,Social,Post-Secondary Education,0.88
+2362,Social,Occupation,0.9,Economic,Occupation,0.9
+2363,Social,Occupation,0.9,Economic,Occupation,0.92
+2364,Social,Occupation,0.9,Economic,Occupation,0.93
+2365,Social,Occupation,0.9,Economic,Occupation,0.88
+2366,Social,Occupation,0.85,Economic,Occupation,0.85
+2367,Social,Occupation,0.85,Economic,Occupation,0.9
+2368,Social,Occupation,0.85,Economic,Occupation,0.87
+2369,Social,Occupation,0.85,Economic,Occupation,0.86
+2380,Economic,Occupation,0.9,Social,Education,0.85
+2381,Economic,Occupation,0.9,Social,Education,0.9
+2383,Economic,Grants,0.8,Social,Education,0.82
+2407,Social,Schools,0.9,Economic,Industry,0.87
+2411,Social,Post-Secondary Education,0.9,Economic,Occupation,0.92
+2447,Social,Education,0.8,Economic,Occupation,0.85
+2453,Social,Education,0.85,Economic,Technology,0.85
+2454,Social,Education,0.85,Economic,Technology,0.85
+2455,Social,Education,0.85,Economic,Technology,0.85
+2456,Social,Occupation,0.8,Economic,Occupation,0.85
+2457,Social,Occupation,0.8,Economic,Occupation,0.85
+2476,Economic,Expenditures,0.85,Social,Post-Secondary Education,0.9
+2477,Economic,Expenditures,0.9,Social,Post-Secondary Education,0.9
+2501,Social,Citizenship,0.95,Demographic,Citizenship,0.95
+2491,Social,Migration,0.95,Demographic,Foreign Born,0.9
+2492,Social,Citizenship,0.99,Demographic,Foreign Born,0.92
+2496,Social,Citizenship,0.99,Demographic,Foreign Born,0.92
+2521,Economic,Occupation,0.9,Social,Language,0.95
+2522,Economic,Occupation,0.9,Social,Language,0.95
+2527,Demographic,Foreign Born,0.9,Social,Citizenship,0.97
+2511,Demographic,Population,0.5,Social,Household,0.65
+2533,Demographic,Population,0.85,Social,Household,0.88
+2534,Demographic,Population,0.85,Social,Household,0.87
+2567,Demographic,Relationship,0.8,Social,Household,0.8
+2568,Government,Geography,0.75,Social,Household,0.72
+2609,Government,Public Employment,0.9,Economic,Employer,0.95
+2633,Social,Household,0.85,Housing,Housing,0.75
+2635,Social,Household,0.9,Demographic,Household,0.88
+2636,Social,Household,0.9,Demographic,Household,0.9
+2615,Social,Household,0.9,Demographic,Relationship,0.7
+2620,Housing,Occupancy,0.8,Social,Household,0.85
+2621,Housing,Occupancy,0.8,Social,Household,0.85
+2622,Housing,Occupancy,0.75,Social,Household,0.8
+2623,Government,Geography,0.9,Social,Household,0.75
+2624,Government,Geography,0.9,Social,Household,0.75
+2642,Social,Household,0.8,Demographic,Relationship,0.85
+2643,Housing,Occupancy,0.92,Demographic,Household,0.94
+2644,Housing,Occupancy,0.92,Demographic,Household,0.94
+2668,Government,Local Government,0.85,Housing,Rental,0.92
+2686,Housing,"Costs (Mortgage, Taxes, Insurance)",0.8,Economic,Expenditures,0.65
+2720,Housing,Structure,0.85,Economic,Residential,0.85
+2721,Housing,Rental,0.95,Economic,Residential,0.88
+2722,Housing,Rental,0.9,Economic,Residential,0.9
+2742,Government,Geography,0.75,Housing,Housing,0.88
+2731,Housing,Homeownership,0.78,Economic,Expenditures,0.8
+2732,Housing,Rental,0.9,Economic,Expenditures,0.82
+2733,Housing,Structure,0.85,Economic,Expenditures,0.78
+2800,Government,Tax,0.8,Economic,Expenditures,0.92
+2801,Government,Local Government,0.9,Housing,Expenditures,0.88
+2802,Government,Tax,0.8,Economic,Expenditures,0.9
+2832,Social,Computer & Internet Use,0.9,Economic,Expenditures,0.9
+2844,Economic,Expenditures,0.95,Housing,Utilities,0.92
+2845,Economic,Expenditures,0.95,Housing,Utilities,0.92
+2846,Economic,Expenditures,0.95,Housing,Utilities,0.92
+2850,Housing,Utilities,0.85,Government,Geography,0.85
+2851,Housing,Utilities,0.85,Government,Geography,0.85
+2869,Economic,Expenditures,0.9,Housing,Expenditures,0.85
+2908,Government,Geography,0.8,Economic,Expenditures,0.7
+2892,Housing,Rental,0.9,Economic,Expenditures,0.95
+2897,Government,Geography,0.85,Economic,Retail,0.8
+2880,Housing,Expenditures,0.9,Economic,Expenditures,0.95
+2883,Housing,Expenditures,0.9,Economic,Expenditures,0.98
+2887,Government,Geography,0.9,Economic,Expenditures,0.75
+2956,Government,Geography,0.85,Economic,Vehicle,0.85
+2915,Government,Geography,0.8,Economic,Expenditures,0.8
+2918,Social,Household,0.9,Economic,Expenditures,0.88
+2960,Economic,Vehicle,0.95,Housing,Vehicles,0.92
+2961,Economic,Vehicle,0.95,Housing,Vehicles,0.9
+2964,Economic,Vehicle,0.95,Housing,Vehicles,0.88
+2965,Economic,Vehicle,0.95,Housing,Vehicles,0.9
+2966,Economic,Vehicle,0.95,Housing,Vehicles,0.92
+2969,Economic,Vehicle,0.9,Housing,Vehicles,0.87
+2982,Government,Geography,0.85,Economic,Expenditures,0.85
+2988,Government,Geography,0.85,Economic,Expenditures,0.8
+3026,Social,Medical Care,0.85,Economic,Health Insurance,0.9
+2997,Government,Geography,0.85,Economic,Vehicle,0.82
+3070,Economic,Health Insurance,0.85,Social,Medical Care,0.92
+3033,Economic,Health Insurance,0.92,Social,Medical Care,0.85
+3039,Economic,Health Insurance,0.9,Social,Medical Care,0.8
+3110,Economic,Expenditures,0.95,Social,Medical Care,0.95
+3111,Economic,Expenditures,0.9,Social,Household,0.9
+3112,Economic,Expenditures,0.95,Social,Medical Care,0.85
+3113,Economic,Expenditures,0.97,Social,Medical Care,0.95
+3114,Economic,Expenditures,0.93,Social,Medical Care,0.85
+3115,Economic,Expenditures,0.9,Social,Medical Care,0.8
+3116,Economic,Expenditures,0.95,Social,Medical Care,0.85
+3136,Economic,Expenditures,0.9,Social,Education,0.9
+3238,Social,Household,0.7,Economic,Expenditures,0.9
+3239,Social,Household,0.7,Economic,Expenditures,0.85
+3250,Economic,Business,0.8,Government,Geography,0.85
+3251,Economic,Business,0.8,Government,Geography,0.85
+3310,Housing,Expenditures,0.87,Economic,Expenditures,0.92
+3311,Housing,Expenditures,0.88,Economic,Spending,0.93
+3331,Economic,Expenditures,0.8,Social,Children,0.85
+3335,Economic,Expenditures,0.82,Social,Children,0.85
+3368,Economic,Purchases,0.82,Housing,Expenditures,0.95
+3369,Economic,Spending,0.88,Housing,Expenditures,0.95
+3380,Economic,Expenditures,0.9,Social,Education,0.95
+3381,Economic,Expenditures,0.9,Social,Education,0.95
+3382,Economic,Expenditures,0.9,Social,Post-Secondary Education,0.95
+3383,Economic,Expenditures,0.9,Social,Post-Secondary Education,0.95
+3384,Economic,Expenditures,0.88,Social,Post-Secondary Education,0.9
+3385,Economic,Expenditures,0.88,Social,Post-Secondary Education,0.9
+3375,Social,Post-Secondary Education,0.85,Economic,Expenditures,0.9
+3377,Social,Education,0.86,Economic,Expenditures,0.9
+3379,Social,Child Care,0.95,Economic,Expenditures,0.92
+3440,Social,Medical Care,0.95,Economic,Expenditures,0.95
+3443,Social,Medical Care,0.95,Economic,Expenditures,0.95
+3445,Social,Medical Care,0.94,Economic,Expenditures,0.95
+3451,Economic,Expenditures,0.92,Housing,Expenditures,0.92
+3452,Economic,Expenditures,0.93,Housing,Expenditures,0.95
+3453,Economic,Expenditures,0.92,Housing,Expenditures,0.92
+3454,Economic,Expenditures,0.93,Housing,Expenditures,0.95
+3503,Social,Medical Care,0.92,Economic,Expenditures,0.92
+3504,Social,Medical Care,0.92,Economic,Expenditures,0.92
+3550,Economic,Expenditures,0.85,Housing,Expenses,0.92
+3553,Economic,Recreation,0.9,Social,Expenditures,0.85
+3554,Economic,Recreation,0.9,Social,Expenditures,0.87
+3571,Economic,Expenditures,0.88,Social,Child Care,0.88
+3572,Economic,Expenditures,0.95,Social,Child Care,0.88
+3608,Economic,Income,0.95,Government,Pension,0.85
+3609,Economic,Income,0.95,Government,Pension,0.85
+3617,Government,Tax,0.9,Economic,Expenditures,0.88
+3625,Government,Pension,0.7,Economic,Income,0.85
+3626,Government,Pension,0.75,Economic,Income,0.87
+3627,Government,Pension,0.78,Economic,Income,0.86
+3628,Government,Pension,0.72,Economic,Income,0.85
+3629,Government,Pension,0.75,Economic,Income,0.84
+3631,Government,Pension,0.9,Economic,Pension,0.95
+3673,Government,Federal Government,0.2,Social,Household,0.45
+3674,Government,Federal Government,0.2,Social,Household,0.45
+3675,Government,Federal Government,0.2,Social,Household,0.45
+3676,Government,Federal Government,0.2,Social,Household,0.45
+3677,Government,Federal Government,0.25,Social,Household,0.4
+3678,Government,Federal Government,0.25,Social,Household,0.4
+3679,Government,Federal Government,0.25,Social,Household,0.4
+3664,Economic,Expenses,0.7,Social,Post-Secondary Education,0.8
+3680,Social,Household,0.75,Government,Geography,0.35
+3681,Social,Household,0.7,Government,Geography,0.35
+3682,Social,Household,0.65,Government,Geography,0.35
+3683,Social,Household,0.65,Government,Geography,0.35
+3684,Social,Household,0.6,Government,Geography,0.35
+3685,Social,Household,0.65,Government,Geography,0.35
+3686,Social,Household,0.6,Government,Geography,0.35
+3687,Social,Household,0.6,Government,Geography,0.35
+3688,Social,Household,0.6,Government,Geography,0.35
+3689,Social,Household,0.6,Government,Geography,0.35
+3700,Social,Household,0.8,Economic,Expenditures,0.45
+3701,Social,Household,0.8,Economic,Expenditures,0.35
+3702,Social,Household,0.8,Economic,Expenditures,0.35
+3703,Social,Household,0.75,Economic,Expenditures,0.35
+3704,Social,Household,0.75,Economic,Expenditures,0.35
+3705,Social,Household,0.8,Economic,Expenditures,0.35
+3706,Social,Household,0.8,Economic,Expenditures,0.4
+3707,Social,Household,0.75,Economic,Expenditures,0.4
+3708,Social,Household,0.75,Economic,Expenditures,0.35
+3690,Demographic,Relationship,0.9,Social,Household,0.85
+3691,Demographic,Relationship,0.9,Social,Household,0.85
+3740,Social,Household,0.3,Demographic,Population,0.5
+3716,Demographic,Relationship,0.88,Social,Computer & Internet Use,0.75
+3717,Social,Household,0.9,Government,Jurisdiction,0.65
+3718,Social,Household,0.92,Government,Jurisdiction,0.65
+3719,Social,Household,0.92,Government,Jurisdiction,0.65
+3739,Social,Household,0.95,Demographic,Population,0.96
+3763,Housing,Utilities,0.85,Social,Computer & Internet Use,0.85
+3788,Social,Household,0.6,Demographic,Population,0.85
+3845,Demographic,Relationship,0.9,Social,Household,0.7
+3862,Demographic,Relationship,0.9,Social,Children,0.95
+3871,Social,Household,0.95,Demographic,Population,0.95
+3872,Social,Household,0.9,Demographic,Population,0.93
+3874,Housing,Occupancy,0.9,Social,Household,0.93
+3875,Housing,Occupancy,0.9,Social,Household,0.92
+3876,Housing,Occupancy,0.9,Social,Household,0.91
+3877,Housing,Occupancy,0.9,Social,Household,0.89
+3879,Housing,Occupancy,0.9,Social,Household,0.88
+3880,Social,Household,0.9,Demographic,Household,0.92
+3881,Social,Household,0.95,Demographic,Household,0.9
+3882,Social,Household,0.95,Demographic,Household,0.88
+3883,Social,Household,0.9,Demographic,Household,0.95
+3884,Social,Household,0.9,Demographic,Household,0.93
+3886,Social,Migration,0.9,Demographic,Household,0.89
+3887,Social,Household,0.9,Demographic,Household,0.91
+3888,Social,Household,0.9,Demographic,Household,0.9
+3889,Social,Household,0.9,Demographic,Household,0.91
+3896,Housing,Year Moved In,0.95,Social,Household,0.9
+3931,Demographic,Foreign Born,0.95,Social,Migration,0.95
+3960,Social,Household,0.9,Demographic,Relationship,0.92
+3961,Social,Household,0.95,Demographic,Relationship,0.9
+3952,Social,Medical Care,0.9,Economic,Health Insurance,0.85
+4010,Government,Geography,0.9,Housing,Housing,0.85
+4011,Government,Geography,0.9,Housing,Housing,0.85
+4012,Government,Geography,0.9,Housing,Housing,0.85
+4013,Government,Geography,0.88,Housing,Housing,0.85
+4014,Government,Geography,0.95,Housing,Housing,0.85
+4015,Government,Geography,0.95,Housing,Housing,0.85
+4016,Government,Geography,0.95,Housing,Housing,0.85
+4017,Government,Geography,0.92,Housing,Housing,0.85
+4018,Social,Household,0.97,Demographic,Relationship,0.9
+4004,Housing,Year Moved In,0.95,Social,Moving,0.95
+4007,Housing,Occupancy,0.9,Social,Moving,0.93
+4008,Government,Geography,0.88,Social,Migration,0.9
+4009,Government,Geography,0.95,Social,Migration,0.92
+4061,Government,Public Employment,0.9,Economic,Employer,0.9
+4075,Social,Household,0.8,Economic,Self-employed,0.88
+4249,Social,Food Stamps (SNAP),0.95,Economic,Food Stamps (SNAP),0.95
+4280,Economic,Income,0.85,Social,Household,0.92
+4310,Economic,Food Stamps (SNAP),0.9,Social,Children,0.85
+4320,Economic,Health Insurance,0.95,Social,Household,0.85
+4330,Economic,Health Insurance,0.9,Social,Medical Care,0.92
+4331,Economic,Health Insurance,0.9,Social,Medical Care,0.92
+4333,Economic,Health Insurance,0.9,Social,Medical Care,0.92
+4334,Economic,Health Insurance,0.9,Social,Medical Care,0.92
+4335,Economic,Health Insurance,0.85,Social,Household,0.85
+4337,Government,State Government,0.9,Economic,Health Insurance,0.93
+4350,Economic,Health Insurance,0.9,Social,Medical Care,0.85
+4351,Economic,Health Insurance,0.9,Social,Medical Care,0.9
+4352,Economic,Health Insurance,0.95,Social,Medical Care,0.88
+4353,Economic,Health Insurance,0.95,Social,Medical Care,0.88
+4354,Economic,Health Insurance,0.9,Social,Medical Care,0.85
+4355,Economic,Health Insurance,0.9,Social,Medical Care,0.85
+4356,Economic,Health Insurance,0.9,Social,Medical Care,0.9
+4357,Economic,Health Insurance,0.9,Social,Medical Care,0.85
+4340,Economic,Health Insurance,0.95,Social,Medical Care,0.92
+4308,Social,Household,0.9,Economic,Food Stamps (SNAP),0.8
+4309,Social,Household,0.9,Economic,Food Stamps (SNAP),0.8
+4370,Economic,Health Insurance,0.9,Social,Medical Care,0.92
+4380,Economic,Income,0.95,Social,Veterans,0.95
+4381,Economic,Income,0.9,Social,Veterans,0.95
+4382,Economic,Income,0.9,Social,Veterans,0.95
+4369,Social,Medical Care,0.9,Economic,Health Insurance,0.93
+4430,Economic,Food Services,0.85,Social,Child Care,0.75
+4431,Economic,Food Services,0.85,Social,Child Care,0.78
+4433,Economic,Food Services,0.85,Social,Child Care,0.75
+4428,Economic,Food Services,0.85,Social,School Enrollment,0.88
+4429,Economic,Food Services,0.85,Social,Children,0.85
+4454,Demographic,Age,0.92,Economic,Income,0.88
+4485,Economic,Income,0.9,Social,Disability,0.89
+4489,Economic,Income,0.9,Social,Disability,0.89
+4520,Economic,Income,0.95,Social,Child Support,0.95
+4521,Economic,Income,0.95,Social,Child Support,0.95
+4522,Economic,Income,0.98,Social,Child Support,0.92
+4523,Economic,Income,0.95,Social,Child Support,0.93
+4524,Economic,Income,0.96,Social,Child Support,0.92
+4525,Economic,Income,0.92,Social,Child Support,0.93
+4526,Economic,Income,0.96,Social,Child Support,0.92
+4527,Economic,Income,0.92,Social,Child Support,0.93
+4528,Economic,Income,0.96,Social,Child Support,0.92
+4529,Economic,Income,0.92,Social,Child Support,0.93
+4519,Economic,Income,0.85,Social,Child Support,0.88
+4560,Economic,Commute/Commuting,0.8,Social,Expenditures,0.85
+4561,Economic,Commute/Commuting,0.8,Social,Expenditures,0.85
+4562,Economic,Commute/Commuting,0.8,Social,Expenditures,0.85
+4563,Economic,Commute/Commuting,0.8,Social,Expenditures,0.85
+4564,Economic,Commute/Commuting,0.8,Social,Expenditures,0.8
+4565,Government,Local Government,0.7,Social,Expenditures,0.8
+4566,Government,Local Government,0.7,Social,Expenditures,0.8
+4567,Economic,Commute/Commuting,0.85,Social,Expenditures,0.75
+4540,Economic,Expenses,0.9,Social,Household,0.85
+4578,Social,Household,0.75,Housing,Housing Costs,0.85
+4588,Social,COVID-19 Data,0.75,Economic,Employment Status,0.9
+4589,Social,COVID-19 Data,0.75,Economic,Employment Status,0.9
+4590,Government,Pension,0.9,Economic,Pension,0.95
+4591,Government,Pension,0.85,Economic,Pension,0.95
+4592,Government,Pension,0.95,Economic,Pension,0.98
+4593,Government,Pension,0.95,Economic,Pension,0.98
+4594,Government,Pension,0.9,Economic,Pension,0.95
+4676,Housing,Vehicles,0.85,Economic,Vehicle,0.92
+4677,Housing,Vehicles,0.9,Economic,Vehicle,0.93
+4678,Housing,Vehicles,0.9,Economic,Vehicle,0.95
+4679,Housing,Vehicles,0.9,Economic,Vehicle,0.9
+4640,Government,Pension,0.9,Economic,Pension,0.92
+4641,Government,Pension,0.9,Economic,Pension,0.95
+4642,Government,Pension,0.85,Economic,Pension,0.93
+4643,Social,Household,0.8,Economic,Income,0.85
+4644,Social,Household,0.85,Economic,Income,0.88
+4645,Social,Household,0.85,Economic,Income,0.88
+4646,Social,Household,0.85,Economic,Income,0.88
+4647,Social,Household,0.85,Economic,Income,0.88
+4648,Social,Household,0.85,Economic,Income,0.88
+4649,Social,Household,0.85,Economic,Income,0.88
+4666,Economic,Income,0.75,Social,Education,0.8
+4667,Economic,Income,0.8,Social,Education,0.8
+4668,Demographic,Relationship,0.9,Social,Education,0.8
+4669,Demographic,Relationship,0.95,Social,Education,0.8
+4680,Economic,Vehicle,0.9,Social,Vehicles,0.85
+4681,Economic,Vehicle,0.9,Social,Vehicles,0.85
+4786,Social,Household,0.9,Housing,Utilities,0.9
+4788,Social,Household,0.6,Economic,Expenditures,0.75
+4789,Social,Household,0.6,Economic,Expenditures,0.72
+4810,Housing,Home Value,0.9,Economic,Income,0.92
+4811,Housing,Home Value,0.9,Economic,Income,0.9
+4812,Housing,"Costs (Mortgage, Taxes, Insurance)",0.9,Economic,Income,0.88
+4813,Housing,"Costs (Mortgage, Taxes, Insurance)",0.9,Economic,Income,0.88
+4815,Housing,Home Value,0.85,Economic,Income,0.9
+4818,Housing,Home Value,0.9,Economic,Income,0.92
+4819,Housing,"Costs (Mortgage, Taxes, Insurance)",0.9,Economic,Income,0.88
+4820,Housing,Rental,0.93,Economic,Income,0.85
+4822,Housing,Home Value,0.97,Economic,Income,0.85
+4824,Housing,"Costs (Mortgage, Taxes, Insurance)",0.95,Economic,Income,0.85
+4826,Housing,Home Value,0.97,Economic,Income,0.85
+4828,Housing,"Costs (Mortgage, Taxes, Insurance)",0.95,Economic,Income,0.85
+4836,Economic,Vehicle,0.8,Housing,Vehicles,0.82
+4837,Economic,Vehicle,0.9,Housing,Vehicles,0.83
+4838,Economic,Vehicle,0.9,Housing,Vehicles,0.84
+4839,Economic,Vehicle,0.9,Housing,Vehicles,0.85
+4890,Economic,Health Insurance,0.75,Social,Household,0.85
+4874,Social,Household,0.6,Economic,Income,0.7
+4915,Economic,Employment Status,0.95,Social,Disability,0.95
+4916,Economic,Employment Status,0.95,Social,Disability,0.95
+4937,Social,Mortality,0.85,Demographic,Age,0.85
+4938,Social,Mortality,0.95,Demographic,Age,0.88
+4939,Social,Mortality,0.95,Demographic,Age,0.87
+5031,Social,Household,0.8,Government,Geography,0.7
+5032,Social,Household,0.6,Government,Geography,0.65
+5033,Social,Moving,0.85,Government,Geography,0.65
+5034,Social,Moving,0.85,Government,Geography,0.65
+5035,Social,Household,0.8,Government,Geography,0.65
+5036,Social,Household,0.8,Government,Geography,0.65
+5037,Social,Household,0.75,Government,Geography,0.65
+5017,Social,COVID-19 Data,0.9,Housing,Housing Costs,0.85
+5018,Economic,Food Stamps (SNAP),0.7,Social,Expenditures,0.85
+5019,Economic,Food Stamps (SNAP),0.7,Social,Expenditures,0.85
+5020,Economic,Food Stamps (SNAP),0.9,Social,Expenditures,0.85
+5021,Economic,Food Stamps (SNAP),0.9,Social,Expenditures,0.85
+5022,Economic,Food Stamps (SNAP),0.9,Social,Expenditures,0.85
+5026,Social,Household,0.7,Demographic,Relationship,0.75
+5029,Government,Geography,0.9,Demographic,Population,0.65
+5044,Social,Household,0.85,Government,Geography,0.7
+5045,Social,Household,0.9,Government,Geography,0.7
+5046,Social,Household,0.85,Government,Geography,0.7
+5048,Social,Household,0.9,Government,Geography,0.6
+5049,Social,Household,0.9,Government,Geography,0.6
+5050,Social,Household,0.6,Government,Federal Government,0.65
+5051,Social,Household,0.7,Government,Federal Government,0.65
+5052,Social,Household,0.6,Government,Federal Government,0.7
+5053,Demographic,Relationship,0.95,Government,Federal Government,0.6
+5054,Social,Language,0.95,Government,Federal Government,0.65
+5057,Social,Household,0.65,Government,Federal Government,0.7
+5058,Social,Household,0.65,Government,Federal Government,0.7
+5063,Social,Children,0.95,Demographic,Relationship,0.85
+5067,Economic,Employment Status,0.9,Social,Child Care,0.95
+5068,Demographic,Age,0.95,Social,Children,0.9
+5099,Social,Household,0.9,Economic,Food Stamps (SNAP),0.85
+5101,Social,Household,0.8,Economic,Income,0.88
+5102,Economic,Emergency,0.85,Social,Household,0.9
+5121,Economic,Recreation,0.8,Social,Recreation,0.9
+5122,Economic,Recreation,0.8,Social,Recreation,0.9
+5123,Economic,Recreation,0.85,Social,Recreation,0.95
+5124,Economic,Recreation,0.8,Social,Recreation,0.9
+5125,Economic,Recreation,0.75,Social,Recreation,0.85
+5129,Economic,Emergency,0.85,Social,Moving,0.7
+5118,Social,Vehicles,0.8,Economic,Commute/Commuting,0.82
+5119,Social,Vehicles,0.75,Economic,Commute/Commuting,0.85
+5130,Economic,Emergency,0.9,Social,Moving,0.85
+5131,Social,Moving,0.9,Housing,Housing,0.9
+5132,Social,Household,0.85,Housing,Occupancy,0.88
+5136,Housing,Occupancy,0.9,Social,Household,0.88
+5137,Economic,Emergency,0.75,Housing,"Costs (Mortgage, Taxes, Insurance)",0.82
+5162,Government,Geography,0.8,Housing,Housing,0.7
+5163,Government,Geography,0.9,Housing,Housing,0.75
+5169,Government,Geography,0.85,Housing,Housing,0.7
+5170,Social,Household,0.85,Demographic,Population,0.92
+5171,Social,Household,0.9,Demographic,Population,0.95
+5177,Social,Moving,0.9,Demographic,Population,0.91
+5179,Social,Household,0.9,Demographic,Population,0.9
+5204,Economic,Occupation,0.9,Social,Education,0.85
+5205,Government,Jurisdiction,0.92,Social,Education,0.82
+5181,Social,Household,0.75,Demographic,Relationship,0.88
+5182,Social,Household,0.8,Demographic,Age,0.85
+5186,Social,Household,0.9,Demographic,Relationship,0.93
+5188,Social,Household,0.9,Demographic,Relationship,0.93
+5297,Government,Public Employment,0.9,Economic,Employer,0.95
+5317,Government,Public Employment,0.85,Economic,Employer,0.93
+5362,Social,Household,0.6,Government,Geography,0.5
+5377,Social,Household,0.05,Unknown,Unknown,0.0
+5415,Demographic,Population,0.9,Social,School Enrollment,0.93
+5452,Social,Household,0.9,Government,Geography,0.45
+5453,Social,Household,0.9,Government,Geography,0.45
+5454,Social,Household,0.85,Government,Geography,0.4
+5455,Social,Computer & Internet Use,0.75,Government,Geography,0.4
+5456,Social,Household,0.88,Government,Geography,0.4
+5457,Social,Household,0.88,Government,Geography,0.4
+5458,Social,Household,0.9,Housing,Residential,0.55
+5459,Social,Household,0.9,Housing,Residential,0.6
+5440,Economic,Employment Status,0.85,Social,Veterans,0.75
+5441,Economic,Employment Status,0.85,Social,Veterans,0.8
+5481,Housing,Occupancy,0.8,Social,Household,0.4
+5488,Housing,Vacancy/Vacancies,0.7,Social,Household,0.35
+5554,Social,Household,0.9,Demographic,Age,0.9
+5555,Housing,Occupancy,0.9,Social,Household,0.93
+5556,Housing,Occupancy,0.95,Social,Household,0.92
+5557,Housing,Occupancy,0.9,Social,Household,0.88
+5523,Social,Inmates,0.9,Housing,Occupancy,0.85
+5583,Social,Household,0.9,Demographic,Relationship,0.98
+5585,Social,Household,0.9,Demographic,Relationship,0.98
+5590,Demographic,Population,0.4,Housing,Housing,0.45
+5597,Social,Household,0.9,Demographic,Relationship,0.9
+5767,Economic,Employment Status,0.9,Housing,Utilities,0.75
+5998,Social,Disability,0.9,Housing,Expenditures,0.8
+5999,Economic,Energy,0.9,Housing,Expenditures,0.85
+6023,Economic,Income,0.95,Social,Child Support,0.88
+6024,Economic,Income,0.95,Social,Child Support,0.88
+6042,Social,Household,0.85,Economic,Income,0.9
+6083,Social,Moving,0.8,Housing,Residential,0.9
+6086,Social,Moving,0.78,Housing,Housing,0.87
+6087,Social,Moving,0.9,Housing,Housing,0.89
+6088,Social,Moving,0.88,Housing,Residential,0.86
+6089,Social,Moving,0.8,Housing,Housing,0.84
+6062,Demographic,Relationship,0.85,Social,Household,0.9
+6066,Demographic,Relationship,0.88,Social,Disability,0.98
+6068,Demographic,Relationship,0.88,Social,Disability,0.98
+6073,Social,Moving,0.9,Housing,Moving,0.9
+6074,Social,Moving,0.9,Housing,Moving,0.92
+6075,Social,Moving,0.9,Housing,Moving,0.88
+6076,Social,Moving,0.9,Housing,Moving,0.85
+6077,Social,Moving,0.9,Housing,Moving,0.85
+6078,Social,Moving,0.88,Housing,Moving,0.85
+6079,Social,Moving,0.9,Housing,Moving,0.88
+6116,Demographic,Age,0.9,Housing,Housing,0.7
+6120,Economic,Business,0.92,Housing,Housing,0.85
+6121,Economic,Business,0.92,Housing,Housing,0.85
+6122,Economic,Manufacturing,0.9,Housing,Housing,0.8
+6123,Economic,Manufacturing,0.9,Housing,Housing,0.8
+6136,Government,Geography,0.9,Housing,Housing,0.9
+6168,Social,Household,0.78,Housing,Housing,0.8
+6175,Social,Children,0.82,Housing,Housing,0.8
+6152,Social,Moving,0.85,Housing,Housing,0.88
+6154,Social,Moving,0.95,Housing,Housing,0.93
+6157,Social,Crime,0.9,Housing,Housing,0.85
+6199,Social,Household,0.6,Housing,Housing,0.7
+6200,Social,Household,0.8,N/A,N/A,0.0
+6201,Social,Household,0.8,N/A,N/A,0.0
+6202,Social,Household,0.8,N/A,N/A,0.0
+6203,Social,Household,0.75,N/A,N/A,0.0
+6205,Social,Household,0.05,N/A,N/A,0.0
+6218,Social,Police,0.9,Government,Police,0.89
+6219,Social,Police,0.92,Government,Police,0.88
+6244,Unknown,Unknown,0.01,Social,Schools,0.0
+6264,Demographic,Age,0.85,Housing,Housing,0.85
+6268,Social,Household,0.85,Housing,Housing Costs,0.78
+6269,Social,Medical Care,0.95,Housing,Housing Costs,0.78
+6284,Social,Household,0.85,Housing,Housing,0.85
+6300,Social,Household,0.85,Economic,Expenditures,0.75
+6307,Social,Household,0.9,Demographic,Relationship,0.9
+6299,Social,Household,0.9,Economic,Expenditures,0.85
+6317,Social,Schools,0.85,Economic,Food Services,0.75
+6318,Social,Schools,0.85,Economic,Expenditures,0.8
+6325,Social,Child Care,0.8,Economic,Food Services,0.88
+6327,Social,Schools,0.88,Economic,Food Services,0.85
+6352,Social,Child Care,0.75,Economic,Expenditures,0.88
+6372,Social,Children,0.7,Economic,Food Stamps (SNAP),0.95
+6373,Social,Children,0.7,Economic,Food Stamps (SNAP),0.95
+6374,Social,Children,0.7,Economic,Food Stamps (SNAP),0.95
+6375,Social,Medical Care,0.85,Economic,Health Insurance,0.98
+6376,Social,Medical Care,0.85,Economic,Health Insurance,0.98
+6400,Housing,Vehicles,0.9,Economic,Vehicle,0.92
+6406,Social,Household,0.8,Economic,Food Stamps (SNAP),0.87
+6407,Social,Household,0.8,Economic,Food Stamps (SNAP),0.85
+6424,Government,Local Government,0.88,Housing,Rental,0.93
+6449,Economic,Food Services,0.85,Social,Expenditures,0.75
+6438,Social,Disability,0.85,Economic,Employment Status,0.88
+6509,Economic,Food Services,0.8,Social,Expenditures,0.75
+6539,Social,Medical Care,0.6,Demographic,Population,0.8
+6551,Social,Disability,0.9,Economic,Employment Status,0.88
+6594,Social,Expenditures,0.8,Economic,Expenditures,0.55
+6595,Social,Expenditures,0.8,Economic,Expenditures,0.5
+6596,Social,Household,0.75,Economic,Expenditures,0.5
+6597,Social,Household,0.75,Economic,Expenditures,0.5
+6598,Social,Household,0.8,Economic,Expenditures,0.5
+6599,Social,Household,0.8,Economic,Expenditures,0.5
+6661,Economic,Purchases,0.9,Social,Expenditures,0.85
+6662,Demographic,Relationship,0.95,Social,Household,0.9
+6611,Economic,Food Services,0.9,Social,School Enrollment,0.8
+6613,Economic,Purchases,0.8,Social,Household,0.7
+6672,Social,Household,0.8,Economic,Expenditures,0.8
+6756,Social,Schools,0.7,Government,School Districts,0.75
+6757,Social,Schools,0.75,Government,School Districts,0.7
+6758,Social,Schools,0.75,Government,School Districts,0.7
+6759,Social,Schools,0.7,Government,School Districts,0.65
+6740,Economic,Food Services,0.8,Social,Household,0.75
+6743,Social,Household,0.6,Economic,Food Stamps (SNAP),0.7
+6747,Social,Household,0.0,Unknown,Unknown,0.0
+6739,Social,Computer & Internet Use,0.6,Economic,Expenditures,0.7
+6782,Economic,Payroll,0.9,Government,Pension,0.9
+6794,Economic,Employer,0.5,Government,Federal Government,0.65
+6796,Government,Jurisdiction,0.85,Housing,Permits,0.88
+6799,Economic,Research and Development,0.6,Government,Federal Government,0.6
+6805,Housing,Permits,0.9,Government,Jurisdiction,0.85
+6888,Economic,Business,0.6,Social,Household,0.65
+6898,Economic,Employer,0.8,Government,Federal Government,0.75
+6919,Economic,Business,0.7,Government,Jurisdiction,0.65
+6930,Economic,Business,0.8,Social,Household,0.65
+6923,Demographic,Sex,0.9,Economic,Research and Development,0.92
+6925,Social,Education,0.9,Economic,Research and Development,0.93
+6928,Social,Citizenship,0.9,Economic,Research and Development,0.93
+6947,Economic,Research and Development,0.92,Government,Tax,0.9
+6977,Demographic,Age,0.9,Economic,Health Insurance,0.95
+6978,Demographic,Age,0.9,Economic,Health Insurance,0.95
+6950,Government,Research and Development,0.3,Social,Medical Care,0.45

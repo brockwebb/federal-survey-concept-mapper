@@ -1,0 +1,131 @@
+final_topic,final_subtopic,count
+Economic,Expenditures,570
+Social,Medical Care,555
+Economic,Income,515
+Economic,Health Insurance,382
+Social,Disability,254
+Social,Schools,253
+Social,Household,224
+Economic,Employment Status,201
+Social,Crime,196
+Social,Education,165
+Housing,Structure,154
+Social,Children,154
+Housing,"Costs (Mortgage, Taxes, Insurance)",140
+Economic,Earnings,137
+Economic,"Hours/Week, Weeks/Year",116
+Economic,Teacher,106
+Economic,Food Stamps (SNAP),104
+Social,School Enrollment,92
+Economic,Occupation,91
+Social,Child Care,91
+Housing,Utilities,88
+Economic,Nurses,86
+Economic,Research and Development,86
+Social,Post-Secondary Education,73
+Demographic,Relationship,72
+Housing,Housing,64
+Social,Veterans,63
+Economic,Vehicle,63
+Demographic,Age,60
+Housing,Construction,57
+Economic,Expenses,56
+Housing,Plumbing/Kitchen Facilities,55
+Economic,Unemployment,52
+Housing,Rental,51
+Economic,Purchases,50
+Housing,Expenditures,50
+Housing,Occupancy,49
+Social,Language,46
+Social,Computer & Internet Use,46
+Economic,Business,45
+Economic,Food Services,45
+Social,Moving,44
+Demographic,Race,43
+Housing,Heating Fuel,42
+Demographic,Sex,42
+Housing,Housing Costs,40
+Demographic,Marital Status,39
+Demographic,Population,39
+Social,COVID-19 Data,39
+Demographic,Foreign Born,37
+Economic,Commute/Commuting,36
+Economic,Employer,36
+Demographic,Hispanic Origin,30
+Social,Field of Degree,30
+Economic,Self-employed,30
+Housing,Vacancy/Vacancies,29
+Government,Pension,27
+Government,Geography,26
+Economic,Pension,25
+Social,Child Support,23
+Social,Citizenship,23
+Housing,Home Value,23
+Housing,Tenure (Own/Rent),23
+Economic,Labor Force,21
+Economic,Industry,21
+Housing,Homeownership,20
+Economic,Tenure,17
+Economic,Spending,16
+Social,Expenditures,15
+Economic,Class of Worker,15
+Housing,Year Moved In,14
+Housing,Expenses,14
+Social,Migration,14
+Social,Occupation,14
+Economic,Recreation,13
+Economic,Firm Size,13
+Social,Police,13
+Economic,Retail,13
+Economic,Grants,12
+Economic,Payroll,11
+Housing,Permits,9
+Social,Fertility,9
+Economic,Business Opening/Closing,9
+Economic,E-Commerce,9
+Housing,Homeowner,8
+Economic,Emergency,8
+Social,Teacher,8
+Economic,Revenue,8
+Demographic,Household,8
+Government,Tax,7
+Social,Recreation,7
+Social,Nurses,7
+Economic,Receipts,7
+Social,Mortality,6
+Unknown,Unknown,6
+Housing,Year Built,6
+Economic,International,6
+Housing,Residential,6
+Housing,Vehicles,6
+Government,School Districts,6
+Government,Police,6
+Economic,Energy,4
+Social,Grandparents,4
+Government,Federal Government,4
+Economic,Firms,4
+Demographic,Ethnicity,4
+Government,State Government,4
+Social,Vehicles,3
+Economic,Commissions,3
+Economic,Sales,3
+Government,Jurisdiction,2
+Government,Public Employment,2
+Economic,Wholesale,2
+Social,Voting,2
+Economic,Technology,2
+Economic,Firm Age,1
+Social,Prisoners,1
+Demographic,International,1
+Economic,Transportation,1
+Economic,Inventory,1
+Economic,NAICS,1
+Economic,Permits,1
+Economic,Retirement Plans,1
+Social,International,1
+Social,Food Stamps (SNAP),1
+Government,Hunting,1
+Social,Expenses,1
+Demographic,Ancestry,1
+Housing,Moving,1
+Government,Local Government,1

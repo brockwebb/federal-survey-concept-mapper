@@ -1,0 +1,47 @@
+Survey,Primary_Topic,Primary_Topic_Pct,Question_Count,Concept_Count
+Survey of Income and Program Participation (SIPP),Economic,61.9,1216,72
+Consumer Expenditure Survey (CE),Economic,76.4,1106,61
+Food Acquisition and Purchase Survey (FoodAPS) Initial Interview/Household Survey,Economic,52.4,246,41
+Current Population Survey (CPS),Economic,65.4,211,35
+National Sample Survey of Registered Nurses (NSSRN),Economic,71.0,183,22
+Medical Expenditure Panel Survey Insurance Component,Economic,93.4,137,23
+National Survey of College Graduates (NSCG),Economic,50.4,121,32
+American Community Survey (ACS),Economic,27.8,115,44
+FoodAPS food Log,Economic,96.5,86,8
+"National Training, Education, and Workforce Survey (NTEWS)",Economic,54.7,86,15
+Teacher Follow-Up Survey (TFS) Current Teacher Survey,Economic,50.8,63,16
+Food Acquisition and Purchase Survey (FoodAPS) Profile and Income Questionnaire,Economic,69.6,56,16
+Teacher Follow-up Survey (TFS) Former Teacher Survey,Economic,68.1,47,18
+Unnamed: 48,Economic,100.0,35,6
+Business Enterprise Research and Development Survey,Economic,52.4,21,7
+Principal Follow-Up Survey School Head/Principal Status Form,Economic,57.1,7,6
+Principal Follow-up Survey (PFS),Economic,100.0,5,2
+Survey of State Government Finances Finances of Insurance Trust Systems,Government,60.0,20,8
+Business and Professional Classifcation Report,Government,66.7,9,4
+Report of Building or Zoning Permits issued for new privately-ownd housing units,Government,66.7,6,2
+Survey of Residential Building or Zoning Permit Systems,Government,100.0,6,1
+American Housing Survey (AHS),Housing,76.6,738,54
+Survey of Market Absorption (SOMA),Housing,97.4,39,9
+National Health Interview Survey (NHIS),Social,63.0,782,42
+"National Survey of Children's Health Topical Questionaire (Children, 0-5 years)",Social,79.4,160,28
+"National Survey of Children's Health Topical Questionaire (Children, 12-17)",Social,77.6,147,22
+"National Survey of Children's Health Topical Questionaire (Chilren, 6-11)",Social,78.9,142,22
+National Teacher and Principal Survey (NTPS) Private School Teacher Questionnaire,Social,56.8,118,26
+National Teacher and Principal Survey (NTPS) Teacher Questionnaire,Social,55.3,114,24
+Household Trends and Outlook Pulse Survey (HTOPS),Social,56.5,108,34
+American Time Use Survey (ATUS),Social,48.0,100,30
+School Survey on Crime and Safety (SSOCS),Social,100.0,91,6
+School Crime Supplement (SCS)/National Crime Victimization Survey (NCVS),Social,93.8,81,10
+National Teacher and Principal Survey (NTPS) Private School Questionnaire,Social,85.0,80,11
+Food Acquisition and Purchase Survey (FoodAPS) Debriefing Questionnaire,Social,58.1,74,10
+Identity Theft Supplement (ITS),Social,89.7,68,5
+Supplemental Victimization Survey (SVS),Social,84.6,65,9
+National Teacher and Principal Survey (NTPS) School Questionnaire,Social,75.0,56,16
+National Teacher and Principal Survey (NTPS) Private School Principal Questionnaire,Social,63.2,38,15
+School Pulse Panel (SPP),Social,64.9,37,7
+National Teacher and Principal Survey (NTPS) Principal Questionnaire,Social,85.7,35,11
+Private School Survey (PSS),Social,90.9,33,6
+Census Military Panel (CMP),Social,57.1,28,11
+National Ambulatory Medical Care Survey (NAMCS),Social,75.0,16,4
+National Survey of Children’s Health (NSCH),Social,66.7,6,5
+Unknown,Social,40.0,5,4

@@ -1,0 +1,115 @@
+# Census Bureau Topic Taxonomy
+# Source: https://www.census.gov/topics.html
+# Hierarchical structure for survey question categorization
+
+topics:
+  Age_and_Sex:
+    description: "Age cohorts and sex/gender demographics"
+    subcategories:
+      - age_groups
+      - age_distribution
+      - sex_composition
+      
+  Business_and_Economy:
+    description: "Business formation, economic indicators, industry"
+    subcategories:
+      - business_formation
+      - business_ownership
+      - economic_indicators
+      - industry_classification
+      
+  Education:
+    description: "Educational attainment and school enrollment"
+    subcategories:
+      - educational_attainment
+      - school_enrollment
+      - field_of_study
+      
+  Employment:
+    description: "Employment status, occupation, work experience"
+    subcategories:
+      - employment_status
+      - occupation
+      - industry
+      - work_experience
+      - commuting
+      - earnings
+      
+  Families_and_Living_Arrangements:
+    description: "Household composition and family structure"
+    subcategories:
+      - household_type
+      - family_structure
+      - marital_status
+      - living_arrangements
+      
+  Health:
+    description: "Health insurance and disability status"
+    subcategories:
+      - health_insurance
+      - disability_status
+      - health_conditions
+      
+  Hispanic_Origin:
+    description: "Hispanic/Latino ethnicity"
+    subcategories:
+      - hispanic_identification
+      - country_of_origin
+      
+  Housing:
+    description: "Housing tenure, costs, and characteristics"
+    subcategories:
+      - tenure
+      - housing_costs
+      - housing_characteristics
+      - utilities
+      - mortgage_status
+      
+  Income_and_Poverty:
+    description: "Income sources, earnings, poverty status"
+    subcategories:
+      - household_income
+      - family_income
+      - personal_earnings
+      - poverty_status
+      - public_assistance
+      - wealth_assets
+      - income_inequality
+      
+  Population:
+    description: "Population size, growth, and distribution"
+    subcategories:
+      - population_size
+      - population_change
+      - population_estimates
+      
+  Race:
+    description: "Racial identification and composition"
+    subcategories:
+      - race_identification
+      - multiracial
+      
+  Geography:
+    description: "Geographic location and classification"
+    subcategories:
+      - state
+      - county
+      - place
+      - metro_area
+      - census_tract
+      
+  Migration_Geographic_Mobility:
+    description: "Residential mobility and migration patterns"
+    subcategories:
+      - residential_mobility
+      - migration
+      - place_of_birth
+      
+  Voting_and_Registration:
+    description: "Voter registration and participation"
+    subcategories:
+      - voter_registration
+      - voting_participation
+
+# Note: This is a simplified version. Full Census taxonomy has more granular subcategories.
+# Will be expanded as analysis progresses.

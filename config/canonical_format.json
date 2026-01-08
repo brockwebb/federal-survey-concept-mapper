@@ -1,0 +1,73 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "created_date": "2025-01-XX",
+    "description": "Canonical JSON format for survey question analysis",
+    "total_questions": 6987,
+    "total_surveys": 46
+  },
+  
+  "question_example": {
+    "question_id": "Q0001",
+    "survey_key": "SIPP",
+    "question_text": "What was the total income of all family members from all sources before taxes in [reference month]?",
+    "categories": [
+      {
+        "category": "Economics.Income.Total_Family",
+        "score": 0.95,
+        "reasoning": "Direct question about total family income from all sources"
+      },
+      {
+        "category": "Demographics.Socioeconomic.Financial_Status",
+        "score": 0.73,
+        "reasoning": "Income is primary indicator of socioeconomic status"
+      },
+      {
+        "category": "Demographics.Family.Household_Composition",
+        "score": 0.45,
+        "reasoning": "Implies understanding of family unit definition"
+      }
+    ],
+    "question_type": "numeric_currency",
+    "complexity": "moderate",
+    "respondent_type": "household_reference_person",
+    "temporal_scope": "monthly",
+    "universe": "all_households",
+    "branching_logic": {
+      "has_conditions": false,
+      "parent_question": null,
+      "condition_description": null
+    },
+    "similar_questions": ["Q0234", "Q1456"],
+    "cluster_id": "C_INCOME_001",
+    "notes": "Standard income question format used across multiple surveys"
+  },
+  
+  "survey_metadata_example": {
+    "survey_key": "SIPP",
+    "full_name": "Survey of Income and Program Participation",
+    "agency": "U.S. Census Bureau",
+    "domain_tags": ["economics", "demographics", "social_programs", "employment"],
+    "target_population": "households",
+    "collection_method": "interview",
+    "frequency": "continuous",
+    "years_active": "1983-present",
+    "question_count": 1319
+  },
+  
+  "cluster_example": {
+    "cluster_id": "C_INCOME_001",
+    "canonical_question_id": "Q0234",
+    "canonical_question_text": "What was your total household income last year?",
+    "cluster_size": 12,
+    "member_questions": ["Q0001", "Q0234", "Q0567", "Q1456"],
+    "avg_similarity": 0.92,
+    "surveys_represented": ["SIPP", "CPS", "ACS", "CE"]
+  },
+  
+  "notes": {
+    "scoring": "Multi-dimensional scores across Census taxonomy dimensions. No threshold applied - raw scores preserved for analysis.",
+    "survey_context": "Same question text may have different categorizations based on survey context",
+    "offline_processing": "All embeddings generated with locally cached RoBERTa-large model"
+  }
+}

@@ -1,0 +1,15 @@
+# 1. Abstract
+
+**Background**: The U.S. federal statistical system fields dozens of demographic surveys annually, but systematic analysis of how measurement effort is distributed across concepts has been infeasible due to resource constraints. Manual expert review would require approximately 70 hours (at ~100 questions/hour) to categorize 6,987 survey questions to standardized taxonomies—roughly 2 weeks of dedicated effort at substantial cost.
+
+**Methods**: We developed an exploratory dual-model Large Language Model (LLM) categorization pipeline using GPT-5-mini and Claude Haiku 4.5 to independently categorize 6,987 questions from 46 federal surveys to the U.S. Census Bureau's Survey Explorer topic taxonomy (5 topics, 152 subtopics). Disagreements were resolved through confidence-based arbitration using Claude Sonnet 4.5. Inter-rater reliability was assessed using Cohen's Kappa.
+
+**Results**: The pipeline achieved 99.5% successful categorization (6,949/6,987 questions) in approximately 2 hours at ~$15 cost—an estimated 35× speed improvement and 95%+ cost reduction compared to manual approaches. Topic-level agreement between models reached 89.4% (Cohen's κ = 0.842), representing "almost perfect agreement" per the Landis & Koch (1977) interpretation scale. Coverage analysis revealed measurement concentration patterns: 10 concepts (6.6% of taxonomy) account for 39.4% of all questions, reflecting the demographic baseline surveys require for cross-survey analysis and universe definition. Survey pairs showed expected conceptual overlap at the taxonomy level, consistent with how demographic surveys establish population contexts.
+
+**Interpretation**: This work demonstrates technical feasibility of AI-assisted survey ecosystem analysis at scale. The methodology successfully processes thousands of questions with strong inter-rater reliability. However, **this is an exploratory proof-of-concept**. The patterns identified—measurement concentration, survey overlap, coverage distribution—largely reflect intentional survey design: repeated demographic questions establish population universes and enable cross-survey comparability. Validation by subject matter experts is needed to assess whether automated categorizations accurately capture survey intent and to determine which patterns, if any, warrant closer examination.
+
+**Conclusions**: LLM-based concept mapping enables systematic survey analysis at speeds and scales previously infeasible. The approach is reproducible and generates structured data that builds semantic knowledge about the survey ecosystem—supporting data discovery, cross-survey analysis, and informed questionnaire design. Critical next steps include expert review to assess categorization accuracy and evaluate whether this methodology merits operational adoption. Success is measured not by identifying problems, but by demonstrating that AI-assisted analysis can systematically map survey content to enable deeper understanding.
+
+**Keywords**: survey methodology, concept mapping, large language models, artificial intelligence, federal statistics, proof-of-concept, Census Bureau
+
+**Word Count**: ~340 words

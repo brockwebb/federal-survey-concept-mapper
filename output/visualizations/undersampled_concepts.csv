@@ -1,0 +1,30 @@
+concept,question_count,topic,subtopic
+Economic.Permits,1,Economic,Permits
+Social.Prisoners,1,Social,Prisoners
+Social.International,1,Social,International
+Economic.Firm Age,1,Economic,Firm Age
+Demographic.International,1,Demographic,International
+Demographic.Ancestry,1,Demographic,Ancestry
+Social.Food Stamps (SNAP),1,Social,Food Stamps (SNAP)
+Social.Expenses,1,Social,Expenses
+Economic.Retirement Plans,1,Economic,Retirement Plans
+Economic.Transportation,1,Economic,Transportation
+Economic.Inventory,1,Economic,Inventory
+Housing.Moving,1,Housing,Moving
+Government.Hunting,1,Government,Hunting
+Government.Local Government,1,Government,Local Government
+Economic.NAICS,1,Economic,NAICS
+Government.Jurisdiction,2,Government,Jurisdiction
+Economic.Wholesale,2,Economic,Wholesale
+Social.Voting,2,Social,Voting
+Government.Public Employment,2,Government,Public Employment
+Economic.Technology,2,Economic,Technology
+Economic.Commissions,3,Economic,Commissions
+Economic.Sales,3,Economic,Sales
+Social.Vehicles,3,Social,Vehicles
+Economic.Firms,4,Economic,Firms
+Government.State Government,4,Government,State Government
+Economic.Energy,4,Economic,Energy
+Demographic.Ethnicity,4,Demographic,Ethnicity
+Government.Federal Government,4,Government,Federal Government
+Social.Grandparents,4,Social,Grandparents
