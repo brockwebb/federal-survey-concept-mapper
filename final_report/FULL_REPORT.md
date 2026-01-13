@@ -35,7 +35,7 @@
 
 ## The Challenge
 
-Federal household surveys face mounting pressure. Response rates continue to decline, raising the cost per completed interview. Each survey question represents an investment—yet developing the capabilities to systematically assess whether the federal survey ecosystem is structured efficiently requires substantial labor. Manual analysis of questionnaire overlap across dozens of surveys would require weeks of expert time and rarely happens at ecosystem scale.
+Federal household surveys face mounting pressure. Response rates continue to decline, raising the cost per completed interview. Each survey question represents an investment, yet developing the capabilities to systematically assess whether the federal survey ecosystem is structured efficiently requires substantial labor. Manual analysis of questionnaire overlap across dozens of surveys would require weeks of expert time and rarely happens at ecosystem scale.
 
 ## What This Study Did
 
@@ -51,13 +51,13 @@ This proof-of-concept applied AI-based text categorization to map 6,987 question
 
 ## What We Found
 
-The analysis surfaced three patterns warranting expert attention:
+The analysis produced three key findings:
 
-**1. Measurement Concentration**: A small fraction of taxonomy concepts dominate federal surveys. Ten concepts (6.6% of the taxonomy) account for 39.4% of all questions. Income, health insurance, and employment status are measured extensively across multiple surveys.
+**1. Technical Feasibility Demonstrated**: This proof of concept successfully showed that AI-based LLM tools can reliably categorize survey questions at scale. Two independent models achieved Cohen's κ = 0.842 ("almost perfect agreement"), processing nearly 7,000 questions in approximately 2 hours. The methodology works.
 
-**2. Expected Overlap in Demographic Measurement**: Many demographic surveys ask similar questions about respondents—age, income, household composition, employment. This duplication is by design: it establishes which universe different populations belong to and enables cross-survey comparisons. The more interesting analytical question concerns under-represented and hard-to-count populations: what additional data or enrichment is needed to better understand these groups? Large, stable populations that change slowly yield less new information than targeted measurement of populations where we need to understand impacts, outcomes, and effects for evidence-based policy.
+**2. Topic Distribution Visible at a Glance**: The methodology produces visualizations (Figure 2) showing how questions distribute across taxonomy concepts. Within household demographic surveys, Economic and Social topics dominate, while coverage is thinner in some subtopics. Whether sparse coverage in particular areas warrants closer examination or appropriately reflects survey scope is a question for domain experts.
 
-**3. Coverage Reflects Study Scope**: Approximately 30% of Census taxonomy concepts have limited or no coverage in the surveys analyzed. This is expected—we examined household demographic surveys, not the full federal statistical portfolio. The value of this methodology lies in demonstrating that systematic mapping is feasible. Extending this approach to additional survey domains would build progressively more complete coverage maps, using this analysis as a springboard.
+**3. Patterns Reflect Study Scope**: The concentration of questions in certain topics (Income, Health Insurance, Employment Status) and the approximately 30% of taxonomy concepts without coverage are expected given our focus on household demographic surveys. This is one segment of the federal statistical portfolio. The value of this methodology lies in demonstrating that systematic mapping is feasible; extending this approach to additional survey domains would build progressively more complete coverage maps.
 
 ## What This Means
 
@@ -79,22 +79,22 @@ This is exploratory research, not an operational system. It does not recommend m
 
 ---
 
-**Bottom line**: AI can now do in 2 hours what would take weeks manually—systematically mapping survey questions to standardized concepts across the federal survey ecosystem. Whether the patterns surfaced are actionable depends on expert review. The methodology is ready for that conversation.
+**Bottom line**: AI can now do in 2 hours what would take weeks manually: systematically mapping survey questions to standardized concepts across the federal survey ecosystem. Whether the patterns surfaced are actionable depends on expert review. The methodology is ready for that conversation.
 
 
 \newpage
 
 # 1. Abstract
 
-**Background**: The U.S. federal statistical system fields dozens of demographic surveys annually, but systematic analysis of how measurement effort is distributed across concepts has been infeasible due to resource constraints. Manual expert review would require approximately 70 hours (at ~100 questions/hour) to categorize 6,987 survey questions to standardized taxonomies—roughly 2 weeks of dedicated effort at substantial cost.
+**Background**: The U.S. federal statistical system fields dozens of demographic surveys annually, but systematic analysis of how measurement effort is distributed across concepts has been infeasible due to resource constraints. Manual expert review would require weeks of dedicated effort at substantial cost to categorize thousands of survey questions to standardized taxonomies.
 
 **Methods**: We developed an exploratory dual-model Large Language Model (LLM) categorization pipeline using GPT-5-mini and Claude Haiku 4.5 to independently categorize 6,987 questions from 46 federal surveys to the U.S. Census Bureau's Survey Explorer topic taxonomy (5 topics, 152 subtopics). Disagreements were resolved through confidence-based arbitration using Claude Sonnet 4.5. Inter-rater reliability was assessed using Cohen's Kappa.
 
-**Results**: The pipeline achieved 99.5% successful categorization (6,949/6,987 questions) in approximately 2 hours at ~$15 cost—an estimated 35× speed improvement and 95%+ cost reduction compared to manual approaches. Topic-level agreement between models reached 89.4% (Cohen's κ = 0.842), representing "almost perfect agreement" per the Landis & Koch (1977) interpretation scale. Coverage analysis revealed measurement concentration patterns: 10 concepts (6.6% of taxonomy) account for 39.4% of all questions, reflecting the demographic baseline surveys require for cross-survey analysis and universe definition. Survey pairs showed expected conceptual overlap at the taxonomy level, consistent with how demographic surveys establish population contexts.
+**Results**: The pipeline achieved 99.5% successful categorization (6,949/6,987 questions) in approximately 2 hours at ~$15 cost, an estimated 35× speed improvement and 95%+ cost reduction compared to manual approaches. Topic-level agreement between models reached 89.4% (Cohen's κ = 0.842), representing "almost perfect agreement" per the Landis & Koch (1977) interpretation scale. Coverage analysis revealed measurement concentration patterns: 10 concepts (6.6% of taxonomy) account for 39.4% of all questions, reflecting the demographic baseline surveys require for cross-survey analysis and universe definition. Survey pairs showed expected conceptual overlap at the taxonomy level, consistent with how demographic surveys establish population contexts.
 
-**Interpretation**: This work demonstrates technical feasibility of AI-assisted survey ecosystem analysis at scale. The methodology successfully processes thousands of questions with strong inter-rater reliability. However, **this is an exploratory proof-of-concept**. The patterns identified—measurement concentration, survey overlap, coverage distribution—largely reflect intentional survey design: repeated demographic questions establish population universes and enable cross-survey comparability. Validation by subject matter experts is needed to assess whether automated categorizations accurately capture survey intent and to determine which patterns, if any, warrant closer examination.
+**Interpretation**: This work demonstrates technical feasibility of AI-assisted survey ecosystem analysis at scale. The methodology successfully processes thousands of questions with strong inter-rater reliability. However, **this is an exploratory proof-of-concept**. The patterns identified (measurement concentration, survey overlap, coverage distribution) largely reflect intentional survey design: repeated demographic questions establish population universes and enable cross-survey comparability. Validation by subject matter experts is needed to assess whether automated categorizations accurately capture survey intent and to determine which patterns, if any, warrant closer examination.
 
-**Conclusions**: LLM-based concept mapping enables systematic survey analysis at speeds and scales previously infeasible. The approach is reproducible and generates structured data that builds semantic knowledge about the survey ecosystem—supporting data discovery, cross-survey analysis, and informed questionnaire design. Critical next steps include expert review to assess categorization accuracy and evaluate whether this methodology merits operational adoption. Success is measured not by identifying problems, but by demonstrating that AI-assisted analysis can systematically map survey content to enable deeper understanding.
+**Conclusions**: LLM-based concept mapping enables systematic survey analysis at speeds and scales previously infeasible. The approach is reproducible and generates structured data that builds semantic knowledge about the survey ecosystem, supporting data discovery, cross-survey analysis, and informed questionnaire design. Critical next steps include expert review to assess categorization accuracy and evaluate whether this methodology merits operational adoption. Success is measured not by identifying problems, but by demonstrating that AI-assisted analysis can systematically map survey content to enable deeper understanding.
 
 **Keywords**: survey methodology, concept mapping, large language models, artificial intelligence, federal statistics, proof-of-concept, Census Bureau
 
@@ -109,9 +109,9 @@ This is exploratory research, not an operational system. It does not recommend m
 
 The U.S. federal government operates one of the world's most comprehensive statistical systems, fielding dozens of demographic surveys annually to inform policy, allocate resources, and track societal well-being. These surveys span economic security (Survey of Income and Program Participation), health access (National Health Interview Survey), housing quality (American Housing Survey), education outcomes (National Teacher and Principal Survey), and myriad other domains critical to evidence-based governance.
 
-Yet this breadth comes with complexity. The federal survey ecosystem has evolved organically over decades, with individual agencies developing specialized instruments to address emerging policy needs. Understanding how this ecosystem is structured—which concepts are measured extensively, where surveys share conceptual territory, and how coverage varies across domains—has traditionally required labor-intensive manual analysis.
+Yet this breadth comes with complexity. The federal survey ecosystem has evolved organically over decades, with individual agencies developing specialized instruments to address emerging policy needs. Understanding how this ecosystem is structured (which concepts are measured extensively, where surveys share conceptual territory, and how coverage varies across domains) has traditionally required labor-intensive manual analysis.
 
-As federal agencies face pressure to reduce respondent burden while maintaining data quality, systematic knowledge of the survey ecosystem becomes increasingly valuable. **What concepts are being measured, by which surveys, and with what patterns of overlap and specialization?** Answering these questions at scale has been infeasible—until now.
+As federal agencies face pressure to reduce respondent burden while maintaining data quality, systematic knowledge of the survey ecosystem becomes increasingly valuable. **What concepts are being measured, by which surveys, and with what patterns of overlap and specialization?** Answering these questions at scale has been infeasible until now.
 
 ## 2.2 The Concept Mapping Challenge
 
@@ -162,7 +162,7 @@ This study makes three primary contributions:
 
 **Methodological**: Demonstrates that dual-LLM categorization with arbitration achieves 99.5% successful categorization with Cohen's Kappa of 0.842 ("almost perfect agreement" per Landis & Koch, 1977) while operating approximately 20× faster than estimated manual analysis.
 
-**Exploratory**: Identifies patterns in survey coverage—concepts with high measurement concentration (reflecting the demographic baseline surveys need), survey pairs with shared conceptual territory (reflecting intentional design for universe definition), and the distribution of coverage across taxonomy domains.
+**Exploratory**: Identifies patterns in survey coverage: concepts with high measurement concentration (reflecting the demographic baseline surveys need), survey pairs with shared conceptual territory (reflecting intentional design for universe definition), and the distribution of coverage across taxonomy domains.
 
 **Operational**: Establishes a reproducible, cost-effective framework (~$15 for ~7,000 questions, ~2 hours processing time) that could support ongoing concept mapping if validated by domain experts.
 
@@ -182,7 +182,7 @@ The remainder of this report proceeds as follows:
 
 **Section 7 (Results)** reports categorization performance metrics, model agreement analysis, and processing efficiency compared to manual approaches.
 
-**Section 8 (Coverage Analysis)** identifies patterns in concept coverage—high-frequency concepts, sparsely measured concepts, and concepts without household survey coverage.
+**Section 8 (Coverage Analysis)** identifies patterns in concept coverage: high-frequency concepts, sparsely measured concepts, and concepts without household survey coverage.
 
 **Section 9 (Survey Overlap Patterns)** presents survey similarity findings as areas for expert investigation, without prescribing specific consolidation actions.
 
@@ -270,7 +270,7 @@ The traditional approach to cross-survey concept mapping involves subject matter
 - Scale limitations (infeasible for thousands of questions)
 - Difficult to update as surveys evolve
 
-For the 6,987 questions in this analysis, manual expert review would require an estimated ~70 hours (assuming 100 questions/hour, a conservative estimate for expert categorization with taxonomy reference; ~2 weeks of full-time work), making comprehensive ecosystem analysis prohibitively expensive for routine execution.
+For the thousands of questions in this analysis, manual expert review would require weeks of dedicated effort, making comprehensive ecosystem analysis prohibitively expensive for routine execution.
 
 ### 3.2.2 Metadata-Based Approaches
 
@@ -325,7 +325,7 @@ LLMs also have important limitations for this task:
 
 **Hallucination Risk**: LLMs occasionally generate plausible-sounding but incorrect information. This risk is managed through cross-validation (dual-model approach) and confidence scoring.
 
-**Inconsistency**: LLMs can produce non-deterministic outputs. For models that support temperature control, setting temperature = 0 (or as low as permitted) is recommended for classification tasks to maximize consistency and reproducibility. However, the models used in this study—GPT-5-mini (a Mixture of Experts architecture where the temperature parameter was deprecated) and Claude Haiku 4.5 (which does not expose temperature control)—do not offer this option. We used default API parameters for both models, accepting that some output variability may occur across runs.
+**Inconsistency**: LLMs can produce non-deterministic outputs. For models that support temperature control, setting temperature = 0 (or as low as permitted) is recommended for classification tasks to maximize consistency and reproducibility. However, the models used in this study (GPT-5-mini, a Mixture of Experts architecture where the temperature parameter was deprecated, and Claude Haiku 4.5, which does not expose temperature control) do not offer this option. We used default API parameters for both models, accepting that some output variability may occur across runs.
 
 **Cost**: Commercial LLM APIs charge per token processed. Our full pipeline cost ~$15, a fraction of manual expert review cost but non-trivial for very large datasets.
 
@@ -1037,12 +1037,7 @@ The complete pipeline processed all 6,987 questions in approximately **2 hours o
 
 **Total API cost**: Approximately $15 for complete pipeline execution.
 
-**Comparison to Manual Analysis**: For 6,987 questions, assuming expert manual categorization at 100 questions/hour (a conservative estimate; thorough analysis including survey context, taxonomy alignment, and documentation typically requires 5-10 minutes per question):
-- Estimated manual time: ~70 hours (~2 weeks at 40 hrs/week)
-- Actual LLM time: 2 hours
-- **Time savings: 96% reduction**
-
-This dramatic efficiency gain demonstrates the practical value of LLM-based approaches for large-scale survey analysis tasks, making previously infeasible analyses tractable.
+**Comparison to Manual Analysis**: Manual expert categorization of thousands of questions would require weeks of dedicated effort. The LLM pipeline completed the same task in approximately 2 hours, representing a dramatic efficiency gain that makes previously infeasible analyses tractable.
 
 ## 7.7 Summary
 
@@ -1051,7 +1046,7 @@ The dual-model LLM categorization pipeline achieved:
 - ✅ **89.4% topic agreement** demonstrating consistent semantic understanding
 - ✅ **κ = 0.842** ("almost perfect agreement" per Landis & Koch, 1977)
 - ✅ **3.1% dual-modal questions** capturing genuine conceptual complexity  
-- ✅ **~2 hours processing time** vs. estimated ~70 hours manual effort (~35× faster)
+- ✅ **~2 hours processing time** vs. weeks of manual effort
 - ✅ **~$15 total cost** for processing 6,987 questions
 
 These results demonstrate technical feasibility: modern LLMs can perform reliable, scalable semantic categorization with strong inter-rater agreement. Whether this methodology should be operationalized requires expert validation of categorization accuracy and assessment of whether surfaced patterns represent actionable insights.
@@ -1091,7 +1086,7 @@ Among the covered subtopics, question distribution is highly skewed.
 | Max (most covered concept) | 587 questions |
 | Min (least covered concept) | 1 question |
 
-The large standard deviation (94.7) and gap between mean (79.4) and median (42.0) indicate a **heavily right-skewed distribution**—a few concepts receive intensive measurement while most receive moderate attention.
+The large standard deviation (94.7) and gap between mean (79.4) and median (42.0) indicate a **heavily right-skewed distribution**: a few concepts receive intensive measurement while most receive moderate attention.
 
 ## 8.3 High-Frequency Concepts
 
@@ -1118,7 +1113,7 @@ The following concepts appear in hundreds of questions across multiple surveys:
 
 **Why Demographic Questions Are Repeated Across Surveys**
 
-Many demographic surveys ask similar questions about respondents—age, income, household composition, employment status. This duplication is by design: these questions establish which universe different populations belong to and enable cross-survey comparisons. A health survey needs income data to stratify health outcomes by economic status. An education survey needs age data to define grade-appropriate populations. An employment survey needs demographic data to produce labor force statistics by subgroup.
+Many demographic surveys ask similar questions about respondents (age, income, household composition, employment status). This duplication is by design: these questions establish which universe different populations belong to and enable cross-survey comparisons. A health survey needs income data to stratify health outcomes by economic status. An education survey needs age data to define grade-appropriate populations. An employment survey needs demographic data to produce labor force statistics by subgroup.
 
 This measurement pattern reflects how federal statistics support evidence-based policy. Large, stable populations that change slowly yield less new information per measurement than targeted assessment of under-represented or hard-to-count groups. The repeated demographic baseline enables the analytical work of understanding impacts, outcomes, and effects across population segments.
 
@@ -1126,7 +1121,7 @@ This measurement pattern reflects how federal statistics support evidence-based 
 
 **Health insurance** (412 questions): Driven by Affordable Care Act monitoring requirements and public health surveillance needs. Coverage status, source, and cost are measured across surveys serving different analytical purposes.
 
-**Employment** (389 questions): Labor force statistics are foundational to economic indicators. Multiple surveys track employment from different angles—current status, work history, job characteristics, industry, occupation.
+**Employment** (389 questions): Labor force statistics are foundational to economic indicators. Multiple surveys track employment from different angles: current status, work history, job characteristics, industry, occupation.
 
 **Demographic anchors**: Age (276), race/ethnicity, and geographic location appear universally as stratification variables enabling subgroup analysis.
 
@@ -1158,7 +1153,7 @@ High measurement frequency across surveys enables:
 ### 8.4.2 Interpretation
 
 These concepts with limited coverage often represent:
-- **Emerging phenomena**: Cryptocurrency, gig economy, smart homes—relatively new economic/social trends that predate widespread survey adoption
+- **Emerging phenomena**: Cryptocurrency, gig economy, smart homes are relatively new economic/social trends that predate widespread survey adoption
 - **Specialized measurement**: Topics measured in depth by surveys outside this study's scope
 - **Recently added taxonomy concepts**: Categories added to the taxonomy after most survey instruments were designed
 
@@ -1504,21 +1499,19 @@ This study demonstrates that modern Large Language Models can reliably categoriz
 
 **1. LLMs Match or Exceed Human Inter-Coder Reliability**
 
-The dual-model approach achieved Cohen's Kappa of 0.842 for topic-level categorization, representing "almost perfect agreement" per the Landis & Koch (1977) interpretation scale. This was accomplished in 2 hours at ~$15 cost, compared to an estimated ~70 hours for manual expert review.
+The dual-model approach achieved Cohen's Kappa of 0.842 for topic-level categorization, representing "almost perfect agreement" per the Landis & Koch (1977) interpretation scale. This was accomplished in approximately 2 hours at ~$15 cost, compared to the weeks of effort manual expert review would require.
 
-The efficiency gain is not merely incremental—it represents a **qualitative shift** in what analyses are feasible. Regular concept mapping to track survey evolution becomes practical rather than aspirational.
+The efficiency gain is not merely incremental. It represents a **qualitative shift** in what analyses are feasible. Regular concept mapping to track survey evolution becomes practical rather than aspirational.
 
 **2. Federal Survey Ecosystem Shows Measurement Concentration by Design**
 
 The federal demographic survey ecosystem exhibits concentration: **6.6% of concepts (10 subtopics) account for 39.4% of all questions**. Income, Health Insurance, Employment Status, and related concepts dominate measurement across surveys.
 
-This concentration reflects intentional survey design. Many demographic surveys ask similar questions about respondents—age, income, household composition, employment—because these establish which universe different populations belong to and enable cross-survey comparisons. A health survey needs income data to stratify health outcomes by economic status. An employment survey needs demographic data to produce labor force statistics by subgroup. The analytical value of federal statistics depends on this consistent measurement foundation.
-
-The more interesting analytical question concerns under-represented and hard-to-count populations: what additional data or enrichment is needed to better understand these groups? Large, stable populations that change slowly yield less new information per measurement than targeted assessment of populations where we need to understand impacts, outcomes, and effects for evidence-based policy.
+This concentration reflects intentional survey design. Many demographic surveys ask similar questions about respondents (age, income, household composition, employment) because these establish which universe different populations belong to and enable cross-survey comparisons. A health survey needs income data to stratify health outcomes by economic status. An employment survey needs demographic data to produce labor force statistics by subgroup. The analytical value of federal statistics depends on this consistent measurement foundation.
 
 **3. Coverage Reflects Study Scope**
 
-Approximately 30% of Census taxonomy concepts have limited or no coverage in the 46 household demographic surveys analyzed. This is expected—we examined one segment of the federal statistical system, not the complete portfolio. Many concepts without household survey coverage are appropriately measured through administrative data, establishment surveys, or specialized censuses.
+Approximately 30% of Census taxonomy concepts have limited or no coverage in the 46 household demographic surveys analyzed. This is expected: we examined one segment of the federal statistical system, not the complete portfolio. Many concepts without household survey coverage are appropriately measured through administrative data, establishment surveys, or specialized censuses.
 
 The value of this methodology lies in demonstrating that systematic mapping is feasible. Extending this approach to additional survey domains would build progressively more complete coverage maps, using this analysis as a springboard.
 
@@ -2107,12 +2100,12 @@ This study explored whether Large Language Models can support systematic analysi
 
 **Technical Feasibility Demonstrated**: The dual-model LLM categorization pipeline achieved 99.5% successful categorization of 6,987 questions from 46 federal surveys. Inter-rater reliability (Cohen's κ = 0.842 for topics, 0.692 for subtopics) represents "almost perfect" and "substantial" agreement respectively per the Landis & Koch (1977) interpretation scale.
 
-**Substantial Efficiency Gains**: Processing completed in approximately 2 hours at ~$15 cost, compared to an estimated ~70 hours for manual expert review (approximately 35× faster). This efficiency gain makes ecosystem-level analysis feasible for the first time.
+**Substantial Efficiency Gains**: Processing completed in approximately 2 hours at ~$15 cost, compared to the weeks of effort manual expert review would require. This efficiency gain makes ecosystem-level analysis feasible for the first time.
 
 **Patterns Identified**: The analysis surfaced patterns in measurement allocation:
-- Concentration: 6.6% of taxonomy concepts account for 39.4% of questions—reflecting the demographic baseline needed for cross-survey analysis
-- Overlap: Several survey pairs show high conceptual similarity at the taxonomy level—expected given how demographic surveys establish population universes
-- Scope-bounded coverage: ~30% of taxonomy concepts have limited coverage in household demographic surveys—expected given study scope; these concepts may be measured through other survey programs or administrative data
+- Concentration: 6.6% of taxonomy concepts account for 39.4% of questions, reflecting the demographic baseline needed for cross-survey analysis
+- Overlap: Several survey pairs show high conceptual similarity at the taxonomy level, expected given how demographic surveys establish population universes
+- Scope-bounded coverage: ~30% of taxonomy concepts have limited coverage in household demographic surveys, expected given study scope; these concepts may be measured through other survey programs or administrative data
 
 ## 13.2 What This Analysis Does and Does Not Provide
 
@@ -2178,7 +2171,7 @@ This research is offered as a starting point for discussion, not a finished prod
 
 **Technical Staff**: Suggestions for improving the methodology, extending to additional surveys, or integrating with existing systems.
 
-The code, documentation, and intermediate outputs are available for review and replication. This work represents an experiment in applied AI for survey methodology—the value of that experiment depends on whether it connects with the expertise needed to interpret its results.
+The code, documentation, and intermediate outputs are available for review and replication. This work represents an experiment in applied AI for survey methodology. The value of that experiment depends on whether it connects with the expertise needed to interpret its results.
 
 For questions, feedback, or collaboration inquiries, please contact the author.
 

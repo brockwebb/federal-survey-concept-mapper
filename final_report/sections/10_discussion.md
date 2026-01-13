@@ -6,21 +6,19 @@ This study demonstrates that modern Large Language Models can reliably categoriz
 
 **1. LLMs Match or Exceed Human Inter-Coder Reliability**
 
-The dual-model approach achieved Cohen's Kappa of 0.842 for topic-level categorization, representing "almost perfect agreement" per the Landis & Koch (1977) interpretation scale. This was accomplished in 2 hours at ~$15 cost, compared to an estimated ~70 hours for manual expert review.
+The dual-model approach achieved Cohen's Kappa of 0.842 for topic-level categorization, representing "almost perfect agreement" per the Landis & Koch (1977) interpretation scale. This was accomplished in approximately 2 hours at ~$15 cost, compared to the weeks of effort manual expert review would require.
 
-The efficiency gain is not merely incremental—it represents a **qualitative shift** in what analyses are feasible. Regular concept mapping to track survey evolution becomes practical rather than aspirational.
+The efficiency gain is not merely incremental. It represents a **qualitative shift** in what analyses are feasible. Regular concept mapping to track survey evolution becomes practical rather than aspirational.
 
 **2. Federal Survey Ecosystem Shows Measurement Concentration by Design**
 
 The federal demographic survey ecosystem exhibits concentration: **6.6% of concepts (10 subtopics) account for 39.4% of all questions**. Income, Health Insurance, Employment Status, and related concepts dominate measurement across surveys.
 
-This concentration reflects intentional survey design. Many demographic surveys ask similar questions about respondents—age, income, household composition, employment—because these establish which universe different populations belong to and enable cross-survey comparisons. A health survey needs income data to stratify health outcomes by economic status. An employment survey needs demographic data to produce labor force statistics by subgroup. The analytical value of federal statistics depends on this consistent measurement foundation.
-
-The more interesting analytical question concerns under-represented and hard-to-count populations: what additional data or enrichment is needed to better understand these groups? Large, stable populations that change slowly yield less new information per measurement than targeted assessment of populations where we need to understand impacts, outcomes, and effects for evidence-based policy.
+This concentration reflects intentional survey design. Many demographic surveys ask similar questions about respondents (age, income, household composition, employment) because these establish which universe different populations belong to and enable cross-survey comparisons. A health survey needs income data to stratify health outcomes by economic status. An employment survey needs demographic data to produce labor force statistics by subgroup. The analytical value of federal statistics depends on this consistent measurement foundation.
 
 **3. Coverage Reflects Study Scope**
 
-Approximately 30% of Census taxonomy concepts have limited or no coverage in the 46 household demographic surveys analyzed. This is expected—we examined one segment of the federal statistical system, not the complete portfolio. Many concepts without household survey coverage are appropriately measured through administrative data, establishment surveys, or specialized censuses.
+Approximately 30% of Census taxonomy concepts have limited or no coverage in the 46 household demographic surveys analyzed. This is expected: we examined one segment of the federal statistical system, not the complete portfolio. Many concepts without household survey coverage are appropriately measured through administrative data, establishment surveys, or specialized censuses.
 
 The value of this methodology lies in demonstrating that systematic mapping is feasible. Extending this approach to additional survey domains would build progressively more complete coverage maps, using this analysis as a springboard.
 

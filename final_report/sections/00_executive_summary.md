@@ -2,7 +2,7 @@
 
 ## The Challenge
 
-Federal household surveys face mounting pressure. Response rates continue to decline, raising the cost per completed interview. Each survey question represents an investment—yet developing the capabilities to systematically assess whether the federal survey ecosystem is structured efficiently requires substantial labor. Manual analysis of questionnaire overlap across dozens of surveys would require weeks of expert time and rarely happens at ecosystem scale.
+Federal household surveys face mounting pressure. Response rates continue to decline, raising the cost per completed interview. Each survey question represents an investment, yet developing the capabilities to systematically assess whether the federal survey ecosystem is structured efficiently requires substantial labor. Manual analysis of questionnaire overlap across dozens of surveys would require weeks of expert time and rarely happens at ecosystem scale.
 
 ## What This Study Did
 
@@ -18,13 +18,13 @@ This proof-of-concept applied AI-based text categorization to map 6,987 question
 
 ## What We Found
 
-The analysis surfaced three patterns warranting expert attention:
+The analysis produced three key findings:
 
-**1. Measurement Concentration**: A small fraction of taxonomy concepts dominate federal surveys. Ten concepts (6.6% of the taxonomy) account for 39.4% of all questions. Income, health insurance, and employment status are measured extensively across multiple surveys.
+**1. Technical Feasibility Demonstrated**: This proof of concept successfully showed that AI-based LLM tools can reliably categorize survey questions at scale. Two independent models achieved Cohen's κ = 0.842 ("almost perfect agreement"), processing nearly 7,000 questions in approximately 2 hours. The methodology works.
 
-**2. Expected Overlap in Demographic Measurement**: Many demographic surveys ask similar questions about respondents—age, income, household composition, employment. This duplication is by design: it establishes which universe different populations belong to and enables cross-survey comparisons. The more interesting analytical question concerns under-represented and hard-to-count populations: what additional data or enrichment is needed to better understand these groups? Large, stable populations that change slowly yield less new information than targeted measurement of populations where we need to understand impacts, outcomes, and effects for evidence-based policy.
+**2. Topic Distribution Visible at a Glance**: The methodology produces visualizations (Figure 2) showing how questions distribute across taxonomy concepts. Within household demographic surveys, Economic and Social topics dominate, while coverage is thinner in some subtopics. Whether sparse coverage in particular areas warrants closer examination or appropriately reflects survey scope is a question for domain experts.
 
-**3. Coverage Reflects Study Scope**: Approximately 30% of Census taxonomy concepts have limited or no coverage in the surveys analyzed. This is expected—we examined household demographic surveys, not the full federal statistical portfolio. The value of this methodology lies in demonstrating that systematic mapping is feasible. Extending this approach to additional survey domains would build progressively more complete coverage maps, using this analysis as a springboard.
+**3. Patterns Reflect Study Scope**: The concentration of questions in certain topics (Income, Health Insurance, Employment Status) and the approximately 30% of taxonomy concepts without coverage are expected given our focus on household demographic surveys. This is one segment of the federal statistical portfolio. The value of this methodology lies in demonstrating that systematic mapping is feasible; extending this approach to additional survey domains would build progressively more complete coverage maps.
 
 ## What This Means
 
@@ -46,4 +46,4 @@ This is exploratory research, not an operational system. It does not recommend m
 
 ---
 
-**Bottom line**: AI can now do in 2 hours what would take weeks manually—systematically mapping survey questions to standardized concepts across the federal survey ecosystem. Whether the patterns surfaced are actionable depends on expert review. The methodology is ready for that conversation.
+**Bottom line**: AI can now do in 2 hours what would take weeks manually: systematically mapping survey questions to standardized concepts across the federal survey ecosystem. Whether the patterns surfaced are actionable depends on expert review. The methodology is ready for that conversation.

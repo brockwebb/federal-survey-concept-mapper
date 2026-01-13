@@ -59,7 +59,7 @@ The traditional approach to cross-survey concept mapping involves subject matter
 - Scale limitations (infeasible for thousands of questions)
 - Difficult to update as surveys evolve
 
-For the 6,987 questions in this analysis, manual expert review would require an estimated ~70 hours (assuming 100 questions/hour, a conservative estimate for expert categorization with taxonomy reference; ~2 weeks of full-time work), making comprehensive ecosystem analysis prohibitively expensive for routine execution.
+For the thousands of questions in this analysis, manual expert review would require weeks of dedicated effort, making comprehensive ecosystem analysis prohibitively expensive for routine execution.
 
 ### 3.2.2 Metadata-Based Approaches
 
@@ -114,7 +114,7 @@ LLMs also have important limitations for this task:
 
 **Hallucination Risk**: LLMs occasionally generate plausible-sounding but incorrect information. This risk is managed through cross-validation (dual-model approach) and confidence scoring.
 
-**Inconsistency**: LLMs can produce non-deterministic outputs. For models that support temperature control, setting temperature = 0 (or as low as permitted) is recommended for classification tasks to maximize consistency and reproducibility. However, the models used in this study—GPT-5-mini (a Mixture of Experts architecture where the temperature parameter was deprecated) and Claude Haiku 4.5 (which does not expose temperature control)—do not offer this option. We used default API parameters for both models, accepting that some output variability may occur across runs.
+**Inconsistency**: LLMs can produce non-deterministic outputs. For models that support temperature control, setting temperature = 0 (or as low as permitted) is recommended for classification tasks to maximize consistency and reproducibility. However, the models used in this study (GPT-5-mini, a Mixture of Experts architecture where the temperature parameter was deprecated, and Claude Haiku 4.5, which does not expose temperature control) do not offer this option. We used default API parameters for both models, accepting that some output variability may occur across runs.
 
 **Cost**: Commercial LLM APIs charge per token processed. Our full pipeline cost ~$15, a fraction of manual expert review cost but non-trivial for very large datasets.
 

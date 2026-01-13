@@ -159,12 +159,7 @@ The complete pipeline processed all 6,987 questions in approximately **2 hours o
 
 **Total API cost**: Approximately $15 for complete pipeline execution.
 
-**Comparison to Manual Analysis**: For 6,987 questions, assuming expert manual categorization at 100 questions/hour (a conservative estimate; thorough analysis including survey context, taxonomy alignment, and documentation typically requires 5-10 minutes per question):
-- Estimated manual time: ~70 hours (~2 weeks at 40 hrs/week)
-- Actual LLM time: 2 hours
-- **Time savings: 96% reduction**
-
-This dramatic efficiency gain demonstrates the practical value of LLM-based approaches for large-scale survey analysis tasks, making previously infeasible analyses tractable.
+**Comparison to Manual Analysis**: Manual expert categorization of thousands of questions would require weeks of dedicated effort. The LLM pipeline completed the same task in approximately 2 hours, representing a dramatic efficiency gain that makes previously infeasible analyses tractable.
 
 ## 7.7 Summary
 
@@ -173,7 +168,7 @@ The dual-model LLM categorization pipeline achieved:
 - ✅ **89.4% topic agreement** demonstrating consistent semantic understanding
 - ✅ **κ = 0.842** ("almost perfect agreement" per Landis & Koch, 1977)
 - ✅ **3.1% dual-modal questions** capturing genuine conceptual complexity  
-- ✅ **~2 hours processing time** vs. estimated ~70 hours manual effort (~35× faster)
+- ✅ **~2 hours processing time** vs. weeks of manual effort
 - ✅ **~$15 total cost** for processing 6,987 questions
 
 These results demonstrate technical feasibility: modern LLMs can perform reliable, scalable semantic categorization with strong inter-rater agreement. Whether this methodology should be operationalized requires expert validation of categorization accuracy and assessment of whether surfaced patterns represent actionable insights.

@@ -4,9 +4,9 @@
 
 The U.S. federal government operates one of the world's most comprehensive statistical systems, fielding dozens of demographic surveys annually to inform policy, allocate resources, and track societal well-being. These surveys span economic security (Survey of Income and Program Participation), health access (National Health Interview Survey), housing quality (American Housing Survey), education outcomes (National Teacher and Principal Survey), and myriad other domains critical to evidence-based governance.
 
-Yet this breadth comes with complexity. The federal survey ecosystem has evolved organically over decades, with individual agencies developing specialized instruments to address emerging policy needs. Understanding how this ecosystem is structured—which concepts are measured extensively, where surveys share conceptual territory, and how coverage varies across domains—has traditionally required labor-intensive manual analysis.
+Yet this breadth comes with complexity. The federal survey ecosystem has evolved organically over decades, with individual agencies developing specialized instruments to address emerging policy needs. Understanding how this ecosystem is structured (which concepts are measured extensively, where surveys share conceptual territory, and how coverage varies across domains) has traditionally required labor-intensive manual analysis.
 
-As federal agencies face pressure to reduce respondent burden while maintaining data quality, systematic knowledge of the survey ecosystem becomes increasingly valuable. **What concepts are being measured, by which surveys, and with what patterns of overlap and specialization?** Answering these questions at scale has been infeasible—until now.
+As federal agencies face pressure to reduce respondent burden while maintaining data quality, systematic knowledge of the survey ecosystem becomes increasingly valuable. **What concepts are being measured, by which surveys, and with what patterns of overlap and specialization?** Answering these questions at scale has been infeasible until now.
 
 ## 2.2 The Concept Mapping Challenge
 
@@ -57,7 +57,7 @@ This study makes three primary contributions:
 
 **Methodological**: Demonstrates that dual-LLM categorization with arbitration achieves 99.5% successful categorization with Cohen's Kappa of 0.842 ("almost perfect agreement" per Landis & Koch, 1977) while operating approximately 20× faster than estimated manual analysis.
 
-**Exploratory**: Identifies patterns in survey coverage—concepts with high measurement concentration (reflecting the demographic baseline surveys need), survey pairs with shared conceptual territory (reflecting intentional design for universe definition), and the distribution of coverage across taxonomy domains.
+**Exploratory**: Identifies patterns in survey coverage: concepts with high measurement concentration (reflecting the demographic baseline surveys need), survey pairs with shared conceptual territory (reflecting intentional design for universe definition), and the distribution of coverage across taxonomy domains.
 
 **Operational**: Establishes a reproducible, cost-effective framework (~$15 for ~7,000 questions, ~2 hours processing time) that could support ongoing concept mapping if validated by domain experts.
 
@@ -77,7 +77,7 @@ The remainder of this report proceeds as follows:
 
 **Section 7 (Results)** reports categorization performance metrics, model agreement analysis, and processing efficiency compared to manual approaches.
 
-**Section 8 (Coverage Analysis)** identifies patterns in concept coverage—high-frequency concepts, sparsely measured concepts, and concepts without household survey coverage.
+**Section 8 (Coverage Analysis)** identifies patterns in concept coverage: high-frequency concepts, sparsely measured concepts, and concepts without household survey coverage.
 
 **Section 9 (Survey Overlap Patterns)** presents survey similarity findings as areas for expert investigation, without prescribing specific consolidation actions.
 

@@ -6,12 +6,12 @@ This study explored whether Large Language Models can support systematic analysi
 
 **Technical Feasibility Demonstrated**: The dual-model LLM categorization pipeline achieved 99.5% successful categorization of 6,987 questions from 46 federal surveys. Inter-rater reliability (Cohen's κ = 0.842 for topics, 0.692 for subtopics) represents "almost perfect" and "substantial" agreement respectively per the Landis & Koch (1977) interpretation scale.
 
-**Substantial Efficiency Gains**: Processing completed in approximately 2 hours at ~$15 cost, compared to an estimated ~70 hours for manual expert review (approximately 35× faster). This efficiency gain makes ecosystem-level analysis feasible for the first time.
+**Substantial Efficiency Gains**: Processing completed in approximately 2 hours at ~$15 cost, compared to the weeks of effort manual expert review would require. This efficiency gain makes ecosystem-level analysis feasible for the first time.
 
 **Patterns Identified**: The analysis surfaced patterns in measurement allocation:
-- Concentration: 6.6% of taxonomy concepts account for 39.4% of questions—reflecting the demographic baseline needed for cross-survey analysis
-- Overlap: Several survey pairs show high conceptual similarity at the taxonomy level—expected given how demographic surveys establish population universes
-- Scope-bounded coverage: ~30% of taxonomy concepts have limited coverage in household demographic surveys—expected given study scope; these concepts may be measured through other survey programs or administrative data
+- Concentration: 6.6% of taxonomy concepts account for 39.4% of questions, reflecting the demographic baseline needed for cross-survey analysis
+- Overlap: Several survey pairs show high conceptual similarity at the taxonomy level, expected given how demographic surveys establish population universes
+- Scope-bounded coverage: ~30% of taxonomy concepts have limited coverage in household demographic surveys, expected given study scope; these concepts may be measured through other survey programs or administrative data
 
 ## 13.2 What This Analysis Does and Does Not Provide
 
@@ -77,6 +77,6 @@ This research is offered as a starting point for discussion, not a finished prod
 
 **Technical Staff**: Suggestions for improving the methodology, extending to additional surveys, or integrating with existing systems.
 
-The code, documentation, and intermediate outputs are available for review and replication. This work represents an experiment in applied AI for survey methodology—the value of that experiment depends on whether it connects with the expertise needed to interpret its results.
+The code, documentation, and intermediate outputs are available for review and replication. This work represents an experiment in applied AI for survey methodology. The value of that experiment depends on whether it connects with the expertise needed to interpret its results.
 
 For questions, feedback, or collaboration inquiries, please contact the author.

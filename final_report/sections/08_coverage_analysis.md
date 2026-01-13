@@ -30,7 +30,7 @@ Among the covered subtopics, question distribution is highly skewed.
 | Max (most covered concept) | 587 questions |
 | Min (least covered concept) | 1 question |
 
-The large standard deviation (94.7) and gap between mean (79.4) and median (42.0) indicate a **heavily right-skewed distribution**—a few concepts receive intensive measurement while most receive moderate attention.
+The large standard deviation (94.7) and gap between mean (79.4) and median (42.0) indicate a **heavily right-skewed distribution**: a few concepts receive intensive measurement while most receive moderate attention.
 
 ## 8.3 High-Frequency Concepts
 
@@ -57,7 +57,7 @@ The following concepts appear in hundreds of questions across multiple surveys:
 
 **Why Demographic Questions Are Repeated Across Surveys**
 
-Many demographic surveys ask similar questions about respondents—age, income, household composition, employment status. This duplication is by design: these questions establish which universe different populations belong to and enable cross-survey comparisons. A health survey needs income data to stratify health outcomes by economic status. An education survey needs age data to define grade-appropriate populations. An employment survey needs demographic data to produce labor force statistics by subgroup.
+Many demographic surveys ask similar questions about respondents (age, income, household composition, employment status). This duplication is by design: these questions establish which universe different populations belong to and enable cross-survey comparisons. A health survey needs income data to stratify health outcomes by economic status. An education survey needs age data to define grade-appropriate populations. An employment survey needs demographic data to produce labor force statistics by subgroup.
 
 This measurement pattern reflects how federal statistics support evidence-based policy. Large, stable populations that change slowly yield less new information per measurement than targeted assessment of under-represented or hard-to-count groups. The repeated demographic baseline enables the analytical work of understanding impacts, outcomes, and effects across population segments.
 
@@ -65,7 +65,7 @@ This measurement pattern reflects how federal statistics support evidence-based 
 
 **Health insurance** (412 questions): Driven by Affordable Care Act monitoring requirements and public health surveillance needs. Coverage status, source, and cost are measured across surveys serving different analytical purposes.
 
-**Employment** (389 questions): Labor force statistics are foundational to economic indicators. Multiple surveys track employment from different angles—current status, work history, job characteristics, industry, occupation.
+**Employment** (389 questions): Labor force statistics are foundational to economic indicators. Multiple surveys track employment from different angles: current status, work history, job characteristics, industry, occupation.
 
 **Demographic anchors**: Age (276), race/ethnicity, and geographic location appear universally as stratification variables enabling subgroup analysis.
 
@@ -97,7 +97,7 @@ High measurement frequency across surveys enables:
 ### 8.4.2 Interpretation
 
 These concepts with limited coverage often represent:
-- **Emerging phenomena**: Cryptocurrency, gig economy, smart homes—relatively new economic/social trends that predate widespread survey adoption
+- **Emerging phenomena**: Cryptocurrency, gig economy, smart homes are relatively new economic/social trends that predate widespread survey adoption
 - **Specialized measurement**: Topics measured in depth by surveys outside this study's scope
 - **Recently added taxonomy concepts**: Categories added to the taxonomy after most survey instruments were designed
 
