@@ -55,7 +55,7 @@ Questions are mapped to the **Census Bureau's Survey Explorer taxonomy**, the au
 
 This study makes three primary contributions:
 
-**Methodological**: Demonstrates that dual-LLM categorization with arbitration achieves 99.5% successful categorization with Cohen's Kappa of 0.842 ("almost perfect agreement" per Landis & Koch, 1977) while operating approximately 20× faster than estimated manual analysis.
+**Methodological**: Demonstrates that dual-LLM categorization with arbitration achieves 99.5% successful categorization with Cohen's Kappa of 0.842 ("almost perfect agreement" per Landis & Koch, 1977), representing a substantial reduction in time and cost compared to manual analysis.
 
 **Exploratory**: Identifies patterns in survey coverage: concepts with high measurement concentration (reflecting the demographic baseline surveys need), survey pairs with shared conceptual territory (reflecting intentional design for universe definition), and the distribution of coverage across taxonomy domains.
 

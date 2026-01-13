@@ -29,7 +29,7 @@
 
 ---
 
-\newpage
+---
 
 # Executive Summary
 
@@ -82,15 +82,15 @@ This is exploratory research, not an operational system. It does not recommend m
 **Bottom line**: AI can now do in 2 hours what would take weeks manually: systematically mapping survey questions to standardized concepts across the federal survey ecosystem. Whether the patterns surfaced are actionable depends on expert review. The methodology is ready for that conversation.
 
 
-\newpage
+---
 
 # 1. Abstract
 
-**Background**: The U.S. federal statistical system fields dozens of demographic surveys annually, but systematic analysis of how measurement effort is distributed across concepts has been infeasible due to resource constraints. Manual expert review would require weeks of dedicated effort at substantial cost to categorize thousands of survey questions to standardized taxonomies.
+**Background**: The U.S. federal statistical system fields dozens of demographic surveys annually, but systematic analysis of how measurement effort is distributed across concepts has been infeasible due to resource constraints. Manual expert review would require an estimated two weeks of dedicated staff effort to categorize thousands of survey questions to standardized taxonomies.
 
 **Methods**: We developed an exploratory dual-model Large Language Model (LLM) categorization pipeline using GPT-5-mini and Claude Haiku 4.5 to independently categorize 6,987 questions from 46 federal surveys to the U.S. Census Bureau's Survey Explorer topic taxonomy (5 topics, 152 subtopics). Disagreements were resolved through confidence-based arbitration using Claude Sonnet 4.5. Inter-rater reliability was assessed using Cohen's Kappa.
 
-**Results**: The pipeline achieved 99.5% successful categorization (6,949/6,987 questions) in approximately 2 hours at ~$15 cost, an estimated 35× speed improvement and 95%+ cost reduction compared to manual approaches. Topic-level agreement between models reached 89.4% (Cohen's κ = 0.842), representing "almost perfect agreement" per the Landis & Koch (1977) interpretation scale. Coverage analysis revealed measurement concentration patterns: 10 concepts (6.6% of taxonomy) account for 39.4% of all questions, reflecting the demographic baseline surveys require for cross-survey analysis and universe definition. Survey pairs showed expected conceptual overlap at the taxonomy level, consistent with how demographic surveys establish population contexts.
+**Results**: The pipeline achieved 99.5% successful categorization (6,949/6,987 questions) in approximately 2 hours at ~$15 in API costs, a substantial reduction in time and cost compared to manual approaches. Topic-level agreement between models reached 89.4% (Cohen's κ = 0.842), representing "almost perfect agreement" per the Landis & Koch (1977) interpretation scale. Coverage analysis revealed measurement concentration patterns: 10 concepts (6.6% of taxonomy) account for 39.4% of all questions, reflecting the demographic baseline surveys require for cross-survey analysis and universe definition. Survey pairs showed expected conceptual overlap at the taxonomy level, consistent with how demographic surveys establish population contexts.
 
 **Interpretation**: This work demonstrates technical feasibility of AI-assisted survey ecosystem analysis at scale. The methodology successfully processes thousands of questions with strong inter-rater reliability. However, **this is an exploratory proof-of-concept**. The patterns identified (measurement concentration, survey overlap, coverage distribution) largely reflect intentional survey design: repeated demographic questions establish population universes and enable cross-survey comparability. Validation by subject matter experts is needed to assess whether automated categorizations accurately capture survey intent and to determine which patterns, if any, warrant closer examination.
 
@@ -101,7 +101,7 @@ This is exploratory research, not an operational system. It does not recommend m
 **Word Count**: ~340 words
 
 
-\newpage
+---
 
 # 2. Introduction
 
@@ -160,7 +160,7 @@ Questions are mapped to the **Census Bureau's Survey Explorer taxonomy**, the au
 
 This study makes three primary contributions:
 
-**Methodological**: Demonstrates that dual-LLM categorization with arbitration achieves 99.5% successful categorization with Cohen's Kappa of 0.842 ("almost perfect agreement" per Landis & Koch, 1977) while operating approximately 20× faster than estimated manual analysis.
+**Methodological**: Demonstrates that dual-LLM categorization with arbitration achieves 99.5% successful categorization with Cohen's Kappa of 0.842 ("almost perfect agreement" per Landis & Koch, 1977), representing a substantial reduction in time and cost compared to manual analysis.
 
 **Exploratory**: Identifies patterns in survey coverage: concepts with high measurement concentration (reflecting the demographic baseline surveys need), survey pairs with shared conceptual territory (reflecting intentional design for universe definition), and the distribution of coverage across taxonomy domains.
 
@@ -207,7 +207,7 @@ This report serves multiple audiences:
 Technical details are provided for reproducibility, but the core findings and recommendations are accessible to non-technical readers. Where specialized knowledge aids understanding, we provide context and definitions rather than assuming expertise.
 
 
-\newpage
+---
 
 # 3. Background and Related Work
 
@@ -369,7 +369,7 @@ This study fills these gaps, providing both methodological innovation (dual-mode
 The Census Bureau taxonomy provides an authoritative framework for categorizing federal survey content, but manually mapping thousands of questions to this taxonomy is prohibitively expensive. Prior automated approaches using embeddings failed due to information asymmetry between detailed questions and sparse labels. Modern LLMs offer semantic reasoning capabilities that can bridge this gap, but require careful validation through cross-checking and arbitration. This study applies LLM-based categorization at unprecedented scale to provide the first comprehensive concept map of the federal demographic survey ecosystem.
 
 
-\newpage
+---
 
 # 4. Methodology
 
@@ -645,7 +645,7 @@ Total computational cost: ~$15 in API fees for complete pipeline execution on 6,
 This methodology represents a scalable, cost-effective approach to survey concept mapping that can process thousands of questions in hours rather than the weeks required for manual analysis. The dual-model architecture with arbitration provides both efficiency and quality assurance, while the dual-modal framework captures the genuine complexity of survey questions that span conceptual boundaries.
 
 
-\newpage
+---
 
 # 5. Data Collection and Preparation
 
@@ -844,7 +844,7 @@ The data quality issues have several implications:
 The source dataset of 6,987 questions from 46 federal surveys provided comprehensive coverage of federal demographic measurement but suffered from data quality issues inherent to manual extraction. These issues - missing skip logic, administrative text, fragmented questions - primarily affected the tail of difficult-to-categorize cases while the bulk of substantive questions categorized successfully. Future applications of this methodology would benefit substantially from automated question extraction preserving full survey context.
 
 
-\newpage
+---
 
 # 6. Implementation Overview
 
@@ -874,7 +874,7 @@ The complete implementation is available in the project GitHub repository (`fede
 Full technical specifications, prompt templates, validation procedures, and code snippets are provided in **Appendix A**.
 
 
-\newpage
+---
 
 # 7. Results: Categorization Performance
 
@@ -1052,7 +1052,7 @@ The dual-model LLM categorization pipeline achieved:
 These results demonstrate technical feasibility: modern LLMs can perform reliable, scalable semantic categorization with strong inter-rater agreement. Whether this methodology should be operationalized requires expert validation of categorization accuracy and assessment of whether surfaced patterns represent actionable insights.
 
 
-\newpage
+---
 
 # 8. Coverage Analysis: Patterns in the Data
 
@@ -1325,7 +1325,7 @@ Coverage analysis of 46 federal household demographic surveys reveals:
 These patterns reflect the design of federal household surveys: repeated demographic measurement enables universe definition and subgroup analysis, while specialized surveys provide depth on specific topics. The value of this mapping lies in demonstrating systematic analysis is feasible—a foundation that experts can build upon.
 
 
-\newpage
+---
 
 # 9. Survey Overlap Patterns: Areas for Expert Investigation
 
@@ -1489,7 +1489,7 @@ Overlap analysis reveals patterns in the federal survey ecosystem:
 Whether overlap represents inefficiency, appropriate redundancy, or necessary cross-validation is a judgment that requires domain expertise, understanding of statutory requirements, and consideration of user community needs. This analysis provides structured data to support such expert evaluation - it does not substitute for it.
 
 
-\newpage
+---
 
 # 10. Discussion
 
@@ -1744,7 +1744,7 @@ The methodology surfaces patterns in measurement concentration, survey coverage,
 This proof-of-concept demonstrates technical feasibility. Whether and how to apply this methodology operationally requires expert evaluation. The tools and initial data are ready for that conversation.
 
 
-\newpage
+---
 
 # 11. Limitations
 
@@ -1946,7 +1946,7 @@ Despite these limitations, the analysis provides valuable insights about federal
 These improvements would address the most significant limitations while leveraging the demonstrated strengths of the LLM-based approach.
 
 
-\newpage
+---
 
 # 12. Next Steps and Research Directions
 
@@ -2090,7 +2090,7 @@ The primary near-term value is methodological: demonstrating that this type of a
 If expert review validates this approach and finds value in the identified patterns, similar analyses could support ongoing survey portfolio monitoring. The low cost (~$15) and fast turnaround (~2 hours) make regular re-analysis feasible, potentially providing structured input for periodic survey planning processes.
 
 
-\newpage
+---
 
 # 13. Conclusion
 
@@ -2176,7 +2176,7 @@ The code, documentation, and intermediate outputs are available for review and r
 For questions, feedback, or collaboration inquiries, please contact the author.
 
 
-\newpage
+---
 
 # 14. Appendices
 
@@ -2574,7 +2574,7 @@ LLMs succeed where embeddings fail because they perform **semantic reasoning** r
 This finding saved substantial effort by ruling out embedding-based approaches early, allowing resources to focus on the LLM methodology that proved successful.
 
 
-\newpage
+---
 
 # References
 

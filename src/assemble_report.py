@@ -187,7 +187,7 @@ def assemble_report():
     content.append("")
     content.append("---")
     content.append("")
-    content.append("\\newpage")
+    content.append("---")
     content.append("")
     
     # Append each section
@@ -210,7 +210,7 @@ def assemble_report():
         
         # Don't add page break after references (it's the last section)
         if section_file != 'references.md':
-            content.append("\\newpage")
+            content.append("---")
             content.append("")
     
     # Write assembled report
