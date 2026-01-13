@@ -325,7 +325,7 @@ LLMs also have important limitations for this task:
 
 **Hallucination Risk**: LLMs occasionally generate plausible-sounding but incorrect information. This risk is managed through cross-validation (dual-model approach) and confidence scoring.
 
-**Inconsistency**: LLMs with temperature > 0 produce non-deterministic outputs. We set temperature = 0.3 for reduced variability while preserving some diversity for arbitration.
+**Inconsistency**: LLMs can produce non-deterministic outputs. For models that support temperature control, setting temperature = 0 (or as low as permitted) is recommended for classification tasks to maximize consistency and reproducibility. However, the models used in this study—GPT-5-mini (a Mixture of Experts architecture where the temperature parameter was deprecated) and Claude Haiku 4.5 (which does not expose temperature control)—do not offer this option. We used default API parameters for both models, accepting that some output variability may occur across runs.
 
 **Cost**: Commercial LLM APIs charge per token processed. Our full pipeline cost ~$15, a fraction of manual expert review cost but non-trivial for very large datasets.
 

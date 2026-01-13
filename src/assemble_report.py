@@ -3,15 +3,18 @@
 Assemble the complete report from individual sections.
 
 This script:
-1. Regenerates required figures from source data
+1. Regenerates required figures from source data (unless --skip-figures)
 2. Copies figures to final_report/figures/
 3. Copies data files to final_report/data/
 4. Assembles all sections into FULL_REPORT.md
 
-Run from src/ directory:
-    python assemble_report.py
+Usage:
+    python assemble_report.py              # Full build (regenerate figures)
+    python assemble_report.py --skip-figures   # Text-only (skip figure regeneration)
+    python assemble_report.py -s           # Same as --skip-figures
 """
 
+import argparse
 import shutil
 import subprocess
 import sys
@@ -222,11 +225,31 @@ def assemble_report():
 
 def main():
     """Run complete report build."""
+    parser = argparse.ArgumentParser(
+        description='Assemble the Federal Survey Concept Mapper report.',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  python assemble_report.py                # Full build
+  python assemble_report.py --skip-figures # Text edits only, skip figure regen
+        """
+    )
+    parser.add_argument(
+        '-s', '--skip-figures',
+        action='store_true',
+        help='Skip figure regeneration (faster for text-only edits)'
+    )
+    args = parser.parse_args()
+    
     print("=" * 70)
     print("FEDERAL SURVEY CONCEPT MAPPING - REPORT BUILD")
     print("=" * 70)
     
-    scripts_ok = run_figure_scripts()
+    if args.skip_figures:
+        print("\n[--skip-figures] Skipping figure regeneration")
+        scripts_ok = True
+    else:
+        scripts_ok = run_figure_scripts()
     figures_ok = copy_figures()
     data_ok = copy_data_files()
     sections_ok, char_count = assemble_report()
