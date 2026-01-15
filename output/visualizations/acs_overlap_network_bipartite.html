@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ACS Survey Overlap Network - Bipartite</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            background: #fafafa;
+        }
+        #container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        #header {
+            padding: 15px 20px;
+            background: white;
+            border-bottom: 1px solid #ddd;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        #header h1 {
+            margin: 0 0 5px 0;
+            font-size: 1.4em;
+            color: #333;
+        }
+        #header p {
+            margin: 0;
+            font-size: 0.9em;
+            color: #666;
+        }
+        #graph {
+            flex: 1;
+            overflow: hidden;
+        }
+        .node {
+            cursor: grab;
+        }
+        .node:active {
+            cursor: grabbing;
+        }
+        .node.fixed {
+            stroke: #333 !important;
+            stroke-width: 3px !important;
+        }
+        .node-label {
+            font-size: 10px;
+            font-weight: 600;
+            pointer-events: none;
+        }
+        .node-label.survey {
+            fill: #1a5a8a;
+            text-shadow: 0 1px 2px white, 0 -1px 2px white, 1px 0 2px white, -1px 0 2px white;
+        }
+        .node-label.subtopic {
+            fill: #8a4a1a;
+            text-shadow: 0 1px 2px white, 0 -1px 2px white, 1px 0 2px white, -1px 0 2px white;
+        }
+        .link {
+            stroke: #999;
+            stroke-opacity: 0.3;
+        }
+        .tooltip {
+            position: absolute;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 12px;
+            font-size: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            pointer-events: none;
+            max-width: 350px;
+            z-index: 1000;
+        }
+        .tooltip h3 {
+            margin: 0 0 8px 0;
+            font-size: 14px;
+            color: #333;
+        }
+        .tooltip .type-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .tooltip .type-badge.survey {
+            background: #d4e8f7;
+            color: #1a5a8a;
+        }
+        .tooltip .type-badge.subtopic {
+            background: #f7e4d4;
+            color: #8a4a1a;
+        }
+        .tooltip .coverage {
+            font-weight: 600;
+        }
+        .tooltip .connections {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid #eee;
+            color: #555;
+            line-height: 1.4;
+        }
+        .tooltip .connection-list {
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        #legend {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            font-size: 11px;
+        }
+        #legend h4 {
+            margin: 0 0 10px 0;
+            font-size: 12px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 6px 0;
+        }
+        .legend-circle {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        #controls {
+            position: absolute;
+            top: 80px;
+            right: 20px;
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            font-size: 11px;
+            width: 160px;
+        }
+        #controls button {
+            display: block;
+            width: 100%;
+            margin: 4px 0;
+            padding: 6px 10px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: #f5f5f5;
+        }
+        #controls button:hover {
+            background: #e8e8e8;
+        }
+        #controls label {
+            display: block;
+            margin: 10px 0 5px 0;
+            font-weight: 600;
+        }
+        #controls input[type="range"] {
+            width: 100%;
+        }
+        #controls .slider-value {
+            text-align: center;
+            font-size: 10px;
+            color: #666;
+        }
+        #controls .checkbox-row {
+            margin: 8px 0;
+        }
+        #controls .checkbox-row input {
+            margin-right: 6px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="header">
+            <h1>ACS Survey-Subtopic Network</h1>
+            <p>Blue = Surveys, Orange = ACS Subtopics. Edges show which surveys cover which subtopics. Drag to pin, double-click to release.</p>
+        </div>
+        <div id="graph"></div>
+    </div>
+    <div id="legend">
+        <h4>Node Types</h4>
+        <div class="legend-item">
+            <div class="legend-circle" style="background: #4a90d9;"></div>
+            <span>Survey (sized by # subtopics)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-circle" style="background: #d9944a;"></div>
+            <span>Subtopic (sized by # surveys)</span>
+        </div>
+        <div style="margin-top: 10px; font-size: 10px; color: #666;">
+            <strong>Dark border</strong> = pinned
+        </div>
+    </div>
+    <div id="controls">
+        <button onclick="resetZoom()">Reset View</button>
+        <button onclick="releaseAll()">Release All Pins</button>
+        
+        <div class="checkbox-row">
+            <input type="checkbox" id="showSurveyLabels" checked onchange="updateLabels()">
+            <label for="showSurveyLabels" style="display:inline;">Survey labels</label>
+        </div>
+        <div class="checkbox-row">
+            <input type="checkbox" id="showSubtopicLabels" checked onchange="updateLabels()">
+            <label for="showSubtopicLabels" style="display:inline;">Subtopic labels</label>
+        </div>
+        
+        <label>Spacing</label>
+        <input type="range" id="spacing" min="30" max="300" value="100" onchange="updateForces()">
+        <div class="slider-value" id="spacingVal">100</div>
+        
+        <label>Repulsion</label>
+        <input type="range" id="repulsion" min="50" max="1500" value="400" onchange="updateForces()">
+        <div class="slider-value" id="repulsionVal">400</div>
+        
+        <label>Link Strength</label>
+        <input type="range" id="linkStrength" min="1" max="100" value="30" onchange="updateForces()">
+        <div class="slider-value" id="linkStrengthVal">30</div>
+    </div>
+    <div class="tooltip" style="display: none;"></div>
+
+    <script>
+    const data = {"nodes": [{"id": 0, "name": "NTPS Teacher", "fullName": "National Teacher and Principal Survey (NTPS) Teacher Questionnaire", "type": "survey", "coverage": 14}, {"id": 1, "name": "FoodAPS", "fullName": "Food Acquisition and Purchase Survey (FoodAPS) Debriefing Questionnaire", "type": "survey", "coverage": 5}, {"id": 2, "name": "SSOCS", "fullName": "School Survey on Crime and Safety (SSOCS)", "type": "survey", "coverage": 2}, {"id": 3, "name": "NHIS", "fullName": "National Health Interview Survey (NHIS)", "type": "survey", "coverage": 27}, {"id": 4, "name": "Survey of State Gove", "fullName": "Survey of State Government Finances Finances of Insurance Trust Systems", "type": "survey", "coverage": 2}, {"id": 5, "name": "Unknown", "fullName": "Unknown", "type": "survey", "coverage": 3}, {"id": 6, "name": "CPS", "fullName": "Current Population Survey (CPS)", "type": "survey", "coverage": 25}, {"id": 7, "name": "AHS", "fullName": "American Housing Survey (AHS)", "type": "survey", "coverage": 34}, {"id": 8, "name": "CMP", "fullName": "Census Military Panel (CMP)", "type": "survey", "coverage": 7}, {"id": 9, "name": "TFS Former", "fullName": "Teacher Follow-up Survey (TFS) Former Teacher Survey", "type": "survey", "coverage": 9}, {"id": 10, "name": "Principal Follow-Up ", "fullName": "Principal Follow-Up Survey School Head/Principal Status Form", "type": "survey", "coverage": 4}, {"id": 11, "name": "NSCH 6-11", "fullName": "National Survey of Children's Health Topical Questionaire (Chilren, 6-11)", "type": "survey", "coverage": 15}, {"id": 12, "name": "NSSRN", "fullName": "National Sample Survey of Registered Nurses (NSSRN)", "type": "survey", "coverage": 13}, {"id": 13, "name": "SCS/NCVS", "fullName": "School Crime Supplement (SCS)/National Crime Victimization Survey (NCVS)", "type": "survey", "coverage": 5}, {"id": 14, "name": "PSS", "fullName": "Private School Survey (PSS)", "type": "survey", "coverage": 3}, {"id": 15, "name": "NSCG", "fullName": "National Survey of College Graduates (NSCG)", "type": "survey", "coverage": 19}, {"id": 16, "name": "FoodAPS", "fullName": "Food Acquisition and Purchase Survey (FoodAPS) Initial Interview/Household Survey", "type": "survey", "coverage": 23}, {"id": 17, "name": "SOMA", "fullName": "Survey of Market Absorption (SOMA)", "type": "survey", "coverage": 4}, {"id": 18, "name": "FoodAPS Profile", "fullName": "Food Acquisition and Purchase Survey (FoodAPS) Profile and Income Questionnaire", "type": "survey", "coverage": 9}, {"id": 19, "name": "FoodAPS Log", "fullName": "FoodAPS food Log", "type": "survey", "coverage": 3}, {"id": 20, "name": "NTPS", "fullName": "National Teacher and Principal Survey (NTPS) School Questionnaire", "type": "survey", "coverage": 11}, {"id": 21, "name": "HTOPS", "fullName": "Household Trends and Outlook Pulse Survey (HTOPS)", "type": "survey", "coverage": 19}, {"id": 22, "name": "TFS Current", "fullName": "Teacher Follow-Up Survey (TFS) Current Teacher Survey", "type": "survey", "coverage": 9}, {"id": 23, "name": "NSCH", "fullName": "National Survey of Children\u2019s Health (NSCH)", "type": "survey", "coverage": 2}, {"id": 24, "name": "NTPS Principal", "fullName": "National Teacher and Principal Survey (NTPS) Principal Questionnaire", "type": "survey", "coverage": 5}, {"id": 25, "name": "SIPP", "fullName": "Survey of Income and Program Participation (SIPP)", "type": "survey", "coverage": 38}, {"id": 26, "name": "NTPS", "fullName": "National Teacher and Principal Survey (NTPS) Private School Questionnaire", "type": "survey", "coverage": 6}, {"id": 27, "name": "NTEWS", "fullName": "National Training, Education, and Workforce Survey (NTEWS)", "type": "survey", "coverage": 8}, {"id": 28, "name": "ITS", "fullName": "Identity Theft Supplement (ITS)", "type": "survey", "coverage": 1}, {"id": 29, "name": "PFS", "fullName": "Principal Follow-up Survey (PFS)", "type": "survey", "coverage": 2}, {"id": 30, "name": "NTPS", "fullName": "National Teacher and Principal Survey (NTPS) Private School Teacher Questionnaire", "type": "survey", "coverage": 15}, {"id": 31, "name": "NSCH 0-5", "fullName": "National Survey of Children's Health Topical Questionaire (Children, 0-5 years)", "type": "survey", "coverage": 21}, {"id": 32, "name": "SVS", "fullName": "Supplemental Victimization Survey (SVS)", "type": "survey", "coverage": 6}, {"id": 33, "name": "CE", "fullName": "Consumer Expenditure Survey (CE)", "type": "survey", "coverage": 30}, {"id": 34, "name": "Unnamed: 48", "fullName": "Unnamed: 48", "type": "survey", "coverage": 3}, {"id": 35, "name": "NSCH 12-17", "fullName": "National Survey of Children's Health Topical Questionaire (Children, 12-17)", "type": "survey", "coverage": 15}, {"id": 36, "name": "NTPS", "fullName": "National Teacher and Principal Survey (NTPS) Private School Principal Questionnaire", "type": "survey", "coverage": 9}, {"id": 37, "name": "MEPS", "fullName": "Medical Expenditure Panel Survey Insurance Component", "type": "survey", "coverage": 3}, {"id": 38, "name": "ATUS", "fullName": "American Time Use Survey (ATUS)", "type": "survey", "coverage": 19}, {"id": 39, "name": "SPP", "fullName": "School Pulse Panel (SPP)", "type": "survey", "coverage": 4}, {"id": 40, "name": "Sales", "fullName": "Sales", "type": "subtopic", "coverage": 2}, {"id": 41, "name": "Occupation", "fullName": "Occupation", "type": "subtopic", "coverage": 15}, {"id": 42, "name": "Education", "fullName": "Education", "type": "subtopic", "coverage": 25}, {"id": 43, "name": "Foreign Born", "fullName": "Foreign Born", "type": "subtopic", "coverage": 10}, {"id": 44, "name": "Population", "fullName": "Population", "type": "subtopic", "coverage": 8}, {"id": 45, "name": "Field of Degree", "fullName": "Field of Degree", "type": "subtopic", "coverage": 7}, {"id": 46, "name": "Citizenship", "fullName": "Citizenship", "type": "subtopic", "coverage": 6}, {"id": 47, "name": "Household", "fullName": "Household", "type": "subtopic", "coverage": 22}, {"id": 48, "name": "Migration", "fullName": "Migration", "type": "subtopic", "coverage": 7}, {"id": 49, "name": "Hispanic Origin", "fullName": "Hispanic Origin", "type": "subtopic", "coverage": 14}, {"id": 50, "name": "Earnings", "fullName": "Earnings", "type": "subtopic", "coverage": 17}, {"id": 51, "name": "Age", "fullName": "Age", "type": "subtopic", "coverage": 19}, {"id": 52, "name": "Relationship", "fullName": "Relationship", "type": "subtopic", "coverage": 14}, {"id": 53, "name": "Hours/Week, Weeks/Year", "fullName": "Hours/Week, Weeks/Year", "type": "subtopic", "coverage": 15}, {"id": 54, "name": "Moving", "fullName": "Moving", "type": "subtopic", "coverage": 9}, {"id": 55, "name": "Costs (Mortgage, Taxes, Insurance)", "fullName": "Costs (Mortgage, Taxes, Insurance)", "type": "subtopic", "coverage": 6}, {"id": 56, "name": "Health Insurance", "fullName": "Health Insurance", "type": "subtopic", "coverage": 11}, {"id": 57, "name": "Unemployment", "fullName": "Unemployment", "type": "subtopic", "coverage": 9}, {"id": 58, "name": "Home Value", "fullName": "Home Value", "type": "subtopic", "coverage": 3}, {"id": 59, "name": "Plumbing/Kitchen Facilities", "fullName": "Plumbing/Kitchen Facilities", "type": "subtopic", "coverage": 4}, {"id": 60, "name": "Commissions", "fullName": "Commissions", "type": "subtopic", "coverage": 1}, {"id": 61, "name": "Grandparents", "fullName": "Grandparents", "type": "subtopic", "coverage": 1}, {"id": 62, "name": "Race", "fullName": "Race", "type": "subtopic", "coverage": 16}, {"id": 63, "name": "Year Moved In", "fullName": "Year Moved In", "type": "subtopic", "coverage": 4}, {"id": 64, "name": "Disability", "fullName": "Disability", "type": "subtopic", "coverage": 17}, {"id": 65, "name": "Utilities", "fullName": "Utilities", "type": "subtopic", "coverage": 5}, {"id": 66, "name": "Fertility", "fullName": "Fertility", "type": "subtopic", "coverage": 4}, {"id": 67, "name": "Employment Status", "fullName": "Employment Status", "type": "subtopic", "coverage": 25}, {"id": 68, "name": "School Enrollment", "fullName": "School Enrollment", "type": "subtopic", "coverage": 22}, {"id": 69, "name": "Tenure (Own/Rent)", "fullName": "Tenure (Own/Rent)", "type": "subtopic", "coverage": 10}, {"id": 70, "name": "Veterans", "fullName": "Veterans", "type": "subtopic", "coverage": 15}, {"id": 71, "name": "Vehicles", "fullName": "Vehicles", "type": "subtopic", "coverage": 5}, {"id": 72, "name": "Labor Force", "fullName": "Labor Force", "type": "subtopic", "coverage": 5}, {"id": 73, "name": "Commute/Commuting", "fullName": "Commute/Commuting", "type": "subtopic", "coverage": 8}, {"id": 74, "name": "Marital Status", "fullName": "Marital Status", "type": "subtopic", "coverage": 13}, {"id": 75, "name": "Food Stamps (SNAP)", "fullName": "Food Stamps (SNAP)", "type": "subtopic", "coverage": 13}, {"id": 76, "name": "Language", "fullName": "Language", "type": "subtopic", "coverage": 14}, {"id": 77, "name": "Rental", "fullName": "Rental", "type": "subtopic", "coverage": 6}, {"id": 78, "name": "Heating Fuel", "fullName": "Heating Fuel", "type": "subtopic", "coverage": 3}, {"id": 79, "name": "Sex", "fullName": "Sex", "type": "subtopic", "coverage": 19}, {"id": 80, "name": "Computer & Internet Use", "fullName": "Computer & Internet Use", "type": "subtopic", "coverage": 14}, {"id": 81, "name": "Ancestry", "fullName": "Ancestry", "type": "subtopic", "coverage": 0}, {"id": 82, "name": "Year Built", "fullName": "Year Built", "type": "subtopic", "coverage": 1}, {"id": 83, "name": "Structure", "fullName": "Structure", "type": "subtopic", "coverage": 8}], "links": [{"source": 37, "target": 40}, {"source": 7, "target": 40}, {"source": 6, "target": 41}, {"source": 7, "target": 41}, {"source": 30, "target": 41}, {"source": 0, "target": 41}, {"source": 9, "target": 41}, {"source": 10, "target": 41}, {"source": 22, "target": 41}, {"source": 24, "target": 41}, {"source": 12, "target": 41}, {"source": 33, "target": 41}, {"source": 25, "target": 41}, {"source": 15, "target": 41}, {"source": 36, "target": 41}, {"source": 27, "target": 41}, {"source": 38, "target": 41}, {"source": 0, "target": 42}, {"source": 2, "target": 42}, {"source": 3, "target": 42}, {"source": 4, "target": 42}, {"source": 6, "target": 42}, {"source": 7, "target": 42}, {"source": 8, "target": 42}, {"source": 9, "target": 42}, {"source": 11, "target": 42}, {"source": 13, "target": 42}, {"source": 12, "target": 42}, {"source": 15, "target": 42}, {"source": 16, "target": 42}, {"source": 22, "target": 42}, {"source": 24, "target": 42}, {"source": 25, "target": 42}, {"source": 26, "target": 42}, {"source": 27, "target": 42}, {"source": 30, "target": 42}, {"source": 31, "target": 42}, {"source": 33, "target": 42}, {"source": 35, "target": 42}, {"source": 36, "target": 42}, {"source": 38, "target": 42}, {"source": 39, "target": 42}, {"source": 6, "target": 43}, {"source": 7, "target": 43}, {"source": 31, "target": 43}, {"source": 11, "target": 43}, {"source": 3, "target": 43}, {"source": 12, "target": 43}, {"source": 25, "target": 43}, {"source": 15, "target": 43}, {"source": 35, "target": 43}, {"source": 38, "target": 43}, {"source": 6, "target": 44}, {"source": 7, "target": 44}, {"source": 21, "target": 44}, {"source": 8, "target": 44}, {"source": 3, "target": 44}, {"source": 33, "target": 44}, {"source": 25, "target": 44}, {"source": 5, "target": 44}, {"source": 30, "target": 45}, {"source": 0, "target": 45}, {"source": 24, "target": 45}, {"source": 12, "target": 45}, {"source": 25, "target": 45}, {"source": 15, "target": 45}, {"source": 27, "target": 45}, {"source": 6, "target": 46}, {"source": 7, "target": 46}, {"source": 3, "target": 46}, {"source": 25, "target": 46}, {"source": 15, "target": 46}, {"source": 38, "target": 46}, {"source": 1, "target": 47}, {"source": 3, "target": 47}, {"source": 5, "target": 47}, {"source": 6, "target": 47}, {"source": 7, "target": 47}, {"source": 8, "target": 47}, {"source": 10, "target": 47}, {"source": 11, "target": 47}, {"source": 13, "target": 47}, {"source": 12, "target": 47}, {"source": 16, "target": 47}, {"source": 17, "target": 47}, {"source": 19, "target": 47}, {"source": 20, "target": 47}, {"source": 21, "target": 47}, {"source": 22, "target": 47}, {"source": 25, "target": 47}, {"source": 31, "target": 47}, {"source": 33, "target": 47}, {"source": 35, "target": 47}, {"source": 38, "target": 47}, {"source": 39, "target": 47}, {"source": 6, "target": 48}, {"source": 20, "target": 48}, {"source": 7, "target": 48}, {"source": 22, "target": 48}, {"source": 3, "target": 48}, {"source": 25, "target": 48}, {"source": 15, "target": 48}, {"source": 6, "target": 49}, {"source": 20, "target": 49}, {"source": 7, "target": 49}, {"source": 0, "target": 49}, {"source": 30, "target": 49}, {"source": 31, "target": 49}, {"source": 9, "target": 49}, {"source": 32, "target": 49}, {"source": 3, "target": 49}, {"source": 33, "target": 49}, {"source": 25, "target": 49}, {"source": 15, "target": 49}, {"source": 36, "target": 49}, {"source": 38, "target": 49}, {"source": 29, "target": 50}, {"source": 6, "target": 50}, {"source": 7, "target": 50}, {"source": 30, "target": 50}, {"source": 0, "target": 50}, {"source": 9, "target": 50}, {"source": 10, "target": 50}, {"source": 18, "target": 50}, {"source": 23, "target": 50}, {"source": 1, "target": 50}, {"source": 12, "target": 50}, {"source": 33, "target": 50}, {"source": 25, "target": 50}, {"source": 15, "target": 50}, {"source": 16, "target": 50}, {"source": 36, "target": 50}, {"source": 27, "target": 50}, {"source": 0, "target": 51}, {"source": 3, "target": 51}, {"source": 6, "target": 51}, {"source": 7, "target": 51}, {"source": 9, "target": 51}, {"source": 11, "target": 51}, {"source": 13, "target": 51}, {"source": 15, "target": 51}, {"source": 16, "target": 51}, {"source": 20, "target": 51}, {"source": 21, "target": 51}, {"source": 25, "target": 51}, {"source": 30, "target": 51}, {"source": 31, "target": 51}, {"source": 32, "target": 51}, {"source": 33, "target": 51}, {"source": 35, "target": 51}, {"source": 36, "target": 51}, {"source": 38, "target": 51}, {"source": 6, "target": 52}, {"source": 7, "target": 52}, {"source": 31, "target": 52}, {"source": 19, "target": 52}, {"source": 32, "target": 52}, {"source": 11, "target": 52}, {"source": 3, "target": 52}, {"source": 13, "target": 52}, {"source": 33, "target": 52}, {"source": 25, "target": 52}, {"source": 38, "target": 52}, {"source": 35, "target": 52}, {"source": 16, "target": 52}, {"source": 28, "target": 52}, {"source": 6, "target": 53}, {"source": 30, "target": 53}, {"source": 0, "target": 53}, {"source": 18, "target": 53}, {"source": 22, "target": 53}, {"source": 3, "target": 53}, {"source": 12, "target": 53}, {"source": 33, "target": 53}, {"source": 25, "target": 53}, {"source": 15, "target": 53}, {"source": 16, "target": 53}, {"source": 34, "target": 53}, {"source": 36, "target": 53}, {"source": 27, "target": 53}, {"source": 38, "target": 53}, {"source": 6, "target": 54}, {"source": 7, "target": 54}, {"source": 21, "target": 54}, {"source": 31, "target": 54}, {"source": 11, "target": 54}, {"source": 33, "target": 54}, {"source": 25, "target": 54}, {"source": 35, "target": 54}, {"source": 38, "target": 54}, {"source": 7, "target": 55}, {"source": 21, "target": 55}, {"source": 31, "target": 55}, {"source": 33, "target": 55}, {"source": 25, "target": 55}, {"source": 16, "target": 55}, {"source": 21, "target": 56}, {"source": 31, "target": 56}, {"source": 11, "target": 56}, {"source": 3, "target": 56}, {"source": 12, "target": 56}, {"source": 33, "target": 56}, {"source": 25, "target": 56}, {"source": 34, "target": 56}, {"source": 35, "target": 56}, {"source": 16, "target": 56}, {"source": 37, "target": 56}, {"source": 6, "target": 57}, {"source": 9, "target": 57}, {"source": 3, "target": 57}, {"source": 25, "target": 57}, {"source": 15, "target": 57}, {"source": 16, "target": 57}, {"source": 27, "target": 57}, {"source": 38, "target": 57}, {"source": 5, "target": 57}, {"source": 33, "target": 58}, {"source": 25, "target": 58}, {"source": 7, "target": 58}, {"source": 33, "target": 59}, {"source": 25, "target": 59}, {"source": 7, "target": 59}, {"source": 21, "target": 59}, {"source": 6, "target": 60}, {"source": 25, "target": 61}, {"source": 6, "target": 62}, {"source": 20, "target": 62}, {"source": 7, "target": 62}, {"source": 0, "target": 62}, {"source": 30, "target": 62}, {"source": 31, "target": 62}, {"source": 9, "target": 62}, {"source": 32, "target": 62}, {"source": 3, "target": 62}, {"source": 33, "target": 62}, {"source": 14, "target": 62}, {"source": 25, "target": 62}, {"source": 15, "target": 62}, {"source": 16, "target": 62}, {"source": 36, "target": 62}, {"source": 38, "target": 62}, {"source": 33, "target": 63}, {"source": 25, "target": 63}, {"source": 7, "target": 63}, {"source": 3, "target": 63}, {"source": 6, "target": 64}, {"source": 20, "target": 64}, {"source": 7, "target": 64}, {"source": 0, "target": 64}, {"source": 30, "target": 64}, {"source": 31, "target": 64}, {"source": 21, "target": 64}, {"source": 22, "target": 64}, {"source": 11, "target": 64}, {"source": 3, "target": 64}, {"source": 25, "target": 64}, {"source": 15, "target": 64}, {"source": 35, "target": 64}, {"source": 16, "target": 64}, {"source": 26, "target": 64}, {"source": 18, "target": 64}, {"source": 38, "target": 64}, {"source": 7, "target": 65}, {"source": 21, "target": 65}, {"source": 33, "target": 65}, {"source": 25, "target": 65}, {"source": 17, "target": 65}, {"source": 31, "target": 66}, {"source": 25, "target": 66}, {"source": 16, "target": 66}, {"source": 3, "target": 66}, {"source": 0, "target": 67}, {"source": 3, "target": 67}, {"source": 6, "target": 67}, {"source": 7, "target": 67}, {"source": 8, "target": 67}, {"source": 9, "target": 67}, {"source": 11, "target": 67}, {"source": 12, "target": 67}, {"source": 15, "target": 67}, {"source": 16, "target": 67}, {"source": 18, "target": 67}, {"source": 21, "target": 67}, {"source": 22, "target": 67}, {"source": 23, "target": 67}, {"source": 25, "target": 67}, {"source": 27, "target": 67}, {"source": 29, "target": 67}, {"source": 30, "target": 67}, {"source": 31, "target": 67}, {"source": 33, "target": 67}, {"source": 34, "target": 67}, {"source": 35, "target": 67}, {"source": 37, "target": 67}, {"source": 38, "target": 67}, {"source": 39, "target": 67}, {"source": 0, "target": 68}, {"source": 2, "target": 68}, {"source": 3, "target": 68}, {"source": 4, "target": 68}, {"source": 6, "target": 68}, {"source": 7, "target": 68}, {"source": 13, "target": 68}, {"source": 12, "target": 68}, {"source": 14, "target": 68}, {"source": 15, "target": 68}, {"source": 16, "target": 68}, {"source": 18, "target": 68}, {"source": 20, "target": 68}, {"source": 21, "target": 68}, {"source": 24, "target": 68}, {"source": 25, "target": 68}, {"source": 26, "target": 68}, {"source": 27, "target": 68}, {"source": 30, "target": 68}, {"source": 31, "target": 68}, {"source": 33, "target": 68}, {"source": 39, "target": 68}, {"source": 6, "target": 69}, {"source": 7, "target": 69}, {"source": 21, "target": 69}, {"source": 10, "target": 69}, {"source": 31, "target": 69}, {"source": 22, "target": 69}, {"source": 3, "target": 69}, {"source": 33, "target": 69}, {"source": 25, "target": 69}, {"source": 16, "target": 69}, {"source": 6, "target": 70}, {"source": 20, "target": 70}, {"source": 7, "target": 70}, {"source": 8, "target": 70}, {"source": 31, "target": 70}, {"source": 11, "target": 70}, {"source": 3, "target": 70}, {"source": 12, "target": 70}, {"source": 33, "target": 70}, {"source": 25, "target": 70}, {"source": 15, "target": 70}, {"source": 35, "target": 70}, {"source": 16, "target": 70}, {"source": 18, "target": 70}, {"source": 38, "target": 70}, {"source": 21, "target": 71}, {"source": 3, "target": 71}, {"source": 25, "target": 71}, {"source": 16, "target": 71}, {"source": 17, "target": 71}, {"source": 6, "target": 72}, {"source": 30, "target": 72}, {"source": 25, "target": 72}, {"source": 18, "target": 72}, {"source": 38, "target": 72}, {"source": 6, "target": 73}, {"source": 7, "target": 73}, {"source": 21, "target": 73}, {"source": 33, "target": 73}, {"source": 25, "target": 73}, {"source": 15, "target": 73}, {"source": 16, "target": 73}, {"source": 18, "target": 73}, {"source": 6, "target": 74}, {"source": 20, "target": 74}, {"source": 7, "target": 74}, {"source": 31, "target": 74}, {"source": 11, "target": 74}, {"source": 3, "target": 74}, {"source": 12, "target": 74}, {"source": 33, "target": 74}, {"source": 25, "target": 74}, {"source": 15, "target": 74}, {"source": 35, "target": 74}, {"source": 16, "target": 74}, {"source": 38, "target": 74}, {"source": 7, "target": 75}, {"source": 21, "target": 75}, {"source": 8, "target": 75}, {"source": 31, "target": 75}, {"source": 1, "target": 75}, {"source": 11, "target": 75}, {"source": 3, "target": 75}, {"source": 33, "target": 75}, {"source": 25, "target": 75}, {"source": 35, "target": 75}, {"source": 16, "target": 75}, {"source": 18, "target": 75}, {"source": 19, "target": 75}, {"source": 20, "target": 76}, {"source": 7, "target": 76}, {"source": 0, "target": 76}, {"source": 30, "target": 76}, {"source": 31, "target": 76}, {"source": 21, "target": 76}, {"source": 22, "target": 76}, {"source": 1, "target": 76}, {"source": 3, "target": 76}, {"source": 12, "target": 76}, {"source": 33, "target": 76}, {"source": 25, "target": 76}, {"source": 26, "target": 76}, {"source": 38, "target": 76}, {"source": 7, "target": 77}, {"source": 21, "target": 77}, {"source": 3, "target": 77}, {"source": 33, "target": 77}, {"source": 25, "target": 77}, {"source": 16, "target": 77}, {"source": 33, "target": 78}, {"source": 7, "target": 78}, {"source": 21, "target": 78}, {"source": 0, "target": 79}, {"source": 3, "target": 79}, {"source": 6, "target": 79}, {"source": 7, "target": 79}, {"source": 9, "target": 79}, {"source": 11, "target": 79}, {"source": 14, "target": 79}, {"source": 15, "target": 79}, {"source": 16, "target": 79}, {"source": 20, "target": 79}, {"source": 25, "target": 79}, {"source": 26, "target": 79}, {"source": 30, "target": 79}, {"source": 31, "target": 79}, {"source": 32, "target": 79}, {"source": 33, "target": 79}, {"source": 35, "target": 79}, {"source": 36, "target": 79}, {"source": 38, "target": 79}, {"source": 7, "target": 80}, {"source": 0, "target": 80}, {"source": 30, "target": 80}, {"source": 21, "target": 80}, {"source": 8, "target": 80}, {"source": 32, "target": 80}, {"source": 1, "target": 80}, {"source": 11, "target": 80}, {"source": 3, "target": 80}, {"source": 24, "target": 80}, {"source": 33, "target": 80}, {"source": 16, "target": 80}, {"source": 35, "target": 80}, {"source": 36, "target": 80}, {"source": 7, "target": 82}, {"source": 7, "target": 83}, {"source": 31, "target": 83}, {"source": 11, "target": 83}, {"source": 33, "target": 83}, {"source": 25, "target": 83}, {"source": 35, "target": 83}, {"source": 17, "target": 83}, {"source": 26, "target": 83}]};
+
+    const container = document.getElementById('graph');
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+    
+    // Colors
+    const surveyColor = '#4a90d9';
+    const subtopicColor = '#d9944a';
+    
+    // Size scales
+    const surveySizeScale = d3.scaleSqrt().domain([1, 40]).range([8, 28]);
+    const subtopicSizeScale = d3.scaleSqrt().domain([1, 40]).range([6, 22]);
+
+    const svg = d3.select('#graph')
+        .append('svg')
+        .attr('width', '100%')
+        .attr('height', '100%')
+        .attr('viewBox', [0, 0, width, height]);
+
+    // Zoom
+    const g = svg.append('g');
+    const zoom = d3.zoom()
+        .scaleExtent([0.2, 5])
+        .on('zoom', (event) => g.attr('transform', event.transform));
+    svg.call(zoom);
+
+    // Precompute connections for tooltips
+    const surveyConnections = {};
+    const subtopicConnections = {};
+    data.links.forEach(link => {
+        const sourceNode = data.nodes.find(n => n.id === link.source || n.id === link.source.id);
+        const targetNode = data.nodes.find(n => n.id === link.target || n.id === link.target.id);
+        if (sourceNode && targetNode) {
+            const surveyNode = sourceNode.type === 'survey' ? sourceNode : targetNode;
+            const subtopicNode = sourceNode.type === 'subtopic' ? sourceNode : targetNode;
+            
+            if (!surveyConnections[surveyNode.id]) surveyConnections[surveyNode.id] = [];
+            if (!subtopicConnections[subtopicNode.id]) subtopicConnections[subtopicNode.id] = [];
+            
+            surveyConnections[surveyNode.id].push(subtopicNode.name);
+            subtopicConnections[subtopicNode.id].push(surveyNode.name);
+        }
+    });
+
+    // Force simulation
+    const simulation = d3.forceSimulation(data.nodes)
+        .force('link', d3.forceLink(data.links)
+            .id(d => d.id)
+            .distance(100)
+            .strength(0.03))
+        .force('charge', d3.forceManyBody().strength(-400))
+        .force('center', d3.forceCenter(width / 2, height / 2))
+        .force('collision', d3.forceCollide().radius(d => {
+            const size = d.type === 'survey' ? surveySizeScale(d.coverage) : subtopicSizeScale(d.coverage);
+            return size + 8;
+        }))
+        .force('x', d3.forceX(width / 2).strength(0.015))
+        .force('y', d3.forceY(height / 2).strength(0.015));
+
+    // Draw edges
+    const link = g.append('g')
+        .selectAll('line')
+        .data(data.links)
+        .join('line')
+        .attr('class', 'link')
+        .attr('stroke-width', 1);
+
+    // Draw nodes
+    const node = g.append('g')
+        .selectAll('circle')
+        .data(data.nodes)
+        .join('circle')
+        .attr('class', 'node')
+        .attr('r', d => d.type === 'survey' ? surveySizeScale(d.coverage) : subtopicSizeScale(d.coverage))
+        .attr('fill', d => d.type === 'survey' ? surveyColor : subtopicColor)
+        .attr('stroke', '#fff')
+        .attr('stroke-width', 1.5)
+        .attr('opacity', 0.85)
+        .call(drag(simulation));
+
+    // Double-click to release
+    node.on('dblclick', (event, d) => {
+        d.fx = null;
+        d.fy = null;
+        d3.select(event.currentTarget).classed('fixed', false);
+        simulation.alpha(0.3).restart();
+    });
+
+    // Labels
+    const labels = g.append('g')
+        .selectAll('text')
+        .data(data.nodes)
+        .join('text')
+        .attr('class', d => 'node-label ' + d.type)
+        .text(d => d.name)
+        .attr('dx', d => {
+            const size = d.type === 'survey' ? surveySizeScale(d.coverage) : subtopicSizeScale(d.coverage);
+            return size + 3;
+        })
+        .attr('dy', 3)
+        .style('font-size', d => d.type === 'survey' ? '11px' : '9px');
+
+    // Tooltip
+    const tooltip = d3.select('.tooltip');
+    
+    node.on('mouseover', (event, d) => {
+        const connections = d.type === 'survey' 
+            ? (surveyConnections[d.id] || []).sort()
+            : (subtopicConnections[d.id] || []).sort();
+        
+        const connectionLabel = d.type === 'survey' ? 'Subtopics covered' : 'Covered by surveys';
+        
+        tooltip.style('display', 'block')
+            .html(`
+                <span class="type-badge ${d.type}">${d.type === 'survey' ? 'SURVEY' : 'SUBTOPIC'}</span>
+                <h3>${d.name}</h3>
+                ${d.type === 'survey' ? `<div><strong>Full name:</strong> ${d.fullName}</div>` : ''}
+                <div class="coverage">${d.coverage} ${d.type === 'survey' ? 'ACS subtopics' : 'surveys'}</div>
+                <div class="connections">
+                    <strong>${connectionLabel}:</strong>
+                    <div class="connection-list">${connections.join(', ') || 'None'}</div>
+                </div>
+            `);
+        
+        // Highlight connected
+        const connectedIds = new Set();
+        data.links.forEach(l => {
+            const sid = l.source.id !== undefined ? l.source.id : l.source;
+            const tid = l.target.id !== undefined ? l.target.id : l.target;
+            if (sid === d.id) connectedIds.add(tid);
+            if (tid === d.id) connectedIds.add(sid);
+        });
+        
+        link.attr('stroke-opacity', l => {
+            const sid = l.source.id !== undefined ? l.source.id : l.source;
+            const tid = l.target.id !== undefined ? l.target.id : l.target;
+            return (sid === d.id || tid === d.id) ? 0.8 : 0.05;
+        }).attr('stroke-width', l => {
+            const sid = l.source.id !== undefined ? l.source.id : l.source;
+            const tid = l.target.id !== undefined ? l.target.id : l.target;
+            return (sid === d.id || tid === d.id) ? 2 : 1;
+        });
+        
+        node.attr('opacity', n => {
+            if (n.id === d.id) return 1;
+            return connectedIds.has(n.id) ? 0.9 : 0.15;
+        });
+        labels.attr('opacity', n => {
+            if (n.id === d.id) return 1;
+            return connectedIds.has(n.id) ? 0.9 : 0.15;
+        });
+    })
+    .on('mousemove', (event) => {
+        tooltip.style('left', (event.pageX + 15) + 'px')
+               .style('top', (event.pageY - 10) + 'px');
+    })
+    .on('mouseout', () => {
+        tooltip.style('display', 'none');
+        link.attr('stroke-opacity', 0.3).attr('stroke-width', 1);
+        node.attr('opacity', 0.85);
+        labels.attr('opacity', 1);
+    });
+
+    // Tick
+    simulation.on('tick', () => {
+        link
+            .attr('x1', d => d.source.x)
+            .attr('y1', d => d.source.y)
+            .attr('x2', d => d.target.x)
+            .attr('y2', d => d.target.y);
+        node
+            .attr('cx', d => d.x)
+            .attr('cy', d => d.y);
+        labels
+            .attr('x', d => d.x)
+            .attr('y', d => d.y);
+    });
+
+    // Drag - sticky
+    function drag(simulation) {
+        return d3.drag()
+            .on('start', (event, d) => {
+                if (!event.active) simulation.alphaTarget(0.3).restart();
+                d.fx = d.x;
+                d.fy = d.y;
+                d3.select(event.sourceEvent.target).classed('fixed', true);
+            })
+            .on('drag', (event, d) => {
+                d.fx = event.x;
+                d.fy = event.y;
+            })
+            .on('end', (event, d) => {
+                if (!event.active) simulation.alphaTarget(0);
+            });
+    }
+
+    // Controls
+    function updateLabels() {
+        const showSurvey = document.getElementById('showSurveyLabels').checked;
+        const showSubtopic = document.getElementById('showSubtopicLabels').checked;
+        labels.style('display', d => {
+            if (d.type === 'survey') return showSurvey ? 'block' : 'none';
+            return showSubtopic ? 'block' : 'none';
+        });
+    }
+    
+    function resetZoom() {
+        svg.transition().duration(500).call(zoom.transform, d3.zoomIdentity);
+    }
+    
+    function releaseAll() {
+        data.nodes.forEach(d => { d.fx = null; d.fy = null; });
+        node.classed('fixed', false);
+        simulation.alpha(0.5).restart();
+    }
+    
+    function updateForces() {
+        const spacing = +document.getElementById('spacing').value;
+        const repulsion = +document.getElementById('repulsion').value;
+        const linkStr = +document.getElementById('linkStrength').value / 1000;
+        
+        document.getElementById('spacingVal').textContent = spacing;
+        document.getElementById('repulsionVal').textContent = repulsion;
+        document.getElementById('linkStrengthVal').textContent = document.getElementById('linkStrength').value;
+        
+        simulation.force('link').distance(spacing).strength(linkStr);
+        simulation.force('charge').strength(-repulsion);
+        simulation.alpha(0.5).restart();
+    }
+    </script>
+</body>
+</html>
