@@ -1,0 +1,117 @@
+{
+  "name": "FoodAPS-ACS Overlap",
+  "children": [
+    {
+      "name": "Economic",
+      "children": [
+        {
+          "name": "Food Stamps (SNAP)",
+          "value": 22
+        },
+        {
+          "name": "Earnings",
+          "value": 10
+        },
+        {
+          "name": "Commute/Commuting",
+          "value": 9
+        },
+        {
+          "name": "Employment Status",
+          "value": 9
+        },
+        {
+          "name": "Hours/Week, Weeks/Year",
+          "value": 6
+        },
+        {
+          "name": "Health Insurance",
+          "value": 2
+        },
+        {
+          "name": "Unemployment",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "name": "Social",
+      "children": [
+        {
+          "name": "Household",
+          "value": 18
+        },
+        {
+          "name": "School Enrollment",
+          "value": 11
+        },
+        {
+          "name": "Veterans",
+          "value": 5
+        },
+        {
+          "name": "Computer & Internet Use",
+          "value": 4
+        },
+        {
+          "name": "Education",
+          "value": 2
+        },
+        {
+          "name": "Disability",
+          "value": 1
+        },
+        {
+          "name": "Fertility",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "name": "Demographic",
+      "children": [
+        {
+          "name": "Age",
+          "value": 3
+        },
+        {
+          "name": "Sex",
+          "value": 3
+        },
+        {
+          "name": "Marital Status",
+          "value": 2
+        },
+        {
+          "name": "Race",
+          "value": 2
+        },
+        {
+          "name": "Relationship",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "name": "Housing",
+      "children": [
+        {
+          "name": "Costs (Mortgage, Taxes, Insurance)",
+          "value": 6
+        },
+        {
+          "name": "Vehicles",
+          "value": 2
+        },
+        {
+          "name": "Rental",
+          "value": 1
+        },
+        {
+          "name": "Tenure (Own/Rent)",
+          "value": 1
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+q_id,question_text,subtopic,survey
+ACS_0021,How is this person related to Person 1?,Relationship,ACS
+ACS_0022,What is Person 1’s sex?,Sex,ACS
+ACS_0023,What is Person 1’s age and what is Person 1’s date of birth?,Age,ACS
+ACS_0024,"Is Person 1 of Hispanic, Latino, or Spanish origin?",Race,ACS
+ACS_0025,What is Person 1’s race?,Race,ACS
+ACS_0027,How is this person related to Person 1?,Relationship,ACS
+ACS_0028,What is Person 2’s sex?,Sex,ACS
+ACS_0029,What is Person 2’s age and what is Person 2’s date of birth?,Age,ACS
+ACS_0030,"Is Person 2 of Hispanic, Latino, or Spanish origin?",Race,ACS
+ACS_0031,What is Person 2’s race?,Race,ACS
+ACS_0033,How is this person related to Person 1?,Relationship,ACS
+ACS_0034,What is Person 3’s sex?,Sex,ACS
+ACS_0035,What is Person 3’s age and what is Person 3’s date of birth?,Age,ACS
+ACS_0036,"Is Person 3 of Hispanic, Latino, or Spanish origin?",Race,ACS
+ACS_0037,What is Person 3’s race?,Race,ACS
+ACS_0056,"IN THE PAST 12 MONTHS, did you or any member of this household receive benefits from the Food Stamp Program or SNAP (the Supplemental Nutrition Assistance Program)?",SNAP,ACS
+ACS_0072,Where was this person born?,Age,ACS
+ACS_0094,What is this person’s marital status?,Marital,ACS
+ACS_0095,In the past 12 MONTHS did this person get  a. Married? b. Widowed? c. Divorced?,Marital,ACS
+ACS_0096,How many times has this person been married?,Marital,ACS
+ACS_0097,In what year did this person last get married?,Marital,ACS
+ACS_0099,Does this person have any of his/her own grandchildren under the age of 18 living in this house or apartment?,Age,ACS
+ACS_0100,Is this grandparent currently responsible for most of the basic needs of any grandchildren under the age of 18 who live in this house or apartment?,Age,ACS

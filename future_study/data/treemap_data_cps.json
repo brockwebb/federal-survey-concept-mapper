@@ -1,0 +1,125 @@
+{
+  "name": "CPS-ACS Overlap",
+  "children": [
+    {
+      "name": "Economic",
+      "children": [
+        {
+          "name": "Employment Status",
+          "value": 36
+        },
+        {
+          "name": "Earnings",
+          "value": 23
+        },
+        {
+          "name": "Hours/Week, Weeks/Year",
+          "value": 19
+        },
+        {
+          "name": "Unemployment",
+          "value": 12
+        },
+        {
+          "name": "Occupation",
+          "value": 11
+        },
+        {
+          "name": "Labor Force",
+          "value": 6
+        },
+        {
+          "name": "Commissions",
+          "value": 2
+        },
+        {
+          "name": "Commute/Commuting",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "name": "Social",
+      "children": [
+        {
+          "name": "Disability",
+          "value": 17
+        },
+        {
+          "name": "Household",
+          "value": 10
+        },
+        {
+          "name": "Education",
+          "value": 5
+        },
+        {
+          "name": "Citizenship",
+          "value": 3
+        },
+        {
+          "name": "School Enrollment",
+          "value": 2
+        },
+        {
+          "name": "Veterans",
+          "value": 2
+        },
+        {
+          "name": "Migration",
+          "value": 1
+        },
+        {
+          "name": "Moving",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "name": "Demographic",
+      "children": [
+        {
+          "name": "Relationship",
+          "value": 10
+        },
+        {
+          "name": "Population",
+          "value": 4
+        },
+        {
+          "name": "Age",
+          "value": 3
+        },
+        {
+          "name": "Foreign Born",
+          "value": 3
+        },
+        {
+          "name": "Hispanic Origin",
+          "value": 3
+        },
+        {
+          "name": "Race",
+          "value": 3
+        },
+        {
+          "name": "Marital Status",
+          "value": 2
+        },
+        {
+          "name": "Sex",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "name": "Housing",
+      "children": [
+        {
+          "name": "Tenure (Own/Rent)",
+          "value": 1
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,108 @@
+pair_id,foodaps_q_id,foodaps_text,acs_q_id,acs_text,subtopic
+P_0001,FAPS_0006,"Who lives at [fill address], even if they are not related to you? Please list all the people who will be living at your address over the next week. Include any babies or young children.",ACS_0021,How is this person related to Person 1?,Relationship
+P_0002,FAPS_0006,"Who lives at [fill address], even if they are not related to you? Please list all the people who will be living at your address over the next week. Include any babies or young children.",ACS_0027,How is this person related to Person 1?,Relationship
+P_0003,FAPS_0006,"Who lives at [fill address], even if they are not related to you? Please list all the people who will be living at your address over the next week. Include any babies or young children.",ACS_0033,How is this person related to Person 1?,Relationship
+P_0004,FAPS_0018,What is your date of birth?,ACS_0023,What is Person 1’s age and what is Person 1’s date of birth?,Age
+P_0005,FAPS_0018,What is your date of birth?,ACS_0029,What is Person 2’s age and what is Person 2’s date of birth?,Age
+P_0006,FAPS_0018,What is your date of birth?,ACS_0035,What is Person 3’s age and what is Person 3’s date of birth?,Age
+P_0007,FAPS_0018,What is your date of birth?,ACS_0072,Where was this person born?,Age
+P_0008,FAPS_0018,What is your date of birth?,ACS_0099,Does this person have any of his/her own grandchildren under the age of 18 living in this house or apartment?,Age
+P_0009,FAPS_0018,What is your date of birth?,ACS_0100,Is this grandparent currently responsible for most of the basic needs of any grandchildren under the age of 18 who live in this house or apartment?,Age
+P_0010,FAPS_0019,Please verify or enter correct age.,ACS_0023,What is Person 1’s age and what is Person 1’s date of birth?,Age
+P_0011,FAPS_0019,Please verify or enter correct age.,ACS_0029,What is Person 2’s age and what is Person 2’s date of birth?,Age
+P_0012,FAPS_0019,Please verify or enter correct age.,ACS_0035,What is Person 3’s age and what is Person 3’s date of birth?,Age
+P_0013,FAPS_0019,Please verify or enter correct age.,ACS_0072,Where was this person born?,Age
+P_0014,FAPS_0019,Please verify or enter correct age.,ACS_0099,Does this person have any of his/her own grandchildren under the age of 18 living in this house or apartment?,Age
+P_0015,FAPS_0019,Please verify or enter correct age.,ACS_0100,Is this grandparent currently responsible for most of the basic needs of any grandchildren under the age of 18 who live in this house or apartment?,Age
+P_0016,FAPS_0020,Are you male or female?,ACS_0022,What is Person 1’s sex?,Sex
+P_0017,FAPS_0020,Are you male or female?,ACS_0028,What is Person 2’s sex?,Sex
+P_0018,FAPS_0020,Are you male or female?,ACS_0034,What is Person 3’s sex?,Sex
+P_0019,FAPS_0021,What is your race and/or ethnicity? Select all that apply.,ACS_0024,"Is Person 1 of Hispanic, Latino, or Spanish origin?",Race
+P_0020,FAPS_0021,What is your race and/or ethnicity? Select all that apply.,ACS_0025,What is Person 1’s race?,Race
+P_0021,FAPS_0021,What is your race and/or ethnicity? Select all that apply.,ACS_0030,"Is Person 2 of Hispanic, Latino, or Spanish origin?",Race
+P_0022,FAPS_0021,What is your race and/or ethnicity? Select all that apply.,ACS_0031,What is Person 2’s race?,Race
+P_0023,FAPS_0021,What is your race and/or ethnicity? Select all that apply.,ACS_0036,"Is Person 3 of Hispanic, Latino, or Spanish origin?",Race
+P_0024,FAPS_0021,What is your race and/or ethnicity? Select all that apply.,ACS_0037,What is Person 3’s race?,Race
+P_0025,FAPS_0023,"Are you currently married, widowed, divorced, separated, or never married?",ACS_0094,What is this person’s marital status?,Marital
+P_0026,FAPS_0023,"Are you currently married, widowed, divorced, separated, or never married?",ACS_0095,In the past 12 MONTHS did this person get  a. Married? b. Widowed? c. Divorced?,Marital
+P_0027,FAPS_0023,"Are you currently married, widowed, divorced, separated, or never married?",ACS_0096,How many times has this person been married?,Marital
+P_0028,FAPS_0023,"Are you currently married, widowed, divorced, separated, or never married?",ACS_0097,In what year did this person last get married?,Marital
+P_0029,FAPS_0024,Is your spouse a member of this household?,ACS_0021,How is this person related to Person 1?,Relationship
+P_0030,FAPS_0024,Is your spouse a member of this household?,ACS_0027,How is this person related to Person 1?,Relationship
+P_0031,FAPS_0024,Is your spouse a member of this household?,ACS_0033,How is this person related to Person 1?,Relationship
+P_0032,FAPS_0045,What is NAME’s relationship to you?,ACS_0021,How is this person related to Person 1?,Relationship
+P_0033,FAPS_0045,What is NAME’s relationship to you?,ACS_0027,How is this person related to Person 1?,Relationship
+P_0034,FAPS_0045,What is NAME’s relationship to you?,ACS_0033,How is this person related to Person 1?,Relationship
+P_0035,FAPS_0046,What is NAME’s date of birth?,ACS_0023,What is Person 1’s age and what is Person 1’s date of birth?,Age
+P_0036,FAPS_0046,What is NAME’s date of birth?,ACS_0029,What is Person 2’s age and what is Person 2’s date of birth?,Age
+P_0037,FAPS_0046,What is NAME’s date of birth?,ACS_0035,What is Person 3’s age and what is Person 3’s date of birth?,Age
+P_0038,FAPS_0046,What is NAME’s date of birth?,ACS_0072,Where was this person born?,Age
+P_0039,FAPS_0046,What is NAME’s date of birth?,ACS_0099,Does this person have any of his/her own grandchildren under the age of 18 living in this house or apartment?,Age
+P_0040,FAPS_0046,What is NAME’s date of birth?,ACS_0100,Is this grandparent currently responsible for most of the basic needs of any grandchildren under the age of 18 who live in this house or apartment?,Age
+P_0041,FAPS_0047,Is NAME male or female?,ACS_0022,What is Person 1’s sex?,Sex
+P_0042,FAPS_0047,Is NAME male or female?,ACS_0028,What is Person 2’s sex?,Sex
+P_0043,FAPS_0047,Is NAME male or female?,ACS_0034,What is Person 3’s sex?,Sex
+P_0044,FAPS_0048,What is NAME’s race and/or ethnicity? Select all that apply.,ACS_0024,"Is Person 1 of Hispanic, Latino, or Spanish origin?",Race
+P_0045,FAPS_0048,What is NAME’s race and/or ethnicity? Select all that apply.,ACS_0025,What is Person 1’s race?,Race
+P_0046,FAPS_0048,What is NAME’s race and/or ethnicity? Select all that apply.,ACS_0030,"Is Person 2 of Hispanic, Latino, or Spanish origin?",Race
+P_0047,FAPS_0048,What is NAME’s race and/or ethnicity? Select all that apply.,ACS_0031,What is Person 2’s race?,Race
+P_0048,FAPS_0048,What is NAME’s race and/or ethnicity? Select all that apply.,ACS_0036,"Is Person 3 of Hispanic, Latino, or Spanish origin?",Race
+P_0049,FAPS_0048,What is NAME’s race and/or ethnicity? Select all that apply.,ACS_0037,What is Person 3’s race?,Race
+P_0050,FAPS_0050,"Is NAME currently married, widowed, divorced, separated, or never married?",ACS_0094,What is this person’s marital status?,Marital
+P_0051,FAPS_0050,"Is NAME currently married, widowed, divorced, separated, or never married?",ACS_0095,In the past 12 MONTHS did this person get  a. Married? b. Widowed? c. Divorced?,Marital
+P_0052,FAPS_0050,"Is NAME currently married, widowed, divorced, separated, or never married?",ACS_0096,How many times has this person been married?,Marital
+P_0053,FAPS_0050,"Is NAME currently married, widowed, divorced, separated, or never married?",ACS_0097,In what year did this person last get married?,Marital
+P_0054,FAPS_0051,Is NAME’s spouse a member of this household?,ACS_0021,How is this person related to Person 1?,Relationship
+P_0055,FAPS_0051,Is NAME’s spouse a member of this household?,ACS_0027,How is this person related to Person 1?,Relationship
+P_0056,FAPS_0051,Is NAME’s spouse a member of this household?,ACS_0033,How is this person related to Person 1?,Relationship
+P_0057,FAPS_0054,What is the reason NAME will not attend school this week and next week?  (1) Summer vacation/summer break  (2) Other school break  (3) Home schooled (4) Disabled (5) Not old enough (6) Not enrolled (7) Graduated (8) Other,ACS_0023,What is Person 1’s age and what is Person 1’s date of birth?,Age
+P_0058,FAPS_0054,What is the reason NAME will not attend school this week and next week?  (1) Summer vacation/summer break  (2) Other school break  (3) Home schooled (4) Disabled (5) Not old enough (6) Not enrolled (7) Graduated (8) Other,ACS_0029,What is Person 2’s age and what is Person 2’s date of birth?,Age
+P_0059,FAPS_0054,What is the reason NAME will not attend school this week and next week?  (1) Summer vacation/summer break  (2) Other school break  (3) Home schooled (4) Disabled (5) Not old enough (6) Not enrolled (7) Graduated (8) Other,ACS_0035,What is Person 3’s age and what is Person 3’s date of birth?,Age
+P_0060,FAPS_0054,What is the reason NAME will not attend school this week and next week?  (1) Summer vacation/summer break  (2) Other school break  (3) Home schooled (4) Disabled (5) Not old enough (6) Not enrolled (7) Graduated (8) Other,ACS_0072,Where was this person born?,Age
+P_0061,FAPS_0054,What is the reason NAME will not attend school this week and next week?  (1) Summer vacation/summer break  (2) Other school break  (3) Home schooled (4) Disabled (5) Not old enough (6) Not enrolled (7) Graduated (8) Other,ACS_0099,Does this person have any of his/her own grandchildren under the age of 18 living in this house or apartment?,Age
+P_0062,FAPS_0054,What is the reason NAME will not attend school this week and next week?  (1) Summer vacation/summer break  (2) Other school break  (3) Home schooled (4) Disabled (5) Not old enough (6) Not enrolled (7) Graduated (8) Other,ACS_0100,Is this grandparent currently responsible for most of the basic needs of any grandchildren under the age of 18 who live in this house or apartment?,Age
+P_0063,FAPS_0075,Have you received benefits from the Supplemental Nutrition Assistance Program in the past 30 days? This program is also known as [FILL IN STATE SNAP NAME] or food stamps and it puts money on an EBT card that you can use to buy food.,ACS_0056,"IN THE PAST 12 MONTHS, did you or any member of this household receive benefits from the Food Stamp Program or SNAP (the Supplemental Nutrition Assistance Program)?",SNAP
+P_0064,FAPS_0076,Has anyone at this address received benefits from the Supplemental Nutrition Assistance Program in the past 30 days? This program is also known as [FILL IN STATE SNAP NAME] or food stamps and it puts money on an EBT card that you can use to buy food.,ACS_0056,"IN THE PAST 12 MONTHS, did you or any member of this household receive benefits from the Food Stamp Program or SNAP (the Supplemental Nutrition Assistance Program)?",SNAP
+P_0065,FAPS_0077,How many [FILL IN STATE SNAP NAME] EBT cards are issued to people at this address ?,ACS_0056,"IN THE PAST 12 MONTHS, did you or any member of this household receive benefits from the Food Stamp Program or SNAP (the Supplemental Nutrition Assistance Program)?",SNAP
+P_0066,FAPS_0078,You said there is one [FILL IN STATE SNAP NAME] card in this household. Now we will ask about who in the household is assigned to the EBT card. Select the names of the people below that receive [FILL SNAP] benefits together under that EBT card,ACS_0056,"IN THE PAST 12 MONTHS, did you or any member of this household receive benefits from the Food Stamp Program or SNAP (the Supplemental Nutrition Assistance Program)?",SNAP
+P_0067,FAPS_0079,You said there are two [FILL IN STATE SNAP NAME] cards in this household. Now we will ask about who in the household is assigned to the two EBT cards. Select the names of the people below that receive [FILL SNAP] benefits together under those two EBT cards.,ACS_0056,"IN THE PAST 12 MONTHS, did you or any member of this household receive benefits from the Food Stamp Program or SNAP (the Supplemental Nutrition Assistance Program)?",SNAP
+P_0068,FAPS_0080,You said there are three or more [FILL IN STATE SNAP NAME] cards in this household. Now we will ask about who in the household is assigned to the first three EBT cards. Select the names of the people below that receive [FILL SNAP] benefits together under the first three EBT cards.,ACS_0056,"IN THE PAST 12 MONTHS, did you or any member of this household receive benefits from the Food Stamp Program or SNAP (the Supplemental Nutrition Assistance Program)?",SNAP
+P_0069,FAPS_0081,On what date did [you/you and names of SNAP group 1 from B1ba ] last receive [FILL IN STATE SNAP NAME] benefits?,ACS_0056,"IN THE PAST 12 MONTHS, did you or any member of this household receive benefits from the Food Stamp Program or SNAP (the Supplemental Nutrition Assistance Program)?",SNAP
+P_0070,FAPS_0082,How many dollars were put on your EBT card the last time you received [FILL IN STATE SNAP NAME] benefits?,ACS_0056,"IN THE PAST 12 MONTHS, did you or any member of this household receive benefits from the Food Stamp Program or SNAP (the Supplemental Nutrition Assistance Program)?",SNAP
+P_0071,FAPS_0084,[Have you/Has anyone at this address] ever received benefits from SNAP?,ACS_0056,"IN THE PAST 12 MONTHS, did you or any member of this household receive benefits from the Food Stamp Program or SNAP (the Supplemental Nutrition Assistance Program)?",SNAP
+P_0072,FAPS_0085,Did (you/anyone at this address) receive benefits from SNAP in the last 12 months?,ACS_0056,"IN THE PAST 12 MONTHS, did you or any member of this household receive benefits from the Food Stamp Program or SNAP (the Supplemental Nutrition Assistance Program)?",SNAP
+P_0073,FAPS_0086,Select the names of the people below that received benefits from SNAP during the last 12 months.,ACS_0056,"IN THE PAST 12 MONTHS, did you or any member of this household receive benefits from the Food Stamp Program or SNAP (the Supplemental Nutrition Assistance Program)?",SNAP
+P_0074,FAPS_0087,On what date did [you/someone at this address] last receive benefits from SNAP?,ACS_0056,"IN THE PAST 12 MONTHS, did you or any member of this household receive benefits from the Food Stamp Program or SNAP (the Supplemental Nutrition Assistance Program)?",SNAP
+P_0075,FAPS_0088,How many dollars were put on the SNAP EBT card at that time?,ACS_0056,"IN THE PAST 12 MONTHS, did you or any member of this household receive benefits from the Food Stamp Program or SNAP (the Supplemental Nutrition Assistance Program)?",SNAP
+P_0076,FAPS_0095,List FEMALE HOUSEHOLD MEMBERS BETWEEN ages 14 AND <53,ACS_0022,What is Person 1’s sex?,Sex
+P_0077,FAPS_0095,List FEMALE HOUSEHOLD MEMBERS BETWEEN ages 14 AND <53,ACS_0028,What is Person 2’s sex?,Sex
+P_0078,FAPS_0095,List FEMALE HOUSEHOLD MEMBERS BETWEEN ages 14 AND <53,ACS_0034,What is Person 3’s sex?,Sex
+P_0079,FAPS_0105,Do you use most of your benefits from [FILL IN STATE SNAP NAME] at [Fill store from C1 or at Fill store from C3]?,ACS_0056,"IN THE PAST 12 MONTHS, did you or any member of this household receive benefits from the Food Stamp Program or SNAP (the Supplemental Nutrition Assistance Program)?",SNAP
+P_0080,FAPS_0106,Where do you do most of your food shopping when using your benefits from [FILL IN STATE SNAP NAME]?,ACS_0056,"IN THE PAST 12 MONTHS, did you or any member of this household receive benefits from the Food Stamp Program or SNAP (the Supplemental Nutrition Assistance Program)?",SNAP
+P_0081,FAPS_0116,How much do you usually pay out of pocket for a single one-way trip to [FILL IN PRIMARY STORE NAME FROM C1],ACS_0094,What is this person’s marital status?,Marital
+P_0082,FAPS_0116,How much do you usually pay out of pocket for a single one-way trip to [FILL IN PRIMARY STORE NAME FROM C1],ACS_0095,In the past 12 MONTHS did this person get  a. Married? b. Widowed? c. Divorced?,Marital
+P_0083,FAPS_0116,How much do you usually pay out of pocket for a single one-way trip to [FILL IN PRIMARY STORE NAME FROM C1],ACS_0096,How many times has this person been married?,Marital
+P_0084,FAPS_0116,How much do you usually pay out of pocket for a single one-way trip to [FILL IN PRIMARY STORE NAME FROM C1],ACS_0097,In what year did this person last get married?,Marital
+P_0085,FAPS_0304,"On what date did you last receive benefits from SNAP? This program used to be called food stamps and, in your state, it is called [FILL IN STATE SNAP NAME]. It puts money on a SNAP EBT card that you can use to buy food",ACS_0056,"IN THE PAST 12 MONTHS, did you or any member of this household receive benefits from the Food Stamp Program or SNAP (the Supplemental Nutrition Assistance Program)?",SNAP
+P_0086,FAPS_0305,How many dollars were put on your SNAP EBT card the last time you received SNAP benefits?,ACS_0056,"IN THE PAST 12 MONTHS, did you or any member of this household receive benefits from the Food Stamp Program or SNAP (the Supplemental Nutrition Assistance Program)?",SNAP
+P_0087,FAPS_0322,Keep track of the foods and drinks that children age 13 and under in your household got?,ACS_0023,What is Person 1’s age and what is Person 1’s date of birth?,Age
+P_0088,FAPS_0322,Keep track of the foods and drinks that children age 13 and under in your household got?,ACS_0029,What is Person 2’s age and what is Person 2’s date of birth?,Age
+P_0089,FAPS_0322,Keep track of the foods and drinks that children age 13 and under in your household got?,ACS_0035,What is Person 3’s age and what is Person 3’s date of birth?,Age
+P_0090,FAPS_0322,Keep track of the foods and drinks that children age 13 and under in your household got?,ACS_0072,Where was this person born?,Age
+P_0091,FAPS_0322,Keep track of the foods and drinks that children age 13 and under in your household got?,ACS_0099,Does this person have any of his/her own grandchildren under the age of 18 living in this house or apartment?,Age
+P_0092,FAPS_0322,Keep track of the foods and drinks that children age 13 and under in your household got?,ACS_0100,Is this grandparent currently responsible for most of the basic needs of any grandchildren under the age of 18 who live in this house or apartment?,Age
+P_0093,FAPS_0323,Record the foods and drinks that children age 13 and under in your household got?,ACS_0023,What is Person 1’s age and what is Person 1’s date of birth?,Age
+P_0094,FAPS_0323,Record the foods and drinks that children age 13 and under in your household got?,ACS_0029,What is Person 2’s age and what is Person 2’s date of birth?,Age
+P_0095,FAPS_0323,Record the foods and drinks that children age 13 and under in your household got?,ACS_0035,What is Person 3’s age and what is Person 3’s date of birth?,Age
+P_0096,FAPS_0323,Record the foods and drinks that children age 13 and under in your household got?,ACS_0072,Where was this person born?,Age
+P_0097,FAPS_0323,Record the foods and drinks that children age 13 and under in your household got?,ACS_0099,Does this person have any of his/her own grandchildren under the age of 18 living in this house or apartment?,Age
+P_0098,FAPS_0323,Record the foods and drinks that children age 13 and under in your household got?,ACS_0100,Is this grandparent currently responsible for most of the basic needs of any grandchildren under the age of 18 who live in this house or apartment?,Age
+P_0099,FAPS_0341,"[Do you/Does your household] shop for food depending on when you receive income or food assistance benefits (WIC, [Insert State SNAP Name], etc.)?",ACS_0056,"IN THE PAST 12 MONTHS, did you or any member of this household receive benefits from the Food Stamp Program or SNAP (the Supplemental Nutrition Assistance Program)?",SNAP
+P_0100,FAPS_0342,Did [you/your household] receive any benefits from [State SNAP name] during the [insert number of day fill] day Food Log period?,ACS_0056,"IN THE PAST 12 MONTHS, did you or any member of this household receive benefits from the Food Stamp Program or SNAP (the Supplemental Nutrition Assistance Program)?",SNAP
+P_0101,FAPS_0343,[If Yes to D2] On what date did [you/your household] last receive benefits from [State SNAP name]?,ACS_0056,"IN THE PAST 12 MONTHS, did you or any member of this household receive benefits from the Food Stamp Program or SNAP (the Supplemental Nutrition Assistance Program)?",SNAP
+P_0102,FAPS_0344,If Yes to D2] How much did [you/your household] receive from [State SNAP name] during the [insert number of day fill] day Food Log period?,ACS_0056,"IN THE PAST 12 MONTHS, did you or any member of this household receive benefits from the Food Stamp Program or SNAP (the Supplemental Nutrition Assistance Program)?",SNAP
+P_0103,FAPS_0372,Do you think that receiving a single daily reminder was the right number of reminders?,ACS_0094,What is this person’s marital status?,Marital
+P_0104,FAPS_0372,Do you think that receiving a single daily reminder was the right number of reminders?,ACS_0095,In the past 12 MONTHS did this person get  a. Married? b. Widowed? c. Divorced?,Marital
+P_0105,FAPS_0372,Do you think that receiving a single daily reminder was the right number of reminders?,ACS_0096,How many times has this person been married?,Marital
+P_0106,FAPS_0372,Do you think that receiving a single daily reminder was the right number of reminders?,ACS_0097,In what year did this person last get married?,Marital
+P_0107,FAPS_0458,How much did you /[Fill name] pay with the SNAP EBT card?,ACS_0056,"IN THE PAST 12 MONTHS, did you or any member of this household receive benefits from the Food Stamp Program or SNAP (the Supplemental Nutrition Assistance Program)?",SNAP

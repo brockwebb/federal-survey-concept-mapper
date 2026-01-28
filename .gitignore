@@ -4,6 +4,12 @@ models/roberta-large/
 # Ignore archive folder
 archive/
 
+# Ignore handoffs folder
+handoffs/
+
+# Ingnore claude code tasks
+cc_tasks/
+
 # File system
 **/.DS_Store
 

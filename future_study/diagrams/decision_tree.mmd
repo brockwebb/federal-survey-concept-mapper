@@ -1,0 +1,10 @@
+flowchart TD
+    A[Question Pair] --> B{Claude: yes or partial?}
+    B -->|No| Z[NOT CONSOLIDABLE]
+    B -->|Yes| C{GPT: yes or partial?}
+    C -->|No| Z
+    C -->|Yes| D[CONSOLIDABLE]
+    
+    D --> E{Both say yes?}
+    E -->|Yes| F[HIGH CONFIDENCE]
+    E -->|No| G[MODERATE CONFIDENCE]

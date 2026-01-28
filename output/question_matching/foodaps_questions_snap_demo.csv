@@ -1,0 +1,42 @@
+q_id,question_text,subtopic,survey
+FAPS_0006,"Who lives at [fill address], even if they are not related to you? Please list all the people who will be living at your address over the next week. Include any babies or young children.",Relationship,FoodAPS
+FAPS_0018,What is your date of birth?,Age,FoodAPS
+FAPS_0019,Please verify or enter correct age.,Age,FoodAPS
+FAPS_0020,Are you male or female?,Sex,FoodAPS
+FAPS_0021,What is your race and/or ethnicity? Select all that apply.,Race,FoodAPS
+FAPS_0023,"Are you currently married, widowed, divorced, separated, or never married?",Marital,FoodAPS
+FAPS_0024,Is your spouse a member of this household?,Relationship,FoodAPS
+FAPS_0045,What is NAME’s relationship to you?,Relationship,FoodAPS
+FAPS_0046,What is NAME’s date of birth?,Age,FoodAPS
+FAPS_0047,Is NAME male or female?,Sex,FoodAPS
+FAPS_0048,What is NAME’s race and/or ethnicity? Select all that apply.,Race,FoodAPS
+FAPS_0050,"Is NAME currently married, widowed, divorced, separated, or never married?",Marital,FoodAPS
+FAPS_0051,Is NAME’s spouse a member of this household?,Relationship,FoodAPS
+FAPS_0054,What is the reason NAME will not attend school this week and next week?  (1) Summer vacation/summer break  (2) Other school break  (3) Home schooled (4) Disabled (5) Not old enough (6) Not enrolled (7) Graduated (8) Other,Age,FoodAPS
+FAPS_0075,Have you received benefits from the Supplemental Nutrition Assistance Program in the past 30 days? This program is also known as [FILL IN STATE SNAP NAME] or food stamps and it puts money on an EBT card that you can use to buy food.,SNAP,FoodAPS
+FAPS_0076,Has anyone at this address received benefits from the Supplemental Nutrition Assistance Program in the past 30 days? This program is also known as [FILL IN STATE SNAP NAME] or food stamps and it puts money on an EBT card that you can use to buy food.,SNAP,FoodAPS
+FAPS_0077,How many [FILL IN STATE SNAP NAME] EBT cards are issued to people at this address ?,SNAP,FoodAPS
+FAPS_0078,You said there is one [FILL IN STATE SNAP NAME] card in this household. Now we will ask about who in the household is assigned to the EBT card. Select the names of the people below that receive [FILL SNAP] benefits together under that EBT card,SNAP,FoodAPS
+FAPS_0079,You said there are two [FILL IN STATE SNAP NAME] cards in this household. Now we will ask about who in the household is assigned to the two EBT cards. Select the names of the people below that receive [FILL SNAP] benefits together under those two EBT cards.,SNAP,FoodAPS
+FAPS_0080,You said there are three or more [FILL IN STATE SNAP NAME] cards in this household. Now we will ask about who in the household is assigned to the first three EBT cards. Select the names of the people below that receive [FILL SNAP] benefits together under the first three EBT cards.,SNAP,FoodAPS
+FAPS_0081,On what date did [you/you and names of SNAP group 1 from B1ba ] last receive [FILL IN STATE SNAP NAME] benefits?,SNAP,FoodAPS
+FAPS_0082,How many dollars were put on your EBT card the last time you received [FILL IN STATE SNAP NAME] benefits?,SNAP,FoodAPS
+FAPS_0084,[Have you/Has anyone at this address] ever received benefits from SNAP?,SNAP,FoodAPS
+FAPS_0085,Did (you/anyone at this address) receive benefits from SNAP in the last 12 months?,SNAP,FoodAPS
+FAPS_0086,Select the names of the people below that received benefits from SNAP during the last 12 months.,SNAP,FoodAPS
+FAPS_0087,On what date did [you/someone at this address] last receive benefits from SNAP?,SNAP,FoodAPS
+FAPS_0088,How many dollars were put on the SNAP EBT card at that time?,SNAP,FoodAPS
+FAPS_0095,List FEMALE HOUSEHOLD MEMBERS BETWEEN ages 14 AND <53,Sex,FoodAPS
+FAPS_0105,Do you use most of your benefits from [FILL IN STATE SNAP NAME] at [Fill store from C1 or at Fill store from C3]?,SNAP,FoodAPS
+FAPS_0106,Where do you do most of your food shopping when using your benefits from [FILL IN STATE SNAP NAME]?,SNAP,FoodAPS
+FAPS_0116,How much do you usually pay out of pocket for a single one-way trip to [FILL IN PRIMARY STORE NAME FROM C1],Marital,FoodAPS
+FAPS_0304,"On what date did you last receive benefits from SNAP? This program used to be called food stamps and, in your state, it is called [FILL IN STATE SNAP NAME]. It puts money on a SNAP EBT card that you can use to buy food",SNAP,FoodAPS
+FAPS_0305,How many dollars were put on your SNAP EBT card the last time you received SNAP benefits?,SNAP,FoodAPS
+FAPS_0322,Keep track of the foods and drinks that children age 13 and under in your household got?,Age,FoodAPS
+FAPS_0323,Record the foods and drinks that children age 13 and under in your household got?,Age,FoodAPS
+FAPS_0341,"[Do you/Does your household] shop for food depending on when you receive income or food assistance benefits (WIC, [Insert State SNAP Name], etc.)?",SNAP,FoodAPS
+FAPS_0342,Did [you/your household] receive any benefits from [State SNAP name] during the [insert number of day fill] day Food Log period?,SNAP,FoodAPS
+FAPS_0343,[If Yes to D2] On what date did [you/your household] last receive benefits from [State SNAP name]?,SNAP,FoodAPS
+FAPS_0344,If Yes to D2] How much did [you/your household] receive from [State SNAP name] during the [insert number of day fill] day Food Log period?,SNAP,FoodAPS
+FAPS_0372,Do you think that receiving a single daily reminder was the right number of reminders?,Marital,FoodAPS
+FAPS_0458,How much did you /[Fill name] pay with the SNAP EBT card?,SNAP,FoodAPS
