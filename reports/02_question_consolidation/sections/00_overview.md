@@ -8,7 +8,7 @@ This report documents the methodology and findings from a question-level consoli
 
 The analysis follows a four-phase approach:
 
-![Process Flow](figures/process_flow.png)
+![Process Flow](../figures/process_flow.png)
 
 **Phase 1: Concept Mapping** (Prior Work)
 - Classified 47 federal surveys using Census Bureau topic taxonomy

@@ -10,7 +10,7 @@ Before examining individual question pairs, we visualize where each survey's ove
 
 ## FoodAPS-ACS Concept Overlap
 
-![FoodAPS-ACS Treemap](figures/treemap_foodaps.png)
+![FoodAPS-ACS Treemap](../figures/treemap_foodaps.png)
 
 **Key observations:**
 
@@ -32,7 +32,7 @@ Before examining individual question pairs, we visualize where each survey's ove
 
 ## CPS-ACS Concept Overlap
 
-![CPS-ACS Treemap](figures/treemap_cps.png)
+![CPS-ACS Treemap](../figures/treemap_cps.png)
 
 **Key observations:**
 

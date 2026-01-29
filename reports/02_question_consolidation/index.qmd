@@ -1,0 +1,23 @@
+# Preface {.unnumbered}
+
+This report documents a proof-of-concept analysis examining whether federal survey questions can be consolidated through record linkage with the American Community Survey (ACS).
+
+## Key Finding
+
+**~11% of conceptually overlapping questions are actually consolidable.**
+
+The gap between concept-level overlap and question-level consolidation reflects real methodological differences:
+
+- Reference period mismatches
+- Construct differences (same topic, different operationalization)
+- Screener vs. battery design patterns
+
+## Scope
+
+- **Surveys analyzed**: FoodAPS, CPS (compared against ACS)
+- **Question pairs classified**: 1,702
+- **Method**: Dual-LLM classification with inter-rater validation
+
+## Data
+
+Source data and analysis scripts are available in the project repository.

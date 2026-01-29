@@ -4,7 +4,7 @@
 
 This methodology uses dual-LLM classification to assess whether question pairs from different surveys measure the same construct with compatible reference periods and response formats.
 
-![Classification Workflow](figures/classification_workflow.png)
+![Classification Workflow](../figures/classification_workflow.png)
 
 ## Stage 1: Input Data
 
@@ -44,7 +44,7 @@ OUTPUT: Topic: Economics
 
 ### Pair Matching Logic
 
-![Pair Matching](figures/pair_matching.png)
+![Pair Matching](../figures/pair_matching.png)
 
 Questions are paired **within shared subtopics only**:
 - Only questions with **matching subtopics** are paired
@@ -122,7 +122,7 @@ Respond in JSON format.
 
 ### Consolidation Determination
 
-![Decision Tree](figures/decision_tree.png)
+![Decision Tree](../figures/decision_tree.png)
 
 A pair is flagged as **consolidable** when:
 

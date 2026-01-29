@@ -1,0 +1,613 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Question-Level Survey Consolidation Analysis",
+    "section": "",
+    "text": "Preface\nThis report documents a proof-of-concept analysis examining whether federal survey questions can be consolidated through record linkage with the American Community Survey (ACS).",
+    "crumbs": [
+      "Preface"
+    ]
+  },
+  {
+    "objectID": "index.html#key-finding",
+    "href": "index.html#key-finding",
+    "title": "Question-Level Survey Consolidation Analysis",
+    "section": "Key Finding",
+    "text": "Key Finding\n~11% of conceptually overlapping questions are actually consolidable.\nThe gap between concept-level overlap and question-level consolidation reflects real methodological differences:\n\nReference period mismatches\nConstruct differences (same topic, different operationalization)\nScreener vs. battery design patterns",
+    "crumbs": [
+      "Preface"
+    ]
+  },
+  {
+    "objectID": "index.html#scope",
+    "href": "index.html#scope",
+    "title": "Question-Level Survey Consolidation Analysis",
+    "section": "Scope",
+    "text": "Scope\n\nSurveys analyzed: FoodAPS, CPS (compared against ACS)\nQuestion pairs classified: 1,702\nMethod: Dual-LLM classification with inter-rater validation",
+    "crumbs": [
+      "Preface"
+    ]
+  },
+  {
+    "objectID": "index.html#data",
+    "href": "index.html#data",
+    "title": "Question-Level Survey Consolidation Analysis",
+    "section": "Data",
+    "text": "Data\nSource data and analysis scripts are available in the project repository.",
+    "crumbs": [
+      "Preface"
+    ]
+  },
+  {
+    "objectID": "sections/00_overview.html",
+    "href": "sections/00_overview.html",
+    "title": "1  Overview",
+    "section": "",
+    "text": "1.1 Project Context\nThis report documents the methodology and findings from a question-level consolidation analysis comparing federal surveys with the American Community Survey (ACS). The goal is to determine realistic consolidation potential through record linkage by examining actual question pairs rather than relying solely on concept-level overlap.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Overview</span>"
+    ]
+  },
+  {
+    "objectID": "sections/00_overview.html#analysis-process",
+    "href": "sections/00_overview.html#analysis-process",
+    "title": "1  Overview",
+    "section": "1.2 Analysis Process",
+    "text": "1.2 Analysis Process\nThe analysis follows a four-phase approach:\n\n\n\nProcess Flow\n\n\nPhase 1: Concept Mapping (Prior Work) - Classified 47 federal surveys using Census Bureau topic taxonomy - Generated overlap matrices by subtopic - Identified survey “families” with shared conceptual domains\nPhase 2: Survey Selection (This Analysis Begins) - Focused on “Family 2” - Economic Household Surveys - Compared 5 surveys against ACS: SIPP, CE, AHS, CPS, FoodAPS - Selected FoodAPS (123 overlap) and CPS (181 overlap) as pilot cases due to manageable question counts\nPhase 3: Question Analysis - Generated 1,702 question pairs within shared subtopics - Applied dual-model LLM classification (Claude Haiku 4.5 + GPT-5-mini) - Classified pairs as consolidable, partially consolidable, or not consolidable\nPhase 4: Findings - ~11% overall consolidation potential (structural ceiling) - Identified three primary barriers: construct mismatch, reference period incompatibility, screener vs. battery design - Validated methodology through case studies (SNAP, Disability, Employment Status)",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Overview</span>"
+    ]
+  },
+  {
+    "objectID": "sections/00_overview.html#key-finding",
+    "href": "sections/00_overview.html#key-finding",
+    "title": "1  Overview",
+    "section": "1.3 Key Finding",
+    "text": "1.3 Key Finding\nConcept overlap is a ceiling, not an estimate.\nThe 123 FoodAPS questions sharing subtopics with ACS yielded only 74 consolidable pairs (12.1%). The 181 CPS questions yielded 118 consolidable pairs (10.8%). The ~90% gap between concept overlap and actual consolidation potential reflects real methodological differences in how surveys operationalize the same constructs.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Overview</span>"
+    ]
+  },
+  {
+    "objectID": "sections/00_overview.html#report-structure",
+    "href": "sections/00_overview.html#report-structure",
+    "title": "1  Overview",
+    "section": "1.4 Report Structure",
+    "text": "1.4 Report Structure\n\n\n\n\n\n\n\nSection\nContent\n\n\n\n\n1. Survey Selection\nWhy Family 2, why FoodAPS & CPS\n\n\n2. Concept Overlap\nTreemap visualization of subtopic distribution\n\n\n3. Methodology\nClassification workflow, prompts, decision logic\n\n\n4. Results\nConsolidation rates, agreement metrics, data tables\n\n\n5. Case Studies\nDeep-dives: SNAP, Race, Disability, Employment\n\n\n6. Synthesis\nCross-survey patterns, barrier taxonomy, recommendations\n\n\n7. Future Work\nNext surveys, extensions, limitations",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Overview</span>"
+    ]
+  },
+  {
+    "objectID": "sections/01_survey_selection.html",
+    "href": "sections/01_survey_selection.html",
+    "title": "2  Survey Selection: Family 2 Economic Household Surveys",
+    "section": "",
+    "text": "2.1 The ACS as a Linkage Backbone\nThe American Community Survey (ACS) is the largest household survey in the federal statistical system, collecting data continuously from approximately 3.5 million households annually. Its comprehensive coverage of demographics, economics, housing, and social characteristics makes it a natural candidate for record linkage with specialized surveys.\nThe key insight: rather than each survey independently collecting the same demographic information, surveys could potentially sample from ACS respondents and link records, collecting only the specialized content unique to their mission.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Survey Selection: Family 2 Economic Household Surveys</span>"
+    ]
+  },
+  {
+    "objectID": "sections/01_survey_selection.html#family-2-economic-household-surveys",
+    "href": "sections/01_survey_selection.html#family-2-economic-household-surveys",
+    "title": "2  Survey Selection: Family 2 Economic Household Surveys",
+    "section": "2.2 Family 2: Economic Household Surveys",
+    "text": "2.2 Family 2: Economic Household Surveys\nFrom the broader concept mapping analysis (Phase 1), we identified “Family 2” as surveys sharing substantial conceptual overlap with ACS in economic and household domains:\n\n\n\n\n\n\n\n\n\n\nSurvey\nFull Name\nTotal Shared Questions\nSubtopics Covered\nDominant Domain\n\n\n\n\nSIPP\nSurvey of Income and Program Participation\n577\n38\nEconomic (304)\n\n\nAHS\nAmerican Housing Survey\n460\n34\nHousing (343)\n\n\nCE\nConsumer Expenditure Survey\n283\n30\nHousing/Economic\n\n\nCPS\nCurrent Population Survey\n181\n25\nEconomic (110)\n\n\nFoodAPS\nFood Acquisition and Purchase Survey\n123\n23\nEconomic (59)\n\n\n\nTotal across Family 2: 1,624 shared questions with ACS",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Survey Selection: Family 2 Economic Household Surveys</span>"
+    ]
+  },
+  {
+    "objectID": "sections/01_survey_selection.html#why-foodaps-and-cps",
+    "href": "sections/01_survey_selection.html#why-foodaps-and-cps",
+    "title": "2  Survey Selection: Family 2 Economic Household Surveys",
+    "section": "2.3 Why FoodAPS and CPS?",
+    "text": "2.3 Why FoodAPS and CPS?\nWe selected FoodAPS and CPS as pilot cases for question-level analysis:\nPractical considerations: - Lowest question counts (123 and 181) → tractable for methodology development - Combined: 1,702 question pairs to classify - Estimated API cost: ~$1.50 total\nAnalytical considerations: - Different overlap profiles: FoodAPS is SNAP-heavy, CPS is employment-heavy - Different survey designs: FoodAPS is a specialized supplement, CPS is a core labor force survey - Testing generalizability across survey types\nWhat we deferred: - SIPP (577 questions) - largest, save for scaled analysis - AHS (460 questions) - housing-dominated, different domain - CE (283 questions) - moderate size, future candidate",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Survey Selection: Family 2 Economic Household Surveys</span>"
+    ]
+  },
+  {
+    "objectID": "sections/01_survey_selection.html#domain-distribution",
+    "href": "sections/01_survey_selection.html#domain-distribution",
+    "title": "2  Survey Selection: Family 2 Economic Household Surveys",
+    "section": "2.4 Domain Distribution",
+    "text": "2.4 Domain Distribution\n\n2.4.1 FoodAPS (123 questions)\n\n\n\nDomain\nCount\nTop Subtopics\n\n\n\n\nEconomic\n59\nFood Stamps/SNAP (22), Earnings (10), Employment (9)\n\n\nSocial\n42\nHousehold (18), School Enrollment (11), Veterans (5)\n\n\nDemographic\n12\nAge (3), Sex (3), Race (2), Relationship (2)\n\n\nHousing\n10\nCosts (6), Vehicles (2), Tenure (1)\n\n\n\n\n\n2.4.2 CPS (181 questions)\n\n\n\n\n\n\n\n\nDomain\nCount\nTop Subtopics\n\n\n\n\nEconomic\n110\nEmployment Status (36), Earnings (23), Hours/Week (19)\n\n\nSocial\n41\nDisability (17), Household (10), Education (5)\n\n\nDemographic\n29\nRelationship (10), Age (3), Race (3), Hispanic (3)\n\n\nHousing\n1\nTenure (1)",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Survey Selection: Family 2 Economic Household Surveys</span>"
+    ]
+  },
+  {
+    "objectID": "sections/01_survey_selection.html#implications-for-pair-generation",
+    "href": "sections/01_survey_selection.html#implications-for-pair-generation",
+    "title": "2  Survey Selection: Family 2 Economic Household Surveys",
+    "section": "2.5 Implications for Pair Generation",
+    "text": "2.5 Implications for Pair Generation\nQuestions are paired within shared subtopics only. This means: - FoodAPS’s 22 SNAP questions pair with ACS’s 1 SNAP question → 22 pairs - CPS’s 36 Employment Status questions pair with ACS’s 6 Employment questions → 216 pairs - Cross-subtopic comparisons are excluded (reduces noise)\nThe total pair counts: - FoodAPS × ACS: 610 pairs - CPS × ACS: 1,092 pairs - Combined: 1,702 pairs\nThis many-to-many pairing within subtopics is why pair counts exceed question counts.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Survey Selection: Family 2 Economic Household Surveys</span>"
+    ]
+  },
+  {
+    "objectID": "sections/02_concept_overlap.html",
+    "href": "sections/02_concept_overlap.html",
+    "title": "3  Concept-Level Overlap Visualization",
+    "section": "",
+    "text": "3.1 Understanding the Treemaps\nBefore examining individual question pairs, we visualize where each survey’s overlap with ACS concentrates. These treemaps show:",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Concept-Level Overlap Visualization</span>"
+    ]
+  },
+  {
+    "objectID": "sections/02_concept_overlap.html#understanding-the-treemaps",
+    "href": "sections/02_concept_overlap.html#understanding-the-treemaps",
+    "title": "3  Concept-Level Overlap Visualization",
+    "section": "",
+    "text": "Box size: Number of questions in that subtopic sharing conceptual overlap with ACS\nBox color: Domain category (Economic, Social, Housing, Demographic)\nLabels: Subtopic name and question count",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Concept-Level Overlap Visualization</span>"
+    ]
+  },
+  {
+    "objectID": "sections/02_concept_overlap.html#foodaps-acs-concept-overlap",
+    "href": "sections/02_concept_overlap.html#foodaps-acs-concept-overlap",
+    "title": "3  Concept-Level Overlap Visualization",
+    "section": "3.2 FoodAPS-ACS Concept Overlap",
+    "text": "3.2 FoodAPS-ACS Concept Overlap\n\n\n\nFoodAPS-ACS Treemap\n\n\nKey observations:\n\nSNAP dominates Economic domain (22 of 59 economic questions)\n\nFoodAPS was designed specifically for food assistance research\nThis concentration creates many pairs but most are screener-vs-battery mismatches\n\nHousehold structure is significant (18 questions in Social)\n\nUnderstanding who lives together matters for food acquisition patterns\nThese tend to consolidate well with ACS\n\nDemographics are sparse but important (12 questions)\n\nBasic demographics (age, sex, race) for each household member\nHigh consolidation potential - stable characteristics\n\nHousing is peripheral (10 questions)\n\nMostly costs and vehicle access (relevant for food access)\nNot FoodAPS’s primary focus",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Concept-Level Overlap Visualization</span>"
+    ]
+  },
+  {
+    "objectID": "sections/02_concept_overlap.html#cps-acs-concept-overlap",
+    "href": "sections/02_concept_overlap.html#cps-acs-concept-overlap",
+    "title": "3  Concept-Level Overlap Visualization",
+    "section": "3.3 CPS-ACS Concept Overlap",
+    "text": "3.3 CPS-ACS Concept Overlap\n\n\n\nCPS-ACS Treemap\n\n\nKey observations:\n\nEmployment dominates (36 questions)\n\nCore CPS mission: monthly labor force statistics\nMany reference period mismatches with ACS’s “last week” framing\n\nDisability is substantial (17 questions in Social)\n\nCPS includes both work-limiting disability (Type A) and ACS6 functional questions (Type B)\nConstruct mismatch is significant - same topic, different operationalization\n\nDemographics are richer than FoodAPS (29 questions)\n\nMore detailed relationship, nativity, and migration questions\nBetter consolidation potential\n\nHousing is minimal (1 question - tenure)\n\nCPS is not a housing survey\nAlmost no housing overlap with ACS",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Concept-Level Overlap Visualization</span>"
+    ]
+  },
+  {
+    "objectID": "sections/02_concept_overlap.html#what-these-treemaps-tell-us",
+    "href": "sections/02_concept_overlap.html#what-these-treemaps-tell-us",
+    "title": "3  Concept-Level Overlap Visualization",
+    "section": "3.4 What These Treemaps Tell Us",
+    "text": "3.4 What These Treemaps Tell Us\nConcept overlap is necessary but not sufficient for consolidation.\nThe treemaps show WHERE overlap exists, but not WHETHER questions can substitute for each other. Consider:\n\n\n\n\n\n\n\n\nSubtopic\nConcept Overlap\nConsolidation Reality\n\n\n\n\nSNAP (FoodAPS)\n22 questions\nOnly 2 consolidable (8.7%) - different reference periods, depths\n\n\nEmployment (CPS)\n36 questions\n~4 consolidable (11%) - reference period mismatches\n\n\nRace (FoodAPS)\n2 questions\n2 consolidable (100%) - stable demographic\n\n\nDisability (CPS)\n17 questions\n6 consolidable (35%) - only ACS6-compatible subset\n\n\n\nThe gap between treemap area and consolidation potential IS the finding.\nThis gap reflects: 1. Reference period incompatibility 2. Construct differences (same concept, different operationalization) 3. Screener vs. battery design (breadth vs. depth)\nThe question-level analysis quantifies this gap precisely.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Concept-Level Overlap Visualization</span>"
+    ]
+  },
+  {
+    "objectID": "sections/02_concept_overlap.html#interpreting-domain-colors",
+    "href": "sections/02_concept_overlap.html#interpreting-domain-colors",
+    "title": "3  Concept-Level Overlap Visualization",
+    "section": "3.5 Interpreting Domain Colors",
+    "text": "3.5 Interpreting Domain Colors\n\n\n\n\n\n\n\n\n\nDomain\nColor\nTypical Consolidation\nWhy\n\n\n\n\nEconomic\nGreen\n10-15%\nReference periods rarely align; surveys need different temporal granularity\n\n\nSocial\nPurple\n20-40%\nMixed - household composition consolidates, disability depends on construct\n\n\nHousing\nBlue\n5-15%\nSpecialized needs; surveys focus on different housing aspects\n\n\nDemographic\nRed\n60-100%\nStable characteristics; standardized across surveys\n\n\n\nThe demographic domain consistently shows highest consolidation potential because: - Characteristics don’t change between survey administrations - Constructs are standardized (OMB definitions for race/ethnicity) - No reference period complications (age, sex are point-in-time facts)\nEconomic and employment questions face the steepest barriers because: - Labor force status requires specific temporal windows - Different surveys need different windows for their analytical purposes - “Last week” ≠ “last 4 weeks” ≠ “last 12 months” - these serve different uses",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Concept-Level Overlap Visualization</span>"
+    ]
+  },
+  {
+    "objectID": "sections/03_methodology.html",
+    "href": "sections/03_methodology.html",
+    "title": "4  Classification Methodology",
+    "section": "",
+    "text": "4.1 Workflow Overview\nThis methodology uses dual-LLM classification to assess whether question pairs from different surveys measure the same construct with compatible reference periods and response formats.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Classification Methodology</span>"
+    ]
+  },
+  {
+    "objectID": "sections/03_methodology.html#workflow-overview",
+    "href": "sections/03_methodology.html#workflow-overview",
+    "title": "4  Classification Methodology",
+    "section": "",
+    "text": "Classification Workflow",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Classification Methodology</span>"
+    ]
+  },
+  {
+    "objectID": "sections/03_methodology.html#stage-1-input-data",
+    "href": "sections/03_methodology.html#stage-1-input-data",
+    "title": "4  Classification Methodology",
+    "section": "4.2 Stage 1: Input Data",
+    "text": "4.2 Stage 1: Input Data\n\n4.2.1 Source Questions\nQuestions are extracted from official survey instruments:\n\n\n\nSurvey\nSource\nQuestions Extracted\n\n\n\n\nFoodAPS\nUSDA FoodAPS questionnaire PDFs\n610 unique questions\n\n\nCPS\nCensus Bureau CPS instrument\n~400 unique questions\n\n\nACS\nCensus Bureau ACS instrument\n~150 unique questions\n\n\n\n\n\n4.2.2 Topic Taxonomy\nWe use the Census Bureau’s official topic taxonomy with standardized categories:\nTop-level topics: Demographics, Economics, Housing, Social\nSubtopics (examples): - Demographics → Age, Sex, Race, Hispanic Origin, Citizenship - Economics → Employment Status, Hours/Week, Earnings, Unemployment - Social → Disability, Veterans, School Enrollment",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Classification Methodology</span>"
+    ]
+  },
+  {
+    "objectID": "sections/03_methodology.html#stage-2-pair-generation",
+    "href": "sections/03_methodology.html#stage-2-pair-generation",
+    "title": "4  Classification Methodology",
+    "section": "4.3 Stage 2: Pair Generation",
+    "text": "4.3 Stage 2: Pair Generation\n\n4.3.1 Topic Assignment\nEach question is classified into the taxonomy using LLM:\nINPUT:  \"How many hours do you usually work per week at your main job?\"\nOUTPUT: Topic: Economics\n        Subtopic: Hours/Week, Weeks/Year\n        Confidence: 0.95\n\n\n4.3.2 Pair Matching Logic\n\n\n\nPair Matching\n\n\nQuestions are paired within shared subtopics only: - Only questions with matching subtopics are paired - This is a many-to-many relationship within subtopics - Cross-subtopic pairs are not generated (reduces noise)\nExample pair counts:\n\n\n\nSubtopic\nFoodAPS Qs\nACS Qs\nPairs Generated\n\n\n\n\nHours/Week\n8\n7\n56 (8 × 7)\n\n\nSNAP\n23\n1\n23 (23 × 1)\n\n\nDisability\n2\n6\n12 (2 × 6)\n\n\nSex\n27\n1\n27 (27 × 1)",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Classification Methodology</span>"
+    ]
+  },
+  {
+    "objectID": "sections/03_methodology.html#stage-3-dual-model-classification",
+    "href": "sections/03_methodology.html#stage-3-dual-model-classification",
+    "title": "4  Classification Methodology",
+    "section": "4.4 Stage 3: Dual-Model Classification",
+    "text": "4.4 Stage 3: Dual-Model Classification\n\n4.4.1 Classification Schema\nEach model assigns one of six classifications:\n\n\n\n\n\n\n\n\nClassification\nDefinition\nConsolidation Potential\n\n\n\n\nexact_duplicate\nIdentical wording, format, reference period\nYes\n\n\nnear_duplicate\nMinor wording differences, same construct\nYes\n\n\nrelated_but_distinct\nSame topic, different specifics\nNo\n\n\nreference_period_mismatch\nSame construct, incompatible time windows\nNo\n\n\nresponse_format_mismatch\nSame construct, incompatible response types\nNo\n\n\nnot_comparable\nDifferent constructs or topics\nNo\n\n\n\n\n\n4.4.2 Classification Prompt\nEach question pair is sent to both models with identical prompts:\nYou are analyzing two survey questions to determine if they measure \nthe same construct and could potentially be consolidated through \nrecord linkage.\n\nQUESTION A (from {Survey A}):\n\"{question_a_text}\"\n\nQUESTION B (from {Survey B}):\n\"{question_b_text}\"\n\nAnalyze these questions and provide:\n\n1. CLASSIFICATION: Choose exactly one from the schema above\n2. CONFIDENCE: high, medium, or low\n3. REASONING: 2-3 sentences explaining your classification\n4. CONSOLIDATION_POTENTIAL: yes, partial, or no\n5. REFERENCE_PERIOD_A: Extract the time frame from Question A\n6. REFERENCE_PERIOD_B: Extract the time frame from Question B\n\nRespond in JSON format.\n\n\n4.4.3 Model Configuration\n\n\n\nParameter\nClaude Haiku 4.5\nGPT-5-mini\n\n\n\n\nTemperature\n0.0\n0.0\n\n\nMax tokens\n500\n500\n\n\nBatch size\n10 questions\n10 questions\n\n\nParallel workers\n6\n6\n\n\nRate limiting\nExponential backoff\nExponential backoff\n\n\n\nWhy two models? - Reduces single-model bias - Disagreements flag ambiguous cases - Agreement increases confidence - Different training data → different blind spots",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Classification Methodology</span>"
+    ]
+  },
+  {
+    "objectID": "sections/03_methodology.html#stage-4-output-and-analysis",
+    "href": "sections/03_methodology.html#stage-4-output-and-analysis",
+    "title": "4  Classification Methodology",
+    "section": "4.5 Stage 4: Output and Analysis",
+    "text": "4.5 Stage 4: Output and Analysis\n\n4.5.1 Consolidation Determination\n\n\n\nDecision Tree\n\n\nA pair is flagged as consolidable when:\nDecision rules: - Both models say YES → High confidence, likely droppable - Both models say PARTIAL → Moderate confidence, partial overlap - One YES, one PARTIAL → Moderate confidence, needs review - Any NO → Not consolidable (conservative approach)\n\n\n4.5.2 Disagreement Handling\n\n\n\n\n\n\n\nDisagreement Type\nAction\n\n\n\n\nClassification differs, consolidation same\nUse consolidation consensus\n\n\nConsolidation differs\nFlag for human review\n\n\nOne high confidence, one low\nWeight toward high confidence",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Classification Methodology</span>"
+    ]
+  },
+  {
+    "objectID": "sections/03_methodology.html#classification-criteria",
+    "href": "sections/03_methodology.html#classification-criteria",
+    "title": "4  Classification Methodology",
+    "section": "4.6 Classification Criteria",
+    "text": "4.6 Classification Criteria\n\n4.6.1 Exact Duplicate Criteria\nAll must be true: - Same core construct (what is being measured) - Same or equivalent wording - Same response format (binary, numeric, categorical) - Same reference period (or both unspecified) - Same unit of analysis (person, household)\n\n\n4.6.2 Near Duplicate Criteria\nMost must be true: - Same core construct - Similar but not identical wording - Compatible response format - Same or compatible reference period - Same unit of analysis\n\n\n4.6.3 Reference Period Mismatch Criteria\n\nSame core construct\nCompatible wording\nDifferent reference periods that serve different purposes\n\n\n\n4.6.4 Construct Mismatch (Not Comparable) Criteria\n\nDifferent constructs despite same topic domain",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Classification Methodology</span>"
+    ]
+  },
+  {
+    "objectID": "sections/03_methodology.html#quality-assurance",
+    "href": "sections/03_methodology.html#quality-assurance",
+    "title": "4  Classification Methodology",
+    "section": "4.7 Quality Assurance",
+    "text": "4.7 Quality Assurance\n\n4.7.1 Automated Checks\n\n\n\nCheck\nPurpose\nAction if Failed\n\n\n\n\nJSON parse\nValid model output\nRetry with backoff\n\n\nRequired fields\nComplete response\nRetry or flag\n\n\nEnum validation\nValid classification\nReject and retry\n\n\nConfidence present\nQuality signal\nDefault to “medium”\n\n\n\n\n\n4.7.2 Checkpoint/Resume\nLong runs use checkpoint files. If interrupted, processing resumes from last checkpoint.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Classification Methodology</span>"
+    ]
+  },
+  {
+    "objectID": "sections/03_methodology.html#interpreting-results",
+    "href": "sections/03_methodology.html#interpreting-results",
+    "title": "4  Classification Methodology",
+    "section": "4.8 Interpreting Results",
+    "text": "4.8 Interpreting Results\n\n4.8.1 Consolidation Rate Calculation\nConsolidation Rate = (Pairs where BOTH models say yes/partial) / Total Pairs\n\n\n4.8.2 What “Consolidable” Means\nIt means: If you had perfect person-linkage between surveys, this question could potentially be dropped from Survey A because Survey B already collects equivalent data.\nIt does NOT mean: - The questions are identical - Linkage is feasible - Data quality would be equivalent - Skip logic permits removal\n\n\n4.8.3 Model Agreement Interpretation\n\n\n\nAgreement Rate\nInterpretation\n\n\n\n\n&gt;90%\nClear cases, high confidence in results\n\n\n70-90%\nNormal range, some genuine ambiguity\n\n\n&lt;70%\nMany borderline cases, interpret cautiously",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Classification Methodology</span>"
+    ]
+  },
+  {
+    "objectID": "sections/03_methodology.html#reproducibility",
+    "href": "sections/03_methodology.html#reproducibility",
+    "title": "4  Classification Methodology",
+    "section": "4.9 Reproducibility",
+    "text": "4.9 Reproducibility\n\n4.9.1 Parameters\nMODELS = [\"claude-haiku-4.5\", \"gpt-5-mini\"]\nTEMPERATURE = 0.0\nMAX_TOKENS = 500\nBATCH_SIZE = 10\nPARALLEL_WORKERS = 6\nREQUIRE_BOTH_MODELS = True\nCONSOLIDATION_VALUES = [\"yes\", \"partial\"]\n\n\n4.9.2 Cost Tracking\n\n\n\nSurvey Pair\nPairs\nTotal Cost\n\n\n\n\nFoodAPS-ACS\n610\n~$0.50\n\n\nCPS-ACS\n1,092\n~$1.00\n\n\nTotal\n1,702\n~$1.50",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Classification Methodology</span>"
+    ]
+  },
+  {
+    "objectID": "sections/03_methodology.html#limitations",
+    "href": "sections/03_methodology.html#limitations",
+    "title": "4  Classification Methodology",
+    "section": "4.10 Limitations",
+    "text": "4.10 Limitations\n\n4.10.1 What LLMs Can’t Assess\n\nSkip logic dependencies - Whether removing a question breaks survey flow\nAnalytical continuity - Impact on time series if source changes\nResponse quality - Whether linked data has same error properties\nLinkage feasibility - Whether person-matching is actually possible\n\n\n\n4.10.2 When Human Review Is Required\n\nModel disagreement on consolidation potential\nHigh-stakes consolidation decisions\nUnusual or domain-specific constructs\nQuestions with complex skip logic",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Classification Methodology</span>"
+    ]
+  },
+  {
+    "objectID": "sections/04_results.html",
+    "href": "sections/04_results.html",
+    "title": "5  Results",
+    "section": "",
+    "text": "5.1 Executive Summary",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Results</span>"
+    ]
+  },
+  {
+    "objectID": "sections/04_results.html#executive-summary",
+    "href": "sections/04_results.html#executive-summary",
+    "title": "5  Results",
+    "section": "",
+    "text": "5.1.1 Key Finding: ~11% Consolidation Potential, Structurally Bounded\n\n\n\nSurvey Pair\nTotal Pairs\nBoth Models Agree Consolidable\nRate\n\n\n\n\nFoodAPS-ACS\n610\n74\n12.1%\n\n\nCPS-ACS\n1,092\n118\n10.8%\n\n\nCombined\n1,702\n192\n11.3%\n\n\n\nBoth surveys converge on ~11% regardless of their different missions (food behavior vs labor force). This convergence suggests a structural ceiling rather than survey-specific limitations.\n\n\n5.1.2 Why Only 11%?\n\nDemographics consolidate well (60-100%): Sex, age, race are stable characteristics with standardized constructs\nHabitual measures partially consolidate (~26%): “Usually/normally” framing aligns across surveys\n\nPoint-in-time measures rarely consolidate (~4-12%): Reference period mismatches block substitution\nConstruct mismatches block consolidation entirely (0-2%): Same topic, different operationalization\n\n\n\n5.1.3 LLM Validation: High Accuracy on Clear Cases\nThe CPS Disability analysis provides strong validation: - 6/6 ACS6 standardized question matches identified (perfect diagonal) - 336/336 non-matching pairs correctly rejected - Model agreement: 94.7% on Disability subtopic",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Results</span>"
+    ]
+  },
+  {
+    "objectID": "sections/04_results.html#detailed-results",
+    "href": "sections/04_results.html#detailed-results",
+    "title": "5  Results",
+    "section": "5.2 Detailed Results",
+    "text": "5.2 Detailed Results\n\n5.2.1 FoodAPS-ACS (610 pairs)\n\n5.2.1.1 Classification Distribution\n\n\n\nClassification\nClaude Haiku 4.5\nGPT-5-mini\n\n\n\n\nrelated_but_distinct\n283 (46%)\n419 (69%)\n\n\nnot_comparable\n179 (29%)\n53 (9%)\n\n\nnear_duplicate\n44 (7%)\n28 (5%)\n\n\nresponse_format_mismatch\n38 (6%)\n32 (5%)\n\n\nreference_period_mismatch\n36 (6%)\n39 (6%)\n\n\nexact_duplicate\n30 (5%)\n39 (6%)\n\n\n\n\n\n5.2.1.2 Consolidation by Subtopic\n\n\n\nSubtopic\nConsolidable/Total\nRate\nPattern\n\n\n\n\nEducation\n2/2\n100%\nDemographic\n\n\nTenure (Own/Rent)\n1/1\n100%\nDemographic\n\n\nSex\n24/27\n89%\nDemographic\n\n\nRace\n5/6\n83%\nDemographic\n\n\nAge\n6/9\n67%\nDemographic\n\n\nRelationship\n3/6\n50%\nDemographic\n\n\nHours/Week, Weeks/Year\n16/56\n29%\nHabitual framing\n\n\nMarital Status\n2/8\n25%\nDemographic\n\n\nVeterans\n5/36\n14%\nMixed\n\n\nEmployment Status\n6/60\n10%\nPoint-in-time\n\n\nSNAP\n2/23\n8.7%\nScreener vs battery\n\n\nEarnings\n3/90\n3%\nReference period\n\n\nSchool Enrollment\n2/65\n3%\nReference period\n\n\nCosts\n1/54\n2%\nConstruct mismatch\n\n\nHousehold\n1/72\n1%\nConstruct mismatch\n\n\nDisability\n0/12\n0%\nConstruct mismatch\n\n\nCommute\n0/55\n0%\nReference period\n\n\nComputer/Internet\n0/12\n0%\nConstruct mismatch\n\n\nHealth Insurance\n0/6\n0%\nConstruct mismatch\n\n\n\n\n\n\n\n5.2.2 CPS-ACS (1,092 pairs)\n\n5.2.2.1 Classification Distribution\n\n\n\nClassification\nClaude Haiku 4.5\nGPT-5-mini\n\n\n\n\nrelated_but_distinct\n693 (63%)\n781 (72%)\n\n\nnot_comparable\n141 (13%)\n19 (2%)\n\n\nnear_duplicate\n83 (8%)\n54 (5%)\n\n\nreference_period_mismatch\n77 (7%)\n71 (7%)\n\n\nresponse_format_mismatch\n63 (6%)\n103 (9%)\n\n\nexact_duplicate\n35 (3%)\n64 (6%)\n\n\n\n\n\n5.2.2.2 Consolidation by Subtopic\n\n\n\nSubtopic\nConsolidable/Total\nRate\nPattern\n\n\n\n\nSex\n3/3\n100%\nDemographic\n\n\nHispanic Origin\n6/9\n67%\nDemographic\n\n\nOccupation\n10/17\n59%\nStandardized codes\n\n\nCommissions\n1/2\n50%\nSmall N\n\n\nEducation\n2/5\n40%\nDemographic\n\n\nAge\n3/9\n33%\nDemographic\n\n\nCitizenship\n1/3\n33%\nDemographic\n\n\nRelationship\n8/30\n27%\nDemographic\n\n\nHours/Week, Weeks/Year\n44/168\n26%\nHabitual framing\n\n\nVeterans\n2/8\n25%\nDemographic\n\n\nRace\n2/9\n22%\nDemographic\n\n\nForeign Born\n1/6\n17%\nDemographic\n\n\nEarnings\n17/138\n12%\nReference period\n\n\nMarital Status\n1/8\n12%\nDemographic\n\n\nPopulation\n1/8\n12%\nResponse format\n\n\nSchool Enrollment\n1/10\n10%\nReference period\n\n\nEmployment Status\n25/215\n11.6%\nReference period\n\n\nUnemployment\n1/26\n4%\nReference period\n\n\nDisability\n6/342\n1.8%\nConstruct mismatch\n\n\nHousehold\n0/52\n0%\nConstruct mismatch\n\n\nLabor Force\n0/16\n0%\nReference period\n\n\nCommute\n0/5\n0%\nReference period",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Results</span>"
+    ]
+  },
+  {
+    "objectID": "sections/04_results.html#structural-barriers-to-consolidation",
+    "href": "sections/04_results.html#structural-barriers-to-consolidation",
+    "title": "5  Results",
+    "section": "5.3 Structural Barriers to Consolidation",
+    "text": "5.3 Structural Barriers to Consolidation\n\n5.3.1 1. Construct Mismatch\nDefinition: Questions address the same topic but operationalize different constructs serving different analytical purposes.\n\n\n\nTopic\nSurvey A Construct\nSurvey B Construct\nSubstitutable?\n\n\n\n\nDisability\nWork-limiting\nFunctional limitation\nNo\n\n\nSNAP\nProgram mechanics\nProgram prevalence\nNo\n\n\nEmployment\nLabor force flows\nPoint-in-time status\nPartial\n\n\n\nImplication: Topic-level overlap analysis dramatically overestimates consolidation potential.\n\n\n5.3.2 2. Reference Period Incompatibility\n\n\n\nReference Type\nConsolidation Potential\n\n\n\n\nHabitual (“usually/normally”)\nHigh - no temporal anchor\n\n\nSame specific window\nHigh - direct comparison\n\n\nOverlapping windows\nPartial - subset relationship\n\n\nNon-overlapping windows\nLow - different statistics\n\n\n\n\n\n5.3.3 3. Screener vs. Battery Design\nSurveys collect the “same thing” at different depths: - Screener: “Did anyone receive SNAP?” (yes/no) - Battery: “How much? When? Which cards? Who’s covered?”\nACS optimizes for breadth (many topics, shallow). Specialized surveys optimize for depth (few topics, detailed). These are complementary designs.\n\n\n5.3.4 4. Response Format Differences\nEven identical constructs may use incompatible formats: - Count vs binary (“How many?” vs “Any?”) - Roster vs aggregate (“Who specifically?” vs “Anyone?”) - Continuous vs categorical (“Exact amount?” vs “Range?”)",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Results</span>"
+    ]
+  },
+  {
+    "objectID": "sections/04_results.html#methodological-findings",
+    "href": "sections/04_results.html#methodological-findings",
+    "title": "5  Results",
+    "section": "5.4 Methodological Findings",
+    "text": "5.4 Methodological Findings\n\n5.4.1 LLM Classification Performance\n\n\n\nMetric\nFoodAPS-ACS\nCPS-ACS\n\n\n\n\nModel agreement\n68.2%\n75.4%\n\n\nAgreement on consolidable\n74/74 (100%)\n118/118 (100%)\n\n\nDisability diagonal accuracy\nN/A\n6/6 (100%)\n\n\n\nInterpretation: When both models agree on consolidation, confidence is high. Disagreements indicate genuine ambiguity warranting human review.\n\n\n5.4.2 Model Generation Effects\nNewer models (Claude Haiku 4.5, GPT-5-mini) showed lower consolidation rates than earlier models tested during development. This pattern is consistent with improved nuance handling: - Better detection of reference period mismatches - Better discrimination of construct differences - More conservative on borderline cases\n\n\n5.4.3 Sampling vs. Full Population\n\n\n\nApproach\nCPS Consolidation Rate\nModel Agreement\n\n\n\n\n300-pair stratified sample\n15%\n66%\n\n\nFull 1,092-pair run\n10.8%\n75.4%\n\n\n\nStratified sampling overestimated consolidation by 4 percentage points due to demographic over-representation. Full runs cost ~$0.50-1.00 per survey - sampling offers no meaningful savings.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Results</span>"
+    ]
+  },
+  {
+    "objectID": "sections/04_results.html#consolidation-patterns-by-content-type",
+    "href": "sections/04_results.html#consolidation-patterns-by-content-type",
+    "title": "5  Results",
+    "section": "5.5 Consolidation Patterns by Content Type",
+    "text": "5.5 Consolidation Patterns by Content Type\n\n\n\n\n\n\n\n\nContent Type\nTypical Consolidation Rate\nRationale\n\n\n\n\nCore demographics (sex, age, race)\n60-100%\nStable characteristics, standardized constructs\n\n\nHabitual measures (hours/week)\n25-30%\n“Usually/normally” framing aligns\n\n\nPoint-in-time status\n10-15%\nReference period mismatches\n\n\nProgram-specific content\n0-10%\nSpecialized needs require specialized questions",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Results</span>"
+    ]
+  },
+  {
+    "objectID": "sections/04_results.html#data-sources",
+    "href": "sections/04_results.html#data-sources",
+    "title": "5  Results",
+    "section": "5.6 Data Sources",
+    "text": "5.6 Data Sources\n\n\n\n\n\n\n\n\nFile\nContents\nPairs\n\n\n\n\ndata/foodaps_comparison_merged.csv\nFoodAPS-ACS classifications\n610\n\n\ndata/cps_comparison_merged.csv\nCPS-ACS classifications\n1,092\n\n\n\n\n5.6.1 Classification Schema\n\nexact_duplicate: Identical wording, format, reference period\nnear_duplicate: Minor wording differences, same construct\nrelated_but_distinct: Same topic, different specifics\nreference_period_mismatch: Same construct, incompatible time windows\nresponse_format_mismatch: Same construct, incompatible response types\nnot_comparable: Different topics or constructs\n\n\n\n5.6.2 Consolidation Definition\nA pair is “consolidable” if both models classify it as exact_duplicate, near_duplicate, or assign consolidation_potential = “yes” or “partial”.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Results</span>"
+    ]
+  },
+  {
+    "objectID": "sections/05_case_study_foodaps.html",
+    "href": "sections/05_case_study_foodaps.html",
+    "title": "6  Case Study: FoodAPS-ACS",
+    "section": "",
+    "text": "6.1 Overview\nThis case study provides detailed analysis of specific FoodAPS-ACS question pairs to illustrate the structural barriers to survey consolidation. Through examination of actual question text and LLM reasoning, we demonstrate that low consolidation rates in specialized content areas are not analytical failures but expected outcomes of survey design differences.\nKey findings: - SNAP (8.7% consolidable): ACS screener vs. FoodAPS program battery - fundamentally different analytical purposes - Race (83-100% consolidable): Demographics work well - stable characteristics with no temporal scope issues - Reference periods drive consolidation: Habitual framing (“usually/normally”) enables consolidation; point-in-time framing blocks it",
+    "crumbs": [
+      "Case Studies",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Case Study: FoodAPS-ACS</span>"
+    ]
+  },
+  {
+    "objectID": "sections/05_case_study_foodaps.html#snap-food-stamps---223-consolidable-8.7",
+    "href": "sections/05_case_study_foodaps.html#snap-food-stamps---223-consolidable-8.7",
+    "title": "6  Case Study: FoodAPS-ACS",
+    "section": "6.2 SNAP (Food Stamps) - 2/23 Consolidable (8.7%)",
+    "text": "6.2 SNAP (Food Stamps) - 2/23 Consolidable (8.7%)\n\n6.2.1 The Paradox\nFoodAPS is explicitly designed to study food acquisition behavior among SNAP participants. Yet only 2 of 23 SNAP-related question pairs show consolidation potential with ACS. This appears anomalous - shouldn’t the survey’s core mission area show more overlap with ACS, not less?\n\n\n6.2.2 The Data\n\n\n\nMetric\nValue\n\n\n\n\nTotal SNAP pairs\n23\n\n\nClaude consolidable\n6 (26%)\n\n\nGPT consolidable\n5 (22%)\n\n\nBoth agree consolidable\n2 (8.7%)\n\n\nModel agreement rate\n48%\n\n\n\n\n\n6.2.3 What Consolidates: Identical Constructs\nPair FOODAPS_0594 (Both models: YES)\nFoodAPS: \"Did (you/anyone at this address) receive benefits from SNAP in the last 12 months?\"\nACS:     \"IN THE PAST 12 MONTHS, did you or any member of this household receive benefits \n          from the Food Stamp Program or SNAP (the Supplemental Nutrition Assistance Program)?\"\nWhy it works: - Identical reference period (12 months) - Same unit of analysis (household-level) - Same construct (binary SNAP receipt)\n\n\n6.2.4 What Doesn’t Consolidate: Screener vs. Battery\nProblem Type 1: Reference Period Mismatch\nFoodAPS: \"Have you received benefits from SNAP in the past 30 days?\"\nACS:     \"IN THE PAST 12 MONTHS, did you receive SNAP benefits?\"\n30 days ≠ 12 months. FoodAPS needs current participation status to interpret food acquisition diaries.\nProblem Type 2: Response Format Mismatch\nFoodAPS: \"How many EBT cards are issued to people at this address?\"\nACS:     \"Did you receive SNAP benefits?\" (yes/no)\nCount vs binary - ACS provides no information about enrollment intensity.\nProblem Type 3: Administrative Detail vs. Prevalence\nFoodAPS: \"Select the names of the people that receive SNAP benefits on this card.\"\nACS:     \"Did you receive SNAP benefits?\" (yes/no)\nRoster identification vs prevalence - entirely different analytical purposes.\n\n\n6.2.5 The Structural Pattern\n\n\n\nFoodAPS Question Type\nCount\nACS Substitutable?\n\n\n\n\n12-month receipt screener\n1\n✓ Yes\n\n\nLast receipt date\n1\n∼ Partial\n\n\n30-day receipt\n2\n✗ No\n\n\nNumber of EBT cards\n1\n✗ No\n\n\nCard assignment roster\n~15\n✗ No\n\n\nBenefit amount/timing\n~3\n✗ No\n\n\n\nConclusion: The 8.7% consolidation rate is structurally determined. FoodAPS needs program mechanics; ACS measures program reach. These are complementary, not redundant.",
+    "crumbs": [
+      "Case Studies",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Case Study: FoodAPS-ACS</span>"
+    ]
+  },
+  {
+    "objectID": "sections/05_case_study_foodaps.html#raceethnicity---56-consolidable-83",
+    "href": "sections/05_case_study_foodaps.html#raceethnicity---56-consolidable-83",
+    "title": "6  Case Study: FoodAPS-ACS",
+    "section": "6.3 Race/Ethnicity - 5/6 Consolidable (83%)",
+    "text": "6.3 Race/Ethnicity - 5/6 Consolidable (83%)\n\n6.3.1 Why Race Works\nThe pattern:\nFoodAPS: \"What is your race and/or ethnicity? Select all that apply.\"\nACS:     \"What is Person 1's race?\"\nWhy consolidation works: 1. No temporal scope - Race is a stable characteristic 2. Same construct - Both measure racial/ethnic self-identification 3. Similar response format - Both allow multiple selections\nWhy “partial” instead of “yes”: - FoodAPS combines race AND ethnicity in one question - ACS asks race and Hispanic origin separately (standard federal practice)\n\n\n6.3.2 Demographics: The Reliable Consolidation Target\n\n\n\nDemographic Item\nFoodAPS Rate\nCPS Rate\n\n\n\n\nSex\n89% (24/27)\n100% (3/3)\n\n\nAge\n67% (6/9)\n33% (3/9)\n\n\nRace\n83% (5/6)\n22% (2/9)\n\n\nRelationship\n50% (3/6)\n27% (8/30)",
+    "crumbs": [
+      "Case Studies",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Case Study: FoodAPS-ACS</span>"
+    ]
+  },
+  {
+    "objectID": "sections/05_case_study_foodaps.html#hoursweek---1656-consolidable-29",
+    "href": "sections/05_case_study_foodaps.html#hoursweek---1656-consolidable-29",
+    "title": "6  Case Study: FoodAPS-ACS",
+    "section": "6.4 Hours/Week - 16/56 Consolidable (29%)",
+    "text": "6.4 Hours/Week - 16/56 Consolidable (29%)\n\n6.4.1 Why This Works Better Than Employment Status\nThe key is habitual framing.\nConsolidable pairs use habitual language:\nFoodAPS: \"How many hours do you NORMALLY work for pay?\"\nACS:     \"How many hours do you USUALLY work per week?\"\nNo specific reference period → direct comparison possible.\nNon-consolidable pairs use point-in-time language:\nFoodAPS: \"How many hours did you work LAST WEEK?\"\nACS:     \"During the PAST 12 MONTHS, did this person usually work 35+ hours?\"\nWeekly snapshot ≠ annual typical hours.\n\n\n6.4.2 Reference Period Alignment Drives Consolidation\n\n\n\nFraming Type\nConsolidation Rate\n\n\n\n\nHabitual (“usually/normally”)\n~40-50%\n\n\nPoint-in-time (“last week”)\n~10%\n\n\nAnnual retrospective (“past 12 months”)\n~15%",
+    "crumbs": [
+      "Case Studies",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Case Study: FoodAPS-ACS</span>"
+    ]
+  },
+  {
+    "objectID": "sections/05_case_study_foodaps.html#summary-what-foodaps-acs-teaches-us",
+    "href": "sections/05_case_study_foodaps.html#summary-what-foodaps-acs-teaches-us",
+    "title": "6  Case Study: FoodAPS-ACS",
+    "section": "6.5 Summary: What FoodAPS-ACS Teaches Us",
+    "text": "6.5 Summary: What FoodAPS-ACS Teaches Us\n\nSpecialized Surveys Have Specialized Needs - FoodAPS can’t use ACS SNAP data because ACS doesn’t collect program mechanics\nDemographics Are the Reliable Target - Race, sex, age work because they’re time-invariant and federally standardized\nHabitual Framing Enables Cross-Survey Comparison - “Usually work” is comparable; “worked last week” is not\nLow Consolidation Rates Are Features, Not Bugs - The 8.7% SNAP rate reflects correct survey design",
+    "crumbs": [
+      "Case Studies",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Case Study: FoodAPS-ACS</span>"
+    ]
+  },
+  {
+    "objectID": "sections/05_case_study_cps.html",
+    "href": "sections/05_case_study_cps.html",
+    "title": "7  Case Study: CPS-ACS",
+    "section": "",
+    "text": "7.1 Overview\nThis case study analyzes CPS-ACS question pairs, focusing on two subtopics that reveal fundamental barriers to survey consolidation:",
+    "crumbs": [
+      "Case Studies",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Case Study: CPS-ACS</span>"
+    ]
+  },
+  {
+    "objectID": "sections/05_case_study_cps.html#overview",
+    "href": "sections/05_case_study_cps.html#overview",
+    "title": "7  Case Study: CPS-ACS",
+    "section": "",
+    "text": "Disability (1.8% consolidable): A textbook case of construct mismatch - CPS measures work-limiting disability while ACS measures functional limitations. The 6 consolidable pairs are exactly the ACS6 standardized questions, validating LLM accuracy.\nEmployment Status (11.6% consolidable): Reference period incompatibility - CPS uses multiple temporal windows for labor force dynamics while ACS uses fixed “last week” snapshots.",
+    "crumbs": [
+      "Case Studies",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Case Study: CPS-ACS</span>"
+    ]
+  },
+  {
+    "objectID": "sections/05_case_study_cps.html#disability---6342-consolidable-1.8",
+    "href": "sections/05_case_study_cps.html#disability---6342-consolidable-1.8",
+    "title": "7  Case Study: CPS-ACS",
+    "section": "7.2 Disability - 6/342 Consolidable (1.8%)",
+    "text": "7.2 Disability - 6/342 Consolidable (1.8%)\n\n7.2.1 The Structure\nThe Disability subtopic contains 342 pairs formed from: - 57 unique CPS disability questions × 6 unique ACS disability questions\nCPS has two fundamentally different types of disability questions.\n\n\n7.2.2 CPS Disability Question Types\nType A: Work-Limiting Disability (51 questions)\n\"Does your disability prevent you from accepting any kind of work \n during the next 6 months?\"\nPurpose: Labor force participation measurement for BLS employment statistics\nType B: Functional Limitations - ACS6 Compatible (6 questions)\nCPS_294: \"Are you deaf or do you have serious difficulty hearing?\"\nCPS_295: \"Are you blind or do you have serious difficulty seeing?\"\nCPS_296: \"Do you have serious difficulty concentrating, remembering, or making decisions?\"\nCPS_297: \"Do you have serious difficulty walking or climbing stairs?\"\nCPS_298: \"Do you have difficulty dressing or bathing?\"\nCPS_299: \"Do you have difficulty doing errands alone?\"\nPurpose: ADA compliance, accessibility planning (matches ACS purpose)\n\n\n7.2.3 LLM Validation: Perfect Diagonal Match\nThe 6 consolidable pairs form a perfect 1:1 diagonal between CPS Type B and ACS questions:\n\n\n\nCPS Question\nACS Question\nConstruct\nResult\n\n\n\n\nCPS_294\nACS_84\nHearing\n✓ CONSOLIDABLE\n\n\nCPS_295\nACS_85\nVision\n✓ CONSOLIDABLE\n\n\nCPS_296\nACS_86\nCognition\n✓ CONSOLIDABLE\n\n\nCPS_297\nACS_87\nWalking\n✓ CONSOLIDABLE\n\n\nCPS_298\nACS_88\nDressing\n✓ CONSOLIDABLE\n\n\nCPS_299\nACS_89\nErrands\n✓ CONSOLIDABLE\n\n\n\nAccuracy: - 6/6 true positive diagonal matches (100%) - 336/336 true negatives - off-diagonal and Type A correctly rejected - Model agreement: 94.7%\nThis is the strongest validation of LLM classification accuracy in the dataset.\n\n\n7.2.4 Why Work-Limiting ≠ Functional Limitations\n\n\n\nDimension\nWork-Limiting\nFunctional\n\n\n\n\nQuestion\n“Can you work?”\n“Can you walk?”\n\n\nUse case\nBLS unemployment stats\nADA compliance\n\n\nReference\nForward (next 6 months)\nCurrent/ongoing\n\n\nDerivability\nNot related\nNot related",
+    "crumbs": [
+      "Case Studies",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Case Study: CPS-ACS</span>"
+    ]
+  },
+  {
+    "objectID": "sections/05_case_study_cps.html#employment-status---25215-consolidable-11.6",
+    "href": "sections/05_case_study_cps.html#employment-status---25215-consolidable-11.6",
+    "title": "7  Case Study: CPS-ACS",
+    "section": "7.3 Employment Status - 25/215 Consolidable (11.6%)",
+    "text": "7.3 Employment Status - 25/215 Consolidable (11.6%)\n\n7.3.1 The Reference Period Problem\n\n\n\nMetric\nValue\n\n\n\n\nTotal pairs\n215\n\n\nBoth agree consolidable\n25 (11.6%)\n\n\nReference period mismatches\n37 (17.2%)\n\n\nModel disagreements\n60 (27.9%)\n\n\n\nThe 28% disagreement rate is the highest of any subtopic.\n\n\n7.3.2 Reference Period Distribution\nCPS uses multiple windows: - Last week / week before last - Last 4 weeks - Last month - Last 12 months - Currently/ongoing\nACS uses one window: - Last week (74%)\nThe mismatch is structural: CPS needs multiple temporal windows for labor force dynamics.\n\n\n7.3.3 What Consolidates: Overlapping Windows\nCPS: \"LAST WEEK, did you do ANY work for pay?\"\nACS: \"LAST WEEK, did this person work for pay at a job?\"\nSame reference period → consolidable.\n\n\n7.3.4 What Doesn’t Consolidate: Incompatible Windows\nCPS: \"Did you do any work for pay in the LAST 4 WEEKS?\"\nACS: \"LAST WEEK, did this person work for pay?\"\nDifferent time periods, different statistics → not consolidable.\n\n\n7.3.5 Model Disagreement Analysis\n\n\n\nDisagreement Type\nCount\nPattern\n\n\n\n\nClaude YES, GPT NO\n13\nClaude more lenient on overlapping windows\n\n\nClaude NO, GPT YES\n27\nGPT more lenient on construct similarity\n\n\nSame consolidation, different reasoning\n20\nAgree on bottom line\n\n\n\nExample of legitimate disagreement:\nCPS: \"Do you currently want a job, either full or part time?\"\nACS: \"LAST WEEK, was this person on layoff from a job?\"\nJob-seeking intention vs layoff status - both models defensible.",
+    "crumbs": [
+      "Case Studies",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Case Study: CPS-ACS</span>"
+    ]
+  },
+  {
+    "objectID": "sections/05_case_study_cps.html#consolidation-rate-by-content-type",
+    "href": "sections/05_case_study_cps.html#consolidation-rate-by-content-type",
+    "title": "7  Case Study: CPS-ACS",
+    "section": "7.4 Consolidation Rate by Content Type",
+    "text": "7.4 Consolidation Rate by Content Type\n\n\n\n\n\n\n\n\nContent Type\nCPS Rate\nDriver\n\n\n\n\nDemographics (sex, age, race)\n40-100%\nStable, standardized\n\n\nHabitual measures (hours/week)\n26%\n“Usually” framing aligns\n\n\nPoint-in-time status (employment)\n11.6%\nReference period mismatch\n\n\nConstruct-specific (disability)\n1.8%\nDifferent definitions",
+    "crumbs": [
+      "Case Studies",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Case Study: CPS-ACS</span>"
+    ]
+  },
+  {
+    "objectID": "sections/05_case_study_cps.html#summary-what-cps-acs-teaches-us",
+    "href": "sections/05_case_study_cps.html#summary-what-cps-acs-teaches-us",
+    "title": "7  Case Study: CPS-ACS",
+    "section": "7.5 Summary: What CPS-ACS Teaches Us",
+    "text": "7.5 Summary: What CPS-ACS Teaches Us\n\nLLMs Correctly Identify Standardized Matches - Perfect ACS6 diagonal validates methodology\nMulti-Purpose Surveys Resist Consolidation - CPS’s multi-window design serves BLS needs incompatible with ACS’s single window\nConstruct Mismatch Is Invisible at Topic Level - “Disability” appears in both surveys but measures different things\nHigh Model Disagreement = Genuine Ambiguity - 28% disagreement in Employment reflects real uncertainty, not model failure\nConsolidation Is Structurally Bounded - 10.8% is an accurate measurement of design-constrained overlap",
+    "crumbs": [
+      "Case Studies",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Case Study: CPS-ACS</span>"
+    ]
+  },
+  {
+    "objectID": "sections/06_synthesis.html",
+    "href": "sections/06_synthesis.html",
+    "title": "8  Synthesis and Conclusions",
+    "section": "",
+    "text": "8.1 The Central Finding\nAfter analyzing 1,702 question pairs across two major federal surveys, we find that survey consolidation through ACS record linkage has real but structurally limited potential. The convergence of both survey pairs on ~11% consolidation—despite serving vastly different purposes (food acquisition behavior vs. labor force statistics)—suggests this is a fundamental ceiling imposed by how federal surveys are designed.\nThis ceiling is not a failure. It reflects the reality that surveys optimize for different analytical needs, and those differences are encoded in question design.",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Synthesis and Conclusions</span>"
+    ]
+  },
+  {
+    "objectID": "sections/06_synthesis.html#what-we-learned",
+    "href": "sections/06_synthesis.html#what-we-learned",
+    "title": "8  Synthesis and Conclusions",
+    "section": "8.2 What We Learned",
+    "text": "8.2 What We Learned\n\n8.2.1 1. Topic Overlap ≠ Question Substitutability\n\n\n\nLevel of Analysis\nApparent Overlap\nActual Substitutability\n\n\n\n\nDomain (“both measure employment”)\n~80-90%\n—\n\n\nTopic (“both ask about work hours”)\n~40-60%\n—\n\n\nQuestion (actual text comparison)\n—\n~11%\n\n\n\nConcept-level analysis dramatically overestimates consolidation potential.\n\n\n8.2.2 2. Three Structural Barriers Explain Most Non-Consolidation\n\n\n\n\n\n\n\n\nBarrier\nDescription\nExample\n\n\n\n\nConstruct mismatch\nSame topic, different operationalization\nCPS work-limiting disability vs ACS functional limitations\n\n\nReference period incompatibility\nSame construct, different time windows\nCPS “last 4 weeks” vs ACS “last week”\n\n\nScreener vs battery\nSame topic, different depth\nACS “received SNAP?” vs FoodAPS “how many cards?”\n\n\n\nThese barriers are features, not bugs.\n\n\n8.2.3 3. Content Type Predicts Consolidation Rate\n\n\n\n\n\n\n\n\nContent Type\nConsolidation Rate\nWhy\n\n\n\n\nCore demographics\n60-100%\nStable characteristics, standardized\n\n\nHabitual measures\n25-30%\n“Usually/normally” has no temporal anchor\n\n\nPoint-in-time status\n10-15%\nReference periods rarely align\n\n\nProgram-specific\n0-10%\nSpecialized needs require specialized questions\n\n\n\n\n\n8.2.4 4. LLMs Can Reliably Identify Consolidation Opportunities\nThe Disability case study provides validation:\n\n\n\nTest\nResult\n\n\n\n\nTrue positive: ACS6 diagonal\n6/6 (100%)\n\n\nTrue negative: Off-diagonal\n336/336 (100%)\n\n\n\nWhen constructs genuinely align, LLMs find them.",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Synthesis and Conclusions</span>"
+    ]
+  },
+  {
+    "objectID": "sections/06_synthesis.html#policy-implications",
+    "href": "sections/06_synthesis.html#policy-implications",
+    "title": "8  Synthesis and Conclusions",
+    "section": "8.3 Policy Implications",
+    "text": "8.3 Policy Implications\n\n8.3.1 The Optimistic View\n11% is not nothing. For a 100-question survey: - ~11 questions could potentially be dropped with ACS linkage - Demographics (5-10 questions typically) are nearly fully consolidable\n\n\n8.3.2 The Realistic View\n11% is a ceiling, not a floor. Actual consolidation will be lower because: - Linkage isn’t free (consent, matching error, privacy) - Skip logic creates dependencies - Analytical continuity matters - High-burden questions rarely consolidate\n\n\n8.3.3 The Strategic View\nTarget high-value opportunities:\n\n\n\nOpportunity\nValue\nFeasibility\n\n\n\n\nDemographic battery consolidation\nHigh\nHigh\n\n\nHabitual framing coordination\nMedium\nMedium\n\n\nFull survey consolidation\nLow\nLow",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Synthesis and Conclusions</span>"
+    ]
+  },
+  {
+    "objectID": "sections/06_synthesis.html#recommendations",
+    "href": "sections/06_synthesis.html#recommendations",
+    "title": "8  Synthesis and Conclusions",
+    "section": "8.4 Recommendations",
+    "text": "8.4 Recommendations\n\n8.4.1 For Statistical Agencies\n\nTarget demographics first - Near-certain wins with minimal risk\nCoordinate framing conventions - Habitual framing consolidates; point-in-time doesn’t\nDon’t expect specialized content to consolidate - SNAP mechanics, disability work-limitations, monthly employment flows require specialized questions by design\nUse question-level analysis for planning - Concept-level studies overestimate by 5-10x\n\n\n\n8.4.2 For Survey Design\n\nConsolidation potential is a design choice - Surveys needing ACS-linkable data should adopt ACS constructs\nStandardization has tradeoffs - ACS6 disability consolidates perfectly but doesn’t measure work-limitation\nReference periods are load-bearing - “Last week” vs “last 4 weeks” vs “past 12 months” aren’t interchangeable",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Synthesis and Conclusions</span>"
+    ]
+  },
+  {
+    "objectID": "sections/06_synthesis.html#methodological-contributions",
+    "href": "sections/06_synthesis.html#methodological-contributions",
+    "title": "8  Synthesis and Conclusions",
+    "section": "8.5 Methodological Contributions",
+    "text": "8.5 Methodological Contributions\n\n8.5.1 Question-Level Analysis Framework\nWe demonstrate that question-level comparison using LLM classification is: - Feasible: 1,702 pairs classified for ~$1.50 - Scalable: Full-population runs preferred over sampling - Validated: ACS6 diagonal provides ground truth\n\n\n8.5.2 Proposed Taxonomy Addition: Construct Mismatch\nCurrent categories don’t capture the Disability pattern. Proposed addition:\nconstruct_mismatch: Questions address the same topic but operationalize different constructs serving different analytical purposes. Cannot be substituted regardless of linkage quality.\n\n\n8.5.3 Dual-Model Validation\nUsing two independent LLMs provides: - Confidence scoring (both agree = high confidence) - Ambiguity detection (disagreement = needs review) - Bias mitigation",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Synthesis and Conclusions</span>"
+    ]
+  },
+  {
+    "objectID": "sections/06_synthesis.html#limitations",
+    "href": "sections/06_synthesis.html#limitations",
+    "title": "8  Synthesis and Conclusions",
+    "section": "8.6 Limitations",
+    "text": "8.6 Limitations\n\nNo human validation - LLM classifications need expert review\nAssumed contemporaneous collection - Real linkage has temporal gaps\nSkip logic not evaluated - Survey flow dependencies exist\nPerfect linkage assumed - Real matching has error",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Synthesis and Conclusions</span>"
+    ]
+  },
+  {
+    "objectID": "sections/06_synthesis.html#final-thoughts",
+    "href": "sections/06_synthesis.html#final-thoughts",
+    "title": "8  Synthesis and Conclusions",
+    "section": "8.7 Final Thoughts",
+    "text": "8.7 Final Thoughts\nSurvey consolidation has real but limited potential. The ~11% ceiling allows agencies to: - Set realistic expectations - Target high-value opportunities - Avoid costly efforts on incompatible content - Design new surveys with linkage in mind\nSurvey design encodes analytical purpose at the question level. Two surveys can “measure employment” while asking fundamentally different questions because they serve fundamentally different needs. This is good survey design, not wasteful duplication.\nThe goal is not to maximize consolidation but to identify the subset where consolidation genuinely serves both surveys’ analytical purposes—and our analysis shows that subset is real, identifiable, and worth pursuing.",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Synthesis and Conclusions</span>"
+    ]
+  },
+  {
+    "objectID": "sections/07_future_work.html",
+    "href": "sections/07_future_work.html",
+    "title": "9  Future Work",
+    "section": "",
+    "text": "9.1 Immediate Extensions",
+    "crumbs": [
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Future Work</span>"
+    ]
+  },
+  {
+    "objectID": "sections/07_future_work.html#immediate-extensions",
+    "href": "sections/07_future_work.html#immediate-extensions",
+    "title": "9  Future Work",
+    "section": "",
+    "text": "9.1.1 Additional Survey Pairs\nThe methodology developed here can be applied to additional Family 2 surveys:\n\n\n\nSurvey Pair\nEstimated Pairs\nExpected Pattern\n\n\n\n\nSIPP-ACS\n~1,500-2,000\nSimilar ~10-12% (income/program focus)\n\n\nCE-ACS\n~800-1,200\nLower ~5-8% (expenditure detail)\n\n\nAHS-ACS\n~1,200-1,600\nVariable (housing construct differences)\n\n\n\nEstimated cost: ~$2-5 total for all three additional surveys\n\n\n9.1.2 Methodological Improvements\n\nHuman validation sample\n\n100-200 pairs with expert adjudication\nCalibrate LLM accuracy against ground truth\nIdentify systematic bias patterns\n\nConstruct mismatch classifier\n\nTrain model to specifically detect this barrier type\nDistinguish from reference_period_mismatch and related_but_distinct\n\nCross-survey framing analysis\n\nSystematic comparison of reference period conventions\nIdentify coordination opportunities",
+    "crumbs": [
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Future Work</span>"
+    ]
+  },
+  {
+    "objectID": "sections/07_future_work.html#research-questions",
+    "href": "sections/07_future_work.html#research-questions",
+    "title": "9  Future Work",
+    "section": "9.2 Research Questions",
+    "text": "9.2 Research Questions\n\n9.2.1 Does Consolidation Potential Vary by Survey Domain?\nWe analyzed economic household surveys. Other domains may show different patterns:\n\n\n\nDomain\nHypothesis\n\n\n\n\nHealth surveys (NHIS, MEPS)\nHigher - more demographic content\n\n\nEducation surveys (NCES)\nModerate - standardized constructs exist\n\n\nBusiness surveys\nLower - specialized definitional needs\n\n\n\n\n\n9.2.2 Can Reference Period Coordination Increase Consolidation?\nThe Hours/Week finding (26-29% consolidation due to habitual framing) suggests deliberate coordination could help. Research questions:\n\nWhich surveys could adopt habitual framing without analytical loss?\nWhat’s the cost-benefit of survey redesign vs. accepting current ceilings?\n\n\n\n9.2.3 What’s the Actual Linkage Error Rate?\nOur analysis assumes perfect linkage. Real implementation faces: - Person-matching error - Temporal misalignment (ACS from different month) - Consent refusal - Coverage gaps\nA simulation study could model realistic consolidation under imperfect linkage.",
+    "crumbs": [
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Future Work</span>"
+    ]
+  },
+  {
+    "objectID": "sections/07_future_work.html#technical-extensions",
+    "href": "sections/07_future_work.html#technical-extensions",
+    "title": "9  Future Work",
+    "section": "9.3 Technical Extensions",
+    "text": "9.3 Technical Extensions\n\n9.3.1 Alternative Classification Approaches\n\nFine-tuned models on survey question pairs\nEmbedding-based similarity (failed for topic classification but might work for direct question comparison)\nHybrid LLM + rule-based systems\n\n\n\n9.3.2 Visualization and Reporting\n\nInteractive consolidation explorer\nSurvey-specific consolidation reports\nPolicy briefing documents\n\n\n\n9.3.3 Integration with Survey Metadata\n\nLink to question skip logic\nIncorporate temporal collection windows\nConnect to survey purpose documentation",
+    "crumbs": [
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Future Work</span>"
+    ]
+  },
+  {
+    "objectID": "sections/07_future_work.html#resource-summary",
+    "href": "sections/07_future_work.html#resource-summary",
+    "title": "9  Future Work",
+    "section": "9.4 Resource Summary",
+    "text": "9.4 Resource Summary\n\n\n\nItem\nCost\n\n\n\n\nCompleted analysis (FoodAPS + CPS)\n~$1.50\n\n\nFuture surveys (SIPP + CE + AHS)\n~$3-5\n\n\nHuman validation sample\nTBD (analyst time)\n\n\nTotal API costs\n&lt;$10\n\n\n\n\nThe question-level analysis framework is ready for extension. The primary constraint is analyst time for interpretation, not computational cost.",
+    "crumbs": [
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Future Work</span>"
+    ]
+  }
+]
