@@ -14,10 +14,14 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.metrics import cohen_kappa_score
 from collections import Counter
+import sys
+
+sys.path.insert(0, str(Path(__file__).parent))
+from lib.io_utils import ensure_dir
 
 # Configuration
-RESULTS_DIR = Path('./output/results')
-OUTPUT_DIR = Path('./output/analysis')
+RESULTS_DIR = Path(__file__).parent.parent / 'output' / 'results'
+OUTPUT_DIR = Path(__file__).parent.parent / 'output' / 'analysis'
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 sns.set_style('whitegrid')

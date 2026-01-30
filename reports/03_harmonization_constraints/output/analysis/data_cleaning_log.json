@@ -1,0 +1,86 @@
+{
+  "timestamp": "2026-01-29T16:40:28.188380",
+  "version": "1.0",
+  "stage": "post_arbitration_cleanup",
+  "arbitrators": {
+    "anthropic": {
+      "input_file": "arbitration_v3_results_anthropic_claude-opus-4-5-20251101.jsonl",
+      "raw_count": 1600,
+      "deduped_count": 1598,
+      "dropped_count": 2,
+      "dropped_pair_ids": [
+        "CPS_0092",
+        "CPS_0091"
+      ],
+      "validation": {
+        "total": 1598,
+        "null_barriers": 0,
+        "none_string_barriers": 0,
+        "empty_barriers": 0,
+        "recoded_to_nhb0": 0,
+        "missing_fields": [],
+        "schema_valid": 1598
+      },
+      "output_file": "arbitration_deduped_anthropic.jsonl"
+    },
+    "openai": {
+      "input_file": "arbitration_v3_results_openai_gpt-5.2.jsonl",
+      "raw_count": 1598,
+      "deduped_count": 1598,
+      "dropped_count": 0,
+      "dropped_pair_ids": [],
+      "validation": {
+        "total": 1598,
+        "null_barriers": 0,
+        "none_string_barriers": 0,
+        "empty_barriers": 0,
+        "recoded_to_nhb0": 0,
+        "missing_fields": [],
+        "schema_valid": 1598
+      },
+      "output_file": "arbitration_deduped_openai.jsonl"
+    },
+    "google": {
+      "input_file": "arbitration_v3_results_google_gemini-3-pro-preview.jsonl",
+      "raw_count": 252,
+      "deduped_count": 251,
+      "dropped_count": 1,
+      "dropped_pair_ids": [
+        "CPS_0016"
+      ],
+      "validation": {
+        "total": 251,
+        "null_barriers": 0,
+        "none_string_barriers": 0,
+        "empty_barriers": 0,
+        "recoded_to_nhb0": 0,
+        "missing_fields": [],
+        "schema_valid": 251
+      },
+      "output_file": "arbitration_deduped_google.jsonl"
+    }
+  },
+  "merge_stats": {
+    "total_pairs": 1598,
+    "coverage_distribution": {
+      "2": 1347,
+      "3": 251
+    },
+    "output_file": "arbitration_merged.csv",
+    "pair_sources": {
+      "CPS": 1030,
+      "FoodAPS": 568
+    },
+    "three_way_coverage": {
+      "total": 251,
+      "CPS": 251,
+      "FoodAPS": 0
+    }
+  },
+  "files_written": [
+    "/Users/brock/Documents/GitHub/federal-survey-concept-mapper/reports/03_harmonization_constraints/output/analysis/arbitration_deduped_anthropic.jsonl",
+    "/Users/brock/Documents/GitHub/federal-survey-concept-mapper/reports/03_harmonization_constraints/output/analysis/arbitration_deduped_openai.jsonl",
+    "/Users/brock/Documents/GitHub/federal-survey-concept-mapper/reports/03_harmonization_constraints/output/analysis/arbitration_deduped_google.jsonl",
+    "/Users/brock/Documents/GitHub/federal-survey-concept-mapper/reports/03_harmonization_constraints/output/analysis/arbitration_merged.csv"
+  ]
+}

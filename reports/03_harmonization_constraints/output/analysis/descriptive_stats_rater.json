@@ -1,0 +1,290 @@
+{
+  "rater": {
+    "stage": "rater",
+    "n_pairs": 1598,
+    "raters": {
+      "anthropic": {
+        "l1_distribution": {
+          "CC": {
+            "count": 1257,
+            "percent": 78.7
+          },
+          "TC": {
+            "count": 185,
+            "percent": 11.6
+          },
+          "RS": {
+            "count": 99,
+            "percent": 6.2
+          },
+          "MC": {
+            "count": 37,
+            "percent": 2.3
+          },
+          "PC": {
+            "count": 10,
+            "percent": 0.6
+          },
+          "nan": {
+            "count": 10,
+            "percent": 0.6
+          }
+        },
+        "l2_distribution": {
+          "CC.1": {
+            "count": 860,
+            "percent": 53.8
+          },
+          "CC.2": {
+            "count": 273,
+            "percent": 17.1
+          },
+          "CC.4": {
+            "count": 113,
+            "percent": 7.1
+          },
+          "TC.1": {
+            "count": 98,
+            "percent": 6.1
+          },
+          "TC.2": {
+            "count": 87,
+            "percent": 5.4
+          },
+          "RS.1": {
+            "count": 82,
+            "percent": 5.1
+          },
+          "MC.2": {
+            "count": 23,
+            "percent": 1.4
+          },
+          "RS.2": {
+            "count": 15,
+            "percent": 0.9
+          },
+          "CC.3": {
+            "count": 11,
+            "percent": 0.7
+          },
+          "MC.3": {
+            "count": 8,
+            "percent": 0.5
+          },
+          "PC.3": {
+            "count": 5,
+            "percent": 0.3
+          },
+          "MC.4": {
+            "count": 5,
+            "percent": 0.3
+          },
+          "PC.1": {
+            "count": 5,
+            "percent": 0.3
+          },
+          "RS.3": {
+            "count": 2,
+            "percent": 0.1
+          },
+          "MC.1": {
+            "count": 1,
+            "percent": 0.1
+          }
+        }
+      },
+      "openai": {
+        "l1_distribution": {
+          "CC": {
+            "count": 1284,
+            "percent": 80.4
+          },
+          "TC": {
+            "count": 177,
+            "percent": 11.1
+          },
+          "RS": {
+            "count": 69,
+            "percent": 4.3
+          },
+          "PC": {
+            "count": 34,
+            "percent": 2.1
+          },
+          "MC": {
+            "count": 22,
+            "percent": 1.4
+          },
+          "PM": {
+            "count": 9,
+            "percent": 0.6
+          },
+          "nan": {
+            "count": 3,
+            "percent": 0.2
+          }
+        },
+        "l2_distribution": {
+          "CC.1": {
+            "count": 901,
+            "percent": 56.4
+          },
+          "CC.2": {
+            "count": 254,
+            "percent": 15.9
+          },
+          "CC.4": {
+            "count": 122,
+            "percent": 7.6
+          },
+          "TC.2": {
+            "count": 105,
+            "percent": 6.6
+          },
+          "TC.1": {
+            "count": 67,
+            "percent": 4.2
+          },
+          "RS.1": {
+            "count": 47,
+            "percent": 2.9
+          },
+          "PC.1": {
+            "count": 29,
+            "percent": 1.8
+          },
+          "RS.2": {
+            "count": 12,
+            "percent": 0.8
+          },
+          "MC.3": {
+            "count": 10,
+            "percent": 0.6
+          },
+          "PM.2": {
+            "count": 9,
+            "percent": 0.6
+          },
+          "RS.4": {
+            "count": 8,
+            "percent": 0.5
+          },
+          "CC.3": {
+            "count": 7,
+            "percent": 0.4
+          },
+          "MC.2": {
+            "count": 6,
+            "percent": 0.4
+          },
+          "TC.3": {
+            "count": 5,
+            "percent": 0.3
+          },
+          "PC.3": {
+            "count": 5,
+            "percent": 0.3
+          }
+        }
+      },
+      "google": {
+        "l1_distribution": {
+          "CC": {
+            "count": 1276,
+            "percent": 79.8
+          },
+          "RS": {
+            "count": 160,
+            "percent": 10.0
+          },
+          "TC": {
+            "count": 129,
+            "percent": 8.1
+          },
+          "MC": {
+            "count": 26,
+            "percent": 1.6
+          },
+          "PC": {
+            "count": 7,
+            "percent": 0.4
+          }
+        },
+        "l2_distribution": {
+          "CC.1": {
+            "count": 876,
+            "percent": 54.8
+          },
+          "CC.2": {
+            "count": 247,
+            "percent": 15.5
+          },
+          "CC.4": {
+            "count": 145,
+            "percent": 9.1
+          },
+          "RS.1": {
+            "count": 129,
+            "percent": 8.1
+          },
+          "TC.1": {
+            "count": 62,
+            "percent": 3.9
+          },
+          "TC.2": {
+            "count": 55,
+            "percent": 3.4
+          },
+          "RS.2": {
+            "count": 26,
+            "percent": 1.6
+          },
+          "TC.3": {
+            "count": 12,
+            "percent": 0.8
+          },
+          "MC.2": {
+            "count": 12,
+            "percent": 0.8
+          },
+          "CC.3": {
+            "count": 8,
+            "percent": 0.5
+          },
+          "MC.3": {
+            "count": 8,
+            "percent": 0.5
+          },
+          "PC.3": {
+            "count": 5,
+            "percent": 0.3
+          },
+          "RS.3": {
+            "count": 5,
+            "percent": 0.3
+          },
+          "MC.4": {
+            "count": 5,
+            "percent": 0.3
+          },
+          "PC.1": {
+            "count": 2,
+            "percent": 0.1
+          }
+        }
+      }
+    },
+    "agreement": {
+      "n_pairs": 1598,
+      "n_raters": 3,
+      "l1": {
+        "agreement_count": 1289,
+        "agreement_percent": 80.7
+      },
+      "l2": {
+        "agreement_count": 831,
+        "agreement_percent": 52.0
+      }
+    }
+  }
+}

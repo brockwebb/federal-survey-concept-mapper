@@ -1,0 +1,83 @@
+{
+  "total_pairs": 1598,
+  "surveys": {
+    "CPS": 1030,
+    "FoodAPS": 568
+  },
+  "barrier_L1_distribution": {
+    "CC": 1318,
+    "TC": 150,
+    "RS": 91,
+    "MC": 22,
+    "PC": 9
+  },
+  "feasibility_distribution": {
+    "F3": 1308,
+    "F2": 204,
+    "F1": 86
+  },
+  "arbitration": {
+    "total_arbitrated": 783,
+    "agreed_pairs": 815,
+    "source_distribution": {
+      "model_b": 429,
+      "model_a": 218,
+      "synthesis": 136
+    }
+  },
+  "by_survey": {
+    "CPS": {
+      "count": 1030,
+      "barrier_L1": {
+        "CC": 842,
+        "TC": 108,
+        "RS": 52,
+        "MC": 21,
+        "PC": 3
+      },
+      "feasibility": {
+        "F3": 846,
+        "F2": 130,
+        "F1": 54
+      }
+    },
+    "FoodAPS": {
+      "count": 568,
+      "barrier_L1": {
+        "CC": 476,
+        "TC": 42,
+        "RS": 39,
+        "PC": 6,
+        "MC": 1
+      },
+      "feasibility": {
+        "F3": 462,
+        "F2": 74,
+        "F1": 32
+      }
+    }
+  },
+  "barrier_feasibility_crosstab": {
+    "F1": {
+      "CC": 15,
+      "MC": 17,
+      "PC": 2,
+      "RS": 32,
+      "TC": 12
+    },
+    "F2": {
+      "CC": 91,
+      "MC": 3,
+      "PC": 1,
+      "RS": 20,
+      "TC": 89
+    },
+    "F3": {
+      "CC": 1212,
+      "MC": 2,
+      "PC": 6,
+      "RS": 39,
+      "TC": 49
+    }
+  }
+}

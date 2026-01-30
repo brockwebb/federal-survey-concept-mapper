@@ -1,0 +1,126 @@
+# =============================================================================
+# BARRIER CODING PIPELINE CONFIGURATION v2.0
+# =============================================================================
+# SINGLE SOURCE OF TRUTH FOR ALL MODEL NAMES AND PARAMETERS
+#
+# WHY CONFIG-DRIVEN:
+# 1. Reproducibility - like saving random seeds in statistical work
+# 2. LLM training epochs mean stale model names can creep into generated code
+# 3. Human verification - see exactly what will run before execution
+# 4. Audit trail - config + outputs = complete reproducibility
+#
+# RULE: If it affects results and you'd be upset if wrong, it goes here.
+# =============================================================================
+
+version: '2.0'
+created: '2025-01-29'
+purpose: 'Multi-vendor barrier coding with cross-vendor arbitration'
+
+# -----------------------------------------------------------------------------
+# TEMPERATURE SETTINGS
+# -----------------------------------------------------------------------------
+# Temperature controls randomness. For classification tasks, we want deterministic.
+#
+# Provider-specific behavior:
+#   - Anthropic: 0.0-1.0 range. Use 0.0 for deterministic classification.
+#   - Google Gemini 3: MUST use 1.0. Google docs warn lower values cause issues.
+#   - OpenAI gpt-5o-mini: 0.0-2.0 range. Use 0.0 for deterministic.
+#   - OpenAI gpt-5.2: DOES NOT ACCEPT temperature. Set to null, code omits param.
+# -----------------------------------------------------------------------------
+
+# -----------------------------------------------------------------------------
+# RATER MODELS - These classify barrier types for question pairs
+# -----------------------------------------------------------------------------
+# NOTE: gpt-5-mini works with MINIMAL params only (model + messages).
+# Adding max_completion_tokens or temperature causes empty responses.
+raters:
+  openai:
+    model: 'gpt-5-mini'
+    provider: 'openai'
+    api_key_env: 'OPENAI_API_KEY'
+    notes: 'OpenAI reasoning model - use minimal params only'
+
+  anthropic:
+    model: 'claude-haiku-4-5-20251001'
+    provider: 'anthropic'
+    api_key_env: 'ANTHROPIC_API_KEY'
+    temperature: 0.0
+    notes: 'Anthropic fast model, Oct 2025 release'
+
+  google:
+    model: 'gemini-3-flash-preview'
+    provider: 'google'
+    api_key_env: 'GEMINI_API_KEY'
+    temperature: 1.0
+    notes: 'Google Gemini 3 flash - temperature must be 1.0 per Google docs'
+
+# -----------------------------------------------------------------------------
+# ARBITRATOR MODELS - These resolve disagreements between raters
+# -----------------------------------------------------------------------------
+arbitrators:
+  anthropic:
+    model: 'claude-opus-4-5-20251101'
+    provider: 'anthropic'
+    api_key_env: 'ANTHROPIC_API_KEY'
+    temperature: 0.0
+    notes: 'Anthropic flagship model, Nov 2025 release'
+
+  openai:
+    model: 'gpt-5.2'
+    provider: 'openai'
+    api_key_env: 'OPENAI_API_KEY'
+    temperature: null
+    max_tokens_param: 'max_completion_tokens'  # gpt-5.2 uses this instead of max_tokens
+    notes: 'OpenAI flagship - DOES NOT accept temperature param, set null'
+
+  google:
+    model: 'gemini-3-pro-preview'
+    provider: 'google'
+    api_key_env: 'GEMINI_API_KEY'
+    temperature: 1.0
+    notes: 'Google Gemini 3 pro - temperature must be 1.0 per Google docs'
+
+# -----------------------------------------------------------------------------
+# PIPELINE PARAMETERS
+# -----------------------------------------------------------------------------
+pipeline:
+  # Token limit - sufficient for classification responses (~200-300 tokens)
+  max_tokens: 8192
+
+  # Rating stage
+  rating_batch_size: 10
+  rating_max_workers: 6
+  rating_checkpoint_interval: 10
+  rating_rate_limit_delay: 0.3
+
+  # Arbitration stage
+  arbitration_batch_size: 5
+  arbitration_max_workers: 3
+  arbitration_checkpoint_interval: 5
+  arbitration_rate_limit_delay: 0.5
+
+  # Execution control
+  execution_mode: 'serial'  # serial | parallel (serial recommended)
+  stop_on_failure: true
+
+  # Random seed for any stochastic operations
+  random_seed: 42
+
+# -----------------------------------------------------------------------------
+# PATHS (relative to script location)
+# -----------------------------------------------------------------------------
+paths:
+  data_dir: './data'
+  output_dir: './output'
+  results_subdir: 'results'
+  analysis_subdir: 'analysis'
+  checkpoints_subdir: 'checkpoints'
+
+# -----------------------------------------------------------------------------
+# TAXONOMY VERSION (for reproducibility)
+# -----------------------------------------------------------------------------
+taxonomy:
+  version: '1.1'
+  file: 'taxonomy_v1.md'
+  categories: ['TC', 'CC', 'PC', 'RS', 'MC', 'PM', 'NHB']
+  feasibility: ['F1', 'F2', 'F3']

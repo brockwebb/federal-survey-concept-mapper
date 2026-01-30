@@ -1,0 +1,112 @@
+{
+  "timestamp": "2026-01-30T07:17:34.368711",
+  "version": "1.0",
+  "stage": "post_classification_cleanup",
+  "raters": {
+    "openai": {
+      "input_file": "barrier_results_openai_gpt-5-mini.jsonl",
+      "raw_count": 1598,
+      "deduped_count": 1598,
+      "dropped_count": 0,
+      "dropped_pair_ids": [],
+      "total_dropped": 0,
+      "validation": {
+        "total": 1598,
+        "null_barriers": 0,
+        "none_string_barriers": 3,
+        "empty_barriers": 0,
+        "recoded_to_nhb0": 3,
+        "missing_fields": [],
+        "schema_valid": 1598,
+        "barrier_distribution": {
+          "RS": 69,
+          "CC": 1284,
+          "PC": 34,
+          "TC": 177,
+          "MC": 22,
+          "PM": 9,
+          "NHB": 3
+        }
+      },
+      "output_file": "barrier_deduped_openai.jsonl"
+    },
+    "anthropic": {
+      "input_file": "barrier_results_anthropic_claude-haiku-4-5-20251001.jsonl",
+      "raw_count": 1598,
+      "deduped_count": 1598,
+      "dropped_count": 0,
+      "dropped_pair_ids": [],
+      "total_dropped": 0,
+      "validation": {
+        "total": 1598,
+        "null_barriers": 7,
+        "none_string_barriers": 3,
+        "empty_barriers": 0,
+        "recoded_to_nhb0": 10,
+        "missing_fields": [],
+        "schema_valid": 1598,
+        "barrier_distribution": {
+          "TC": 185,
+          "CC": 1257,
+          "RS": 99,
+          "MC": 37,
+          "PC": 10,
+          "NHB": 10
+        }
+      },
+      "output_file": "barrier_deduped_anthropic.jsonl"
+    },
+    "google": {
+      "input_file": "barrier_results_google_gemini-3-flash-preview.jsonl",
+      "raw_count": 1598,
+      "deduped_count": 1598,
+      "dropped_count": 0,
+      "dropped_pair_ids": [],
+      "total_dropped": 0,
+      "validation": {
+        "total": 1598,
+        "null_barriers": 0,
+        "none_string_barriers": 0,
+        "empty_barriers": 0,
+        "recoded_to_nhb0": 0,
+        "missing_fields": [],
+        "schema_valid": 1598,
+        "barrier_distribution": {
+          "TC": 129,
+          "CC": 1276,
+          "RS": 160,
+          "PC": 7,
+          "MC": 26
+        }
+      },
+      "output_file": "barrier_deduped_google.jsonl"
+    }
+  },
+  "merge_stats": {
+    "total_pairs": 1598,
+    "coverage_distribution": {
+      "3": 1598
+    },
+    "output_file": "barrier_coding_merged_3rater.csv",
+    "pair_sources": {
+      "CPS": 1030,
+      "FoodAPS": 568
+    },
+    "three_way_coverage": {
+      "total": 1598,
+      "CPS": 1030,
+      "FoodAPS": 568
+    },
+    "l1_agreement_preview": {
+      "unanimous_l1": 1289,
+      "total_3way": 1598,
+      "agreement_rate": 0.807
+    }
+  },
+  "files_written": [
+    "/Users/brock/Documents/GitHub/federal-survey-concept-mapper/reports/03_harmonization_constraints/output/analysis/barrier_deduped_openai.jsonl",
+    "/Users/brock/Documents/GitHub/federal-survey-concept-mapper/reports/03_harmonization_constraints/output/analysis/barrier_deduped_anthropic.jsonl",
+    "/Users/brock/Documents/GitHub/federal-survey-concept-mapper/reports/03_harmonization_constraints/output/analysis/barrier_deduped_google.jsonl",
+    "/Users/brock/Documents/GitHub/federal-survey-concept-mapper/reports/03_harmonization_constraints/output/analysis/barrier_coding_merged_3rater.csv"
+  ]
+}

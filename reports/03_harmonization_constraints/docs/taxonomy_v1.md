@@ -6,6 +6,7 @@
 |---------|------|---------|
 | 0.1 | 2025-01-28 | Initial draft from literature synthesis |
 | 1.0 | 2025-01-28 | Added proper academic citations |
+| 1.1 | 2026-01-29 | Added NHB (No Harmonization Barrier) code based on three-rater validation |
 
 ## Theoretical Basis
 
@@ -49,7 +50,7 @@ This taxonomy synthesizes multiple established frameworks from the survey method
 
 ## Taxonomy Structure
 
-### Level 1: Constraint Type (6 categories)
+### Level 1: Constraint Type (7 categories)
 
 | Code | Constraint Type | Definition | Primary Literature Source |
 |------|-----------------|------------|---------------------------|
@@ -59,6 +60,7 @@ This taxonomy synthesizes multiple established frameworks from the survey method
 | RS | **Response Scale** | Scale type, categories, or format differences | Saris & Gallhofer (2014) |
 | MC | **Mode/Context** | Interview mode or questionnaire context differences | Wolf et al. (2016) |
 | PM | **Processing/Metadata** | Coding, weighting, or documentation differences | Oleksiyenko et al. (2018) |
+| NHB | **No Harmonization Barrier** | Questions are functionally equivalent or near-duplicates | Added v1.1 (2026-01-29) |
 
 ---
 
@@ -122,6 +124,15 @@ This taxonomy synthesizes multiple established frameworks from the survey method
 | PM.2 | Derived variables | Different algorithms for constructed variables | Different poverty calculation methods |
 | PM.3 | Documentation gaps | Insufficient metadata to assess comparability | Missing questionnaire context |
 
+#### NHB - No Harmonization Barrier
+*Added v1.1 (2026-01-29) based on empirical finding during three-rater coding*
+
+| Code | Subtype | Definition | Example |
+|------|---------|------------|---------|
+| NHB.0 | No barrier | Questions are functionally equivalent or near-duplicates requiring only minor standardization | Identical sex/gender questions across surveys |
+
+*Note: This code emerged from 11 pairs where all three raters returned null/None for primary_barrier with F1 feasibility. These represent pairs that slipped through Report 02's consolidation filter or where raters disagreed with the prior non-consolidatable classification.*
+
 ---
 
 ### Level 3: Specific Conflict (Free Text)
@@ -161,7 +172,7 @@ concept_match: bool             # Do they measure same concept? (from Report 02)
 consolidation_feasible: bool    # Can they be consolidated? (from Report 02)
 
 # If not consolidation_feasible:
-constraint_type: str            # Level 1 code (TC, CC, PC, RS, MC, PM)
+constraint_type: str            # Level 1 code (TC, CC, PC, RS, MC, PM, NHB)
 constraint_subtype: str         # Level 2 code (e.g., TC.1)
 specific_conflict: str          # Level 3 free text
 feasibility: str                # F1, F2, or F3
@@ -193,6 +204,7 @@ additional_constraints: list    # If >1 constraint applies
 | RS | Response format differences | — | — |
 | MC | Questionnaire context | Mode of administration | Mode effects |
 | PM | — | — | Data processing |
+| NHB | — | Fully compatible | — |
 
 ---
 

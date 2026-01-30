@@ -1,0 +1,183 @@
+{
+  "timestamp": "2026-01-29T18:07:28.486973",
+  "total_pairs": 1598,
+  "arbitrators": [
+    "anthropic",
+    "openai",
+    "google"
+  ],
+  "pairwise_agreement": [
+    {
+      "pair": "anthropic-openai",
+      "n": 1598,
+      "levels": {
+        "L1_barrier": {
+          "kappa": 0.7960461840707803,
+          "observed_agreement": 0.9474342928660826,
+          "expected_agreement": 0.7422666161237216
+        },
+        "full_barrier": {
+          "kappa": 0.7546544868212273,
+          "observed_agreement": 0.8504380475594493,
+          "expected_agreement": 0.39040274059721086
+        },
+        "feasibility": {
+          "kappa": 0.842628393761973,
+          "observed_agreement": 0.9474342928660826,
+          "expected_agreement": 0.6659771836196998
+        }
+      }
+    },
+    {
+      "pair": "anthropic-google",
+      "n": 251,
+      "levels": {
+        "L1_barrier": {
+          "kappa": 0.8984258022742909,
+          "observed_agreement": 0.9601593625498008,
+          "expected_agreement": 0.6077681306645927
+        },
+        "full_barrier": {
+          "kappa": 0.8273400066416812,
+          "observed_agreement": 0.8844621513944223,
+          "expected_agreement": 0.3308360184758972
+        },
+        "feasibility": {
+          "kappa": 0.9039867392043524,
+          "observed_agreement": 0.9641434262948207,
+          "expected_agreement": 0.6265456103871367
+        }
+      }
+    },
+    {
+      "pair": "openai-google",
+      "n": 251,
+      "levels": {
+        "L1_barrier": {
+          "kappa": 0.7397673999278759,
+          "observed_agreement": 0.9083665338645418,
+          "expected_agreement": 0.6478786051015063
+        },
+        "full_barrier": {
+          "kappa": 0.6690033314825097,
+          "observed_agreement": 0.7729083665338645,
+          "expected_agreement": 0.31391565213250583
+        },
+        "feasibility": {
+          "kappa": 0.8881959910913141,
+          "observed_agreement": 0.9601593625498008,
+          "expected_agreement": 0.6436564498976207
+        }
+      }
+    }
+  ],
+  "two_way_n": 1598,
+  "three_way_n": 251,
+  "three_way_agreement": {
+    "L1_barrier": {
+      "n": 251,
+      "kappa": 0.8051036743771388,
+      "observed_agreement": 0.9282868525896414,
+      "expected_agreement": 0.632044641266717
+    },
+    "full_barrier": {
+      "n": 251,
+      "kappa": 0.7157129243411289,
+      "observed_agreement": 0.8074369189907038,
+      "expected_agreement": 0.32264567229091606
+    },
+    "feasibility": {
+      "n": 251,
+      "kappa": 0.8749218322520127,
+      "observed_agreement": 0.9548472775564408,
+      "expected_agreement": 0.6390039664273406
+    }
+  },
+  "synthesis_rates": [
+    {
+      "arbitrator": "anthropic",
+      "total_pairs": 1598,
+      "synthesis_count": 1234,
+      "arbitration_needed": 364,
+      "synthesis_pct": 77.2215269086358
+    },
+    {
+      "arbitrator": "openai",
+      "total_pairs": 1598,
+      "synthesis_count": 949,
+      "arbitration_needed": 649,
+      "synthesis_pct": 59.386733416770966
+    },
+    {
+      "arbitrator": "google",
+      "total_pairs": 251,
+      "synthesis_count": 15,
+      "arbitration_needed": 236,
+      "synthesis_pct": 5.9760956175298805
+    }
+  ],
+  "family_bias": [
+    {
+      "arbitrator": "anthropic",
+      "arbitrator_family": "anthropic",
+      "total_selections": 364,
+      "same_family_selections": 0,
+      "cross_family_selections": 364,
+      "same_family_pct": 0.0,
+      "expected_same_pct": 33.33,
+      "bias_ratio": 0.0
+    },
+    {
+      "arbitrator": "openai",
+      "arbitrator_family": "openai",
+      "total_selections": 649,
+      "same_family_selections": 0,
+      "cross_family_selections": 649,
+      "same_family_pct": 0.0,
+      "expected_same_pct": 33.33,
+      "bias_ratio": 0.0
+    },
+    {
+      "arbitrator": "google",
+      "arbitrator_family": "google",
+      "total_selections": 236,
+      "same_family_selections": 0,
+      "cross_family_selections": 236,
+      "same_family_pct": 0.0,
+      "expected_same_pct": 33.33,
+      "bias_ratio": 0.0
+    }
+  ],
+  "position_bias": [
+    {
+      "arbitrator": "anthropic",
+      "total_selections": 364,
+      "first_position": 0,
+      "second_position": 0,
+      "third_position": 0,
+      "unknown_position": 364,
+      "first_pct": null,
+      "expected_pct": 33.33
+    },
+    {
+      "arbitrator": "openai",
+      "total_selections": 649,
+      "first_position": 0,
+      "second_position": 0,
+      "third_position": 0,
+      "unknown_position": 649,
+      "first_pct": null,
+      "expected_pct": 33.33
+    },
+    {
+      "arbitrator": "google",
+      "total_selections": 236,
+      "first_position": 0,
+      "second_position": 0,
+      "third_position": 0,
+      "unknown_position": 236,
+      "first_pct": null,
+      "expected_pct": 33.33
+    }
+  ]
+}
