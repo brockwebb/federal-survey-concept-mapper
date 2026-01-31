@@ -648,7 +648,10 @@ def process_single_pair(
         result['order_type'] = order_type
         
         # Decode selected_rater from blind label to actual rater
+        # Normalize: handle "Rater A" format from Google in addition to "A"
         selected = result.get('selected_rater', 'synthesis')
+        if selected and selected.upper().startswith('RATER '):
+            selected = selected[-1].upper()  # Extract letter from "Rater A/B/C"
         if selected in ['A', 'B', 'C']:
             label_to_idx = {'A': 0, 'B': 1, 'C': 2}
             result['selected_rater_key'] = rater_order[label_to_idx[selected]]

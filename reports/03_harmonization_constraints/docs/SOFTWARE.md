@@ -11,14 +11,15 @@
 
 > **This document defines the pipeline validated by `docs/ANALYSIS_VV_PLAN.md`.**
 >
-> | Pipeline Stage | V&V Stage | Script(s) | Status |
-> |----------------|-----------|-----------|--------|
-> | 1. Rating | V&V Stage 1 | `01_barrier_pipeline.py`, `scripts/clean_rater_data.py` | ✅ Validated |
-> | 2. Rater QC | V&V Stage 2 | `scripts/analyze_barrier_results.py` | ⏳ Pending |
-> | 3. Arbitration | V&V Stage 3 | `02_arbitration_pipeline.py` | 🟡 In Progress |
-> | 4. Arb Cleanup | V&V Stage 4 | `scripts/clean_arbitration_data.py` | ⏳ Pending |
-> | 5. Arb Analysis | V&V Stage 5 | `scripts/analyze_arbitration_agreement.py` | ⏳ Pending |
-> | 6. Final Output | - | `scripts/post_arbitration_analysis.py` | ⏳ Pending |
+> | Stage | Name | Purpose | Key Scripts | Status |
+> |-------|------|---------|-------------|--------|
+> | 1 | Rating | Get rater classifications | `01_barrier_pipeline.py`, `clean_rater_data.py` | ✅ Validated |
+> | 2 | Agreement | Validate rater reliability | `analyze_barrier_results.py`, `confusion_matrix_analysis.py` | ✅ Validated |
+> | 3 | Arbitration | Adjudicate + validate arbitration quality | `02_arbitration_pipeline.py`, `clean_arbitration_data.py`, `analyze_arbitration_agreement.py` | 🟡 In Progress |
+> | 4 | Findings | Answer research question (question-level consolidation, domain analysis) | TBD | ⏳ Pending |
+> | 5 | Communication | Stakeholder outputs (visualizations, executive summary) | TBD | ⏳ Pending |
+>
+> **Note:** Data cleaning scripts (e.g., `clean_rater_data.py`, `clean_arbitration_data.py`) are ETL within stages, not separate stages.
 >
 > **Pipeline execution may run ahead of validation.** Check V&V plan for validation status before drawing conclusions.
 
@@ -265,7 +266,7 @@ python scripts/confusion_matrix_analysis.py
 
 **Purpose:** Analyze inter-arbitrator agreement and inter-family bias.
 
-**Stage:** 5 - Arbitration Analysis (may be superseded by `analyze_arbitration_agreement.py`)
+**Stage:** 3 - Arbitration (may be superseded by `analyze_arbitration_agreement.py`)
 
 **Inputs:**
 - `output/results/arbitration_v3_results_*.jsonl`
@@ -293,7 +294,7 @@ python scripts/compare_arbitrators.py
 
 **Purpose:** Generate final visualizations and summary statistics.
 
-**Stage:** 6 - Final Output
+**Stage:** 5 - Communication
 
 **Inputs:**
 - `output/analysis/barrier_coding_final.csv` (or merged + arbitration)
@@ -326,7 +327,7 @@ python scripts/post_arbitration_analysis.py
 
 **Purpose:** Deduplicate and validate arbitration results for analysis.
 
-**Stage:** 4 - Arbitration Cleanup
+**Stage:** 3 - Arbitration (ETL)
 
 **Version:** 1.0
 
@@ -364,7 +365,7 @@ python scripts/clean_arbitration_data.py
 
 **Purpose:** Inter-arbitrator agreement analysis and bias detection.
 
-**Stage:** 5 - Arbitration Analysis
+**Stage:** 3 - Arbitration (V&V)
 
 **Version:** 1.0
 
@@ -406,7 +407,7 @@ python scripts/analyze_arbitration_agreement.py
 
 **Purpose:** Generate reproducible descriptive statistics. Captures ad-hoc analyses from conversation.
 
-**Stage:** 6 - Descriptive Statistics
+**Stage:** 4 - Findings / 5 - Communication
 
 **Analyses:**
 1. L1/L2 barrier distributions (per rater)
@@ -423,7 +424,34 @@ python scripts/descriptive_stats.py --stage all
 
 ---
 
-### 12. `03_analysis_pipeline.py`
+### 12. `scripts/extract_low_confidence_pairs.py`
+
+**Purpose:** Extract LOW confidence pairs with question text for manual expert review.
+
+**Stage:** Ad-hoc diagnostic (not part of automated pipeline)
+
+**Version:** 1.0
+
+**Inputs:**
+- `output/analysis/final_verdicts.csv` — Stage 3 verdicts with confidence levels
+- `output/question_matching/cps/cps_candidate_pairs_all.csv` — CPS question text
+- `output/question_matching/foodaps/foodaps_candidate_pairs_all.csv` — FoodAPS question text
+
+**Outputs:**
+- `output/analysis/low_confidence_pairs_detail.csv` — Full extract with question text and all arbitrator verdicts
+
+**Usage:**
+```bash
+python scripts/extract_low_confidence_pairs.py
+```
+
+**Context:** Stage 3 arbitration identifies 28 pairs (1.8%) where arbitrators disagreed (three-way split or two-way disagreement without Google tiebreaker). This script extracts those pairs with full question text for manual inspection and expert review.
+
+**Related:** `output/analysis/low_confidence_pairs_review.md` contains qualitative analysis of disagreement patterns.
+
+---
+
+### 13. `03_analysis_pipeline.py`
 
 **Purpose:** Orchestrate post-arbitration analysis stages (4-6).
 

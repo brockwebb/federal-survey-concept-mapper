@@ -880,7 +880,134 @@ All scripts functional from new locations. `03_analysis_pipeline.py --dry-run` c
 
 ---
 
-## Decision 014: [Template for Future Decisions]
+## Decision 014: Pipeline Output Architecture (JSON → Report)
+
+**Date:** 2026-01-30
+**Status:** IMPLEMENTED
+
+### Decision
+
+Each pipeline stage produces:
+1. **Structured JSON** — Single source of truth containing all metrics, power verification, and computed values
+2. **Human-readable report** — Generated FROM the JSON, applying interpretation thresholds
+
+The JSON is the artifact. The report is a view.
+
+### Architecture Pattern
+```
+pipeline_stage.py
+    → stage_metrics.json        (ALL numbers, deterministic artifact)
+    → stage_report.md           (human-readable, generated FROM JSON)
+```
+
+### Rationale
+
+1. **Reproducibility** — JSON is deterministic artifact. Interpretation can be debated/revised without re-running pipeline.
+
+2. **Auditability** — Reviewer questions your interpretation? Point them to the raw JSON.
+
+3. **Threshold changes** — If McHugh says 0.80 but reviewer wants 0.70, change template/interpretation layer, regenerate report. Don't re-run computation.
+
+4. **Separation of concerns** — Computation (deterministic) vs interpretation (judgment-based) are distinct operations that should not be entangled.
+
+5. **Consistency with existing pattern** — Already doing this: `descriptive_stats_rater.json` + `*_report.md` pairs.
+
+### Alternatives Rejected
+
+**Option A: Pipeline → Raw CSVs → Separate analysis step**
+- Clean separation but analysis step must "re-learn" context
+- Two-step process prone to drift
+
+**Option B: Each substep analyzes its own outputs (agentic)**
+- Interpretation scattered across pipeline
+- Non-deterministic if LLM-driven
+- Harder to maintain consistency
+
+### Implementation Notes
+
+- JSON files go in `output/analysis/`
+- Reports go in `output/analysis/` or `docs/` depending on audience
+- JSON schema should be self-documenting with clear field names
+- Power verification, sample sizes, and other validity checks belong in JSON, not just report
+
+### Example: Stage 2 Agreement Analysis
+
+```
+03_stage2_agreement.py
+    → output/analysis/stage2_agreement_metrics.json
+        {
+          "power_verification": {...},
+          "agreement_metrics": {...},
+          "confusion_matrices": {...}
+        }
+    → output/analysis/stage2_agreement_report.md
+        (interprets JSON with McHugh thresholds)
+```
+
+**Outcome:** Adopted as standard pattern for Report 03 pipeline stages.
+
+---
+
+## Decision 015: Google Arbitrator selected_rater Parsing Bug Fix
+
+**Date:** 2026-01-30
+**Status:** IMPLEMENTED
+
+### Problem Discovered
+
+During Stage 3 validation, Google arbitrator showed 6% synthesis rate vs 77% for OpenAI/Anthropic. Investigation revealed a parsing bug, not a behavioral difference.
+
+### Root Cause
+
+In `02_arbitration_pipeline.py`, the `process_single_pair()` function decodes the arbitrator's blind label selection:
+
+```python
+selected = result.get('selected_rater', 'synthesis')
+if selected in ['A', 'B', 'C']:
+    # map to vendor name
+else:
+    result['selected_rater_key'] = 'synthesis'
+```
+
+**The bug:** OpenAI and Anthropic output `"A"`, `"B"`, or `"C"`. Google outputs `"Rater A"`, `"Rater B"`, or `"Rater C"`. The exact match check fails for Google's format, causing all Google rater selections to fall through to `'synthesis'`.
+
+### Evidence
+
+Raw JSONL inspection:
+```
+CPS_0000 (Google): "selected_rater": "Rater A" → "selected_rater_key": "synthesis"  # BUG
+CPS_0001 (Google): "selected_rater": "A"       → "selected_rater_key": "openai"     # CORRECT
+```
+
+Google's output is inconsistent ("A" vs "Rater A"), but the parser must handle both.
+
+### Downstream Impact
+
+- `analyze_family_bias()` in `04_stage3_arbitration.py` uses `selected_rater_key` — **AFFECTED**
+- `compute_synthesis_detection()` uses `selected_rater` (raw field) with its own normalization — not affected
+- `analyze_position_bias()` uses `normalize_position()` which already handles "Rater X" format — not affected
+- Final verdicts use `final_barrier_code`, `final_feasibility`, `L1` only — not affected
+
+### Fix Applied
+
+**1. Pipeline fix (future records):** Added normalization in `02_arbitration_pipeline.py`:
+```python
+selected = result.get('selected_rater', 'synthesis')
+if selected and selected.upper().startswith('RATER '):
+    selected = selected[-1].upper()  # Extract letter from "Rater A/B/C"
+if selected in ['A', 'B', 'C']:
+    ...
+```
+
+**2. Data fix (existing records):** `scripts/fix_google_selected_rater_key.py` post-processes existing Google JSONL to re-derive `selected_rater_key` from `selected_rater` + `rater_order`.
+
+### Lesson Learned
+
+Model output format varies even with identical prompts. Parsing logic must normalize inputs, not assume exact format. The `normalize_position()` function in the analysis script already handled this — the pipeline should have used similar logic from the start.
+
+---
+
+## Decision 016: [Template for Future Decisions]
 
 **Date:**
 **Status:**

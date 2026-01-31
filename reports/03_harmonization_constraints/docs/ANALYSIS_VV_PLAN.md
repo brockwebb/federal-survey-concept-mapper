@@ -2,7 +2,7 @@
 
 **Report:** 03 - Harmonization Constraints Analysis  
 **Created:** 2026-01-30  
-**Status:** Stage 1 Complete, Stage 2 In Progress
+**Status:** Stage 3 In Progress
 
 ---
 
@@ -10,14 +10,15 @@
 
 > **This document validates the pipeline defined in `SOFTWARE.md`.**
 >
-> The V&V stages map 1:1 to pipeline execution stages:
-> | V&V Stage | Pipeline Stage | Primary Script(s) |
-> |-----------|----------------|-------------------|
-> | Stage 1: Rating | Pipeline Stage 1 | `01_barrier_pipeline.py`, `scripts/clean_rater_data.py` |
-> | Stage 2: Agreement | Pipeline Stage 2 | `scripts/analyze_barrier_results.py` |
-> | Stage 3: Arbitration | Pipeline Stage 3 | `02_arbitration_pipeline.py` |
-> | Stage 4: Cleanup | Pipeline Stage 4 | `scripts/clean_arbitration_data.py` |
-> | Stage 5: Analysis | Pipeline Stage 5 | `scripts/analyze_arbitration_agreement.py` |
+> | Stage | Name | Purpose | Key Scripts |
+> |-------|------|---------|-------------|
+> | 1 | Rating | Get rater classifications | `01_barrier_pipeline.py`, `clean_rater_data.py` |
+> | 2 | Agreement | Validate rater reliability | `analyze_barrier_results.py`, `confusion_matrix_analysis.py` |
+> | 3 | Arbitration | Adjudicate + validate arbitration quality | `02_arbitration_pipeline.py`, `clean_arbitration_data.py`, `analyze_arbitration_agreement.py` |
+> | 4 | Findings | Answer research question (question-level consolidation, domain analysis) | TBD |
+> | 5 | Communication | Stakeholder outputs (visualizations, executive summary) | TBD |
+>
+> **Note:** Data cleaning scripts are ETL within stages, not separate stages.
 >
 > **Pipeline execution may run ahead of validation. Do not draw conclusions from unvalidated stages.**
 > See `SOFTWARE.md` for script documentation; see this document for validation status and findings.
@@ -46,19 +47,20 @@ This document tracks systematic validation and verification (V&V) of the Report 
 
 | Stage | Name | Status | Last Validated |
 |-------|------|--------|----------------|
-| 1 | Rating (Dual-Model Classification) | **COMPLETE** | 2026-01-30 |
-| 2 | Agreement (Disagreement Detection) | NOT STARTED | - |
+| 1 | Rating | **COMPLETE** | 2026-01-30 |
+| 2 | Agreement | **COMPLETE** | 2026-01-30 |
 | 3 | Arbitration | IN PROGRESS | - |
-| 4 | Cleanup (Ground Truth Construction) | NOT STARTED | - |
-| 5 | Analysis (Statistical Validation) | NOT STARTED | - |
+| 4 | Findings | NOT STARTED | - |
+| 5 | Communication | NOT STARTED | - |
 
 **Status values:** NOT STARTED → IN PROGRESS → BLOCKED (upstream issue) → **COMPLETE**
 
-**Current state (2026-01-30):**
-- Pipeline Stages 1-5 have EXECUTED
-- V&V Stage 1 is VALIDATED
-- V&V Stages 2-5 are NOT VALIDATED
-- Google arbitration at 503/1,598 (31.5%) due to rate limits
+**Current state (2026-01-31):**
+- Stages 1-2: VALIDATED
+- Stage 3: Arbitration complete, validation in progress (see FINDINGS_R03_S3_001)
+  - Open issues: 8.1 (synthesis interpretation), 8.2 (Google behavior), 8.3 (L1 quality gate)
+- Google arbitration at 503/1,598 (31.5%, CPS only) due to rate limits
+- Stages 4-5: Will be spec'd after Stage 3 sign-off
 
 ---
 
@@ -273,183 +275,117 @@ The pipeline has retry logic (5 attempts with exponential backoff). If all retri
 
 ---
 
-## Stage 2: Agreement (Disagreement Detection)
+## Stage 2: Agreement
 
 ### Purpose
 Analyze inter-rater agreement patterns to understand where raters align and diverge. This informs the arbitration stage and provides reliability metrics for the methodology section.
 
 ### Inputs
-- [ ] `output/analysis/barrier_deduped_*.jsonl` - Cleaned per-rater data from Stage 1
-- [ ] `output/analysis/barrier_coding_merged_3rater.csv` - Merged three-rater data
+- [x] `output/analysis/barrier_deduped_*.jsonl` - Cleaned per-rater data from Stage 1
+- [x] `output/analysis/barrier_coding_merged_3rater.csv` - Merged three-rater data
 
-### Process
-- [ ] Document how L1 agreement is determined
-- [ ] Document how L2 agreement is determined
-- [ ] Document how feasibility agreement is determined
-- [ ] Document thresholds/rules for "disagreement"
+### Validation Summary
 
-### Outputs
-- [ ] Document agreement statistics (kappa, percent agreement)
-- [ ] Document confusion matrices
-- [ ] Document output file(s)
+See `FINDINGS_R03_S2_agreement_analysis.md` for complete Stage 2 validation.
 
-### Validation Checklist
-- [ ] Agreement statistics computed correctly (spot check)
-- [ ] Confusion matrices reflect actual disagreement patterns
-- [ ] Edge cases handled (nulls, NHB codes)
-- [ ] Statistics use cleaned data (not raw)
-
-### Verification Questions
-- [ ] What constitutes "agreement" at each level?
-- [ ] How is three-way agreement calculated vs pairwise?
-- [ ] How do we interpret kappa when one category dominates (kappa paradox)?
-
-### Findings
-_To be documented during validation_
+**Key findings:**
+- 80.7% three-way L1 agreement (1,289/1,598 pairs)
+- Cohen's kappa: 0.57-0.73 pairwise (substantial agreement)
+- Confusion matrices show CC→TC and RS→CC as primary disagreement patterns
 
 ### Sign-off
-- [ ] Stage 2 validated
-- Date: ___
-- Notes: ___
+
+- [x] **Stage 2 validated**
+- **Date:** 2026-01-30
+- **Validated by:** Brock Webb / Claude
+- **Notes:** See FINDINGS_R03_S2_agreement_analysis.md for details.
 
 ---
 
 ## Stage 3: Arbitration
 
 ### Purpose
-Use flagship LLM arbitrators to adjudicate ALL question pairs (not just disagreements), enabling inter-arbitrator agreement analysis and bias detection.
+Use flagship LLM arbitrators to adjudicate ALL question pairs (not just disagreements), enabling inter-arbitrator agreement analysis and bias detection. This stage includes data cleaning (ETL) and V&V analysis.
 
 ### Inputs
-- [ ] `output/analysis/barrier_deduped_*.jsonl` - Cleaned rater outputs
-- [ ] Three rater perspectives presented blind (Rater A/B/C masking)
-
-### Process
-- [ ] Document arbitration prompt/instructions
-- [ ] Document "synthesis" operational definition (all 3 raters agreed)
-- [ ] Document blind masking and order randomization (50% fixed, 50% random)
-- [ ] Document arbitrator selection decision
+- [x] `output/analysis/barrier_deduped_*.jsonl` - Cleaned rater outputs
+- [x] Three rater perspectives presented blind (Rater A/B/C masking)
 
 ### Outputs
-- [ ] `output/results/arbitration_v3_results_anthropic_*.jsonl` - 1,598 pairs
-- [ ] `output/results/arbitration_v3_results_openai_*.jsonl` - 1,598 pairs
-- [ ] `output/results/arbitration_v3_results_google_*.jsonl` - 503 pairs (rate limited)
+- [x] `output/results/arbitration_v3_results_anthropic_*.jsonl` - 1,598 pairs
+- [x] `output/results/arbitration_v3_results_openai_*.jsonl` - 1,598 pairs  
+- [x] `output/results/arbitration_v3_results_google_*.jsonl` - 503 pairs (rate limited, CPS only)
+- [x] `output/analysis/final_verdicts.csv` - Consolidated verdicts with confidence levels
 
-### Validation Checklist
-- [ ] All pairs received arbitration (per arbitrator)
-- [ ] Arbitrator outputs conform to expected schema
-- [ ] Synthesis indicator correctly identifies rater agreement cases
-- [ ] Position/order metadata correctly populated
+### Validation Summary
 
-### Verification Questions
-- [ ] What exactly is "synthesis" operationally?
-- [ ] How do we validate synthesis detection accuracy?
-- [ ] What explains Google's 6% synthesis rate vs Anthropic's 77%?
+See `FINDINGS_R03_S3_001_arbitration_analysis.md` for complete Stage 3 validation.
 
-### Findings
-_To be documented during validation_
+**Key metrics (from Sections 1-7):**
+- Inter-arbitrator L1 agreement: 89.2% pairwise (Anthropic-OpenAI)
+- Three-way Fleiss' kappa (L1): 0.796 (substantial, near threshold)
+- Final verdicts: 98.2% HIGH confidence, 1.8% LOW confidence
+- CC dominates at 85-89% of barriers
+- F3 (not feasible) at ~80% of pairs
+
+**Open Issues:**
+- 8.1: Synthesis interpretation (examine reasoning text)
+- 8.2: Google behavior investigation (6% synthesis rate vs 77% for others)
+- 8.3: L1 quality gate decision (0.796 vs 0.80 threshold)
 
 ### Sign-off
-- [ ] Stage 3 validated
-- Date: ___
-- Notes: ___
+
+- [ ] **Stage 3 validated**
+- **Date:** ___
+- **Validated by:** ___
+- **Notes:** Pending resolution of open issues 8.1, 8.2, 8.3
 
 ---
 
-## Stage 4: Cleanup (Ground Truth Construction)
+## Stage 4: Findings
 
 ### Purpose
-Deduplicate and validate arbitration results. Construct final barrier assignments from arbitrator outputs.
+Answer the research question: What proportion of source survey questions can be consolidated with ACS via record linkage? Analysis at question-level (not pair-level) to provide actionable metrics.
 
 ### Inputs
-- [ ] `output/results/arbitration_v3_results_*.jsonl` - Raw arbitration outputs
+- [ ] `output/analysis/final_verdicts.csv` - From Stage 3
+- [ ] Source question mappings from Report 02
 
-### Process
-- [ ] Document deduplication rules (keep first occurrence)
-- [ ] Document schema validation
-- [ ] Document merge strategy for three arbitrators
+### Key Analyses (TBD)
+- [ ] Question-level consolidation rates (per source survey)
+- [ ] Domain/topic analysis (which content areas consolidate best?)
+- [ ] Transformation inventory (F2 pairs: what adjustments needed?)
+- [ ] Barrier pattern analysis (why do certain pairs fail?)
 
-### Outputs
-- [ ] `output/analysis/arbitration_deduped_*.jsonl` - Cleaned per-arbitrator files
-- [ ] `output/analysis/arbitration_merged.csv` - All arbitrators joined on pair_id
-- [ ] `output/analysis/data_cleaning_log.json` - Audit trail
-
-### Validation Checklist
-- [ ] Duplicates correctly identified and removed
-- [ ] Deduplication statistics match expected values
-- [ ] Merged file joins correctly on pair_id
-- [ ] Google sample representativeness verified (CPS-only due to rate limit)
-
-### Verification Questions
-- [ ] How do we handle pairs where arbitrators disagree?
-- [ ] Is the Google sample representative despite being CPS-only?
-- [ ] What is the final ground truth determination rule?
-
-### Findings
-_To be documented during validation_
+### Outputs (TBD)
+- [ ] Question-level consolidation summary
+- [ ] Domain breakdown tables
+- [ ] Transformation requirements inventory
 
 ### Sign-off
-- [ ] Stage 4 validated
-- Date: ___
-- Notes: ___
+
+- [ ] **Stage 4 validated**
+- **Date:** ___
+- **Notes:** Will be spec'd after Stage 3 sign-off
 
 ---
 
-## Stage 5: Analysis (Statistical Validation)
+## Stage 5: Communication
 
 ### Purpose
-Compute final agreement statistics, detect arbitrator biases, and generate report-ready outputs.
+Produce stakeholder-ready outputs: visualizations, executive summary, and final report sections.
 
-### Inputs
-- [ ] `output/analysis/arbitration_merged.csv` - Cleaned merged arbitration data
-- [ ] `config.yaml` - Rater/arbitrator configuration
-
-### Methods Documentation
-
-#### Cohen's Kappa
-- [ ] Formula documented
-- [ ] Interpretation scale documented (slight/fair/moderate/substantial/perfect)
-- [ ] Applicability (pairwise, categorical) confirmed
-- [ ] Known limitations documented (kappa paradox with imbalanced categories)
-
-#### Fleiss' Kappa
-- [ ] Formula documented
-- [ ] Interpretation scale documented
-- [ ] Applicability (multi-rater) confirmed
-- [ ] Sample size requirements documented
-
-#### Family Bias Detection
-- [ ] Chi-square test for same-vendor preference
-- [ ] Null hypothesis: arbitrator selection independent of rater family
-
-#### Position Bias Detection
-- [ ] Compare first-position selection rate vs expected 33.3%
-- [ ] Use fixed vs randomized order comparison
-
-### Outputs
-- [ ] `output/analysis/arbitration_agreement_report.json` - Full statistics
-- [ ] `output/analysis/arbitration_agreement_report.md` - Human-readable report
-- [ ] `output/analysis/position_bias_analysis.csv` - Rater position effects
-- [ ] `output/analysis/family_bias_analysis.csv` - Same-family preference
-
-### Validation Checklist
-- [ ] Kappa calculations mathematically verified (manual spot check)
-- [ ] Agreement rates match manual calculation
-- [ ] Bias detection tests use appropriate statistical methods
-- [ ] Sample sizes adequate for chosen methods
-
-### Verification Questions
-- [ ] Why these specific statistics?
-- [ ] What are the limitations of each?
-- [ ] How do we interpret edge cases (kappa paradox, etc.)?
-- [ ] What constitutes "significant" bias?
-
-### Findings
-_To be documented during validation_
+### Outputs (TBD)
+- [ ] Executive summary (1-2 pages for senior leadership)
+- [ ] Key visualizations for report
+- [ ] Infographic (optional, for broader communication)
+- [ ] Methodology appendix materials
 
 ### Sign-off
-- [ ] Stage 5 validated
-- Date: ___
-- Notes: ___
+
+- [ ] **Stage 5 validated**
+- **Date:** ___
+- **Notes:** Will be spec'd after Stage 4
 
 ---
 
@@ -471,8 +407,10 @@ Track what visuals and tables are needed for the report, identified during valid
 |----|-------------|-------|--------|-------|
 | V1 | L1 barrier distribution by rater (bar chart) | 1 | Identified | Compare rater tendencies |
 | V2 | Feasibility distribution by rater | 1 | Identified | |
-| V3 | Inter-arbitrator agreement heatmap | 5 | Identified | |
-| V4 | Family bias visualization | 5 | Identified | |
+| V3 | Inter-arbitrator agreement heatmap | 3 | Identified | |
+| V4 | Family bias visualization | 3 | Identified | |
+| V5 | Question-level consolidation rates | 4 | TBD | Research question answer |
+| V6 | Domain breakdown chart | 4 | TBD | Which topics consolidate best? |
 
 ---
 
@@ -510,3 +448,4 @@ Items suitable for appendix/lab notebook, identified during validation.
 | 2026-01-30 | Stage 1 documentation started, open items identified | Brock/Claude |
 | 2026-01-30 | Stage 1 validation COMPLETE - all open items resolved | Brock/Claude |
 | 2026-01-30 | Added document relationship header, updated stage status tracker | Brock/Claude |
+| 2026-01-31 | **Pipeline restructure:** Merged old Stages 4-5 (Cleanup/Analysis) into Stage 3. New Stage 4 (Findings) and Stage 5 (Communication) added as placeholders. Cleanup scripts are ETL within stages, not separate stages. | Brock/Claude |

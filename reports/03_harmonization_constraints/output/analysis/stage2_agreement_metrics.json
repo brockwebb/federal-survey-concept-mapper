@@ -1,0 +1,1348 @@
+{
+  "metadata": {
+    "generated_at": "2026-01-30T14:05:23.431634",
+    "input_file": "barrier_coding_merged_3rater.csv",
+    "total_pairs": 1598,
+    "spec_version": "SPEC-R03-S2-001 v1.0",
+    "extended_generated_at": "2026-01-30T14:46:38.917549"
+  },
+  "power_verification": {
+    "overall": {
+      "n_observed": 1598,
+      "n_required_k7_alpha80_p05": 200,
+      "ratio": 7.99,
+      "status": "ADEQUATE"
+    },
+    "by_stratum": {
+      "CPS": {
+        "n": 1030,
+        "n_required": 200,
+        "status": "ADEQUATE"
+      },
+      "FOODAPS": {
+        "n": 568,
+        "n_required": 200,
+        "status": "ADEQUATE"
+      }
+    },
+    "by_category": {
+      "CC": {
+        "n": 1284,
+        "status": "ADEQUATE"
+      },
+      "TC": {
+        "n": 177,
+        "status": "MARGINAL"
+      },
+      "RS": {
+        "n": 69,
+        "status": "MARGINAL"
+      },
+      "PC": {
+        "n": 34,
+        "status": "UNDERPOWERED"
+      },
+      "MC": {
+        "n": 22,
+        "status": "UNDERPOWERED"
+      },
+      "PM": {
+        "n": 9,
+        "status": "UNDERPOWERED"
+      },
+      "NHB": {
+        "n": 3,
+        "status": "UNDERPOWERED"
+      },
+      "Other_combined": {
+        "n": 68,
+        "status": "MARGINAL",
+        "components": [
+          "PC",
+          "MC",
+          "PM",
+          "NHB"
+        ]
+      }
+    },
+    "methodology_note": "Per Krippendorff (2004) via ATLAS.ti guidance. Categories with n<50 flagged as underpowered for independent reliability estimation."
+  },
+  "L1_agreement": {
+    "overall": {
+      "n_pairs": 1598,
+      "pairwise": {
+        "OA_vs_AN": {
+          "percent_agreement": 87.9,
+          "cohens_kappa": 0.655,
+          "interpretation": "Substantial",
+          "quality_gate_passed": false
+        },
+        "OA_vs_GO": {
+          "percent_agreement": 86.0,
+          "cohens_kappa": 0.595,
+          "interpretation": "Moderate",
+          "quality_gate_passed": false
+        },
+        "AN_vs_GO": {
+          "percent_agreement": 85.2,
+          "cohens_kappa": 0.585,
+          "interpretation": "Moderate",
+          "quality_gate_passed": false
+        }
+      },
+      "three_way": {
+        "fleiss_kappa": 0.611,
+        "fleiss_interpretation": "Substantial",
+        "fleiss_quality_gate_passed": false,
+        "krippendorff_alpha": 0.611,
+        "krippendorff_interpretation": "Substantial",
+        "krippendorff_quality_gate_passed": false
+      }
+    },
+    "stratified": {
+      "by_survey": {
+        "CPS": {
+          "n_pairs": 1030,
+          "pairwise": {
+            "OA_vs_AN": {
+              "percent_agreement": 87.5,
+              "cohens_kappa": 0.651,
+              "interpretation": "Substantial",
+              "quality_gate_passed": false
+            },
+            "OA_vs_GO": {
+              "percent_agreement": 86.8,
+              "cohens_kappa": 0.612,
+              "interpretation": "Substantial",
+              "quality_gate_passed": false
+            },
+            "AN_vs_GO": {
+              "percent_agreement": 86.3,
+              "cohens_kappa": 0.612,
+              "interpretation": "Substantial",
+              "quality_gate_passed": false
+            }
+          },
+          "three_way": {
+            "fleiss_kappa": 0.625,
+            "fleiss_interpretation": "Substantial",
+            "fleiss_quality_gate_passed": false,
+            "krippendorff_alpha": 0.625,
+            "krippendorff_interpretation": "Substantial",
+            "krippendorff_quality_gate_passed": false
+          }
+        },
+        "FOODAPS": {
+          "n_pairs": 568,
+          "pairwise": {
+            "OA_vs_AN": {
+              "percent_agreement": 88.6,
+              "cohens_kappa": 0.662,
+              "interpretation": "Substantial",
+              "quality_gate_passed": false
+            },
+            "OA_vs_GO": {
+              "percent_agreement": 84.7,
+              "cohens_kappa": 0.567,
+              "interpretation": "Moderate",
+              "quality_gate_passed": false
+            },
+            "AN_vs_GO": {
+              "percent_agreement": 83.3,
+              "cohens_kappa": 0.537,
+              "interpretation": "Moderate",
+              "quality_gate_passed": false
+            }
+          },
+          "three_way": {
+            "fleiss_kappa": 0.586,
+            "fleiss_interpretation": "Moderate",
+            "fleiss_quality_gate_passed": false,
+            "krippendorff_alpha": 0.586,
+            "krippendorff_interpretation": "Moderate",
+            "krippendorff_quality_gate_passed": false
+          }
+        }
+      },
+      "by_L1_category": {
+        "CC": {
+          "n_pairs": 1284,
+          "pairwise": {
+            "OA_vs_AN": {
+              "percent_agreement": 92.9,
+              "cohens_kappa": 0.0,
+              "interpretation": "Slight/Poor",
+              "quality_gate_passed": false
+            },
+            "OA_vs_GO": {
+              "percent_agreement": 92.8,
+              "cohens_kappa": 0.0,
+              "interpretation": "Slight/Poor",
+              "quality_gate_passed": false
+            },
+            "AN_vs_GO": {
+              "percent_agreement": 90.2,
+              "cohens_kappa": 0.28,
+              "interpretation": "Fair",
+              "quality_gate_passed": false
+            }
+          },
+          "three_way": {
+            "fleiss_kappa": 0.128,
+            "fleiss_interpretation": "Slight/Poor",
+            "fleiss_quality_gate_passed": false,
+            "krippendorff_alpha": 0.128,
+            "krippendorff_interpretation": "Slight/Poor",
+            "krippendorff_quality_gate_passed": false
+          }
+        },
+        "TC": {
+          "n_pairs": 177,
+          "pairwise": {
+            "OA_vs_AN": {
+              "percent_agreement": 80.8,
+              "cohens_kappa": 0.0,
+              "interpretation": "Slight/Poor",
+              "quality_gate_passed": false
+            },
+            "OA_vs_GO": {
+              "percent_agreement": 61.0,
+              "cohens_kappa": 0.0,
+              "interpretation": "Slight/Poor",
+              "quality_gate_passed": false
+            },
+            "AN_vs_GO": {
+              "percent_agreement": 71.8,
+              "cohens_kappa": 0.388,
+              "interpretation": "Fair",
+              "quality_gate_passed": false
+            }
+          },
+          "three_way": {
+            "fleiss_kappa": 0.122,
+            "fleiss_interpretation": "Slight/Poor",
+            "fleiss_quality_gate_passed": false,
+            "krippendorff_alpha": 0.124,
+            "krippendorff_interpretation": "Slight/Poor",
+            "krippendorff_quality_gate_passed": false
+          }
+        },
+        "RS": {
+          "n_pairs": 69,
+          "pairwise": {
+            "OA_vs_AN": {
+              "percent_agreement": 72.5,
+              "cohens_kappa": 0.0,
+              "interpretation": "Slight/Poor",
+              "quality_gate_passed": false
+            },
+            "OA_vs_GO": {
+              "percent_agreement": 87.0,
+              "cohens_kappa": 0.0,
+              "interpretation": "Slight/Poor",
+              "quality_gate_passed": false
+            },
+            "AN_vs_GO": {
+              "percent_agreement": 65.2,
+              "cohens_kappa": -0.008,
+              "interpretation": "Slight/Poor",
+              "quality_gate_passed": false
+            }
+          },
+          "three_way": {
+            "fleiss_kappa": -0.05,
+            "fleiss_interpretation": "Slight/Poor",
+            "fleiss_quality_gate_passed": false,
+            "krippendorff_alpha": -0.045,
+            "krippendorff_interpretation": "Slight/Poor",
+            "krippendorff_quality_gate_passed": false
+          }
+        },
+        "Other_combined": {
+          "n_pairs": 68,
+          "pairwise": {
+            "OA_vs_AN": {
+              "percent_agreement": 26.5,
+              "cohens_kappa": 0.154,
+              "interpretation": "Slight/Poor",
+              "quality_gate_passed": false
+            },
+            "OA_vs_GO": {
+              "percent_agreement": 23.5,
+              "cohens_kappa": 0.143,
+              "interpretation": "Slight/Poor",
+              "quality_gate_passed": false
+            },
+            "AN_vs_GO": {
+              "percent_agreement": 47.1,
+              "cohens_kappa": 0.326,
+              "interpretation": "Fair",
+              "quality_gate_passed": false
+            }
+          },
+          "three_way": {
+            "fleiss_kappa": 0.158,
+            "fleiss_interpretation": "Slight/Poor",
+            "fleiss_quality_gate_passed": false,
+            "krippendorff_alpha": 0.162,
+            "krippendorff_interpretation": "Slight/Poor",
+            "krippendorff_quality_gate_passed": false
+          }
+        }
+      }
+    }
+  },
+  "L2_agreement": {
+    "overall": {
+      "n_pairs": 1598,
+      "pairwise": {
+        "OA_vs_AN": {
+          "percent_agreement": 65.3,
+          "cohens_kappa": 0.471,
+          "interpretation": "Moderate",
+          "quality_gate_passed": false
+        },
+        "OA_vs_GO": {
+          "percent_agreement": 66.6,
+          "cohens_kappa": 0.488,
+          "interpretation": "Moderate",
+          "quality_gate_passed": false
+        },
+        "AN_vs_GO": {
+          "percent_agreement": 64.1,
+          "cohens_kappa": 0.46,
+          "interpretation": "Moderate",
+          "quality_gate_passed": false
+        }
+      },
+      "three_way": {
+        "fleiss_kappa": 0.472,
+        "fleiss_interpretation": "Moderate",
+        "fleiss_quality_gate_passed": false,
+        "krippendorff_alpha": 0.472,
+        "krippendorff_interpretation": "Moderate",
+        "krippendorff_quality_gate_passed": false
+      }
+    },
+    "stratified": {
+      "by_survey": {
+        "CPS": {
+          "n_pairs": 1030,
+          "pairwise": {
+            "OA_vs_AN": {
+              "percent_agreement": 62.3,
+              "cohens_kappa": 0.418,
+              "interpretation": "Moderate",
+              "quality_gate_passed": false
+            },
+            "OA_vs_GO": {
+              "percent_agreement": 66.7,
+              "cohens_kappa": 0.482,
+              "interpretation": "Moderate",
+              "quality_gate_passed": false
+            },
+            "AN_vs_GO": {
+              "percent_agreement": 62.4,
+              "cohens_kappa": 0.434,
+              "interpretation": "Moderate",
+              "quality_gate_passed": false
+            }
+          },
+          "three_way": {
+            "fleiss_kappa": 0.444,
+            "fleiss_interpretation": "Moderate",
+            "fleiss_quality_gate_passed": false,
+            "krippendorff_alpha": 0.444,
+            "krippendorff_interpretation": "Moderate",
+            "krippendorff_quality_gate_passed": false
+          }
+        },
+        "FOODAPS": {
+          "n_pairs": 568,
+          "pairwise": {
+            "OA_vs_AN": {
+              "percent_agreement": 70.6,
+              "cohens_kappa": 0.563,
+              "interpretation": "Moderate",
+              "quality_gate_passed": false
+            },
+            "OA_vs_GO": {
+              "percent_agreement": 66.4,
+              "cohens_kappa": 0.5,
+              "interpretation": "Moderate",
+              "quality_gate_passed": false
+            },
+            "AN_vs_GO": {
+              "percent_agreement": 67.3,
+              "cohens_kappa": 0.504,
+              "interpretation": "Moderate",
+              "quality_gate_passed": false
+            }
+          },
+          "three_way": {
+            "fleiss_kappa": 0.522,
+            "fleiss_interpretation": "Moderate",
+            "fleiss_quality_gate_passed": false,
+            "krippendorff_alpha": 0.522,
+            "krippendorff_interpretation": "Moderate",
+            "krippendorff_quality_gate_passed": false
+          }
+        }
+      },
+      "by_L1_category": {
+        "CC": {
+          "n_pairs": 1284,
+          "pairwise": {
+            "OA_vs_AN": {
+              "percent_agreement": 68.8,
+              "cohens_kappa": 0.376,
+              "interpretation": "Fair",
+              "quality_gate_passed": false
+            },
+            "OA_vs_GO": {
+              "percent_agreement": 71.7,
+              "cohens_kappa": 0.43,
+              "interpretation": "Moderate",
+              "quality_gate_passed": false
+            },
+            "AN_vs_GO": {
+              "percent_agreement": 68.0,
+              "cohens_kappa": 0.399,
+              "interpretation": "Fair",
+              "quality_gate_passed": false
+            }
+          },
+          "three_way": {
+            "fleiss_kappa": 0.401,
+            "fleiss_interpretation": "Moderate",
+            "fleiss_quality_gate_passed": false,
+            "krippendorff_alpha": 0.401,
+            "krippendorff_interpretation": "Moderate",
+            "krippendorff_quality_gate_passed": false
+          }
+        },
+        "TC": {
+          "n_pairs": 177,
+          "pairwise": {
+            "OA_vs_AN": {
+              "percent_agreement": 61.0,
+              "cohens_kappa": 0.371,
+              "interpretation": "Fair",
+              "quality_gate_passed": false
+            },
+            "OA_vs_GO": {
+              "percent_agreement": 42.4,
+              "cohens_kappa": 0.222,
+              "interpretation": "Fair",
+              "quality_gate_passed": false
+            },
+            "AN_vs_GO": {
+              "percent_agreement": 50.8,
+              "cohens_kappa": 0.348,
+              "interpretation": "Fair",
+              "quality_gate_passed": false
+            }
+          },
+          "three_way": {
+            "fleiss_kappa": 0.294,
+            "fleiss_interpretation": "Fair",
+            "fleiss_quality_gate_passed": false,
+            "krippendorff_alpha": 0.295,
+            "krippendorff_interpretation": "Fair",
+            "krippendorff_quality_gate_passed": false
+          }
+        },
+        "RS": {
+          "n_pairs": 69,
+          "pairwise": {
+            "OA_vs_AN": {
+              "percent_agreement": 58.0,
+              "cohens_kappa": 0.229,
+              "interpretation": "Fair",
+              "quality_gate_passed": false
+            },
+            "OA_vs_GO": {
+              "percent_agreement": 75.4,
+              "cohens_kappa": 0.512,
+              "interpretation": "Moderate",
+              "quality_gate_passed": false
+            },
+            "AN_vs_GO": {
+              "percent_agreement": 62.3,
+              "cohens_kappa": 0.298,
+              "interpretation": "Fair",
+              "quality_gate_passed": false
+            }
+          },
+          "three_way": {
+            "fleiss_kappa": 0.336,
+            "fleiss_interpretation": "Fair",
+            "fleiss_quality_gate_passed": false,
+            "krippendorff_alpha": 0.339,
+            "krippendorff_interpretation": "Fair",
+            "krippendorff_quality_gate_passed": false
+          }
+        },
+        "Other_combined": {
+          "n_pairs": 68,
+          "pairwise": {
+            "OA_vs_AN": {
+              "percent_agreement": 16.2,
+              "cohens_kappa": 0.12,
+              "interpretation": "Slight/Poor",
+              "quality_gate_passed": false
+            },
+            "OA_vs_GO": {
+              "percent_agreement": 23.5,
+              "cohens_kappa": 0.214,
+              "interpretation": "Fair",
+              "quality_gate_passed": false
+            },
+            "AN_vs_GO": {
+              "percent_agreement": 27.9,
+              "cohens_kappa": 0.234,
+              "interpretation": "Fair",
+              "quality_gate_passed": false
+            }
+          },
+          "three_way": {
+            "fleiss_kappa": 0.159,
+            "fleiss_interpretation": "Slight/Poor",
+            "fleiss_quality_gate_passed": false,
+            "krippendorff_alpha": 0.163,
+            "krippendorff_interpretation": "Slight/Poor",
+            "krippendorff_quality_gate_passed": false
+          }
+        }
+      }
+    }
+  },
+  "feasibility_agreement": {
+    "overall": {
+      "n_pairs": 1598,
+      "pairwise": {
+        "OA_vs_AN": {
+          "percent_agreement": 76.8,
+          "cohens_kappa": 0.472,
+          "interpretation": "Moderate",
+          "quality_gate_passed": false
+        },
+        "OA_vs_GO": {
+          "percent_agreement": 77.9,
+          "cohens_kappa": 0.505,
+          "interpretation": "Moderate",
+          "quality_gate_passed": false
+        },
+        "AN_vs_GO": {
+          "percent_agreement": 89.0,
+          "cohens_kappa": 0.684,
+          "interpretation": "Substantial",
+          "quality_gate_passed": false
+        }
+      },
+      "three_way": {
+        "fleiss_kappa": 0.537,
+        "fleiss_interpretation": "Moderate",
+        "fleiss_quality_gate_passed": false,
+        "krippendorff_alpha": 0.538,
+        "krippendorff_interpretation": "Moderate",
+        "krippendorff_quality_gate_passed": false
+      }
+    },
+    "stratified": {
+      "by_survey": {
+        "CPS": {
+          "n_pairs": 1030,
+          "pairwise": {
+            "OA_vs_AN": {
+              "percent_agreement": 74.9,
+              "cohens_kappa": 0.442,
+              "interpretation": "Moderate",
+              "quality_gate_passed": false
+            },
+            "OA_vs_GO": {
+              "percent_agreement": 75.8,
+              "cohens_kappa": 0.466,
+              "interpretation": "Moderate",
+              "quality_gate_passed": false
+            },
+            "AN_vs_GO": {
+              "percent_agreement": 89.8,
+              "cohens_kappa": 0.7,
+              "interpretation": "Substantial",
+              "quality_gate_passed": false
+            }
+          },
+          "three_way": {
+            "fleiss_kappa": 0.512,
+            "fleiss_interpretation": "Moderate",
+            "fleiss_quality_gate_passed": false,
+            "krippendorff_alpha": 0.513,
+            "krippendorff_interpretation": "Moderate",
+            "krippendorff_quality_gate_passed": false
+          }
+        },
+        "FOODAPS": {
+          "n_pairs": 568,
+          "pairwise": {
+            "OA_vs_AN": {
+              "percent_agreement": 80.5,
+              "cohens_kappa": 0.533,
+              "interpretation": "Moderate",
+              "quality_gate_passed": false
+            },
+            "OA_vs_GO": {
+              "percent_agreement": 81.7,
+              "cohens_kappa": 0.579,
+              "interpretation": "Moderate",
+              "quality_gate_passed": false
+            },
+            "AN_vs_GO": {
+              "percent_agreement": 87.5,
+              "cohens_kappa": 0.656,
+              "interpretation": "Substantial",
+              "quality_gate_passed": false
+            }
+          },
+          "three_way": {
+            "fleiss_kappa": 0.583,
+            "fleiss_interpretation": "Moderate",
+            "fleiss_quality_gate_passed": false,
+            "krippendorff_alpha": 0.583,
+            "krippendorff_interpretation": "Moderate",
+            "krippendorff_quality_gate_passed": false
+          }
+        }
+      },
+      "by_L1_category": {}
+    }
+  },
+  "confusion_matrices": {
+    "L1": {
+      "OA_AN": {
+        "file": "confusion_matrix_L1_OA_AN.csv",
+        "diagonal_sum": 1404,
+        "off_diagonal_sum": 194,
+        "top_confusions": [
+          {
+            "from": "CC",
+            "to": "RS",
+            "count": 37
+          },
+          {
+            "from": "CC",
+            "to": "TC",
+            "count": 30
+          },
+          {
+            "from": "TC",
+            "to": "CC",
+            "count": 29
+          },
+          {
+            "from": "CC",
+            "to": "MC",
+            "count": 21
+          },
+          {
+            "from": "RS",
+            "to": "CC",
+            "count": 16
+          }
+        ]
+      },
+      "OA_GO": {
+        "file": "confusion_matrix_L1_OA_GO.csv",
+        "diagonal_sum": 1375,
+        "off_diagonal_sum": 223,
+        "top_confusions": [
+          {
+            "from": "CC",
+            "to": "RS",
+            "count": 70
+          },
+          {
+            "from": "TC",
+            "to": "CC",
+            "count": 47
+          },
+          {
+            "from": "PC",
+            "to": "CC",
+            "count": 24
+          },
+          {
+            "from": "TC",
+            "to": "RS",
+            "count": 18
+          },
+          {
+            "from": "CC",
+            "to": "TC",
+            "count": 14
+          }
+        ]
+      },
+      "AN_GO": {
+        "file": "confusion_matrix_L1_AN_GO.csv",
+        "diagonal_sum": 1362,
+        "off_diagonal_sum": 236,
+        "top_confusions": [
+          {
+            "from": "CC",
+            "to": "RS",
+            "count": 63
+          },
+          {
+            "from": "TC",
+            "to": "CC",
+            "count": 55
+          },
+          {
+            "from": "RS",
+            "to": "CC",
+            "count": 27
+          },
+          {
+            "from": "MC",
+            "to": "CC",
+            "count": 18
+          },
+          {
+            "from": "TC",
+            "to": "RS",
+            "count": 15
+          }
+        ]
+      }
+    },
+    "L2": {
+      "OA_AN": {
+        "file": "confusion_matrix_L2_OA_AN.csv",
+        "diagonal_sum": 1043,
+        "off_diagonal_sum": 555,
+        "top_confusions": [
+          {
+            "from": "CC.1",
+            "to": "CC.2",
+            "count": 147
+          },
+          {
+            "from": "CC.2",
+            "to": "CC.1",
+            "count": 104
+          },
+          {
+            "from": "TC.2",
+            "to": "TC.1",
+            "count": 27
+          },
+          {
+            "from": "CC.4",
+            "to": "CC.1",
+            "count": 17
+          },
+          {
+            "from": "CC.2",
+            "to": "RS.1",
+            "count": 15
+          }
+        ]
+      },
+      "OA_GO": {
+        "file": "confusion_matrix_L2_OA_GO.csv",
+        "diagonal_sum": 1064,
+        "off_diagonal_sum": 534,
+        "top_confusions": [
+          {
+            "from": "CC.1",
+            "to": "CC.2",
+            "count": 121
+          },
+          {
+            "from": "CC.2",
+            "to": "CC.1",
+            "count": 85
+          },
+          {
+            "from": "CC.2",
+            "to": "RS.1",
+            "count": 41
+          },
+          {
+            "from": "CC.2",
+            "to": "CC.4",
+            "count": 23
+          },
+          {
+            "from": "TC.2",
+            "to": "TC.1",
+            "count": 21
+          }
+        ]
+      },
+      "AN_GO": {
+        "file": "confusion_matrix_L2_AN_GO.csv",
+        "diagonal_sum": 1025,
+        "off_diagonal_sum": 573,
+        "top_confusions": [
+          {
+            "from": "CC.2",
+            "to": "CC.1",
+            "count": 118
+          },
+          {
+            "from": "CC.1",
+            "to": "CC.2",
+            "count": 112
+          },
+          {
+            "from": "CC.2",
+            "to": "RS.1",
+            "count": 22
+          },
+          {
+            "from": "CC.2",
+            "to": "CC.4",
+            "count": 19
+          },
+          {
+            "from": "CC.1",
+            "to": "RS.1",
+            "count": 18
+          }
+        ]
+      }
+    },
+    "feasibility": {
+      "OA_AN": {
+        "file": "confusion_matrix_feasibility_OA_AN.csv",
+        "diagonal_sum": 1228,
+        "off_diagonal_sum": 370,
+        "top_confusions": [
+          {
+            "from": "F2",
+            "to": "F3",
+            "count": 268
+          },
+          {
+            "from": "F2",
+            "to": "F1",
+            "count": 55
+          },
+          {
+            "from": "F1",
+            "to": "F2",
+            "count": 17
+          },
+          {
+            "from": "F3",
+            "to": "F2",
+            "count": 16
+          },
+          {
+            "from": "F1",
+            "to": "F3",
+            "count": 10
+          }
+        ]
+      },
+      "OA_GO": {
+        "file": "confusion_matrix_feasibility_OA_GO.csv",
+        "diagonal_sum": 1245,
+        "off_diagonal_sum": 353,
+        "top_confusions": [
+          {
+            "from": "F2",
+            "to": "F3",
+            "count": 249
+          },
+          {
+            "from": "F2",
+            "to": "F1",
+            "count": 48
+          },
+          {
+            "from": "F3",
+            "to": "F2",
+            "count": 32
+          },
+          {
+            "from": "F1",
+            "to": "F2",
+            "count": 19
+          },
+          {
+            "from": "F1",
+            "to": "F3",
+            "count": 3
+          }
+        ]
+      },
+      "AN_GO": {
+        "file": "confusion_matrix_feasibility_AN_GO.csv",
+        "diagonal_sum": 1422,
+        "off_diagonal_sum": 176,
+        "top_confusions": [
+          {
+            "from": "F3",
+            "to": "F2",
+            "count": 71
+          },
+          {
+            "from": "F1",
+            "to": "F2",
+            "count": 36
+          },
+          {
+            "from": "F2",
+            "to": "F3",
+            "count": 35
+          },
+          {
+            "from": "F2",
+            "to": "F1",
+            "count": 28
+          },
+          {
+            "from": "F3",
+            "to": "F1",
+            "count": 5
+          }
+        ]
+      }
+    }
+  },
+  "extended_analytics": {
+    "binary_consolidability": {
+      "binary_feasibility": {
+        "pairwise": {
+          "OA_vs_AN": {
+            "percent_agreement": 81.4,
+            "cohens_kappa": 0.549,
+            "interpretation": "Moderate",
+            "quality_gate_passed": false
+          },
+          "OA_vs_GO": {
+            "percent_agreement": 82.1,
+            "cohens_kappa": 0.574,
+            "interpretation": "Moderate",
+            "quality_gate_passed": false
+          },
+          "AN_vs_GO": {
+            "percent_agreement": 93.0,
+            "cohens_kappa": 0.788,
+            "interpretation": "Substantial",
+            "quality_gate_passed": false
+          }
+        },
+        "three_way": {
+          "fleiss_kappa": 0.621,
+          "krippendorff_alpha": 0.621,
+          "interpretation": "Substantial",
+          "quality_gate_passed": false
+        },
+        "distribution": {
+          "consolidable_count": 571,
+          "not_consolidable_count": 1027,
+          "note": "Counts based on OpenAI as reference rater"
+        }
+      }
+    },
+    "conditional_agreement": {
+      "unanimous_f3": {
+        "unanimous_f3": {
+          "n_pairs": 983,
+          "pct_of_total": 61.5,
+          "L1_agreement": {
+            "n_pairs": 983,
+            "pairwise": {
+              "OA_vs_AN": {
+                "percent_agreement": 94.2,
+                "cohens_kappa": 0.504,
+                "interpretation": "Moderate"
+              },
+              "OA_vs_GO": {
+                "percent_agreement": 92.1,
+                "cohens_kappa": 0.318,
+                "interpretation": "Fair"
+              },
+              "AN_vs_GO": {
+                "percent_agreement": 91.9,
+                "cohens_kappa": 0.37,
+                "interpretation": "Fair"
+              }
+            },
+            "three_way": {
+              "fleiss_kappa": 0.396,
+              "krippendorff_alpha": 0.396,
+              "interpretation": "Fair"
+            }
+          },
+          "L1_distribution": {
+            "CC": 930,
+            "TC": 30,
+            "RS": 13,
+            "PC": 10
+          }
+        }
+      },
+      "disagreement_patterns": {
+        "feasibility_disagreements": {
+          "unanimous_count": 1153,
+          "disagreement_count": 445,
+          "disagreement_pct": 27.8
+        },
+        "L1_disagreements": {
+          "unanimous_count": 1289,
+          "disagreement_count": 309,
+          "disagreement_pct": 19.3
+        },
+        "disagreement_crosstab": {
+          "both_agree": 983,
+          "l1_disagree_only": 170,
+          "feasibility_disagree_only": 306,
+          "both_disagree": 139
+        },
+        "arbitration_workload": {
+          "pairs_needing_arbitration": 615,
+          "pct_needing_arbitration": 38.5
+        }
+      },
+      "pairwise_disagreement_detail": {
+        "OA_vs_AN": {
+          "L1_disagreements": 194,
+          "L1_top_transitions": [
+            {
+              "from": "CC",
+              "to": "RS",
+              "count": 37
+            },
+            {
+              "from": "CC",
+              "to": "TC",
+              "count": 30
+            },
+            {
+              "from": "TC",
+              "to": "CC",
+              "count": 29
+            },
+            {
+              "from": "CC",
+              "to": "MC",
+              "count": 21
+            },
+            {
+              "from": "RS",
+              "to": "CC",
+              "count": 16
+            },
+            {
+              "from": "PC",
+              "to": "CC",
+              "count": 14
+            },
+            {
+              "from": "MC",
+              "to": "NHB",
+              "count": 6
+            },
+            {
+              "from": "MC",
+              "to": "TC",
+              "count": 6
+            },
+            {
+              "from": "PM",
+              "to": "RS",
+              "count": 5
+            },
+            {
+              "from": "PC",
+              "to": "MC",
+              "count": 5
+            }
+          ],
+          "feasibility_disagreements": 370,
+          "feasibility_transitions": [
+            {
+              "from": "F2",
+              "to": "F3",
+              "count": 268
+            },
+            {
+              "from": "F2",
+              "to": "F1",
+              "count": 55
+            },
+            {
+              "from": "F1",
+              "to": "F2",
+              "count": 17
+            },
+            {
+              "from": "F3",
+              "to": "F2",
+              "count": 16
+            },
+            {
+              "from": "F1",
+              "to": "F3",
+              "count": 10
+            },
+            {
+              "from": "F3",
+              "to": "F1",
+              "count": 4
+            }
+          ]
+        },
+        "OA_vs_GO": {
+          "L1_disagreements": 223,
+          "L1_top_transitions": [
+            {
+              "from": "CC",
+              "to": "RS",
+              "count": 70
+            },
+            {
+              "from": "TC",
+              "to": "CC",
+              "count": 47
+            },
+            {
+              "from": "PC",
+              "to": "CC",
+              "count": 24
+            },
+            {
+              "from": "TC",
+              "to": "RS",
+              "count": 18
+            },
+            {
+              "from": "CC",
+              "to": "TC",
+              "count": 14
+            },
+            {
+              "from": "RS",
+              "to": "CC",
+              "count": 7
+            },
+            {
+              "from": "CC",
+              "to": "MC",
+              "count": 7
+            },
+            {
+              "from": "PM",
+              "to": "CC",
+              "count": 5
+            },
+            {
+              "from": "MC",
+              "to": "RS",
+              "count": 5
+            },
+            {
+              "from": "MC",
+              "to": "TC",
+              "count": 4
+            }
+          ],
+          "feasibility_disagreements": 353,
+          "feasibility_transitions": [
+            {
+              "from": "F2",
+              "to": "F3",
+              "count": 249
+            },
+            {
+              "from": "F2",
+              "to": "F1",
+              "count": 48
+            },
+            {
+              "from": "F3",
+              "to": "F2",
+              "count": 32
+            },
+            {
+              "from": "F1",
+              "to": "F2",
+              "count": 19
+            },
+            {
+              "from": "F1",
+              "to": "F3",
+              "count": 3
+            },
+            {
+              "from": "F3",
+              "to": "F1",
+              "count": 2
+            }
+          ]
+        },
+        "AN_vs_GO": {
+          "L1_disagreements": 236,
+          "L1_top_transitions": [
+            {
+              "from": "CC",
+              "to": "RS",
+              "count": 63
+            },
+            {
+              "from": "TC",
+              "to": "CC",
+              "count": 55
+            },
+            {
+              "from": "RS",
+              "to": "CC",
+              "count": 27
+            },
+            {
+              "from": "MC",
+              "to": "CC",
+              "count": 18
+            },
+            {
+              "from": "TC",
+              "to": "RS",
+              "count": 15
+            },
+            {
+              "from": "CC",
+              "to": "TC",
+              "count": 13
+            },
+            {
+              "from": "MC",
+              "to": "RS",
+              "count": 8
+            },
+            {
+              "from": "TC",
+              "to": "MC",
+              "count": 8
+            },
+            {
+              "from": "CC",
+              "to": "MC",
+              "count": 7
+            },
+            {
+              "from": "NHB",
+              "to": "TC",
+              "count": 4
+            }
+          ],
+          "feasibility_disagreements": 176,
+          "feasibility_transitions": [
+            {
+              "from": "F3",
+              "to": "F2",
+              "count": 71
+            },
+            {
+              "from": "F1",
+              "to": "F2",
+              "count": 36
+            },
+            {
+              "from": "F2",
+              "to": "F3",
+              "count": 35
+            },
+            {
+              "from": "F2",
+              "to": "F1",
+              "count": 28
+            },
+            {
+              "from": "F3",
+              "to": "F1",
+              "count": 5
+            },
+            {
+              "from": "F1",
+              "to": "F3",
+              "count": 1
+            }
+          ]
+        }
+      }
+    },
+    "multimodel_value": {
+      "L1_vote_patterns": {
+        "unanimous": 1289,
+        "2-1_split": 274,
+        "3-way_split": 35
+      },
+      "feasibility_vote_patterns": {
+        "unanimous": 1153,
+        "2-1_split": 436,
+        "3-way_split": 9
+      },
+      "single_model_risk": {
+        "openai": {
+          "L1_matches_majority_pct": 94.7,
+          "feasibility_matches_majority_pct": 82.7,
+          "L1_diverges_from_majority": 84,
+          "feas_diverges_from_majority": 276
+        },
+        "anthropic": {
+          "L1_matches_majority_pct": 93.0,
+          "feasibility_matches_majority_pct": 94.1,
+          "L1_diverges_from_majority": 112,
+          "feas_diverges_from_majority": 94
+        },
+        "google": {
+          "L1_matches_majority_pct": 90.7,
+          "feasibility_matches_majority_pct": 94.7,
+          "L1_diverges_from_majority": 148,
+          "feas_diverges_from_majority": 84
+        }
+      },
+      "multimodel_value_summary": {
+        "pairs_where_models_disagree_L1": 309,
+        "pairs_where_models_disagree_feas": 445,
+        "note": "These cases justify multi-model + arbitration approach"
+      }
+    },
+    "reasoning_analysis": {
+      "n_disagreement_cases": 309,
+      "total_reasoning_texts_analyzed": 927,
+      "keyword_frequencies": {
+        "reference": 237,
+        "harmoniz": 233,
+        "format": 209,
+        "construct": 199,
+        "response": 199,
+        "time": 190,
+        "temporal": 182,
+        "consolidat": 133,
+        "period": 126,
+        "mode": 87,
+        "context": 76,
+        "numeric": 73,
+        "compatibl": 71,
+        "scale": 69,
+        "concept": 65,
+        "categorical": 55,
+        "reconcil": 51,
+        "universe": 29,
+        "coverage": 21,
+        "definition": 18,
+        "population": 16,
+        "subset": 10,
+        "interview": 7,
+        "self-report": 6,
+        "meaning": 4
+      }
+    }
+  }
+}

@@ -1,0 +1,459 @@
+{
+  "metadata": {
+    "generated_at": "2026-01-30T22:19:35.538839",
+    "spec_version": "SPEC-R03-S3-001 v1.0",
+    "script": "scripts/04_stage3_arbitration.py",
+    "two_way_n": 1598,
+    "three_way_n": 503,
+    "openai_count": 1598,
+    "anthropic_count": 1598,
+    "google_count": 503,
+    "google_limitation": "CPS only, rate-limited at 250/day",
+    "tiebreaker": "OpenAI arbitrator used for two-way disagreements"
+  },
+  "validation_checks": {
+    "openai_count": 1598,
+    "anthropic_count": 1598,
+    "google_count": 503,
+    "rater_count": 1598,
+    "openai_null_L1": 0,
+    "openai_invalid_L1": 0,
+    "anthropic_null_L1": 0,
+    "anthropic_invalid_L1": 0,
+    "google_null_L1": 0,
+    "google_invalid_L1": 0,
+    "openai_invalid_feasibility": 0,
+    "anthropic_invalid_feasibility": 0,
+    "google_invalid_feasibility": 0,
+    "google_surveys": [
+      "CPS"
+    ],
+    "google_cps_only": true
+  },
+  "two_way_agreement": {
+    "n_pairs": 1598,
+    "coverage": "full (all 1,598 pairs)",
+    "L1": {
+      "percent_agreement": 94.7,
+      "cohens_kappa": 0.796,
+      "interpretation": "Substantial",
+      "quality_gate_passed": false
+    },
+    "full_barrier_code": {
+      "percent_agreement": 85.0,
+      "cohens_kappa": 0.755,
+      "interpretation": "Substantial",
+      "quality_gate_passed": false
+    },
+    "feasibility": {
+      "percent_agreement": 94.7,
+      "cohens_kappa": 0.843,
+      "interpretation": "Almost Perfect",
+      "quality_gate_passed": true
+    },
+    "binary_consolidability": {
+      "percent_agreement": 96.7,
+      "cohens_kappa": 0.896,
+      "interpretation": "Almost Perfect",
+      "quality_gate_passed": true
+    }
+  },
+  "three_way_agreement": {
+    "n_pairs": 503,
+    "coverage": "CPS subset only (Google limited)",
+    "L1": {
+      "fleiss_kappa": 0.833,
+      "krippendorff_alpha": 0.833,
+      "interpretation": "Almost Perfect",
+      "quality_gate_passed": true
+    },
+    "L1_pairwise": {
+      "OA_vs_AN": {
+        "percent_agreement": 93.6,
+        "cohens_kappa": 0.813,
+        "interpretation": "Almost Perfect"
+      },
+      "OA_vs_GO": {
+        "percent_agreement": 93.0,
+        "cohens_kappa": 0.795,
+        "interpretation": "Substantial"
+      },
+      "AN_vs_GO": {
+        "percent_agreement": 95.8,
+        "cohens_kappa": 0.887,
+        "interpretation": "Almost Perfect"
+      }
+    },
+    "full_barrier_code": {
+      "fleiss_kappa": 0.747,
+      "krippendorff_alpha": 0.747,
+      "interpretation": "Substantial",
+      "quality_gate_passed": false
+    },
+    "full_barrier_code_pairwise": {
+      "OA_vs_AN": {
+        "percent_agreement": 81.9,
+        "cohens_kappa": 0.714,
+        "interpretation": "Substantial"
+      },
+      "OA_vs_GO": {
+        "percent_agreement": 81.1,
+        "cohens_kappa": 0.702,
+        "interpretation": "Substantial"
+      },
+      "AN_vs_GO": {
+        "percent_agreement": 89.3,
+        "cohens_kappa": 0.827,
+        "interpretation": "Almost Perfect"
+      }
+    },
+    "feasibility": {
+      "fleiss_kappa": 0.871,
+      "krippendorff_alpha": 0.872,
+      "interpretation": "Almost Perfect",
+      "quality_gate_passed": true
+    },
+    "binary_consolidability": {
+      "fleiss_kappa": 0.903,
+      "krippendorff_alpha": 0.903,
+      "interpretation": "Almost Perfect",
+      "quality_gate_passed": true
+    }
+  },
+  "arbitrator_rater_concordance": {
+    "openai": {
+      "n_pairs": 1598,
+      "L1_concordance_with_majority_pct": 92.1,
+      "L2_concordance_with_majority_pct": 83.5,
+      "feasibility_concordance_with_majority_pct": 93.4,
+      "L1_concordance_with_unanimous_pct": 96.7,
+      "L2_concordance_with_unanimous_pct": 94.9,
+      "feasibility_concordance_with_unanimous_pct": 98.7,
+      "n_unanimous_L1_cases": 1289,
+      "L1_overrides_of_unanimous": 42,
+      "n_unanimous_L2_cases": 831,
+      "L2_overrides_of_unanimous": 42,
+      "n_unanimous_feas_cases": 1153,
+      "feas_overrides_of_unanimous": 15
+    },
+    "anthropic": {
+      "n_pairs": 1598,
+      "L1_concordance_with_majority_pct": 95.6,
+      "L2_concordance_with_majority_pct": 93.7,
+      "feasibility_concordance_with_majority_pct": 96.7,
+      "L1_concordance_with_unanimous_pct": 99.8,
+      "L2_concordance_with_unanimous_pct": 99.5,
+      "feasibility_concordance_with_unanimous_pct": 100.0,
+      "n_unanimous_L1_cases": 1289,
+      "L1_overrides_of_unanimous": 3,
+      "n_unanimous_L2_cases": 831,
+      "L2_overrides_of_unanimous": 4,
+      "n_unanimous_feas_cases": 1153,
+      "feas_overrides_of_unanimous": 0
+    },
+    "google": {
+      "n_pairs": 503,
+      "L1_concordance_with_majority_pct": 95.5,
+      "L2_concordance_with_majority_pct": 93.0,
+      "feasibility_concordance_with_majority_pct": 97.0,
+      "L1_concordance_with_unanimous_pct": 100.0,
+      "L2_concordance_with_unanimous_pct": 100.0,
+      "feasibility_concordance_with_unanimous_pct": 100.0,
+      "n_unanimous_L1_cases": 383,
+      "L1_overrides_of_unanimous": 0,
+      "n_unanimous_L2_cases": 244,
+      "L2_overrides_of_unanimous": 0,
+      "n_unanimous_feas_cases": 382,
+      "feas_overrides_of_unanimous": 0
+    }
+  },
+  "synthesis_detection": {
+    "openai": {
+      "n_pairs": 1598,
+      "n_raters_unanimous": 1289,
+      "n_raters_split": 309,
+      "synthesis_when_unanimous": {
+        "n": 1289,
+        "synthesis_count": 825,
+        "rate_pct": 64.0
+      },
+      "synthesis_when_split": {
+        "n": 309,
+        "synthesis_count": 124,
+        "rate_pct": 40.1
+      },
+      "confusion_matrix": {
+        "TP": 825,
+        "FN": 464,
+        "FP": 124,
+        "TN": 185
+      },
+      "precision": 0.869,
+      "recall": 0.64,
+      "f1": 0.737,
+      "synthesis_rate_overall": 59.4,
+      "interpretation": "backwards"
+    },
+    "anthropic": {
+      "n_pairs": 1598,
+      "n_raters_unanimous": 1289,
+      "n_raters_split": 309,
+      "synthesis_when_unanimous": {
+        "n": 1289,
+        "synthesis_count": 1117,
+        "rate_pct": 86.7
+      },
+      "synthesis_when_split": {
+        "n": 309,
+        "synthesis_count": 117,
+        "rate_pct": 37.9
+      },
+      "confusion_matrix": {
+        "TP": 1117,
+        "FN": 172,
+        "FP": 117,
+        "TN": 192
+      },
+      "precision": 0.905,
+      "recall": 0.867,
+      "f1": 0.885,
+      "synthesis_rate_overall": 77.2,
+      "interpretation": "backwards"
+    },
+    "google": {
+      "n_pairs": 503,
+      "n_raters_unanimous": 383,
+      "n_raters_split": 120,
+      "synthesis_when_unanimous": {
+        "n": 383,
+        "synthesis_count": 32,
+        "rate_pct": 8.4
+      },
+      "synthesis_when_split": {
+        "n": 120,
+        "synthesis_count": 3,
+        "rate_pct": 2.5
+      },
+      "confusion_matrix": {
+        "TP": 32,
+        "FN": 351,
+        "FP": 3,
+        "TN": 117
+      },
+      "precision": 0.914,
+      "recall": 0.084,
+      "f1": 0.153,
+      "synthesis_rate_overall": 7.0,
+      "interpretation": "deferential"
+    }
+  },
+  "position_bias": {
+    "openai": {
+      "n_total": 1598,
+      "position_counts": {
+        "synthesis": 949,
+        "A": 310,
+        "B": 278,
+        "C": 61
+      },
+      "synthesis_rate": 59.4,
+      "n_non_synthesis": 649,
+      "chi_square_test": {
+        "chi_square": 169.667,
+        "p_value": 0.0,
+        "significant_at_05": true,
+        "observed": {
+          "A": 310,
+          "B": 278,
+          "C": 61
+        },
+        "expected_each": 216.3
+      }
+    },
+    "anthropic": {
+      "n_total": 1598,
+      "position_counts": {
+        "synthesis": 1234,
+        "A": 152,
+        "B": 133,
+        "C": 79
+      },
+      "synthesis_rate": 77.2,
+      "n_non_synthesis": 364,
+      "chi_square_test": {
+        "chi_square": 23.643,
+        "p_value": 0.0,
+        "significant_at_05": true,
+        "observed": {
+          "A": 152,
+          "B": 133,
+          "C": 79
+        },
+        "expected_each": 121.3
+      }
+    },
+    "google": {
+      "n_total": 503,
+      "position_counts": {
+        "A": 240,
+        "B": 158,
+        "C": 70,
+        "synthesis": 35
+      },
+      "synthesis_rate": 7.0,
+      "n_non_synthesis": 468,
+      "chi_square_test": {
+        "chi_square": 92.667,
+        "p_value": 0.0,
+        "significant_at_05": true,
+        "observed": {
+          "A": 240,
+          "B": 158,
+          "C": 70
+        },
+        "expected_each": 156.0
+      }
+    }
+  },
+  "family_bias": {
+    "openai": {
+      "n_non_synthesis": 649,
+      "same_family_selected": 336,
+      "same_family_rate_pct": 51.8,
+      "expected_rate_pct": 33.3,
+      "chi_square": 99.292,
+      "p_value": 0.0,
+      "significant_at_05": true,
+      "rater_selection_breakdown": {
+        "openai": 336,
+        "anthropic": 237,
+        "google": 76
+      }
+    },
+    "anthropic": {
+      "n_non_synthesis": 364,
+      "same_family_selected": 134,
+      "same_family_rate_pct": 36.8,
+      "expected_rate_pct": 33.3,
+      "chi_square": 1.984,
+      "p_value": 0.159,
+      "significant_at_05": false,
+      "rater_selection_breakdown": {
+        "openai": 135,
+        "anthropic": 134,
+        "google": 95
+      }
+    },
+    "google": {
+      "n_non_synthesis": 468,
+      "same_family_selected": 76,
+      "same_family_rate_pct": 16.2,
+      "expected_rate_pct": 33.3,
+      "chi_square": 61.538,
+      "p_value": 0.0,
+      "significant_at_05": true,
+      "rater_selection_breakdown": {
+        "openai": 226,
+        "anthropic": 166,
+        "google": 76
+      }
+    }
+  },
+  "barrier_summary_by_survey": {
+    "CPS": {
+      "n_pairs": 1030,
+      "L1_distribution": {
+        "CC": 877,
+        "TC": 81,
+        "RS": 42,
+        "NHB": 11,
+        "MC": 10,
+        "PC": 7,
+        "PM": 2
+      },
+      "L1_percentages": {
+        "CC": 85.1,
+        "TC": 7.9,
+        "RS": 4.1,
+        "NHB": 1.1,
+        "MC": 1.0,
+        "PC": 0.7,
+        "PM": 0.2
+      },
+      "feasibility_distribution": {
+        "F3": 832,
+        "F2": 151,
+        "F1": 47
+      },
+      "feasibility_percentages": {
+        "F3": 80.8,
+        "F2": 14.7,
+        "F1": 4.6
+      },
+      "binary_consolidability": {
+        "Not_Consolidable": 832,
+        "Consolidable": 198
+      },
+      "top_L2_barriers": {
+        "CC.1": 610,
+        "CC.2": 186,
+        "CC.4": 80,
+        "TC.2": 51,
+        "RS.1": 35
+      }
+    },
+    "FOODAPS": {
+      "n_pairs": 568,
+      "L1_distribution": {
+        "CC": 505,
+        "TC": 31,
+        "RS": 19,
+        "PC": 5,
+        "MC": 4,
+        "NHB": 3,
+        "PM": 1
+      },
+      "L1_percentages": {
+        "CC": 88.9,
+        "TC": 5.5,
+        "RS": 3.3,
+        "PC": 0.9,
+        "MC": 0.7,
+        "NHB": 0.5,
+        "PM": 0.2
+      },
+      "feasibility_distribution": {
+        "F3": 451,
+        "F2": 90,
+        "F1": 27
+      },
+      "feasibility_percentages": {
+        "F3": 79.4,
+        "F2": 15.8,
+        "F1": 4.8
+      },
+      "binary_consolidability": {
+        "Not_Consolidable": 451,
+        "Consolidable": 117
+      },
+      "top_L2_barriers": {
+        "CC.1": 311,
+        "CC.2": 135,
+        "CC.4": 56,
+        "TC.2": 23,
+        "RS.1": 12
+      }
+    }
+  },
+  "final_verdict_summary": {
+    "total": 1598,
+    "confidence_distribution": {
+      "HIGH": 1458,
+      "MODERATE": 112,
+      "LOW": 28
+    },
+    "unanimous_rate": 91.2,
+    "two_way_agreement_rate": 98.2,
+    "three_way_coverage": 31.5
+  }
+}
