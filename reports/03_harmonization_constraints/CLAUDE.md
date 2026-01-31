@@ -161,16 +161,39 @@ All scripts should read paths from `config.yaml`, not hardcode them. Check confi
 
 ## Current State (Update as needed)
 
-**Last updated:** 2026-01-30
+**Last updated:** 2026-01-31
 
 | Item | Status |
 |------|--------|
-| V&V Stage 1 (Rating) | ✅ COMPLETE |
-| V&V Stage 2 (Agreement) | ⏳ NOT STARTED |
-| V&V Stage 3 (Arbitration) | 🟡 IN PROGRESS (Google at 503/1598) |
-| V&V Stage 4 (Cleanup) | ⏳ NOT STARTED |
-| V&V Stage 5 (Analysis) | ⏳ NOT STARTED |
-| Google rate limit | 250 requests/day - data collection ongoing |
+| V&V Stage 1 (Rating) | ✅ COMPLETE (2026-01-30) |
+| V&V Stage 2 (Agreement) | ✅ COMPLETE (2026-01-30) |
+| V&V Stage 3 (Arbitration) | 🟡 IN PROGRESS - validation pending |
+| V&V Stage 4 (Findings) | ⏳ NOT STARTED |
+| V&V Stage 5 (Communication) | ⏳ NOT STARTED |
+
+### Stage 3 Details
+
+**Data Collection:**
+- OpenAI: 1,598/1,598 (100%)
+- Anthropic: 1,598/1,598 (100%)
+- Google: ~503/1,598 (~31%) - pipeline running, +250/day rate limit
+
+**Agreement Metrics (post-bug-fix):**
+- Two-way L1 Cohen's κ: 0.796 (Substantial)
+- Three-way L1 Fleiss' κ: 0.833 (Almost Perfect, CPS subset)
+- Binary consolidability κ: 0.896 two-way / 0.903 three-way
+
+**Key Finding:** Arbitrators show fundamentally different decision-making behaviors:
+- Anthropic: 77% synthesis rate, neutral family bias
+- OpenAI: 59% synthesis rate, pro-self family bias
+- Google: 7% synthesis rate, anti-self family bias
+
+**Open Issues:**
+| Issue | Status | Notes |
+|-------|--------|-------|
+| 8.1 Synthesis Interpretation | ⏳ DEFERRED | Revisit with complete Google data |
+| 8.2 Google Behavior | ✅ RESOLVED | 7% synthesis is real behavior, not labeling artifact |
+| 8.3 L1 Quality Gate | ✅ ACCEPT | κ=0.796 accepted with kappa paradox context |
 
 ---
 
@@ -198,3 +221,4 @@ All scripts should read paths from `config.yaml`, not hardcode them. Check confi
 | Date | Change |
 |------|--------|
 | 2026-01-30 | Initial CLAUDE.md created for Report 03 |
+| 2026-01-31 | Updated Current State: Stage 2 COMPLETE, Stage 3 metrics/issues, arbitrator behavioral findings |

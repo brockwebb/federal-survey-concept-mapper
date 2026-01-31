@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-01-29T18:07:28.486973",
+  "timestamp": "2026-01-31T06:20:14.737087",
   "total_pairs": 1598,
   "arbitrators": [
     "anthropic",
@@ -30,67 +30,67 @@
     },
     {
       "pair": "anthropic-google",
-      "n": 251,
+      "n": 751,
       "levels": {
         "L1_barrier": {
-          "kappa": 0.8984258022742909,
-          "observed_agreement": 0.9601593625498008,
-          "expected_agreement": 0.6077681306645927
+          "kappa": 0.8942054845980464,
+          "observed_agreement": 0.9720372836218375,
+          "expected_agreement": 0.7356884118999789
         },
         "full_barrier": {
-          "kappa": 0.8273400066416812,
-          "observed_agreement": 0.8844621513944223,
-          "expected_agreement": 0.3308360184758972
+          "kappa": 0.8346100809416198,
+          "observed_agreement": 0.9134487350199734,
+          "expected_agreement": 0.4766835519795178
         },
         "feasibility": {
-          "kappa": 0.9039867392043524,
-          "observed_agreement": 0.9641434262948207,
-          "expected_agreement": 0.6265456103871367
+          "kappa": 0.9073933799566648,
+          "observed_agreement": 0.9720372836218375,
+          "expected_agreement": 0.6980484077155892
         }
       }
     },
     {
       "pair": "openai-google",
-      "n": 251,
+      "n": 751,
       "levels": {
         "L1_barrier": {
-          "kappa": 0.7397673999278759,
-          "observed_agreement": 0.9083665338645418,
-          "expected_agreement": 0.6478786051015063
+          "kappa": 0.8065230832646331,
+          "observed_agreement": 0.9533954727030626,
+          "expected_agreement": 0.7591209944663219
         },
         "full_barrier": {
-          "kappa": 0.6690033314825097,
-          "observed_agreement": 0.7729083665338645,
-          "expected_agreement": 0.31391565213250583
+          "kappa": 0.6733427909902434,
+          "observed_agreement": 0.8268974700399467,
+          "expected_agreement": 0.4700789537607203
         },
         "feasibility": {
-          "kappa": 0.8881959910913141,
-          "observed_agreement": 0.9601593625498008,
-          "expected_agreement": 0.6436564498976207
+          "kappa": 0.855103222072159,
+          "observed_agreement": 0.9587217043941412,
+          "expected_agreement": 0.7151192994338662
         }
       }
     }
   ],
   "two_way_n": 1598,
-  "three_way_n": 251,
+  "three_way_n": 751,
   "three_way_agreement": {
     "L1_barrier": {
-      "n": 251,
-      "kappa": 0.8051036743771388,
-      "observed_agreement": 0.9282868525896414,
-      "expected_agreement": 0.632044641266717
+      "n": 751,
+      "kappa": 0.8428944991204304,
+      "observed_agreement": 0.9609409675987574,
+      "expected_agreement": 0.7513834195329441
     },
     "full_barrier": {
-      "n": 251,
-      "kappa": 0.7157129243411289,
-      "observed_agreement": 0.8074369189907038,
-      "expected_agreement": 0.32264567229091606
+      "n": 751,
+      "kappa": 0.7325013273117066,
+      "observed_agreement": 0.8588548601864181,
+      "expected_agreement": 0.47235199937588773
     },
     "feasibility": {
-      "n": 251,
-      "kappa": 0.8749218322520127,
-      "observed_agreement": 0.9548472775564408,
-      "expected_agreement": 0.6390039664273406
+      "n": 751,
+      "kappa": 0.8641017855714767,
+      "observed_agreement": 0.9604971149578341,
+      "expected_agreement": 0.70932005833717
     }
   },
   "synthesis_rates": [
@@ -110,10 +110,10 @@
     },
     {
       "arbitrator": "google",
-      "total_pairs": 251,
-      "synthesis_count": 15,
-      "arbitration_needed": 236,
-      "synthesis_pct": 5.9760956175298805
+      "total_pairs": 751,
+      "synthesis_count": 40,
+      "arbitration_needed": 711,
+      "synthesis_pct": 5.326231691078561
     }
   ],
   "family_bias": [
@@ -140,9 +140,9 @@
     {
       "arbitrator": "google",
       "arbitrator_family": "google",
-      "total_selections": 236,
+      "total_selections": 711,
       "same_family_selections": 0,
-      "cross_family_selections": 236,
+      "cross_family_selections": 711,
       "same_family_pct": 0.0,
       "expected_same_pct": 33.33,
       "bias_ratio": 0.0
@@ -171,11 +171,11 @@
     },
     {
       "arbitrator": "google",
-      "total_selections": 236,
+      "total_selections": 711,
       "first_position": 0,
       "second_position": 0,
       "third_position": 0,
-      "unknown_position": 236,
+      "unknown_position": 711,
       "first_pct": null,
       "expected_pct": 33.33
     }

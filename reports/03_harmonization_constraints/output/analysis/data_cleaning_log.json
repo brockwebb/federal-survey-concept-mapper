@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-01-30T19:35:31.529137",
+  "timestamp": "2026-01-31T06:19:45.390722",
   "version": "1.0",
   "stage": "post_arbitration_cleanup",
   "arbitrators": {
@@ -42,20 +42,20 @@
     },
     "google": {
       "input_file": "arbitration_v3_results_google_gemini-3-pro-preview.jsonl",
-      "raw_count": 504,
-      "deduped_count": 503,
+      "raw_count": 752,
+      "deduped_count": 751,
       "dropped_count": 1,
       "dropped_pair_ids": [
         "CPS_0016"
       ],
       "validation": {
-        "total": 503,
+        "total": 751,
         "null_barriers": 0,
         "none_string_barriers": 0,
         "empty_barriers": 0,
         "recoded_to_nhb0": 0,
         "missing_fields": [],
-        "schema_valid": 503
+        "schema_valid": 751
       },
       "output_file": "arbitration_deduped_google.jsonl"
     }
@@ -63,8 +63,8 @@
   "merge_stats": {
     "total_pairs": 1598,
     "coverage_distribution": {
-      "2": 1095,
-      "3": 503
+      "2": 847,
+      "3": 751
     },
     "output_file": "arbitration_merged.csv",
     "pair_sources": {
@@ -72,8 +72,8 @@
       "FoodAPS": 568
     },
     "three_way_coverage": {
-      "total": 503,
-      "CPS": 503,
+      "total": 751,
+      "CPS": 751,
       "FoodAPS": 0
     }
   },

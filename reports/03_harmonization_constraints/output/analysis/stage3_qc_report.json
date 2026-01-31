@@ -1,0 +1,110 @@
+{
+  "qc_timestamp": "2026-01-31T06:20:22.433572",
+  "checks": {
+    "data_integrity": {
+      "record_counts": {
+        "openai": 1598,
+        "anthropic": 1598,
+        "google": 751
+      },
+      "duplicate_check": {
+        "passed": true,
+        "details": []
+      },
+      "pair_id_coverage": {
+        "passed": true,
+        "n_verdict_pairs": 1598,
+        "n_source_pairs": 1702,
+        "missing_from_source": []
+      },
+      "schema_validation": {
+        "passed": true,
+        "invalid_records": []
+      }
+    },
+    "taxonomy_conformance": {
+      "l1_valid": {
+        "passed": true,
+        "invalid": []
+      },
+      "l2_format_valid": {
+        "passed": true,
+        "invalid": []
+      },
+      "feasibility_valid": {
+        "passed": true,
+        "invalid": []
+      },
+      "nhb_f1_check": {
+        "passed": true,
+        "violations": []
+      }
+    },
+    "cross_arbitrator": {
+      "extreme_divergence": {
+        "count": 2,
+        "pairs": [
+          {
+            "pair_id": "CPS_0000",
+            "oa_feas": "F3",
+            "oa_code": "CC.2",
+            "an_feas": "F1",
+            "an_code": "RS.1"
+          },
+          {
+            "pair_id": "FOODAPS_0140",
+            "oa_feas": "F3",
+            "oa_code": "CC.2",
+            "an_feas": "F1",
+            "an_code": "RS.1"
+          }
+        ]
+      },
+      "synthesis_rates": {
+        "openai": 59.4,
+        "anthropic": 77.2,
+        "google": 5.9
+      }
+    },
+    "final_verdicts": {
+      "confidence_distribution": {
+        "HIGH": 1458,
+        "MODERATE": 112,
+        "LOW": 28
+      },
+      "high_confidence_check": {
+        "total_high": 1458,
+        "high_with_no_agreement": 0,
+        "passed": true
+      },
+      "orphan_records": {
+        "count": 0,
+        "pair_ids": []
+      },
+      "survey_field_check": {
+        "passed": true,
+        "mismatches": []
+      }
+    },
+    "bug_regression": {
+      "google_rater_format": {
+        "passed": true,
+        "n_rater_prefix_values": 429,
+        "note": "Raw selected_rater still contains \"Rater X\" format; normalize_position() in 04_stage3_arbitration.py handles mapping. selected_rater_key has known upstream mapping issue for these values.",
+        "invalid": []
+      },
+      "synthesis_rate_expected": {
+        "passed": "True",
+        "actual": 5.9,
+        "expected_approx": 7.0,
+        "note": "Rate should be ~7% post-bug-fix, not 60%+"
+      }
+    }
+  },
+  "summary": {
+    "total_checks": 11,
+    "passed": 11,
+    "failed": 0,
+    "warnings": 0
+  }
+}

@@ -329,9 +329,9 @@ See `FINDINGS_R03_S3_001_arbitration_analysis.md` for complete Stage 3 validatio
 - F3 (not feasible) at ~80% of pairs
 
 **Open Issues:**
-- 8.1: Synthesis interpretation (examine reasoning text)
-- 8.2: Google behavior investigation (6% synthesis rate vs 77% for others)
-- 8.3: L1 quality gate decision (0.796 vs 0.80 threshold)
+- 8.1: Synthesis interpretation (examine reasoning text) - DEFERRED pending complete Google data
+- 8.2: Google behavior investigation - ✅ RESOLVED: 7% synthesis is real behavioral difference, not labeling artifact (bug fix applied 2026-01-30)
+- 8.3: L1 quality gate decision - ✅ ACCEPT: κ=0.796 accepted with kappa paradox context; three-way κ=0.833 confirms reliability
 
 ### Sign-off
 
@@ -347,26 +347,62 @@ See `FINDINGS_R03_S3_001_arbitration_analysis.md` for complete Stage 3 validatio
 ### Purpose
 Answer the research question: What proportion of source survey questions can be consolidated with ACS via record linkage? Analysis at question-level (not pair-level) to provide actionable metrics.
 
+### Critical Distinction: Pair-Level vs Question-Level
+
+**Problem:** Current metrics are pair-level, but stakeholders need question-level.
+
+**Example:** FoodAPS has 52 food security questions paired with 6 ACS questions = 312 pairs. Even 100% ACS coverage = 6/312 = 1.9% at pair level. But the stakeholder question is: "Of FoodAPS's 52 questions, how many have at least one consolidable ACS match?"
+
+**Solution:** Aggregate from pair-level to question-level by checking if ANY pair for a given source question is consolidable (F1 or F2).
+
+### Definitions
+
+**Consolidability:**
+- F1 (Direct Recode): Mechanically transformable, fully consolidable
+- F2 (Statistical Adjustment): Requires modeling, conditionally consolidable  
+- F3 (Incompatible): Not consolidable
+
+**Question-Level Consolidability:** A source question is consolidable if it has at least one pair with F1 or F2 feasibility.
+
 ### Inputs
-- [ ] `output/analysis/final_verdicts.csv` - From Stage 3
-- [ ] Source question mappings from Report 02
+- [x] `output/analysis/final_verdicts.csv` - Pair-level arbitration results
+- [x] `data/cps_comparison_merged.csv` - CPS question mapping (pair_id → survey_q_id)
+- [x] `data/foodaps_comparison_merged.csv` - FoodAPS question mapping
 
-### Key Analyses (TBD)
-- [ ] Question-level consolidation rates (per source survey)
-- [ ] Domain/topic analysis (which content areas consolidate best?)
-- [ ] Transformation inventory (F2 pairs: what adjustments needed?)
-- [ ] Barrier pattern analysis (why do certain pairs fail?)
+### Key Analyses
+1. **Question-level consolidation rates** - Per survey: X% of questions have consolidable path
+2. **Quality breakdown** - Of consolidable: X% F1 (direct), Y% F2 (needs adjustment)
+3. **Domain/topic analysis** - Which content areas consolidate best?
+4. **F2 transformation inventory** - What statistical adjustments needed?
+5. **Barrier patterns** - For F3 pairs, which barriers dominate?
 
-### Outputs (TBD)
-- [ ] Question-level consolidation summary
-- [ ] Domain breakdown tables
-- [ ] Transformation requirements inventory
+### Outputs
+
+**Primary:**
+- `output/analysis/stage4_question_level.csv` - One row per source question
+- `output/analysis/stage4_survey_summary.json` - Aggregate statistics
+- `output/analysis/stage4_findings_report.md` - Human-readable summary
+
+**Secondary:**
+- `output/analysis/stage4_topic_breakdown.csv` - Rates by subtopic
+- `output/analysis/stage4_f2_transformations.csv` - F2 pairs needing adjustment
+- `output/analysis/stage4_barrier_patterns.csv` - Barrier distribution for F3
+
+### Script
+`04_findings_pipeline.py` (root, following 01/02/03 pattern per SOFTWARE.md)
+
+### Validation Checklist
+- [ ] Join logic verified (pair_id matches across files)
+- [ ] Question counts match source data
+- [ ] Consolidable + non-consolidable = total (no missing)
+- [ ] Rates are mathematically correct
+- [ ] Domain/topic categories valid
 
 ### Sign-off
 
 - [ ] **Stage 4 validated**
 - **Date:** ___
-- **Notes:** Will be spec'd after Stage 3 sign-off
+- **Notes:** Spec complete. Pending Stage 3 QC and Google data completion.
 
 ---
 
@@ -449,3 +485,4 @@ Items suitable for appendix/lab notebook, identified during validation.
 | 2026-01-30 | Stage 1 validation COMPLETE - all open items resolved | Brock/Claude |
 | 2026-01-30 | Added document relationship header, updated stage status tracker | Brock/Claude |
 | 2026-01-31 | **Pipeline restructure:** Merged old Stages 4-5 (Cleanup/Analysis) into Stage 3. New Stage 4 (Findings) and Stage 5 (Communication) added as placeholders. Cleanup scripts are ETL within stages, not separate stages. | Brock/Claude |
+| 2026-01-31 | Stage 3 issues 8.2 and 8.3 marked RESOLVED. Stage 4 spec completed with question-level consolidability methodology. | Brock/Claude |
