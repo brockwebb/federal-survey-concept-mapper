@@ -2,8 +2,8 @@
 
 ## Report 03: Harmonization Constraints
 
-**Version:** 3.1  
-**Last Updated:** 2026-01-30  
+**Version:** 4.0
+**Last Updated:** 2026-01-31
 **Author:** Brock Webb
 
 ---
@@ -15,9 +15,9 @@
 > |-------|------|---------|-------------|--------|
 > | 1 | Rating | Get rater classifications | `01_barrier_pipeline.py`, `clean_rater_data.py` | ✅ Validated |
 > | 2 | Agreement | Validate rater reliability | `analyze_barrier_results.py`, `confusion_matrix_analysis.py` | ✅ Validated |
-> | 3 | Arbitration | Adjudicate + validate arbitration quality | `02_arbitration_pipeline.py`, `clean_arbitration_data.py`, `analyze_arbitration_agreement.py` | 🟡 In Progress |
-> | 4 | Findings | Answer research question (question-level consolidation, domain analysis) | TBD | ⏳ Pending |
-> | 5 | Communication | Stakeholder outputs (visualizations, executive summary) | TBD | ⏳ Pending |
+> | 3 | Arbitration | Adjudicate + validate arbitration quality | `02_arbitration_pipeline.py`, `clean_arbitration_data.py`, `analyze_arbitration_agreement.py` | ✅ Validated |
+> | 4 | Findings | Question-level consolidability, scoring, best-match rollup | `04_findings_pipeline.py`, `stage4_scoring_bakeoff.py`, `stage4_best_match_rollup.py` | ✅ Complete |
+> | 5 | Deliverables | Expert review tables, stakeholder outputs | `05_deliverables_pipeline.py`, `build_expert_review_table.py` | ✅ Complete |
 >
 > **Note:** Data cleaning scripts (e.g., `clean_rater_data.py`, `clean_arbitration_data.py`) are ETL within stages, not separate stages.
 >
@@ -31,7 +31,9 @@
 | `01_barrier_pipeline.py` | Rate pairs (3 raters) | `python 01_barrier_pipeline.py --rater {openai,anthropic,google}` |
 | `02_arbitration_pipeline.py` | Arbitrate (3 arbitrators) | `python 02_arbitration_pipeline.py --arbitrator {anthropic,openai,google}` |
 | `03_analysis_pipeline.py` | Post-arbitration analysis | `python 03_analysis_pipeline.py` |
-| `run_pipeline.py` | Orchestrate full pipeline | `python run_pipeline.py` |
+| `04_findings_pipeline.py` | Question-level consolidability | `python 04_findings_pipeline.py` |
+| `05_deliverables_pipeline.py` | Scoring, rollup, expert tables | `python 05_deliverables_pipeline.py` |
+| `run_pipeline.py` | Orchestrate full pipeline | `python run_pipeline.py --stage all` |
 | `scripts/analyze_barrier_results.py` | Basic agreement stats | `python scripts/analyze_barrier_results.py` |
 | `scripts/confusion_matrix_analysis.py` | Confusion matrices | `python scripts/confusion_matrix_analysis.py` |
 | `scripts/compare_arbitrators.py` | Inter-arbitrator analysis | `python scripts/compare_arbitrators.py` |
@@ -39,6 +41,14 @@
 | `scripts/analyze_arbitration_agreement.py` | Arbitrator agreement/bias | `python scripts/analyze_arbitration_agreement.py` |
 | `scripts/post_arbitration_analysis.py` | Final visualizations | `python scripts/post_arbitration_analysis.py` |
 | `scripts/descriptive_stats.py` | Reproducible descriptive stats | `python scripts/descriptive_stats.py --stage all` |
+| `scripts/stage4_scoring_bakeoff.py` | 4-method scoring comparison | `python scripts/stage4_scoring_bakeoff.py` |
+| `scripts/stage4_best_match_rollup.py` | Best ACS match + triage quadrant | `python scripts/stage4_best_match_rollup.py` |
+| `scripts/build_expert_review_table.py` | Expert review deliverables | `python scripts/build_expert_review_table.py` |
+| `scripts/04_stage3_arbitration.py` | Stage 3 analysis + final verdicts | `python scripts/04_stage3_arbitration.py` |
+| `scripts/qc_stage3_arbitration.py` | Stage 3 QC (11 checks) | `python scripts/qc_stage3_arbitration.py` |
+| `scripts/clean_rater_data.py` | Dedupe/validate rater data | `python scripts/clean_rater_data.py` |
+| `scripts/extract_low_confidence_pairs.py` | Extract low-confidence pairs | `python scripts/extract_low_confidence_pairs.py` |
+| `scripts/fix_google_selected_rater_key.py` | One-off: fix Google rater key | `python scripts/fix_google_selected_rater_key.py` |
 
 ---
 
@@ -53,8 +63,10 @@ reports/03_harmonization_constraints/
 │
 ├── 01_barrier_pipeline.py      # Stage 1: Rating (renamed from barrier_coding_pipeline.py)
 ├── 02_arbitration_pipeline.py  # Stage 3: Arbitration (renamed from arbitration_pipeline.py)
-├── 03_analysis_pipeline.py     # Stages 4-6: Post-arbitration analysis orchestrator
-├── run_pipeline.py             # Full pipeline orchestrator
+├── 03_analysis_pipeline.py     # Post-arbitration analysis orchestrator
+├── 04_findings_pipeline.py     # Stage 4: Question-level consolidability findings
+├── 05_deliverables_pipeline.py # Stage 5: Scoring bake-off, rollup, expert tables
+├── run_pipeline.py             # Full pipeline orchestrator (all stages)
 ├── run_full_pipeline.py        # Legacy orchestrator (deprecated)
 │
 ├── scripts/
@@ -70,7 +82,16 @@ reports/03_harmonization_constraints/
 │   ├── compare_arbitrators.py           # Stage 5: Inter-arbitrator comparison
 │   ├── analyze_agreement.py             # Stage 2: Agreement statistics
 │   ├── post_arbitration_analysis.py     # Stage 6: Final visualizations
-│   └── descriptive_stats.py             # Reproducible descriptive statistics
+│   ├── descriptive_stats.py             # Reproducible descriptive statistics
+│   ├── 04_stage3_arbitration.py         # Stage 3: Agreement, bias, final verdicts
+│   ├── qc_stage3_arbitration.py         # Stage 3: QC validation (11 checks)
+│   ├── clean_rater_data.py              # Stage 1: Dedupe/validate/merge rater data
+│   ├── extract_low_confidence_pairs.py  # Ad-hoc: Extract low-confidence pairs
+│   ├── fix_google_selected_rater_key.py # One-off: Fix Google rater key bug
+│   ├── stage4_scoring_bakeoff.py        # Stage 5a: 4-method scoring comparison
+│   ├── stage4_best_match_rollup.py      # Stage 5b: Best match per question + triage
+│   ├── stage4_triage_assignment.py      # Pair-level triage (superseded by best_match_rollup)
+│   └── build_expert_review_table.py     # Stage 5c: Expert review deliverables
 │
 ├── docs/
 │   └── pipeline_diagram.md     # Pipeline data flow diagram (Mermaid)
@@ -81,7 +102,14 @@ reports/03_harmonization_constraints/
 │
 ├── output/
 │   ├── results/                # Raw JSONL outputs from raters/arbitrators
-│   ├── analysis/               # Merged CSVs, visualizations
+│   ├── analysis/               # Merged CSVs, stage4_*, expert_review_*
+│   │   ├── stage4_question_level.csv         # 380 questions with consolidability
+│   │   ├── stage4_bakeoff_scores.csv         # 1,598 pairs with 4 scoring methods
+│   │   ├── stage4_question_best_matches.csv  # Best ACS match + triage quadrant
+│   │   ├── expert_review_combined.csv        # 380-row stakeholder table
+│   │   ├── expert_review_cps.csv             # CPS subset (240)
+│   │   ├── expert_review_foodaps.csv         # FoodAPS subset (140)
+│   │   └── ...                               # Other merged CSVs
 │   └── checkpoints/            # Resume points for interrupted runs
 │
 └── output_archive_gpt4omini_error/  # Archived outputs from buggy run
@@ -200,11 +228,18 @@ python 02_arbitration_pipeline.py --arbitrator google
 
 **Stage:** Orchestrator (all stages)
 
+**Stages available:** `rate`, `arbitrate`, `analyze`, `findings`, `deliverables`, `all`
+
 **Usage:**
 ```bash
-python run_pipeline.py                    # Full pipeline
-python run_pipeline.py --stage rating     # Rating only
-python run_pipeline.py --stage arbitration # Arbitration only
+python run_pipeline.py                           # Full pipeline (all stages)
+python run_pipeline.py --stage rate              # Rating only
+python run_pipeline.py --stage arbitrate         # Arbitration only
+python run_pipeline.py --stage analyze           # Post-arbitration analysis
+python run_pipeline.py --stage findings          # Stage 4: Question-level findings
+python run_pipeline.py --stage deliverables      # Stage 5: Scoring, rollup, expert tables
+python run_pipeline.py --validate-config         # Check API keys and config
+python run_pipeline.py --dry-run --stage all     # Show plan without running
 ```
 
 **Note:** For large runs, recommend running raters/arbitrators individually to isolate failures.
@@ -467,6 +502,148 @@ python 03_analysis_pipeline.py --dry-run    # Show plan without executing
 
 ---
 
+### 14. `04_findings_pipeline.py`
+
+**Purpose:** Aggregate pair-level verdicts to question-level consolidability findings.
+
+**Stage:** 4 - Findings
+
+**Inputs:**
+- `output/analysis/final_verdicts.csv` — Stage 3 verdicts (1,598 pairs)
+- `data/cps_comparison_merged.csv` — CPS question mappings
+- `data/foodaps_comparison_merged.csv` — FoodAPS question mappings
+
+**Outputs:**
+- `output/analysis/stage4_question_level.csv` — 380 questions with consolidability flags
+- `output/analysis/stage4_survey_summary.json` — Aggregate rates (CPS 41.7%, FoodAPS 48.6%)
+- `output/analysis/stage4_findings_report.md` — Pipeline-generated summary
+- `output/analysis/stage4_topic_breakdown.csv` — By-topic consolidability
+- `output/analysis/stage4_f2_transformations.csv` — F2 pairs needing statistical adjustment
+- `output/analysis/stage4_barrier_patterns.csv` — F3 barrier distribution
+
+**Usage:**
+```bash
+python 04_findings_pipeline.py
+```
+
+---
+
+### 15. `05_deliverables_pipeline.py`
+
+**Purpose:** Orchestrate scoring, rollup, and expert review sub-stages.
+
+**Stage:** 5 - Deliverables
+
+**Sub-stages:**
+- 5a: Scoring bake-off (`scripts/stage4_scoring_bakeoff.py`)
+- 5b: Best-match rollup (`scripts/stage4_best_match_rollup.py`)
+- 5c: Expert review tables (`scripts/build_expert_review_table.py`)
+
+**Usage:**
+```bash
+python 05_deliverables_pipeline.py              # Run all sub-stages
+python 05_deliverables_pipeline.py --stage 5a   # Scoring only
+python 05_deliverables_pipeline.py --stage 5b   # Best-match only
+python 05_deliverables_pipeline.py --stage 5c   # Expert tables only
+python 05_deliverables_pipeline.py --dry-run    # Show plan without running
+```
+
+---
+
+### 16. `scripts/stage4_scoring_bakeoff.py`
+
+**Purpose:** Compare 4 scoring methods for ranking consolidable pairs.
+
+**Stage:** 5a - Scoring Bake-Off
+
+**Methods:**
+1. **Composite** — Feasibility × confidence weighted score
+2. **Entropy** — Shannon entropy (inverted: low entropy = high agreement stability)
+3. **Bayesian** — Beta-Binomial posterior with calibrated prior (0.197)
+4. **Borda** — Normalized point sum from vote rankings
+5. **Ensemble** — Average of all 4 normalized scores
+
+**Inputs:**
+- `output/analysis/final_verdicts.csv`
+- `output/analysis/barrier_coding_merged_3rater.csv`
+
+**Outputs:**
+- `output/analysis/stage4_bakeoff_scores.csv` — 1,598 pairs with all scoring columns
+- `output/analysis/stage4_bakeoff_correlations.csv` — Pairwise Spearman correlations
+- `output/analysis/stage4_bakeoff_report.md` — Summary report
+- `output/analysis/stage4_divergent_pairs.csv` — Pairs where methods disagree most
+- `output/analysis/stage4_score_distributions.json` — Distributional summaries
+
+**Key Finding:** Entropy is orthogonal to Borda/Bayesian (ρ≈0.08), motivating two-axis triage.
+
+**Usage:**
+```bash
+python scripts/stage4_scoring_bakeoff.py
+```
+
+---
+
+### 17. `scripts/stage4_best_match_rollup.py`
+
+**Purpose:** Identify best ACS match per source question and assign triage quadrants.
+
+**Stage:** 5b - Best-Match Rollup
+
+**Logic:**
+1. Join bakeoff scores with question mappings
+2. Per source question, select best match (F1 > F2 > F3, then highest Borda)
+3. Assign triage quadrant using two-axis framework:
+   - Q1: High Borda + High Entropy (confident consolidable)
+   - Q2: Low Borda + High Entropy (confident non-consolidable)
+   - Q3: High Borda + Low Entropy (edge case — expert review)
+   - Q4: Low Borda + Low Entropy (ambiguous — expert review)
+
+**Inputs:**
+- `output/analysis/stage4_bakeoff_scores.csv`
+- `output/analysis/stage4_question_level.csv`
+- `output/analysis/final_verdicts.csv`
+
+**Outputs:**
+- `output/analysis/stage4_question_best_matches.csv` — 380 rows with triage quadrants
+
+**Triage Distribution:** Q1=151, Q2=136, Q3=40, Q4=53 (93 needing expert review = 24.5%)
+
+**Usage:**
+```bash
+python scripts/stage4_best_match_rollup.py
+```
+
+---
+
+### 18. `scripts/build_expert_review_table.py`
+
+**Purpose:** Generate stakeholder-ready review tables with arbitrator reasoning.
+
+**Stage:** 5c - Expert Review Tables
+
+**Inputs:**
+- `output/analysis/stage4_question_best_matches.csv`
+- `output/analysis/final_verdicts.csv`
+- `output/analysis/arbitration_merged.csv`
+
+**Outputs:**
+- `output/analysis/expert_review_combined.csv` — All 380 questions (17 columns)
+- `output/analysis/expert_review_cps.csv` — CPS only (240 questions)
+- `output/analysis/expert_review_foodaps.csv` — FoodAPS only (140 questions)
+- `output/analysis/taxonomy_reference.md` — Barrier code definitions
+- `output/analysis/classification_distribution.md` — Distribution summary
+
+**Columns:** pair_id, source_survey, source_question_id, source_question_text, acs_question_id, acs_question_text, final_feasibility, final_barrier_code, confidence_level, score_borda, score_entropy, triage_quadrant, expert_review_needed, combined_reasoning, rater_agreement, topic, notes
+
+**Sort Order:** Q3/Q4 first (need review), then Q1, then Q2.
+
+**Usage:**
+```bash
+python scripts/build_expert_review_table.py
+```
+
+---
+
 ## Configuration
 
 ### `config.yaml`
@@ -560,13 +737,25 @@ python 02_arbitration_pipeline.py --arbitrator anthropic
 python 02_arbitration_pipeline.py --arbitrator openai
 python 02_arbitration_pipeline.py --arbitrator google
 
-# 4-6. Post-Arbitration Analysis (orchestrated)
+# 3b. Post-Arbitration Analysis (orchestrated)
 python 03_analysis_pipeline.py
-
 # Or run stages individually:
-# python scripts/clean_arbitration_data.py         # Stage 4
-# python scripts/analyze_arbitration_agreement.py  # Stage 5
-# python scripts/descriptive_stats.py --stage all  # Stage 6
+# python scripts/clean_arbitration_data.py         # Cleanup
+# python scripts/analyze_arbitration_agreement.py  # Agreement
+# python scripts/descriptive_stats.py --stage all  # Stats
+
+# 4. Findings Stage
+python 04_findings_pipeline.py
+
+# 5. Deliverables Stage (requires Stage 4 outputs)
+python 05_deliverables_pipeline.py
+# Or run sub-stages individually:
+# python scripts/stage4_scoring_bakeoff.py         # 5a: Scoring
+# python scripts/stage4_best_match_rollup.py       # 5b: Rollup
+# python scripts/build_expert_review_table.py      # 5c: Expert tables
+
+# Or run everything via orchestrator:
+# python run_pipeline.py --stage all
 ```
 
 ---
@@ -596,6 +785,8 @@ All long-running scripts checkpoint progress:
 | 1.0 | 2026-01-28 | Initial dual-model pipeline |
 | 2.0 | 2026-01-29 | Config-driven, three raters, vendor-specific fixes |
 | 3.0 | 2026-01-29 | Three arbitrators, blind masking, order randomization |
+| 3.1 | 2026-01-30 | Analysis scripts modularized, lib/ created |
+| 4.0 | 2026-01-31 | Stage 4 (findings) + Stage 5 (deliverables) complete, integrated into run_pipeline.py |
 
 ---
 
@@ -607,6 +798,10 @@ All long-running scripts checkpoint progress:
 | `taxonomy_v1.md` | Barrier taxonomy (v1.1 with NHB.0) |
 | `coding_procedure.md` | Detailed coding rules |
 | `docs/pipeline_diagram.md` | Pipeline data flow diagram (methodology communication) |
+| `docs/FINDINGS_R03_S4_consolidability_analysis.md` | Formal Stage 4 findings document |
+| `docs/stage4_research_framing.md` | Stage 4 research question framing |
+| `docs/stage4_ensemble_methodology.md` | Ensemble scoring theory (entropy, Bayesian, Borda) |
+| `docs/ANALYSIS_VV_PLAN.md` | Validation & verification plan and status |
 | `barrier_coding_pipeline_documentation.md` | Legacy pipeline docs (v1.0) |
 | `HANDOFF.md` | Session handoff notes |
 
@@ -617,4 +812,4 @@ All long-running scripts checkpoint progress:
 1. `scripts/compare_arbitrators.py` — May need updates for v3.0 output schema
 2. `scripts/post_arbitration_analysis.py` — Verify works with three-arbitrator outputs
 3. `scripts/analyze_agreement.py` — Verify not redundant with analyze_barrier_results.py
-4. Final merge script — Need script to combine three arbitrator outputs into consensus
+4. `scripts/stage4_triage_assignment.py` — Pair-level triage script, superseded by `stage4_best_match_rollup.py` (question-level). Kept for reference.

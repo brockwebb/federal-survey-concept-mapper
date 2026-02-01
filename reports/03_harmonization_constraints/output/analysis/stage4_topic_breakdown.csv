@@ -1,0 +1,49 @@
+survey,subtopic,total_pairs,consolidable_pairs,f1_pairs,f2_pairs,f3_pairs,consolidation_rate
+CPS,Commissions,1,1,1,0,0,1.0
+CPS,Race,9,9,5,4,0,1.0
+CPS,Age,6,5,2,3,1,0.8333
+CPS,Relationship,27,20,5,15,7,0.7407
+CPS,Occupation,13,7,6,1,6,0.5385
+CPS,Education,4,2,1,1,2,0.5
+CPS,Hispanic Origin,4,2,2,0,2,0.5
+CPS,Population,8,3,1,2,5,0.375
+CPS,Veterans,8,3,1,2,5,0.375
+CPS,Earnings,135,43,4,39,92,0.3185
+CPS,"Hours/Week, Weeks/Year",136,43,11,32,93,0.3162
+CPS,Marital Status,7,2,0,2,5,0.2857
+CPS,Employment Status,215,49,6,43,166,0.2279
+CPS,School Enrollment,9,2,0,2,7,0.2222
+CPS,Commute/Commuting,5,1,0,1,4,0.2
+CPS,Unemployment,26,1,0,1,25,0.0385
+CPS,Disability,339,5,2,3,334,0.0147
+CPS,Citizenship,2,0,0,0,2,0.0
+CPS,Foreign Born,5,0,0,0,5,0.0
+CPS,Household,52,0,0,0,52,0.0
+CPS,Labor Force,16,0,0,0,16,0.0
+CPS,Migration,1,0,0,0,1,0.0
+CPS,Moving,1,0,0,0,1,0.0
+CPS,Tenure (Own/Rent),1,0,0,0,1,0.0
+FOODAPS,Age,5,5,4,1,0,1.0
+FOODAPS,Labor Force,1,1,0,1,0,1.0
+FOODAPS,Race,6,6,0,6,0,1.0
+FOODAPS,Relationship,5,5,3,2,0,1.0
+FOODAPS,Tenure (Own/Rent),1,1,1,0,0,1.0
+FOODAPS,Vehicles,2,2,0,2,0,1.0
+FOODAPS,Unemployment,2,1,0,1,1,0.5
+FOODAPS,Food Stamps (SNAP),22,10,2,8,12,0.4545
+FOODAPS,Sex,5,2,2,0,3,0.4
+FOODAPS,School Enrollment,65,25,3,22,40,0.3846
+FOODAPS,Health Insurance,6,2,1,1,4,0.3333
+FOODAPS,"Hours/Week, Weeks/Year",56,18,0,18,38,0.3214
+FOODAPS,Employment Status,55,12,1,11,43,0.2182
+FOODAPS,Veterans,31,5,4,1,26,0.1613
+FOODAPS,Marital Status,7,1,1,0,6,0.1429
+FOODAPS,Commute/Commuting,55,7,0,7,48,0.1273
+FOODAPS,"Costs (Mortgage, Taxes, Insurance)",54,5,2,3,49,0.0926
+FOODAPS,Earnings,90,8,2,6,82,0.0889
+FOODAPS,Household,71,1,1,0,70,0.0141
+FOODAPS,Computer & Internet Use,12,0,0,0,12,0.0
+FOODAPS,Disability,12,0,0,0,12,0.0
+FOODAPS,Fertility,1,0,0,0,1,0.0
+FOODAPS,Population,2,0,0,0,2,0.0
+FOODAPS,Rental,2,0,0,0,2,0.0

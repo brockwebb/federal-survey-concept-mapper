@@ -1007,7 +1007,87 @@ Model output format varies even with identical prompts. Parsing logic must norma
 
 ---
 
-## Decision 016: [Template for Future Decisions]
+## Decision 016: Ensemble Scoring for Consolidability Ranking
+
+**Date:** 2026-01-31  
+**Status:** VALIDATED (bake-off complete, literature reviewed)
+
+### Context
+
+Stage 4 produces binary consolidability at question level (has F1/F2 path or not). Stakeholders need prioritized lists: which pairs to review first, where is human judgment most needed, how confident are we in each classification.
+
+A continuous score combining direction (F1/F2/F3) with confidence (agreement strength) enables ranking and threshold-based filtering.
+
+### Decision
+
+Implement four complementary scoring methods and ensemble them:
+
+1. **Composite Score** — Weighted product of feasibility × confidence. Simple, interpretable.
+2. **Entropy-Based Score** — Information-theoretic agreement measure. Low entropy = classifiers converged = stable classification.
+3. **Bayesian Posterior** — P(consolidable | votes) with Beta-Binomial model. Principled probability output.
+4. **Borda Count** — Rank aggregation from social choice theory. Non-parametric, robust.
+
+Ensemble score = mean of normalized method scores.
+
+### Rationale
+
+**Why multiple methods:**
+- Each captures different aspects (utility, uncertainty, probability, rank)
+- If methods agree → high confidence in ranking
+- If methods diverge → edge case identification (valuable signal, not noise)
+- Ensemble approach sacrifices precision for accuracy (wider confidence, less likely wrong)
+
+**Theoretical grounding for entropy approach:**
+
+LLMs are sophisticated probabilistic samplers. When we query 6 independent classifiers (3 raters + 3 arbitrators), we're sampling from the solution space multiple times. High agreement (low entropy) suggests the classification lives in a stable attractor — a deep basin in the energy landscape that multiple trajectories converge to. Low agreement suggests a flat region where small perturbations → different outputs.
+
+This framing connects to:
+- Statistical mechanics (entropy as disorder/uncertainty)
+- Energy-based models in neural networks
+- Ensemble methods and "wisdom of crowds"
+
+### Alternatives Considered
+
+1. **Single method only** — Rejected. No principled way to choose "best" without comparison.
+2. **Machine learning (logistic regression)** — Rejected. We don't have ground truth labels for supervised learning. Also adds complexity without clear benefit.
+3. **Expert-weighted methods** — Deferred. Could weight arbitrators by reliability, but we don't have validation data to estimate reliability.
+
+### Validation Plan
+
+1. Compute Spearman correlations between all method pairs
+2. Identify divergent pairs (high rank standard deviation)
+3. Test hypothesis that divergent pairs are edge cases (MODERATE/LOW confidence)
+4. Face validity check: do top-ranked pairs look consolidable?
+
+### Documentation
+
+Full methodology documented in `docs/stage4_ensemble_methodology.md` including:
+- Theoretical justification for each method
+- Formula specifications
+- Hypotheses to test
+- Citation queries for literature support
+
+### Outcome
+
+**Bake-off completed 2026-01-31.** Key findings:
+
+1. **Entropy is orthogonal to vote-count methods**
+   - Entropy ↔ Bayesian: ρ = 0.083
+   - Entropy ↔ Borda: ρ = 0.073
+
+2. **Bayesian ≈ Borda** (ρ = 0.909) — essentially redundant
+
+3. **Simple ensemble suboptimal** — redundant methods dominate
+
+4. **Operational decision:** Use two-axis triage (Borda for direction, Entropy for stability)
+
+**Sober assessment:** The math isn't novel (entropy ≠ vote-count by definition). What's empirically curious is the near-zero correlation — standard ensemble behavior predicts negative correlation. This may be task-specific (subjective classification without ground truth). Useful for our triage needs; not a theoretical discovery.
+
+See `docs/stage4_ensemble_methodology.md` (especially "Future Exploration" section) for research threads parked for later.
+
+---
+
+## Decision 017: [Template for Future Decisions]
 
 **Date:**
 **Status:**

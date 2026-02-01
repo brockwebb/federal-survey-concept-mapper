@@ -1,127 +1,185 @@
 # Report 03: Analysis Pipeline Data Flow
 
+*Updated: 2026-01-31 (v4.0)*
+
 ## Overview Diagram
 
 ```mermaid
 flowchart TD
-    subgraph Stage1["Stage 1: Dual-Model Classification"]
-        S1_IN["1,598 non-consolidatable pairs<br/>(from Report 02)"]
-        S1_PROC["Parallel classification<br/>Anthropic haiku + OpenAI gpt-4o-mini"]
-        S1_OUT["Initial barrier codes<br/>+ feasibility ratings"]
-        S1_IN --> S1_PROC --> S1_OUT
+    subgraph Input["Input Data"]
+        IN["1,598 question pairs<br/>(CPS 958 + FoodAPS 640)<br/>from Report 02"]
     end
 
-    subgraph Stage2["Stage 2: Disagreement Detection"]
-        S2_IN["Paired ratings"]
-        S2_PROC["Compare L1 barriers,<br/>full codes, feasibility"]
-        S2_OUT["Agreement set +<br/>Disagreement set"]
-        S2_IN --> S2_PROC --> S2_OUT
+    subgraph Stage1["Stage 1: Three-Model Rating"]
+        S1_PROC["3 raters classify each pair<br/>Anthropic haiku · OpenAI gpt-5-mini · Google gemini-3-flash"]
+        S1_CLEAN["clean_rater_data.py<br/>Dedupe, validate, merge"]
+        S1_OUT["barrier_coding_merged_3rater.csv<br/>3 ratings per pair"]
+        S1_PROC --> S1_CLEAN --> S1_OUT
     end
 
-    subgraph Stage3["Stage 3: Arbitration"]
-        S3_IN["Disagreement set"]
-        S3_PROC["Third model reviews<br/>(Claude opus / Google)"]
-        S3_OUT["Arbitrated codes +<br/>synthesis indicators"]
-        S3_IN --> S3_PROC --> S3_OUT
+    subgraph Stage2["Stage 2: Inter-Rater Agreement"]
+        S2_PROC["03_stage2_agreement.py<br/>03b_stage2_extended.py"]
+        S2_OUT["Agreement metrics<br/>κ = 0.845 feasibility<br/>Confusion matrices"]
+        S2_PROC --> S2_OUT
     end
 
-    subgraph Stage4["Stage 4: Ground Truth Construction"]
-        S4_IN["All ratings (2-3 per pair)"]
-        S4_PROC["Majority voting /<br/>consensus rules"]
-        S4_OUT["Final barrier<br/>classifications"]
-        S4_IN --> S4_PROC --> S4_OUT
+    subgraph Stage3["Stage 3: Three-Arbitrator Adjudication"]
+        S3_PROC["3 arbitrators review ALL pairs<br/>Anthropic opus · OpenAI gpt-5.2 · Google gemini-3-pro<br/>Blind masking + order randomization"]
+        S3_CLEAN["clean_arbitration_data.py<br/>Dedupe, validate, merge"]
+        S3_ANALYSIS["04_stage3_arbitration.py<br/>Agreement, bias, verdicts"]
+        S3_QC["qc_stage3_arbitration.py<br/>11-check QC validation"]
+        S3_OUT["final_verdicts.csv<br/>1,598 pairs with consensus classification"]
+        S3_PROC --> S3_CLEAN --> S3_ANALYSIS --> S3_QC --> S3_OUT
     end
 
-    subgraph Stage5["Stage 5: Statistical Validation"]
-        S5_IN["All ratings + ground truth"]
-        S5_PROC["Kappa, confusion matrices,<br/>agreement rates"]
-        S5_OUT["Reliability metrics"]
-        S5_IN --> S5_PROC --> S5_OUT
+    subgraph Stage4["Stage 4: Question-Level Findings"]
+        S4_PROC["04_findings_pipeline.py<br/>Pair → question aggregation"]
+        S4_OUT["stage4_question_level.csv<br/>380 questions<br/>CPS 41.7% · FoodAPS 48.6% consolidable"]
+        S4_PROC --> S4_OUT
     end
 
+    subgraph Stage5["Stage 5: Deliverables"]
+        S5A["5a: stage4_scoring_bakeoff.py<br/>Composite · Entropy · Bayesian · Borda"]
+        S5B["5b: stage4_best_match_rollup.py<br/>Best ACS match + triage quadrant"]
+        S5C["5c: build_expert_review_table.py<br/>Expert review tables"]
+        S5_OUT["expert_review_combined.csv<br/>380 rows, 17 columns<br/>Q1=151 · Q2=136 · Q3=40 · Q4=53"]
+        S5A --> S5B --> S5C --> S5_OUT
+    end
+
+    Input --> Stage1
     Stage1 --> Stage2
-    Stage2 --> Stage3
+    Stage1 --> Stage3
+    Stage2 -.->|"informs methodology<br/>(not a data dependency)"| Stage3
     Stage3 --> Stage4
     Stage4 --> Stage5
 ```
 
+## Pipeline Orchestration
+
+```mermaid
+flowchart LR
+    subgraph Orchestrators
+        RP["run_pipeline.py<br/>(all stages)"]
+        AP["03_analysis_pipeline.py<br/>(post-arbitration)"]
+        DP["05_deliverables_pipeline.py<br/>(5a → 5b → 5c)"]
+    end
+
+    RP --> |"--stage rate"| S1["01_barrier_pipeline.py"]
+    RP --> |"--stage arbitrate"| S3["02_arbitration_pipeline.py"]
+    RP --> |"--stage analyze"| AP
+    RP --> |"--stage findings"| S4["04_findings_pipeline.py"]
+    RP --> |"--stage deliverables"| DP
+```
+
 ## Stage Descriptions
 
-### Stage 1: Dual-Model Barrier Classification
+### Stage 1: Three-Model Barrier Classification
 
-**Input:** 1,598 question pairs identified as non-consolidatable in Report 02's ACS comparison analysis.
+**Script:** `01_barrier_pipeline.py`
 
-**Process:** Each pair is independently classified by two LLMs (Anthropic claude-haiku-4-5 and OpenAI gpt-4o-mini) using identical prompts. Models assign:
-- Primary harmonization barrier (6-category taxonomy with subcategories)
-- Feasibility rating (F1/F2/F3)
+**Input:** 1,598 question pairs from Report 02 (CPS-ACS and FoodAPS-ACS comparisons).
+
+**Process:** Each pair is independently classified by three LLMs using identical prompts and the v1.1 barrier taxonomy (7 L1 categories, 22 L2 subcodes). Models assign:
+- Primary harmonization barrier code (e.g., CC.1, TC.2, NHB.0)
+- Feasibility rating (F1: directly consolidable, F2: with transformation, F3: not consolidable)
 - Confidence score and reasoning
 
-**Output:** Two independent ratings per pair, enabling inter-rater reliability assessment.
+**Post-processing:** `clean_rater_data.py` deduplicates checkpoint restarts, validates schema, recodes null barriers to NHB.0, and merges into `barrier_coding_merged_3rater.csv`.
 
-**Rationale:** Dual-model approach provides built-in validation. Disagreements identify ambiguous cases requiring human-like judgment.
+**Output:** Three independent ratings per pair.
 
 ---
 
-### Stage 2: Disagreement Detection
+### Stage 2: Inter-Rater Agreement Analysis
 
-**Input:** Paired ratings from Stage 1.
+**Scripts:** `03_stage2_agreement.py`, `03b_stage2_extended.py`
 
-**Process:** Systematic comparison at multiple granularity levels:
-- L1 agreement: Do both raters assign same barrier category?
-- L2 agreement: Do both raters assign same full code (category + subcategory)?
-- Feasibility agreement: Do both raters assign same feasibility tier?
+**Input:** Merged rater results from Stage 1.
+
+**Process:** Compute inter-rater reliability at multiple levels:
+- Pairwise Cohen's Kappa (L1, full code, feasibility)
+- Three-way Fleiss' Kappa
+- Confusion matrices for systematic disagreement patterns
+- Per-rater distribution analysis
+
+**Output:** `stage2_agreement_metrics.json`, `stage2_agreement_report.md`, confusion matrices. Key result: feasibility κ = 0.845.
+
+**Supporting scripts:** `analyze_barrier_results.py`, `confusion_matrix_analysis.py`, `analyze_agreement.py`
+
+---
+
+### Stage 3: Three-Arbitrator Adjudication
+
+**Script:** `02_arbitration_pipeline.py`
+
+**Input:** Three rater outputs from Stage 1. All 1,598 pairs are arbitrated (not just disagreements).
+
+**Process:**
+1. Blind masking: Raters shown as "Rater A/B/C" (identity hidden from arbitrators)
+2. Order randomization: 50% fixed order, 50% randomized (position bias detection)
+3. Three arbitrators independently review each pair with full question text and all rater reasoning
+4. Post-processing: `clean_arbitration_data.py` deduplicates and merges
+5. Analysis: `04_stage3_arbitration.py` computes agreement, bias, and constructs final verdicts via majority vote
+6. QC: `qc_stage3_arbitration.py` runs 11 validation checks
+
+**Output:** `final_verdicts.csv` — 1,598 pairs with consensus feasibility, barrier code, and confidence level.
+
+**Supporting scripts:** `analyze_arbitration_agreement.py`, `compare_arbitrators.py`, `extract_low_confidence_pairs.py`
+
+---
+
+### Stage 4: Question-Level Consolidability Findings
+
+**Script:** `04_findings_pipeline.py`
+
+**Input:** `final_verdicts.csv` + question mappings from `data/`.
+
+**Process:**
+1. Join verdicts with question metadata (source survey, topic, question text)
+2. Aggregate pairs → questions: "Does this source question have ANY consolidable ACS match?"
+3. Compute per-survey consolidability rates
+4. Analyze by topic and barrier category
+5. Inventory F2 pairs needing statistical transformation
 
 **Output:**
-- Agreement set: Pairs where raters concur (high confidence)
-- Disagreement set: Pairs requiring arbitration
-
-**Rationale:** Disagreement patterns reveal systematic differences in model interpretation, informing taxonomy refinement.
-
----
-
-### Stage 3: Arbitration
-
-**Input:** Disagreement set from Stage 2.
-
-**Process:** Third model (Claude opus-4-5 or Google gemini-2.0-flash) reviews each disagreement with full context:
-- Original question pair
-- Both rater responses with reasoning
-- Instructions to either select one rater or synthesize a new classification
-
-**Output:**
-- Final barrier code for each arbitrated pair
-- Synthesis indicator (did arbitrator create new classification vs. select existing?)
-- Arbitrator reasoning
-
-**Rationale:** Arbitration resolves disagreements while preserving decision audit trail. Synthesis detection identifies cases where neither original rater captured the correct classification.
+- `stage4_question_level.csv` — 380 questions (240 CPS + 140 FoodAPS) with consolidability flags
+- `stage4_survey_summary.json` — CPS 41.7%, FoodAPS 48.6% consolidable
+- `stage4_findings_report.md`, `stage4_topic_breakdown.csv`, `stage4_f2_transformations.csv`, `stage4_barrier_patterns.csv`
 
 ---
 
-### Stage 4: Ground Truth Construction
+### Stage 5: Deliverables
 
-**Input:** All ratings (2-3 per pair depending on arbitration path).
+**Orchestrator:** `05_deliverables_pipeline.py`
 
-**Process:** Consensus rules applied:
-- 3-way agreement: Accept unanimous classification
-- 2-way agreement: Accept majority classification
-- No majority: Flag for manual review or accept arbitrator decision
+#### 5a: Scoring Bake-Off
+**Script:** `scripts/stage4_scoring_bakeoff.py`
 
-**Output:** Final barrier classification for each pair, serving as ground truth for validation.
+Compares 4 scoring methods for ranking consolidability confidence:
+- **Composite:** Feasibility × confidence weighted score
+- **Entropy:** Shannon entropy (inverted — low entropy = stable agreement)
+- **Bayesian:** Beta-Binomial posterior (calibrated prior = 0.197)
+- **Borda:** Normalized point sum from vote rankings
 
-**Rationale:** Ground truth enables calculation of per-model accuracy and systematic error patterns.
+Key finding: Entropy is orthogonal to vote-count methods (ρ ≈ 0.08), providing an independent axis.
 
----
+#### 5b: Best-Match Rollup
+**Script:** `scripts/stage4_best_match_rollup.py`
 
-### Stage 5: Statistical Validation
+Per source question, identifies the best ACS match (F1 > F2 > F3, then highest Borda). Assigns triage quadrant using two-axis framework:
 
-**Input:** All ratings plus constructed ground truth.
+| Quadrant | Borda | Entropy | Count | Action |
+|----------|-------|---------|-------|--------|
+| Q1 | High | High | 151 | Auto-accept (confident consolidable) |
+| Q2 | Low | High | 136 | Auto-reject (confident non-consolidable) |
+| Q3 | High | Low | 40 | Expert review (edge case) |
+| Q4 | Low | Low | 53 | Expert review (ambiguous) |
 
-**Process:** Standard inter-rater reliability metrics:
-- Cohen's Kappa (pairwise agreement)
-- Fleiss' Kappa (multi-rater agreement)
-- Confusion matrices (systematic misclassification patterns)
-- Agreement rates at L1 and L2 levels
+93 questions (24.5%) flagged for expert review.
 
-**Output:** Reliability metrics supporting methodology validity claims.
+#### 5c: Expert Review Tables
+**Script:** `scripts/build_expert_review_table.py`
 
-**Rationale:** Quantitative validation demonstrates that AI-assisted classification achieves acceptable reliability for survey methodology research.
+Generates stakeholder-ready tables with 17 columns including question text, classifications, scores, triage quadrant, and combined arbitrator reasoning. Sorted with Q3/Q4 first.
+
+**Output:** `expert_review_combined.csv`, `expert_review_cps.csv`, `expert_review_foodaps.csv`, `taxonomy_reference.md`, `classification_distribution.md`

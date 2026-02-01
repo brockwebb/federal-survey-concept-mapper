@@ -16,6 +16,7 @@ Usage:
 
 import os
 import sys
+import subprocess
 import argparse
 from pathlib import Path
 from typing import Dict, List, Optional
@@ -254,6 +255,50 @@ def run_analysis_stage(config: Dict, dry_run: bool = False) -> bool:
     return True
 
 
+def run_findings_stage(dry_run: bool = False) -> bool:
+    """Run Stage 4: Question-level consolidability findings."""
+    script = Path(__file__).parent / "04_findings_pipeline.py"
+
+    if dry_run:
+        print("[DRY RUN] Would run 04_findings_pipeline.py")
+        return True
+
+    if not script.exists():
+        print(f"ERROR: {script} not found.")
+        return False
+
+    print("\nRunning question-level consolidability analysis...")
+    result = subprocess.run([sys.executable, str(script)], cwd=str(Path(__file__).parent))
+    if result.returncode != 0:
+        print(f"ERROR: 04_findings_pipeline.py exited with code {result.returncode}")
+        return False
+
+    print("[OK] Findings analysis complete.")
+    return True
+
+
+def run_deliverables_stage(dry_run: bool = False) -> bool:
+    """Run Stage 5: Scoring, triage, and expert review deliverables."""
+    script = Path(__file__).parent / "05_deliverables_pipeline.py"
+
+    if dry_run:
+        print("[DRY RUN] Would run 05_deliverables_pipeline.py")
+        return True
+
+    if not script.exists():
+        print(f"ERROR: {script} not found.")
+        return False
+
+    print("\nRunning deliverables pipeline (scoring, triage, expert tables)...")
+    result = subprocess.run([sys.executable, str(script)], cwd=str(Path(__file__).parent))
+    if result.returncode != 0:
+        print(f"ERROR: 05_deliverables_pipeline.py exited with code {result.returncode}")
+        return False
+
+    print("[OK] Deliverables pipeline complete.")
+    return True
+
+
 def main():
     parser = argparse.ArgumentParser(
         description='Barrier Coding Pipeline Orchestrator v2.0',
@@ -270,7 +315,7 @@ Examples:
 
     parser.add_argument(
         '--stage', '-s',
-        choices=['rate', 'arbitrate', 'analyze', 'all'],
+        choices=['rate', 'arbitrate', 'analyze', 'findings', 'deliverables', 'all'],
         default='all',
         help='Pipeline stage to run (default: all)'
     )
@@ -362,6 +407,22 @@ Examples:
         print("STAGE: ANALYSIS")
         print("=" * 60)
         run_analysis_stage(config, args.dry_run)
+
+    if args.stage in ('findings', 'all') and success:
+        print("\n" + "=" * 60)
+        print("STAGE: FINDINGS")
+        print("=" * 60)
+        success = run_findings_stage(args.dry_run)
+        if not success and not args.dry_run:
+            sys.exit(1)
+
+    if args.stage in ('deliverables', 'all') and success:
+        print("\n" + "=" * 60)
+        print("STAGE: DELIVERABLES")
+        print("=" * 60)
+        success = run_deliverables_stage(args.dry_run)
+        if not success and not args.dry_run:
+            sys.exit(1)
 
     # Final summary
     print("\n" + "=" * 60)
