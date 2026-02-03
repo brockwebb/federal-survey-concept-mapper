@@ -20,19 +20,45 @@ Brief — already covered in Reports 1-2
 
 ## Why It Matters
 
-- **Burden reduction:** Fewer redundant questions for respondents
-- **Data interoperability:** Enable cross-survey analysis
-- **Resource efficiency:** Focus expert review where it matters
+**For Respondents:**
+- Declining survey response rates + increasing costs
+- Overlapping questions create unnecessary burden
+- Consolidation reduces redundant questions
+
+**For Federal Agencies:**
+- **Expert time is the scarce resource**, not expert capability
+- Traditional approach: weeks/months of manual comparison
+- **Our goal:** Multiply expert effectiveness → faster burden reduction
+
+::: {.notes}
+Dual value proposition: (1) Burden reduction for respondents (2) Expert efficiency to achieve it faster
+:::
 
 ---
 
 ## The Challenge
 
 ::: {.incremental}
-- Determining consolidation requires expert judgment
-- Traditional approach: weeks/months of manual review
-- Our approach: AI-assisted triage → human experts on highest-ROI decisions
+- Determining consolidation **requires expert judgment** (this doesn't change)
+- Traditional timeline: **weeks to months** for manual review of 1,598 pairs
+- Our approach: **AI handles pre-work, experts focus on highest-value decisions**
+- Result: Structured expert review table ready for validation
 :::
+
+---
+
+## What Experts Get
+
+| What AI Provides | What Experts Do |
+|------------------|-----------------|
+| Pre-screened pairs with best matches | Validate match quality |
+| Initial F1/F2/F3 classification | Confirm or override |
+| Documented reasoning | Understand and critique |
+| Confidence scores | Prioritize review effort |
+| Barrier codes | Verify diagnosis |
+
+**76%** classified with high confidence → spot-check
+**24%** flagged for expert review → where judgment adds most value
 
 ---
 
@@ -107,6 +133,23 @@ Different profiles = documented finding, not noise
 - **κ = 0.845** — high inter-rater agreement
 - Voting, entropy, Borda scoring
 - Arbitration resolves disagreements → final verdict
+
+---
+
+## Evaluating AI for Survey Harmonization
+
+**Construct Validity:**
+- Three different architectures (OpenAI, Anthropic, Google) with different training
+- **High convergence (κ = 0.845)** = task is well-defined, not model artifact
+
+**Documented Behavioral Differences:**
+- Google: Deferential, conservative (low synthesis)
+- OpenAI: Moderate synthesis, slight self-bias
+- Anthropic: High synthesis, neutral
+
+**Cost/Quality Design:** Fast models rate → flagship models arbitrate
+
+**Result:** Reusable methodology for future survey harmonization work
 
 ---
 
@@ -189,30 +232,44 @@ Right: Top 10 barrier sub-codes for F3 pairs - CC.1 (concept definition) dominat
 
 ![](images/expert_review_load.png){width=80%}
 
-- **76%** auto-processed with high confidence
-- **24%** (93 questions) routed to expert review
-- AI handles grunt work; humans judge edge cases
+- **76%** (287 questions) classified with high confidence → spot-check recommended
+- **24%** (93 questions) flagged for expert review → **where human judgment adds most value**
+- **This IS the efficiency gain:** Experts review 93 questions, not 1,598 pairs
+
+::: {.notes}
+Traditional: Expert reviews all 1,598 pairs = weeks/months
+AI-assisted: Expert reviews 93 flagged questions = focused effort on highest-ROI decisions
+:::
 
 ---
 
 ## Deliverables
 
-| Output | Description |
-|--------|-------------|
-| 168 consolidable mappings | Specific question-to-question recommendations |
-| 212 non-consolidable | With barrier codes explaining why |
-| 93 for expert review | Flagged for human judgment |
-| Full methodology | Reproducible for additional surveys |
+**Primary:** Expert review table (`expert_review_combined.csv`)
+- 380 questions with best ACS matches
+- F1/F2/F3 classifications with confidence scores
+- Barrier codes and reasoning for each decision
+- Triage routing (Q1-Q4) for prioritized review
+
+**Breakdown:**
+- 168 consolidable (F1+F2) — ready for validation
+- 212 non-consolidable (F3) — with documented barriers
+- 93 flagged for expert review — highest-value decisions
+- Full methodology — reproducible for additional surveys
 
 ---
 
 ## What This Proves
 
 ::: {.incremental}
-- AI-assisted methods accelerate traditionally labor-intensive analysis
-- **Days instead of weeks/months**
-- Human oversight preserved throughout
-- Expert judgment focused on highest-ROI decisions
+- **< 1 day processing time** for work that traditionally takes weeks/months
+- **Expert efficiency → faster burden reduction** — identify consolidation opportunities at scale
+- **Human oversight preserved throughout** — AI provides initial judgment, experts validate
+- **The table is the deliverable** — 380 questions, pre-analyzed, ready for expert review
+:::
+
+::: {.notes}
+AI doesn't replace burden reduction goals — it accelerates the path to achieving them through expert efficiency
 :::
 
 ---
@@ -227,10 +284,21 @@ Right: Top 10 barrier sub-codes for F3 pairs - CC.1 (concept definition) dominat
 
 ## Summary
 
-- **~44% consolidation potential** identified
+**Findings:**
+- **~44% consolidation potential** — 168 questions could reduce respondent burden
 - **97% of failures** = construct differences (not fixable)
-- **Reproducible methodology** for future survey harmonization
-- **Proof of concept:** AI + human expertise scales this work
+
+**Method:**
+- **< 1 day processing** for work that traditionally takes weeks/months
+- **AI provides initial judgment, experts provide final validation**
+- **The real product:** 380 questions, pre-analyzed, ready for expert review
+
+**Impact:** Accelerates path to burden reduction through expert efficiency
+
+::: {.notes}
+Expert review table: output/analysis/expert_review_combined.csv
+Dual value: (1) Identifies burden reduction opportunities (2) Efficiently, preserving expert judgment
+:::
 
 ---
 

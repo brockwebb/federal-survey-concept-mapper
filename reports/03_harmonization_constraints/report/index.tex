@@ -1,0 +1,3991 @@
+% Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  letterpaper,
+]{report}
+\usepackage{xcolor}
+\usepackage[lmargin=1in,rmargin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{5}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{241,243,245}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.40,0.45,0.13}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\ExtensionTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.28,0.35,0.67}{#1}}
+\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.46,0.62}{#1}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.07,0.07,0.07}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+
+
+
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+
+
+\makeatletter
+\@ifpackageloaded{bookmark}{}{\usepackage{bookmark}}
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Survey Question Harmonization Constraints},
+  pdfauthor={Brock Webb},
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+
+\title{Survey Question Harmonization Constraints}
+\usepackage{etoolbox}
+\makeatletter
+\providecommand{\subtitle}[1]{% add subtitle to \maketitle
+  \apptocmd{\@title}{\par {\large #1 \par}}{}{}
+}
+\makeatother
+\subtitle{AI-Assisted Analysis of Federal Survey Consolidation
+Potential}
+\author{Brock Webb}
+\date{2026-02-02}
+\begin{document}
+\maketitle
+
+\renewcommand*\contentsname{Table of contents}
+{
+\hypersetup{linkcolor=}
+\setcounter{tocdepth}{2}
+\tableofcontents
+}
+
+\bookmarksetup{startatroot}
+
+\chapter{Survey Question Harmonization
+Constraints}\label{survey-question-harmonization-constraints}
+
+AI-Assisted Analysis of Federal Survey Consolidation Potential
+
+\hfill\break
+
+\bookmarksetup{startatroot}
+
+\chapter*{Preface}\label{preface}
+\addcontentsline{toc}{chapter}{Preface}
+
+\markboth{Preface}{Preface}
+
+This report presents findings from an AI-assisted analysis of federal
+survey question consolidation potential. Using a multi-model ensemble
+approach, we analyzed 1,598 question pairs from the Current Population
+Survey (CPS) and FoodAPS against the American Community Survey (ACS) to
+determine:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{What proportion of survey questions can be consolidated?}
+\item
+  \textbf{What barriers prevent consolidation?}
+\item
+  \textbf{Can AI-assisted methods accelerate this traditionally
+  labor-intensive analysis?}
+\end{enumerate}
+
+\section{Key Findings}\label{key-findings}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textasciitilde44\% consolidation potential} identified across
+  380 questions
+\item
+  \textbf{97\% of failures} stem from construct/concept differences (not
+  fixable)
+\item
+  \textbf{AI handles 76\%} of classifications with high confidence,
+  routing only 24\% to expert review
+\item
+  \textbf{Reproducible methodology} applicable to other survey
+  harmonization efforts
+\end{itemize}
+
+\section{Report Structure}\label{report-structure}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Chapters 1-3}: Background, research context, and harmonization
+  framework
+\item
+  \textbf{Chapters 4-6}: Methodology, results, and discussion
+\item
+  \textbf{Appendices}: Technical details, taxonomy definitions, and
+  expert review tables
+\end{itemize}
+
+\section{Data Availability}\label{data-availability}
+
+All analysis code, intermediate outputs, and expert review tables are
+available in the project repository:
+\texttt{reports/03\_harmonization\_constraints/}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Note:} This is Report 03 of a multi-phase project analyzing
+federal survey questions. Reports 01 (concept classification) and 02
+(pairwise comparison setup) established the foundation for this
+harmonization analysis.
+
+\bookmarksetup{startatroot}
+
+\chapter*{Executive Summary}\label{executive-summary}
+\addcontentsline{toc}{chapter}{Executive Summary}
+
+\markboth{Executive Summary}{Executive Summary}
+
+\section*{Problem}\label{problem}
+\addcontentsline{toc}{section}{Problem}
+
+\markright{Problem}
+
+Federal surveys ask overlapping questions across agencies, creating
+respondent burden and data integration challenges. Determining which
+questions can be harmonized requires expert judgment and traditionally
+takes weeks or months of manual review.
+
+\section*{Approach}\label{approach}
+\addcontentsline{toc}{section}{Approach}
+
+\markright{Approach}
+
+We developed an AI-assisted pairwise analysis system using: -
+\textbf{Multi-model ensemble} (OpenAI, Anthropic, Google) for initial
+classification - \textbf{Arbitration pattern} to resolve disagreements -
+\textbf{Question-level rollup} using two-axis triage (Borda direction ×
+Entropy stability) - \textbf{1,598 question pairs} analyzed (CPS-ACS,
+FoodAPS-ACS)
+
+\section*{Key Results}\label{key-results}
+\addcontentsline{toc}{section}{Key Results}
+
+\markright{Key Results}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{CPS}: 41.7\% consolidable (100 of 240 questions)
+\item
+  \textbf{FoodAPS}: 48.6\% consolidable (68 of 140 questions)
+\item
+  \textbf{Combined}: \textasciitilde44\% consolidation potential
+\end{itemize}
+
+\textbf{Barrier Analysis:} - 97\% of failures = Construct/Concept (CC)
+differences - CC.1 (concept definition) accounts for 70\% of all
+incompatible pairs - Not fixable without re-fielding questions
+
+\textbf{Expert Review Load:} - 76\% auto-processed with high confidence
+- 24\% (93 questions) routed to expert review - AI handles grunt work;
+humans judge edge cases
+
+\section*{Deliverables}\label{deliverables}
+\addcontentsline{toc}{section}{Deliverables}
+
+\markright{Deliverables}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{168 consolidable mappings} with specific question-to-question
+  recommendations
+\item
+  \textbf{212 non-consolidable questions} with barrier codes explaining
+  why
+\item
+  \textbf{93 questions flagged for expert review} (uncertain or
+  contested cases)
+\item
+  \textbf{Reproducible methodology} applicable to additional federal
+  surveys
+\end{enumerate}
+
+\section*{Implications}\label{implications}
+\addcontentsline{toc}{section}{Implications}
+
+\markright{Implications}
+
+This work demonstrates that AI-assisted methods can: -
+\textbf{Accelerate} survey harmonization analysis (days instead of
+weeks) - \textbf{Preserve} human oversight and expert judgment -
+\textbf{Focus} expert effort on highest-ROI decisions - \textbf{Scale}
+to analyze entire federal survey ecosystem
+
+\section*{Next Steps}\label{next-steps}
+\addcontentsline{toc}{section}{Next Steps}
+
+\markright{Next Steps}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Expert validation of recommendations
+\item
+  Expansion to additional federal surveys
+\item
+  Application to survey editing and imputation workflows
+\end{enumerate}
+
+\bookmarksetup{startatroot}
+
+\chapter{Introduction}\label{introduction}
+
+\section{Problem Statement}\label{problem-statement}
+
+The federal statistical system conducts dozens of surveys annually, many
+asking overlapping questions about demographics, economics, health, and
+social conditions. This redundancy creates:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Respondent burden}: Same households answering similar
+  questions across multiple surveys
+\item
+  \textbf{Data integration challenges}: Incompatible question wording
+  prevents cross-survey analysis
+\item
+  \textbf{Resource inefficiency}: Agencies duplicating effort in
+  questionnaire design and data collection
+\end{enumerate}
+
+Determining which questions can be consolidated or harmonized requires
+deep subject-matter expertise and traditionally involves weeks or months
+of manual review by survey methodologists.
+
+\section{Research Questions}\label{research-questions}
+
+This report addresses three core questions:
+
+\subsection{RQ1: Consolidation
+Potential}\label{rq1-consolidation-potential}
+
+\textbf{What proportion of federal survey questions can be consolidated
+with existing ACS questions?}
+
+\begin{itemize}
+\tightlist
+\item
+  Hypothesis: Significant consolidation potential exists but requires
+  systematic identification
+\item
+  Approach: Exhaustive pairwise comparison of CPS/FoodAPS questions
+  against ACS
+\item
+  Outcome: Quantify F1 (direct), F2 (with adjustment), F3 (incompatible)
+  rates
+\end{itemize}
+
+\subsection{RQ2: Barrier Taxonomy}\label{rq2-barrier-taxonomy}
+
+\textbf{What barriers prevent survey question consolidation?}
+
+\begin{itemize}
+\tightlist
+\item
+  Hypothesis: Most barriers stem from construct differences, not
+  operational issues
+\item
+  Approach: Classify failures using DataSHaPER/Maelstrom harmonization
+  framework
+\item
+  Outcome: Identify primary barrier types and their prevalence
+\end{itemize}
+
+\subsection{RQ3: AI-Assisted Methods}\label{rq3-ai-assisted-methods}
+
+\textbf{Can AI-assisted methods accelerate this traditionally
+labor-intensive analysis?}
+
+\begin{itemize}
+\tightlist
+\item
+  Hypothesis: LLM ensemble can handle routine classifications, reserving
+  expert judgment for edge cases
+\item
+  Approach: Multi-model rating + arbitration + two-axis triage
+\item
+  Outcome: Measure agreement rates, expert review load reduction
+\end{itemize}
+
+\section{Scope}\label{scope}
+
+\subsection{Surveys Analyzed}\label{surveys-analyzed}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{American Community Survey (ACS)}: Target survey with
+  comprehensive demographic/economic questions
+\item
+  \textbf{Current Population Survey (CPS)}: Employment-focused survey
+  (240 questions)
+\item
+  \textbf{FoodAPS}: Food security survey (140 questions)
+\end{itemize}
+
+Total: \textbf{380 unique source questions} compared against ACS,
+yielding \textbf{1,598 question pairs}.
+
+\subsection{Framework Applied}\label{framework-applied}
+
+We adopt the DataSHaPER/Maelstrom retrospective harmonization framework:
+- \textbf{F1}: Direct recode (mechanically transformable) - \textbf{F2}:
+Statistical adjustment (requires modeling/bridging) - \textbf{F3}:
+Incompatible (fundamental barriers prevent harmonization)
+
+\subsection{What This Report Is NOT}\label{what-this-report-is-not}
+
+\begin{itemize}
+\tightlist
+\item
+  Not a recommendation to eliminate any surveys (policy decision)
+\item
+  Not a claim that all F1/F2 pairs should be consolidated (requires
+  stakeholder input)
+\item
+  Not a replacement for expert judgment (AI assists, experts decide)
+\end{itemize}
+
+\section{Prior Work}\label{prior-work}
+
+This is \textbf{Report 03} of a multi-phase project:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Report 01}: Concept classification of 7,400+ questions using
+  LLM ensemble
+\item
+  \textbf{Report 02}: Pairwise comparison setup and sampling strategy
+\item
+  \textbf{Report 03} (this report): Harmonization constraints and
+  consolidation analysis
+\end{itemize}
+
+Each report builds on the previous, with validated outputs feeding
+forward.
+
+\section{Report Structure}\label{report-structure-1}
+
+The remainder of this report is organized as:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Chapter 2 (Background)}: Survey harmonization frameworks and
+  prior work
+\item
+  \textbf{Chapter 3 (Methodology)}: 5-stage pipeline from rating to
+  deliverables
+\item
+  \textbf{Chapter 4 (Results)}: Consolidation rates, barrier analysis,
+  agreement statistics
+\item
+  \textbf{Chapter 5 (Discussion)}: Interpretation, limitations,
+  implications
+\item
+  \textbf{Chapter 6 (Conclusion)}: Summary and future directions
+\item
+  \textbf{Appendices}: Taxonomy definitions, methodology decisions,
+  expert review tables
+\end{itemize}
+
+\section{Key Contributions}\label{key-contributions}
+
+This work contributes:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Empirical findings} on federal survey consolidation potential
+  (\textasciitilde44\%)
+\item
+  \textbf{Barrier taxonomy application} showing CC dominance (97\% of
+  failures)
+\item
+  \textbf{Operational triage framework} (two-axis: Borda direction ×
+  Entropy stability)
+\item
+  \textbf{Reproducible methodology} for AI-assisted survey harmonization
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Note}: All data, code, and intermediate outputs are available in
+\texttt{reports/03\_harmonization\_constraints/} for replication and
+extension.
+
+\bookmarksetup{startatroot}
+
+\chapter{Background}\label{background}
+
+\section{Survey Harmonization
+Frameworks}\label{survey-harmonization-frameworks}
+
+\subsection{DataSHaPER/Maelstrom
+Framework}\label{datashapermaelstrom-framework}
+
+The DataSHaPER (Data Schema and Harmonization Platform for
+Epidemiological Research) framework, developed by Fortier et al.~(2011,
+2017), provides a structured approach to retrospective data
+harmonization. This framework classifies variable pairs into three
+feasibility categories:
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1250}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2708}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3542}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Code
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Feasibility
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Definition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Action Required
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{F1} & \textbf{Direct recode} & Variables are mechanically
+transformable through simple recoding, collapsing categories, or unit
+conversion & Simple data transformation \\
+\textbf{F2} & \textbf{Statistical adjustment} & Variables require
+modeling, imputation, or bridging studies to make comparable &
+Statistical harmonization methods \\
+\textbf{F3} & \textbf{Incompatible} & Variables measure fundamentally
+different constructs and cannot be harmonized without re-fielding & No
+harmonization possible \\
+\end{longtable}
+
+\textbf{Source}: Fortier et al.~(2011) applied this framework across 53
+epidemiological studies and found that 38\% of variables could be
+harmonized through direct or statistical methods.
+
+\subsection{Barrier Taxonomy}\label{barrier-taxonomy}
+
+When variables are classified as F3 (incompatible), the framework
+identifies specific barrier types:
+
+\subsubsection{Construct/Concept (CC)}\label{constructconcept-cc}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{CC.1}: Concept definition differences (e.g., ``employment''
+  including/excluding unpaid work)
+\item
+  \textbf{CC.2}: Operationalization differences (different behavioral
+  indicators for same concept)
+\item
+  \textbf{CC.3}: Boundary conditions (different thresholds or cutoffs)
+\item
+  \textbf{CC.4}: Scope inclusions (different components counted)
+\end{itemize}
+
+\subsubsection{Temporal Constraints (TC)}\label{temporal-constraints-tc}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{TC.1}: Reference period length (7-day vs 12-month recall)
+\item
+  \textbf{TC.2}: Temporal framing (point-in-time vs habitual vs
+  retrospective)
+\item
+  \textbf{TC.3}: Calendar alignment (fixed vs rolling reference periods)
+\end{itemize}
+
+\subsubsection{Response Scale (RS)}\label{response-scale-rs}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{RS.1}: Scale type (binary vs Likert vs continuous)
+\item
+  \textbf{RS.2}: Category structure (different number/boundaries)
+\item
+  \textbf{RS.3}: Anchoring/labels (different verbal anchors)
+\item
+  \textbf{RS.4}: Numeric vs verbal scales
+\end{itemize}
+
+\subsubsection{Population/Coverage (PC)}\label{populationcoverage-pc}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{PC.1}: Universe definition (target population differs)
+\item
+  \textbf{PC.2}: Frame exclusions (different sampling exclusions)
+\item
+  \textbf{PC.3}: Age bounds (different age eligibility)
+\item
+  \textbf{PC.4}: Geographic scope (different coverage)
+\end{itemize}
+
+\subsubsection{Mode/Context (MC)}\label{modecontext-mc}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{MC.1}: Interview mode (CATI vs web vs in-person)
+\item
+  \textbf{MC.2}: Question routing (different skip patterns)
+\item
+  \textbf{MC.3}: Contextual priming (question order effects)
+\item
+  \textbf{MC.4}: Proxy response rules
+\end{itemize}
+
+\subsubsection{Processing/Metadata (PM)}\label{processingmetadata-pm}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{PM.1}: Coding schemes (different classification systems)
+\item
+  \textbf{PM.2}: Derived variables (different construction algorithms)
+\item
+  \textbf{PM.3}: Documentation gaps (insufficient metadata)
+\end{itemize}
+
+\textbf{See Appendix A} for complete taxonomy definitions with examples.
+
+\section{Related Literature}\label{related-literature}
+
+\subsection{Survey Data Harmonization}\label{survey-data-harmonization}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Wolf et al.~(2016)}: Harmonizing survey questions between
+  cultures and over time
+\item
+  \textbf{Saris \& Gallhofer (2014)}: Design, evaluation, and analysis
+  of questionnaires for survey research
+\item
+  \textbf{Slomczynski \& Tomescu-Dubrow (2018)}: Basic principles of
+  survey data recycling
+\end{itemize}
+
+\subsection{AI-Assisted Survey
+Analysis}\label{ai-assisted-survey-analysis}
+
+\section{Prior Work: Reports 01-02}\label{prior-work-reports-01-02}
+
+\subsection{Report 01: Concept
+Classification}\label{report-01-concept-classification}
+
+\begin{itemize}
+\tightlist
+\item
+  Mapped 7,400+ survey questions to Census Bureau taxonomy
+\item
+  Used LLM ensemble (Claude Haiku + GPT-4o-mini) with arbitration
+\item
+  Achieved 99.5\% categorization success rate
+\item
+  Cohen's κ = 0.842 (almost perfect agreement)
+\end{itemize}
+
+\subsection{Report 02: Pairwise Comparison
+Setup}\label{report-02-pairwise-comparison-setup}
+
+\begin{itemize}
+\tightlist
+\item
+  Identified 1,598 question pairs for harmonization analysis
+\item
+  Selected CPS and FoodAPS as representative source surveys
+\item
+  Developed sampling strategy based on concept categories
+\item
+  Established pair-level comparison methodology
+\end{itemize}
+
+\subsection{Building Forward}\label{building-forward}
+
+Report 03 (this report) takes the validated pairwise comparisons from
+Report 02 and: 1. Classifies each pair using harmonization framework
+(F1/F2/F3) 2. Identifies barrier codes for F3 pairs 3. Rolls up
+pair-level results to question-level consolidability 4. Generates expert
+review tables for stakeholder use
+
+\section{Census Bureau Context}\label{census-bureau-context}
+
+The Census Bureau conducts multiple surveys covering demographics,
+economics, housing, and social conditions: - \textbf{ACS}: Comprehensive
+demographic/economic data, \textasciitilde3.5M households annually -
+\textbf{CPS}: Labor force statistics, \textasciitilde60K households
+monthly - \textbf{SIPP}: Household dynamics and program participation -
+\textbf{Others}: American Housing Survey, Survey of Income and Program
+Participation, etc.
+
+Harmonization across these surveys would enable: - Cross-survey data
+integration - Reduced respondent burden through shared questions -
+Improved data quality through consistent measurement - Resource
+efficiency in questionnaire design
+
+\section{Research Gap}\label{research-gap}
+
+While survey harmonization frameworks exist (DataSHaPER, SDR
+methodology), \textbf{no prior work has}: 1. Applied these frameworks
+systematically to federal survey questions at scale 2. Used AI-assisted
+methods to accelerate the classification process 3. Quantified
+consolidation potential across major federal surveys 4. Developed
+operational triage frameworks for expert review prioritization
+
+This report addresses these gaps.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Key Takeaway}: Survey harmonization is well-established in
+epidemiology and international survey research, but has not been
+systematically applied to the U.S. federal survey ecosystem. This report
+demonstrates that AI-assisted methods can scale this analysis.
+
+\bookmarksetup{startatroot}
+
+\chapter{Methodology}\label{methodology}
+
+\section{Overview}\label{overview}
+
+We developed a 5-stage pipeline for AI-assisted survey harmonization
+analysis:
+
+\begin{verbatim}
+Stage 1: Rating (3-model ensemble)
+   ↓
+Stage 2: Agreement Analysis (inter-rater reliability)
+   ↓
+Stage 3: Arbitration (disagreement resolution)
+   ↓
+Stage 4: Question-Level Rollup (best-match + triage)
+   ↓
+Stage 5: Deliverables (expert review tables)
+\end{verbatim}
+
+All code is available in
+\texttt{reports/03\_harmonization\_constraints/scripts/}.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Stage 1: Rating}\label{stage-1-rating}
+
+\subsection{Objective}\label{objective}
+
+Classify 1,598 question pairs using harmonization framework (F1/F2/F3 +
+barrier codes).
+
+\subsection{Multi-Model Ensemble}\label{multi-model-ensemble}
+
+We employed three frontier LLMs as independent raters:
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2059}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2647}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.5294}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Model
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Version
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Behavior Profile
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{OpenAI} & gpt-4o-mini & Moderate synthesis, slight
+self-consistency bias \\
+\textbf{Anthropic} & claude-3-5-haiku-20241022 & High synthesis,
+neutral \\
+\textbf{Google} & gemini-2.0-flash-exp & Deferential, conservative \\
+\end{longtable}
+
+\textbf{Why three models?} - Reduces single-model bias - Different
+training data and architectures - Behavioral diversity improves coverage
+
+\subsection{Prompt Design}\label{prompt-design}
+
+Each model received: 1. \textbf{Harmonization framework definitions}
+(F1/F2/F3) 2. \textbf{Barrier taxonomy} (CC, TC, RS, PC, MC, PM) 3.
+\textbf{Question pair} (source + target text) 4. \textbf{Task}: Classify
+feasibility + provide reasoning
+
+\textbf{Output format} (structured JSON):
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{\{}
+  \DataTypeTok{"feasibility"}\FunctionTok{:} \StringTok{"F1|F2|F3"}\FunctionTok{,}
+  \DataTypeTok{"barrier\_code"}\FunctionTok{:} \StringTok{"CC.1|TC.2|..."} \ErrorTok{(if} \ErrorTok{F3)}\FunctionTok{,}
+  \DataTypeTok{"confidence"}\FunctionTok{:} \StringTok{"HIGH|MODERATE|LOW"}\FunctionTok{,}
+  \DataTypeTok{"reasoning"}\FunctionTok{:} \StringTok{"Explanation..."}
+\FunctionTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Execution}\label{execution}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Parallel processing}: 6 workers per model
+\item
+  \textbf{Batch size}: 10 question pairs per API call
+\item
+  \textbf{Error handling}: Exponential backoff for rate limits
+\item
+  \textbf{Checkpointing}: Resume capability for interrupted runs
+\item
+  \textbf{Output}:
+  \texttt{output/results/stage1\_\{model\}\_results.jsonl}
+\end{itemize}
+
+\subsection{Data Quality}\label{data-quality}
+
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+Metric & OpenAI & Anthropic & Google \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Pairs rated} & 1,598 & 1,598 & 751 (47\%) \\
+\textbf{Success rate} & 100\% & 100\% & 47\% \\
+\textbf{Avg confidence} & 0.89 & 0.91 & 0.87 \\
+\end{longtable}
+
+\textbf{Note}: Google rate-limited at 751 pairs. Remaining analysis uses
+OpenAI-Anthropic two-way comparison with Google as validation subset.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Stage 2: Agreement Analysis}\label{stage-2-agreement-analysis}
+
+\subsection{Objective}\label{objective-1}
+
+Quantify inter-rater reliability and identify disagreements for
+arbitration.
+
+\subsection{Metrics Calculated}\label{metrics-calculated}
+
+\subsubsection{Cohen's Kappa (Pairwise)}\label{cohens-kappa-pairwise}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{OpenAI-Anthropic}: κ = 0.845 (almost perfect)
+\item
+  \textbf{OpenAI-Google}: κ = 0.796 (substantial)
+\item
+  \textbf{Anthropic-Google}: κ = 0.833 (almost perfect)
+\end{itemize}
+
+\subsubsection{Fleiss' Kappa (Three-Way)}\label{fleiss-kappa-three-way}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{All three models} (751 pairs with Google): κ = 0.833
+\end{itemize}
+
+\textbf{Interpretation}: High agreement validates that harmonization
+judgments are consistent across models, even with different
+architectures and training data.
+
+\subsection{Agreement Patterns}\label{agreement-patterns}
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Level & OpenAI-Anthropic & Description \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Topic (L1)} & 91.2\% & High-level feasibility \\
+\textbf{Subtopic (L2)} & 84.5\% & Barrier category \\
+\textbf{Full code} & 78.9\% & Complete barrier sub-code \\
+\end{longtable}
+
+\textbf{Finding}: Models agree more on broad feasibility than specific
+barrier codes, consistent with hierarchical classification difficulty.
+
+\subsection{Disagreement
+Identification}\label{disagreement-identification}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Pairs needing arbitration}: 339 (21.2\% of 1,598)
+\item
+  \textbf{Criteria}: OpenAI ≠ Anthropic on feasibility or barrier code
+\item
+  \textbf{Output}: \texttt{output/analysis/arbitration\_candidates.csv}
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Stage 3: Arbitration}\label{stage-3-arbitration}
+
+\subsection{Objective}\label{objective-2}
+
+Resolve disagreements through higher-capability model arbitration.
+
+\subsection{Arbitration Models}\label{arbitration-models}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3182}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4091}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2727}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Model
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Version
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Role
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{OpenAI} & gpt-4o & Arbitrator (stronger than rater) \\
+\textbf{Anthropic} & claude-3-5-sonnet-20241022 & Arbitrator \\
+\textbf{Google} & gemini-2.0-flash-thinking-exp & Arbitrator
+(experimental reasoning) \\
+\end{longtable}
+
+\subsection{Arbitration Prompt}\label{arbitration-prompt}
+
+Arbitrators received: 1. \textbf{Source and target question text} 2.
+\textbf{Initial ratings} from 2-3 raters (with reasoning) 3.
+\textbf{Disagreement summary} 4. \textbf{Task}: Provide final verdict
+with detailed justification
+
+\subsection{Voting Logic}\label{voting-logic}
+
+When arbitrators disagree, final verdict determined by: 1.
+\textbf{Majority vote} (if 2+ agree) 2. \textbf{Borda count} (ranked
+preference if no majority) 3. \textbf{Entropy check} (flag high
+disagreement for expert review)
+
+\subsection{Arbitration Results}\label{arbitration-results}
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule\noalign{}
+Metric & Value \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Pairs arbitrated} & 339 \\
+\textbf{Arbitrator agreement} & 87.6\% \\
+\textbf{Confidence distribution} & HIGH: 68\%, MODERATE: 24\%, LOW:
+8\% \\
+\end{longtable}
+
+\textbf{Quality check} (11 validation tests): ✅ All passed
+
+\subsection{Behavioral Findings}\label{behavioral-findings}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{OpenAI}: Tends toward F2 when uncertain (optimistic about
+  statistical adjustment)
+\item
+  \textbf{Anthropic}: Balanced, detailed reasoning
+\item
+  \textbf{Google}: Conservative, often defers to initial raters
+\end{itemize}
+
+\textbf{See}:
+\texttt{docs/FINDINGS\_R03\_S3\_001\_arbitration\_analysis.md} for
+detailed behavioral analysis.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Stage 4: Question-Level
+Rollup}\label{stage-4-question-level-rollup}
+
+\subsection{Objective}\label{objective-3}
+
+Convert 1,598 pair-level results to 380 question-level consolidability
+assessments with triage.
+
+\subsection{Challenge: Pair-Level
+Inflation}\label{challenge-pair-level-inflation}
+
+Each of 380 source questions was compared against multiple ACS
+questions: - \textbf{Average}: 4.2 comparisons per question -
+\textbf{Range}: 1-12 comparisons per question - \textbf{Problem}: One F1
+match makes a question consolidable, even if 11 other comparisons failed
+
+\textbf{Solution}: Best-match rollup + two-axis triage.
+
+\subsection{Best-Match Selection}\label{best-match-selection}
+
+For each source question: 1. Identify all pairs involving that question
+2. Select pair with highest consolidability: - F1 \textgreater{} F2
+\textgreater{} F3 (feasibility hierarchy) - Within same feasibility,
+highest Borda score 3. Output: One best match per question
+
+\textbf{Result}: 380 question-level records with best ACS match.
+
+\subsection{Scoring Methods (Ensemble
+Approach)}\label{scoring-methods-ensemble-approach}
+
+We computed four complementary scores for each pair:
+
+\subsubsection{1. Composite Score
+(Baseline)}\label{composite-score-baseline}
+
+\begin{verbatim}
+score = {
+  1.0 if unanimous F1/F2,
+  0.5 if majority F1/F2,
+  0.0 if unanimous F3,
+  NA otherwise
+}
+\end{verbatim}
+
+\subsubsection{2. Entropy Score
+(Stability)}\label{entropy-score-stability}
+
+\begin{verbatim}
+H = -Σ p(x) log₂ p(x)
+normalized to [0, 1]
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Low entropy = high agreement (stable)
+\item
+  High entropy = disagreement (unstable)
+\end{itemize}
+
+\subsubsection{3. Bayesian Score
+(Probabilistic)}\label{bayesian-score-probabilistic}
+
+\begin{verbatim}
+P(consolidable | ratings) = (positives + α) / (total + α + β)
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Incorporates prior beliefs
+\item
+  Shrinks toward population mean
+\end{itemize}
+
+\subsubsection{4. Borda Count (Direction)}\label{borda-count-direction}
+
+\begin{verbatim}
+Borda = Σ ranks / max_possible_ranks
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  F1 = 2 points, F2 = 1 point, F3 = 0 points
+\item
+  Captures direction of ensemble
+\end{itemize}
+
+\subsection{Two-Axis Triage Framework}\label{two-axis-triage-framework}
+
+\textbf{Purpose}: Separate ``what's the answer?'' (Borda) from ``how
+much did they argue?'' (Entropy).
+
+\textbf{Thresholds}: Median split on question-level best-match scores -
+Borda median: 0.167 - Entropy median: 0.330
+
+\textbf{Why question-level medians?} - Pair-level distribution dominated
+by unanimous F3 pairs (median ≈ 0) - Question-level reflects actual
+decision space for triage - N=380 questions, not N=1,598 pairs
+
+\textbf{Quadrant Definitions}:
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1400}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1800}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.3200}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1600}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Quadrant
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Borda
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Entropy
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Interpretation
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Action
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Q1} & High & High & Confident consolidable & Auto-accept,
+spot-check \\
+\textbf{Q2} & Low & High & Confident non-consolidable & Auto-reject, low
+priority \\
+\textbf{Q3} & High & Low & Uncertain accept (leaning yes but contested)
+& \textbf{Expert review priority} \\
+\textbf{Q4} & Low & Low & Uncertain reject (genuinely ambiguous) &
+Expert review secondary \\
+\end{longtable}
+
+\textbf{Rationale}: - Q1 (High Borda, High Entropy): Models agree it's
+consolidable → trust - Q2 (Low Borda, High Entropy): Models agree it's
+not consolidable → trust - Q3 (High Borda, Low Entropy): Leaning yes but
+unstable → expert validate - Q4 (Low Borda, Low Entropy): Unclear
+direction → expert clarify
+
+\subsection{Triage Assignment Results}\label{triage-assignment-results}
+
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+Quadrant & Count & \% & Description \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Q1 & 151 & 39.7\% & Auto-accept (confident consolidable) \\
+Q2 & 136 & 35.8\% & Auto-reject (confident non-consolidable) \\
+Q3 & 40 & 10.5\% & Expert review (uncertain accept) \\
+Q4 & 53 & 13.9\% & Expert review (uncertain reject) \\
+\end{longtable}
+
+\textbf{Expert review load}: 24.5\% (93 of 380 questions)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Stage 5: Deliverables}\label{stage-5-deliverables}
+
+\subsection{Objective}\label{objective-4}
+
+Generate stakeholder-ready outputs for expert review and implementation.
+
+\subsection{Expert Review Tables}\label{expert-review-tables}
+
+Three CSV files generated: 1. \textbf{\texttt{expert\_review\_cps.csv}}
+(240 CPS questions) 2. \textbf{\texttt{expert\_review\_foodaps.csv}}
+(140 FoodAPS questions) 3.
+\textbf{\texttt{expert\_review\_combined.csv}} (380 questions, all
+surveys)
+
+\textbf{Columns included}: - Source question text - Best ACS match text
+- Feasibility (F1/F2/F3) - Barrier code (if F3) - Borda score
+(direction) - Entropy score (stability) - Triage quadrant (Q1-Q4) -
+Confidence flags - Reasoning summary
+
+\subsection{Visualizations}\label{visualizations}
+
+All figures saved to \texttt{output/visuals/}: - \textbf{Consolidation
+rates} by survey (bar chart) - \textbf{Barrier distribution} (pie chart)
+- \textbf{Expert review load} (stacked bar) - \textbf{Triage quadrant
+heatmap} - \textbf{Harmonization code distribution} (pair-level) -
+\textbf{Question consolidation distribution} (question-level by survey)
+
+\subsection{Summary Statistics}\label{summary-statistics}
+
+\texttt{output/analysis/stage4\_survey\_summary.json}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{\{}
+  \DataTypeTok{"CPS"}\FunctionTok{:} \FunctionTok{\{}
+    \DataTypeTok{"total"}\FunctionTok{:} \DecValTok{240}\FunctionTok{,}
+    \DataTypeTok{"consolidable"}\FunctionTok{:} \DecValTok{100}\FunctionTok{,}
+    \DataTypeTok{"rate"}\FunctionTok{:} \FloatTok{0.417}
+  \FunctionTok{\},}
+  \DataTypeTok{"FoodAPS"}\FunctionTok{:} \FunctionTok{\{}
+    \DataTypeTok{"total"}\FunctionTok{:} \DecValTok{140}\FunctionTok{,}
+    \DataTypeTok{"consolidable"}\FunctionTok{:} \DecValTok{68}\FunctionTok{,}
+    \DataTypeTok{"rate"}\FunctionTok{:} \FloatTok{0.486}
+  \FunctionTok{\}}
+\FunctionTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Quality Assurance}\label{quality-assurance}
+
+\subsection{Validation Checks}\label{validation-checks}
+
+All pipeline stages include automated validation: 1. \textbf{Data
+completeness}: No missing required fields 2. \textbf{Schema compliance}:
+Output matches expected format 3. \textbf{Logical consistency}: No F1/F2
+pairs with barrier codes 4. \textbf{Agreement metrics}: Kappa
+\textgreater{} 0.75 threshold 5. \textbf{Rollup integrity}: Every
+question has exactly one best match
+
+\textbf{See}: \texttt{docs/ANALYSIS\_VV\_PLAN.md} for complete V\&V
+checklist.
+
+\subsection{Reproducibility}\label{reproducibility}
+
+All analysis scripts are deterministic and produce identical results
+when re-run: - Fixed random seeds - Checkpoint/resume capability -
+Version-controlled prompts - Documented model versions
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Methodological Limitations}\label{methodological-limitations}
+
+\subsection{1. Model Selection}\label{model-selection}
+
+\begin{itemize}
+\tightlist
+\item
+  Only three frontier models tested
+\item
+  Results may differ with other models
+\item
+  Behavioral profiles may change with model updates
+\end{itemize}
+
+\subsection{2. Prompt Engineering}\label{prompt-engineering}
+
+\begin{itemize}
+\tightlist
+\item
+  Structured prompts guide but don't guarantee consistency
+\item
+  Different prompt phrasings could yield different results
+\item
+  No systematic prompt optimization performed
+\end{itemize}
+
+\subsection{3. Barrier Taxonomy
+Application}\label{barrier-taxonomy-application}
+
+\begin{itemize}
+\tightlist
+\item
+  Models apply human-designed taxonomy, not discovered patterns
+\item
+  Taxonomy completeness not validated empirically
+\item
+  Some pairs may have multiple applicable codes (we select primary)
+\end{itemize}
+
+\subsection{4. Triage Framework}\label{triage-framework}
+
+\begin{itemize}
+\tightlist
+\item
+  Two-axis approach is operational heuristic, not theoretical optimum
+\item
+  Threshold selection (median split) is pragmatic, not optimized
+\item
+  Quadrant interpretation requires domain context
+\end{itemize}
+
+\subsection{5. Scope}\label{scope-1}
+
+\begin{itemize}
+\tightlist
+\item
+  Only CPS and FoodAPS analyzed (not full federal survey ecosystem)
+\item
+  Only ACS as target (other surveys could serve as consolidation
+  targets)
+\item
+  English-language surveys only
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Next Steps After This
+Report}\label{next-steps-after-this-report}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Expert validation}: Subject-matter experts review Q3/Q4
+  questions
+\item
+  \textbf{Consolidation pilots}: Test F1 recommendations in practice
+\item
+  \textbf{Expansion}: Apply methodology to additional survey pairs
+\item
+  \textbf{Refinement}: Incorporate expert feedback to improve
+  classification
+\end{enumerate}
+
+\textbf{Key principle}: AI assists, experts decide. This methodology
+accelerates analysis but does not replace human judgment.
+
+\bookmarksetup{startatroot}
+
+\chapter{Results}\label{results}
+
+\section{Consolidation Rates}\label{consolidation-rates}
+
+\subsection{Overall Question-Level
+Results}\label{overall-question-level-results}
+
+\begin{figure}[H]
+
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{sections/figures/consolidation_rates.png}}
+
+}
+
+\caption{Consolidation Rates by Survey}
+
+\end{figure}%
+
+\begin{longtable}[]{@{}lllllll@{}}
+\toprule\noalign{}
+Survey & Total Questions & F1 & F2 & F3 & Consolidable & Rate \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{CPS} & 240 & 37 & 63 & 140 & 100 & \textbf{41.7\%} \\
+\textbf{FoodAPS} & 140 & 23 & 45 & 72 & 68 & \textbf{48.6\%} \\
+\textbf{Combined} & 380 & 60 & 108 & 212 & 168 & \textbf{44.2\%} \\
+\end{longtable}
+
+\textbf{Key Finding}: Nearly half of surveyed questions have at least
+one consolidable ACS match.
+
+\subsection{Consolidation Type
+Breakdown}\label{consolidation-type-breakdown}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{15.8\%} (60/380) are F1 - directly consolidable with simple
+  recoding
+\item
+  \textbf{28.4\%} (108/380) are F2 - consolidable with statistical
+  adjustment
+\item
+  \textbf{55.8\%} (212/380) are F3 - fundamentally incompatible
+\end{itemize}
+
+\textbf{Interpretation}: - F1 questions are ``low-hanging fruit'' -
+immediate consolidation candidates - F2 questions require modeling but
+remain viable - F3 questions need deeper examination of barriers
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Barrier Analysis}\label{barrier-analysis}
+
+\subsection{Pair-Level Distribution}\label{pair-level-distribution}
+
+\begin{figure}[H]
+
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{sections/figures/barrier_distribution.png}}
+
+}
+
+\caption{Barrier Distribution (1,598 pairs)}
+
+\end{figure}%
+
+Out of 1,283 F3 pairs (incompatible):
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3696}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1522}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1957}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2826}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Barrier Category
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Count
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\% of F3
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Description
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{CC} (Construct/Concept) & 1,238 & \textbf{96.5\%} & Fundamental
+concept differences \\
+\textbf{TC} (Temporal) & 24 & 1.9\% & Reference period or timing
+issues \\
+\textbf{RS} (Response Scale) & 13 & 1.0\% & Scale type or category
+differences \\
+\textbf{PC} (Population) & 6 & 0.5\% & Universe or coverage
+differences \\
+\textbf{MC} (Mode/Context) & 1 & 0.1\% & Interview mode or routing \\
+\textbf{PM} (Processing) & 1 & 0.1\% & Coding or metadata issues \\
+\end{longtable}
+
+\textbf{Key Finding}: 97\% of failures stem from construct/concept (CC)
+barriers, not operational issues.
+
+\subsection{Construct Barrier
+Sub-Codes}\label{construct-barrier-sub-codes}
+
+Among CC barriers (1,238 pairs):
+
+\begin{longtable}[]{@{}lllll@{}}
+\toprule\noalign{}
+Sub-Code & Count & \% of CC & \% of F3 & Description \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{CC.1} & 900 & 72.7\% & 70.1\% & Concept definition
+differences \\
+\textbf{CC.2} & 250 & 20.2\% & 19.5\% & Operationalization
+differences \\
+\textbf{CC.4} & 88 & 7.1\% & 6.9\% & Scope inclusion differences \\
+\end{longtable}
+
+\textbf{Interpretation}: - \textbf{CC.1 dominance}: Most incompatible
+pairs measure fundamentally different constructs - \textbf{Not fixable}:
+These are not measurement errors or survey design choices - they reflect
+different research goals - \textbf{Example}: ``Do you want to work
+full-time?'' (intention) vs ``Did you work last week?'' (behavior)
+
+\subsection{Question-Level Barrier
+Distribution}\label{question-level-barrier-distribution}
+
+\begin{figure}[H]
+
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{sections/figures/question_consolidation_distribution.png}}
+
+}
+
+\caption{Question Consolidation by Survey}
+
+\end{figure}%
+
+At the question level (212 F3 questions):
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Barrier & Count & \% of F3 Questions \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{CC.1} & 163 & \textbf{76.9\%} \\
+\textbf{CC.2} & 38 & 17.9\% \\
+\textbf{CC.4} & 4 & 1.9\% \\
+\textbf{Other} & 7 & 3.3\% \\
+\end{longtable}
+
+\textbf{Key Finding}: CC.1 concentration is even higher at question
+level (76.9\% vs 70.1\%), indicating that questions without any
+consolidable path tend to have fundamental concept mismatches.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Agreement Statistics}\label{agreement-statistics}
+
+\subsection{Inter-Rater Reliability}\label{inter-rater-reliability}
+
+\begin{figure}[H]
+
+{\centering \includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{sections/figures/agreement_heatmap.png}
+
+}
+
+\caption{Agreement Heatmap}
+
+\end{figure}%
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Model Pair & Cohen's κ & Interpretation \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{OpenAI - Anthropic} & 0.845 & Almost perfect \\
+\textbf{OpenAI - Google} & 0.796 & Substantial \\
+\textbf{Anthropic - Google} & 0.833 & Almost perfect \\
+\end{longtable}
+
+\textbf{Fleiss' κ (three-way)}: 0.833 (almost perfect)
+
+\subsection{Agreement by Classification
+Level}\label{agreement-by-classification-level}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4286}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3714}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Level
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Agreement Rate
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Description
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Feasibility (F1/F2/F3)} & 84.5\% & High-level harmonization
+potential \\
+\textbf{Barrier L1 (CC/TC/RS)} & 91.2\% & Barrier category \\
+\textbf{Barrier L2 (CC.1/CC.2)} & 78.9\% & Specific barrier sub-code \\
+\end{longtable}
+
+\textbf{Interpretation}: Models show strong agreement on broad
+feasibility judgments, with expected variation on granular barrier
+codes.
+
+\subsection{Confidence Correlation}\label{confidence-correlation}
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Confidence Level & Pair Count & Agreement Rate \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{HIGH} & 1,089 (68.1\%) & 91.3\% \\
+\textbf{MODERATE} & 389 (24.3\%) & 76.8\% \\
+\textbf{LOW} & 120 (7.5\%) & 54.2\% \\
+\end{longtable}
+
+\textbf{Finding}: Model-reported confidence predicts agreement.
+High-confidence pairs show 91\% agreement, validating confidence as a
+triage signal.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Expert Review Load}\label{expert-review-load}
+
+\begin{figure}[H]
+
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{sections/figures/expert_review_load.png}}
+
+}
+
+\caption{Expert Review Load Distribution}
+
+\end{figure}%
+
+\subsection{Triage Quadrant
+Distribution}\label{triage-quadrant-distribution}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1750}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.0750}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.3000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Quadrant
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Count
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\%
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Confidence
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Action
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Q1} (High Borda, High Entropy) & 151 & 39.7\% & Confident
+consolidable & Auto-accept \\
+\textbf{Q2} (Low Borda, High Entropy) & 136 & 35.8\% & Confident
+non-consolidable & Auto-reject \\
+\textbf{Q3} (High Borda, Low Entropy) & 40 & 10.5\% & Uncertain accept &
+\textbf{Expert priority} \\
+\textbf{Q4} (Low Borda, Low Entropy) & 53 & 13.9\% & Uncertain reject &
+Expert secondary \\
+\end{longtable}
+
+\textbf{Expert Review Load}: 93 questions (24.5\%) flagged for human
+review
+
+\subsection{Load Reduction}\label{load-reduction}
+
+Traditional approach: \textbf{380 questions × 100\%} = 380 expert
+reviews
+
+AI-assisted approach: - \textbf{287 auto-processed} (75.5\%) -
+spot-check only - \textbf{93 expert reviews} (24.5\%) - full human
+judgment
+
+\textbf{Efficiency gain}: 75.5\% reduction in expert review workload,
+focusing effort on genuinely uncertain cases.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Example Cases}\label{example-cases}
+
+\subsection{High Consolidability (F1)}\label{high-consolidability-f1}
+
+\textbf{Source (CPS)}: ``How many hours per week do you USUALLY work at
+your main job?''
+
+\textbf{Target (ACS)}: ``What is your best estimate of the number of
+hours per week you usually work at this rate?''
+
+\textbf{Verdict}: F1 (directly consolidable) - Same construct (usual
+work hours) - Same reference period (typical week) - Same measurement
+approach - Minor wording differences immaterial
+
+\textbf{Scores}: Borda=1.0, Entropy=1.0 → Q1 (confident consolidable)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Medium Consolidability
+(F2)}\label{medium-consolidability-f2}
+
+\textbf{Source (CPS)}: ``EXCLUDING overtime, tips, commissions - what is
+your hourly rate of pay?''
+
+\textbf{Target (ACS)}: ``What is your hourly rate of pay?''
+
+\textbf{Verdict}: F2 (consolidable with transformation) - Same construct
+(hourly wage) - Different scope (CPS excludes components, ACS includes
+all) - Statistical adjustment needed: Scale CPS response to account for
+excluded components - Requires bridging study or imputation model
+
+\textbf{Barrier}: CC.4 (scope inclusion differences)
+
+\textbf{Scores}: Borda=0.5, Entropy=0.67 → Q1 (confident consolidable
+with adjustment)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Not Consolidable (F3)}\label{not-consolidable-f3}
+
+\textbf{Source (CPS)}: ``Do you WANT to work full-time (35+ hours per
+week)?''
+
+\textbf{Target (ACS)}: ``Did this person WORK for pay last week?''
+
+\textbf{Verdict}: F3 (incompatible) - Different constructs: Intention vs
+behavior - CPS measures labor force preferences - ACS measures actual
+work status - No statistical transformation can bridge this conceptual
+gap
+
+\textbf{Barrier}: CC.1 (concept definition differences)
+
+\textbf{Scores}: Borda=0.0, Entropy=0.33 → Q2 (confident
+non-consolidable)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Topic-Level Breakdown}\label{topic-level-breakdown}
+
+\subsection{Consolidability by Question
+Topic}\label{consolidability-by-question-topic}
+
+\begin{longtable}[]{@{}lllll@{}}
+\toprule\noalign{}
+Topic & Total & Consolidable & Rate & Notes \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Demographics & 45 & 38 & 84.4\% & High overlap (age, sex, race) \\
+Economics & 128 & 62 & 48.4\% & Moderate (income definitions vary) \\
+Employment & 147 & 52 & 35.4\% & Low (CPS specialization) \\
+Health & 32 & 12 & 37.5\% & Low (different health constructs) \\
+Social & 28 & 4 & 14.3\% & Very low (specialized topics) \\
+\end{longtable}
+
+\textbf{Interpretation}: - Demographics have high consolidation
+potential (expected - standard measures) - Employment shows low
+consolidation despite CPS-ACS overlap (CPS is specialized) - Social
+topics have very low consolidation (specialized constructs)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Survey-Specific Insights}\label{survey-specific-insights}
+
+\subsection{CPS (Current Population
+Survey)}\label{cps-current-population-survey}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Focus}: Labor force statistics
+\item
+  \textbf{Consolidation rate}: 41.7\% (100/240)
+\item
+  \textbf{Challenge}: Many employment questions are CPS-specific (job
+  search, work preferences, multiple job holders)
+\item
+  \textbf{Opportunity}: Demographics and basic employment status
+  consolidable
+\end{itemize}
+
+\subsection{FoodAPS (Food Acquisition and Purchase
+Survey)}\label{foodaps-food-acquisition-and-purchase-survey}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Focus}: Food security and purchasing behavior
+\item
+  \textbf{Consolidation rate}: 48.6\% (68/140)
+\item
+  \textbf{Challenge}: Specialized food security batteries not in ACS
+\item
+  \textbf{Opportunity}: Demographics and household composition
+  consolidable
+\end{itemize}
+
+\textbf{Why FoodAPS higher?} - Shorter questionnaire (140 vs 240
+questions) - More demographic questions relative to specialized content
+- Less employment specialization than CPS
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Summary Statistics}\label{summary-statistics-1}
+
+\subsection{At a Glance}\label{at-a-glance}
+
+\begin{verbatim}
+Input: 380 source questions (240 CPS + 140 FoodAPS)
+Pairs analyzed: 1,598 (avg 4.2 comparisons per question)
+
+Output:
+- 168 consolidable questions (44.2%)
+  - 60 F1 (15.8%) - direct recode
+  - 108 F2 (28.4%) - statistical adjustment
+- 212 non-consolidable (55.8%)
+  - 97% due to CC barriers
+  - 70% specifically CC.1
+
+Expert review: 93 questions (24.5%)
+Auto-processed: 287 questions (75.5%)
+
+Inter-rater agreement: κ = 0.845 (almost perfect)
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Next chapter}: Interpretation of these findings and implications
+for federal survey harmonization practice.
+
+\bookmarksetup{startatroot}
+
+\chapter{Discussion}\label{discussion}
+
+\section{Interpretation of Findings}\label{interpretation-of-findings}
+
+\subsection{The 44\% Consolidation
+Finding}\label{the-44-consolidation-finding}
+
+Our analysis reveals that 44.2\% of questions (168 of 380) have at least
+one consolidable ACS match. This finding must be interpreted carefully:
+
+\textbf{What this means:} - Substantial overlap exists between federal
+surveys - Nearly half of questions measure concepts also captured in ACS
+- Consolidation is technically feasible for these questions
+
+\textbf{What this does NOT mean:} - These questions should be eliminated
+from source surveys - Consolidation is always desirable or appropriate -
+Survey-specific context and use cases are unimportant
+
+\textbf{Policy vs.~Technical Distinction}: This analysis establishes
+\emph{technical feasibility} of consolidation. The decision to actually
+consolidate questions requires stakeholder input, consideration of
+survey-specific research goals, and assessment of data quality
+trade-offs.
+
+\subsection{The CC Barrier Dominance
+(97\%)}\label{the-cc-barrier-dominance-97}
+
+The finding that 97\% of incompatible pairs fail due to
+Construct/Concept (CC) barriers, with 70\% specifically CC.1 (concept
+definition differences), has important implications:
+
+\subsubsection{This is NOT a Fixable
+Problem}\label{this-is-not-a-fixable-problem}
+
+Unlike operational barriers (mode effects, scale differences, temporal
+misalignment), construct differences cannot be resolved through: -
+Survey redesign - Question rewording - Statistical adjustment -
+Post-processing harmonization
+
+\textbf{Example}: A question asking ``Do you want to work full-time?''
+measures \emph{labor force preferences}, while ``Did you work last
+week?'' measures \emph{actual employment status}. No amount of
+methodological sophistication can make these conceptually equivalent.
+
+\subsubsection{This Validates Survey
+Specialization}\label{this-validates-survey-specialization}
+
+The CC.1 dominance suggests that federal surveys serve distinct research
+purposes: - \textbf{CPS}: Detailed employment dynamics (job search,
+multiple jobs, work preferences) - \textbf{FoodAPS}: Food security
+measurement (food purchasing, SNAP utilization, food insecurity
+batteries) - \textbf{ACS}: Broad demographic and economic snapshot
+
+These specializations are intentional and valuable. Consolidation makes
+sense for overlapping demographic measures, but each survey must retain
+its unique substantive content.
+
+\subsection{AI-Assisted Methods
+Performance}\label{ai-assisted-methods-performance}
+
+\subsubsection{High Agreement (κ =
+0.845)}\label{high-agreement-ux3ba-0.845}
+
+The strong inter-rater reliability across three independent LLMs
+validates that: 1. Harmonization judgments are consistent and
+reproducible 2. Different model architectures converge on similar
+classifications 3. The framework (F1/F2/F3 + barrier codes) is
+well-specified enough for models to apply consistently
+
+\subsubsection{Expert Review Load Reduction
+(75\%)}\label{expert-review-load-reduction-75}
+
+By auto-processing 287 of 380 questions (75.5\%), the AI-assisted
+approach achieves: - \textbf{Time savings}: Days instead of weeks for
+initial classification - \textbf{Expert focus}: Human effort
+concentrated on 93 genuinely uncertain cases - \textbf{Scalability}:
+Methodology can be applied to additional survey pairs
+
+\textbf{Important}: ``Auto-processing'' means high-confidence
+classifications, not zero human oversight. All results should undergo
+expert spot-checking and validation.
+
+\subsection{The Two-Axis Triage
+Framework}\label{the-two-axis-triage-framework}
+
+Our Borda-Entropy triage approach represents an operational contribution
+rather than a theoretical advance:
+
+\textbf{What it is}: - Pragmatic heuristic for separating ``what's the
+answer?'' (Borda) from ``how much did they argue?'' (Entropy) -
+Operationalization of ensemble uncertainty for expert review
+prioritization - Median-split thresholding for tractable quadrant
+assignment
+
+\textbf{What it is NOT}: - Novel theoretical framework requiring
+extensive citation - Optimized decision boundary (we used pragmatic
+median split) - Replacement for subject-matter expertise
+
+\textbf{Framing}: This is a useful operational tool that performed well
+in this context. We document it clearly for replication but do not claim
+theoretical novelty. The framing in
+\texttt{docs/stage4\_ensemble\_methodology.md} explicitly treats this as
+operational methodology, not research contribution.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Limitations}\label{limitations}
+
+\subsection{1. Survey Coverage}\label{survey-coverage}
+
+\textbf{Limitation}: Only two source surveys (CPS and FoodAPS) analyzed
+against one target (ACS).
+
+\textbf{Implications}: - Findings may not generalize to other federal
+surveys - ACS-centric perspective (other surveys could serve as
+consolidation targets) - Missing surveys with different topical focus
+(health, housing, education)
+
+\textbf{Mitigation}: Results demonstrate proof-of-concept; expansion to
+additional surveys is straightforward using same methodology.
+
+\subsection{2. Model Selection and
+Behavior}\label{model-selection-and-behavior}
+
+\textbf{Limitation}: Three frontier LLMs tested, each with documented
+behavioral profiles: - OpenAI: Slight optimism toward F2 - Anthropic:
+Balanced, detailed reasoning - Google: Conservative, deferential
+
+\textbf{Implications}: - Results may differ with other models -
+Behavioral profiles may change with model updates - No systematic
+exploration of prompt engineering
+
+\textbf{Mitigation}: High inter-rater agreement (κ = 0.845) suggests
+results are robust across models. Arbitration pattern further reduces
+single-model bias.
+
+\subsection{3. Google Rate Limiting}\label{google-rate-limiting}
+
+\textbf{Limitation}: Google API rate-limited at 751 pairs (47\% of
+dataset).
+
+\textbf{Implications}: - Three-way agreement analysis limited to 751
+pairs - Primary findings based on OpenAI-Anthropic two-way comparison -
+Google results used for validation subset only
+
+\textbf{Mitigation}: Two-way agreement (κ = 0.845) is sufficient for
+validation. Subset with Google (κ = 0.833) confirms consistency.
+
+\subsection{4. Pair-Level Inflation}\label{pair-level-inflation}
+
+\textbf{Limitation}: Analyzing 1,598 pairs for 380 questions creates
+statistical dependencies.
+
+\textbf{Challenge}: - Not all pairs are independent observations -
+Multiple comparisons per question inflates denominator - Naive
+pair-level statistics misleading
+
+\textbf{Mitigation}: Question-level rollup (Stage 4) addresses this by
+selecting one best match per question. Primary findings reported at
+question level (N=380), not pair level (N=1,598).
+
+\subsection{5. Barrier Taxonomy
+Application}\label{barrier-taxonomy-application-1}
+
+\textbf{Limitation}: Models apply human-designed taxonomy
+(DataSHaPER/Maelstrom framework), not discovered patterns.
+
+\textbf{Implications}: - Taxonomy completeness not empirically validated
+- Some pairs may have multiple applicable barriers (we select primary) -
+Granular sub-codes (e.g., CC.1 vs CC.2) subject to interpretation
+
+\textbf{Mitigation}: High inter-rater agreement on barrier categories
+(L1: 91.2\%) suggests taxonomy is well-specified. Expert validation will
+further refine barrier assignments.
+
+\subsection{6. Validation Status}\label{validation-status}
+
+\textbf{Limitation}: Expert validation of classifications is pending.
+
+\textbf{Implications}: - Findings represent AI ensemble judgments, not
+validated ground truth - Classification errors possible, especially in
+uncertain cases - Consolidation recommendations require stakeholder
+review
+
+\textbf{Mitigation}: Triage framework explicitly routes uncertain cases
+(Q3/Q4) to expert review. High-confidence auto-processed cases (Q1/Q2)
+recommended for spot-checking.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Methodological
+Contributions}\label{methodological-contributions}
+
+\subsection{1. Operational Framework for AI-Assisted
+Harmonization}\label{operational-framework-for-ai-assisted-harmonization}
+
+This work demonstrates that multi-model ensemble with arbitration can: -
+Classify survey question pairs consistently (κ = 0.845) - Identify
+consolidation candidates at scale (1,598 pairs in days) - Route
+uncertain cases to experts (75\% auto-processed)
+
+\textbf{Contribution}: Proof-of-concept that AI-assisted methods can
+accelerate survey harmonization without replacing expert judgment.
+
+\subsection{2. Two-Axis Triage for Expert
+Review}\label{two-axis-triage-for-expert-review}
+
+The Borda-Entropy approach provides: - Separation of direction (what's
+the answer?) from stability (did they agree?) - Quadrant-based
+prioritization (Q3 priority, Q4 secondary) - Quantifiable expert review
+load (24.5\%)
+
+\textbf{Contribution}: Operational heuristic for prioritizing expert
+effort. Not a theoretical advance, but a useful tool.
+
+\subsection{3. Question-Level Rollup Addressing Pair
+Inflation}\label{question-level-rollup-addressing-pair-inflation}
+
+Converting pair-level classifications to question-level consolidability
+via best-match rollup: - Resolves statistical dependency issues -
+Provides actionable stakeholder deliverable (one recommendation per
+question) - Enables question-level triage
+
+\textbf{Contribution}: Methodological solution to multi-comparison
+problem in pairwise analysis.
+
+\subsection{4. Empirical Application of DataSHaPER Framework to Federal
+Surveys}\label{empirical-application-of-datashaper-framework-to-federal-surveys}
+
+First systematic application of DataSHaPER/Maelstrom harmonization
+framework to U.S. federal survey ecosystem: - Quantifies consolidation
+potential (\textasciitilde44\%) - Identifies barrier distribution (97\%
+CC) - Validates framework applicability beyond epidemiology
+
+\textbf{Contribution}: Demonstrates that survey harmonization frameworks
+from international and health research translate to federal statistical
+surveys.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Implications for Practice}\label{implications-for-practice}
+
+\subsection{For Federal Statistical
+Agencies}\label{for-federal-statistical-agencies}
+
+\textbf{Finding}: 44\% of questions consolidable suggests meaningful
+burden reduction is possible.
+
+\textbf{Actionable Steps}: 1. \textbf{Prioritize F1 questions} (60
+questions, 15.8\%) as ``low-hanging fruit'' - these can be consolidated
+with minimal effort 2. \textbf{Evaluate F2 questions} (108 questions,
+28.4\%) case-by-case - assess whether statistical adjustment is worth
+the effort 3. \textbf{Respect F3 questions} (212 questions, 55.8\%) -
+these serve distinct research purposes and should remain survey-specific
+
+\textbf{Important}: Consolidation is a tool for burden reduction, not a
+mandate. Survey-specific research goals must guide decisions.
+
+\subsection{For Survey Methodologists}\label{for-survey-methodologists}
+
+\textbf{Finding}: AI-assisted methods reduce expert review load by 75\%.
+
+\textbf{Implications}: - \textbf{Triage, don't replace}: Use AI for
+initial classification, reserve experts for uncertain cases -
+\textbf{Validate liberally}: Spot-check auto-processed classifications
+to ensure quality - \textbf{Iterate}: As experts review, refine prompts
+and threshold based on feedback
+
+\textbf{Workflow}:
+
+\begin{verbatim}
+AI Ensemble → High Confidence (Auto-process) + Low Confidence (Expert Review)
+              ↓                                ↓
+         Spot-check validation          Full expert judgment
+              ↓                                ↓
+         Final classification          Refine methodology
+\end{verbatim}
+
+\subsection{For Data Users}\label{for-data-users}
+
+\textbf{Finding}: Consolidated questions enable cross-survey data
+integration.
+
+\textbf{Opportunities}: - Link CPS employment data with ACS housing data
+using harmonized variables - Combine FoodAPS food security measures with
+ACS income data - Perform longitudinal analysis across surveys with
+consistent measures
+
+\textbf{Caution}: Even F1 questions may have subtle differences
+(sampling, mode, context). Users should assess fitness-for-purpose
+before integrating data.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Relation to Prior Work}\label{relation-to-prior-work}
+
+\subsection{Reports 01-02}\label{reports-01-02}
+
+This analysis builds on: - \textbf{Report 01}: Concept classification
+established question taxonomy - \textbf{Report 02}: Pairwise comparison
+identified 1,598 pairs for analysis
+
+\textbf{Integration}: Each report's validated outputs feed forward,
+demonstrating cumulative progress.
+
+\subsection{Survey Harmonization
+Literature}\label{survey-harmonization-literature}
+
+Our findings align with prior work: - \textbf{Fortier et al.~(2011)}:
+Found 38\% harmonization rate across 53 epidemiological studies - our
+44\% is comparable - \textbf{Wolf et al.~(2016)}: Emphasized construct
+barriers as primary challenge - validated by our 97\% CC finding
+
+\textbf{Extension}: We apply established frameworks to federal surveys
+at scale using AI assistance - first such application documented.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Alternative Explanations}\label{alternative-explanations}
+
+\subsection{Why 44\% and not Higher?}\label{why-44-and-not-higher}
+
+One might expect higher consolidation rates given that federal surveys
+all cover demographic and economic topics.
+
+\textbf{Explanation}: 1. \textbf{Survey specialization}: CPS focuses on
+employment, FoodAPS on food security - specialized questions don't
+overlap with ACS general-purpose content 2. \textbf{Research goals
+differ}: Surveys measure concepts at different granularities and from
+different perspectives 3. \textbf{Policy-driven content}: Questions
+often driven by specific policy needs (e.g., SNAP eligibility) not
+present in other surveys
+
+\textbf{Counterpoint}: 44\% is actually quite high given survey
+specialization. Demographics show 84\% consolidation, validating that
+overlap exists where expected.
+
+\subsection{Why CC.1 Dominates?}\label{why-cc.1-dominates}
+
+The 70\% CC.1 concentration (concept definition differences) might seem
+surprising.
+
+\textbf{Explanation}: 1. \textbf{Fundamental barriers filter early}:
+Questions with fixable barriers (TC, RS, PC) often have alternative
+matches that succeed 2. \textbf{Best-match selection}: We select highest
+consolidability per question - minor barriers appear less frequently
+because alternatives exist 3. \textbf{Survey design}: Federal surveys
+intentionally measure different constructs, so CC barriers are the true
+bottleneck
+
+\textbf{Evidence}: Question-level shows even higher CC.1 (76.9\%),
+confirming that questions without any consolidable path have fundamental
+concept mismatches.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Future Directions}\label{future-directions}
+
+\subsection{Immediate Next Steps}\label{immediate-next-steps}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Expert validation}: Subject-matter experts review 93 flagged
+  questions (Q3/Q4)
+\item
+  \textbf{Consolidation pilots}: Test F1 recommendations in practice
+\item
+  \textbf{Feedback incorporation}: Refine classifications based on
+  expert input
+\end{enumerate}
+
+\subsection{Short-Term Extensions}\label{short-term-extensions}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Additional surveys}: Apply methodology to SIPP, NHIS, AHS
+\item
+  \textbf{Alternative targets}: Use CPS or FoodAPS as consolidation
+  targets (not just ACS)
+\item
+  \textbf{Bidirectional analysis}: Identify ACS questions that could
+  adopt specialized survey measures
+\end{enumerate}
+
+\subsection{Long-Term Applications}\label{long-term-applications}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Survey editing}: Use harmonization patterns to inform
+  questionnaire design
+\item
+  \textbf{Imputation frameworks}: Leverage consolidable questions for
+  cross-survey imputation
+\item
+  \textbf{Respondent burden modeling}: Quantify burden reduction from
+  consolidation
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Key Takeaway}: This analysis provides an evidence base for
+federal survey harmonization decisions. The methodology is reproducible,
+the findings are actionable, and the limitations are documented.
+Stakeholders now have data-driven recommendations for which questions to
+consolidate, which to harmonize with adjustment, and which to maintain
+as survey-specific.
+
+\bookmarksetup{startatroot}
+
+\chapter{Conclusion}\label{conclusion}
+
+\section{Summary of Findings}\label{summary-of-findings}
+
+This report presents the first systematic analysis of federal survey
+question consolidation potential using AI-assisted harmonization
+methods. Analyzing 380 questions (240 CPS + 140 FoodAPS) against the
+American Community Survey, we identified consolidation opportunities and
+characterized barriers at scale.
+
+\subsection{Key Results}\label{key-results-1}
+
+\textbf{Consolidation Potential}: - \textbf{44.2\%} of questions have at
+least one consolidable ACS match - 15.8\% (60 questions) are F1 -
+directly consolidable - 28.4\% (108 questions) are F2 - consolidable
+with statistical adjustment - 55.8\% (212 questions) are F3 -
+fundamentally incompatible
+
+\textbf{Barrier Analysis}: - \textbf{97\% of failures} stem from
+Construct/Concept (CC) barriers - \textbf{70\%} specifically CC.1
+(concept definition differences) - These are not fixable through survey
+redesign or statistical methods
+
+\textbf{AI Performance}: - \textbf{κ = 0.845} inter-rater agreement
+(almost perfect) - \textbf{75\%} of questions auto-processed with high
+confidence - \textbf{24.5\%} (93 questions) routed to expert review
+
+\subsection{Implications}\label{implications-1}
+
+\textbf{For Policy}: Substantial consolidation potential exists, but
+decisions must balance burden reduction with survey-specific research
+goals.
+
+\textbf{For Methodology}: AI-assisted ensemble methods can accelerate
+survey harmonization while preserving expert oversight.
+
+\textbf{For Practice}: The two-axis triage framework (Borda direction ×
+Entropy stability) provides an operational tool for prioritizing expert
+review.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Contributions}\label{contributions}
+
+This work contributes:
+
+\subsection{1. Empirical Evidence}\label{empirical-evidence}
+
+First quantification of consolidation potential across federal surveys
+using standardized harmonization framework. The 44\% finding provides
+data for burden reduction planning.
+
+\subsection{2. Barrier Characterization}\label{barrier-characterization}
+
+Systematic application of DataSHaPER/Maelstrom barrier taxonomy
+identifies that construct differences (not operational issues) prevent
+consolidation. This clarifies where effort should focus.
+
+\subsection{3. Operational Methodology}\label{operational-methodology}
+
+Reproducible AI-assisted pipeline with: - Multi-model ensemble to reduce
+bias - Arbitration for disagreement resolution - Two-axis triage for
+expert review routing - Question-level rollup to address pair inflation
+
+\subsection{4. Stakeholder Deliverables}\label{stakeholder-deliverables}
+
+Expert review tables ready for validation and implementation, with 168
+specific consolidation recommendations.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Limitations Revisited}\label{limitations-revisited}
+
+We acknowledge: - \textbf{Limited survey coverage}: Only CPS and FoodAPS
+analyzed - \textbf{Model-specific results}: Based on three frontier LLMs
+(OpenAI, Anthropic, Google) - \textbf{Pending validation}: Expert review
+of classifications underway - \textbf{Pair inflation}: Addressed via
+question-level rollup but inherent to exhaustive comparison
+
+These limitations do not invalidate findings but contextualize their
+generalizability.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Future Work}\label{future-work}
+
+\subsection{Immediate Priorities}\label{immediate-priorities}
+
+\textbf{1. Expert Validation (Q1 2026)}
+
+Subject-matter experts review: - \textbf{Q3 questions} (40 questions,
+high priority): Leaning consolidable but contested - \textbf{Q4
+questions} (53 questions, secondary): Genuinely ambiguous
+
+\textbf{Outcome}: Refined classifications, validated recommendations
+
+\textbf{2. Consolidation Pilots (Q2 2026)}
+
+Test F1 recommendations in practice: - Select 10-15 high-confidence F1
+pairs - Implement consolidation in pilot surveys - Measure data quality,
+respondent burden, agency workflow
+
+\textbf{Outcome}: Evidence on consolidation feasibility and impact
+
+\subsection{Short-Term Extensions
+(2026)}\label{short-term-extensions-2026}
+
+\textbf{3. Expand Survey Coverage}
+
+Apply methodology to additional surveys: - \textbf{SIPP} (Survey of
+Income and Program Participation): 500+ questions - \textbf{NHIS}
+(National Health Interview Survey): 400+ questions - \textbf{AHS}
+(American Housing Survey): 300+ questions
+
+\textbf{Outcome}: Comprehensive federal survey consolidation map
+
+\textbf{4. Bidirectional Analysis}
+
+Reverse the analysis: - Use CPS as consolidation target (test if FoodAPS
+questions could adopt CPS measures) - Use FoodAPS as target (test
+specialized question adoption)
+
+\textbf{Outcome}: Identify opportunities for survey-specific measures to
+propagate
+
+\subsection{Long-Term Applications
+(2027+)}\label{long-term-applications-2027}
+
+\textbf{5. Survey Design Integration}
+
+Incorporate harmonization analysis into questionnaire design: - Flag new
+questions with consolidation potential - Recommend harmonized wording
+for planned questions - Identify opportunities for question recycling
+
+\textbf{Outcome}: Proactive burden reduction in survey development
+
+\textbf{6. Cross-Survey Imputation}
+
+Leverage consolidable questions for statistical integration: - Impute
+FoodAPS responses using CPS data where F1/F2 relationships exist -
+Enable cross-survey analysis without direct linkage - Validate
+imputation accuracy using validation samples
+
+\textbf{Outcome}: Enhanced data integration capabilities
+
+\textbf{7. Respondent Burden Modeling}
+
+Quantify burden reduction from consolidation: - Estimate cumulative
+burden across surveys - Model impact of consolidating F1 questions -
+Assess trade-offs between burden and data granularity
+
+\textbf{Outcome}: Evidence-based burden reduction targets
+
+\textbf{8. Methodology Refinement}
+
+Incorporate expert feedback to improve: - Prompt engineering for higher
+initial accuracy - Threshold optimization for triage quadrants - Barrier
+taxonomy expansion for edge cases
+
+\textbf{Outcome}: More accurate, efficient future analyses
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Broader Impact}\label{broader-impact}
+
+\subsection{For the Federal Statistical
+System}\label{for-the-federal-statistical-system}
+
+This work provides: - \textbf{Data-driven foundation} for consolidation
+decisions - \textbf{Reproducible methodology} applicable across surveys
+- \textbf{Evidence} that AI can assist (not replace) expert judgment
+
+\subsection{For Survey Methodology}\label{for-survey-methodology}
+
+Demonstrates that: - Harmonization frameworks (DataSHaPER) apply beyond
+epidemiology - Multi-model ensembles achieve high agreement on complex
+classifications - Operational triage frameworks can reduce expert review
+load
+
+\subsection{For AI-Assisted Research}\label{for-ai-assisted-research}
+
+Shows that: - LLMs can apply structured frameworks consistently -
+Ensemble + arbitration patterns reduce single-model bias - Confidence
+scores predict agreement and guide triage
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Closing Perspective}\label{closing-perspective}
+
+Survey harmonization is fundamentally about \textbf{balancing
+standardization with specialization}. Federal surveys serve distinct
+research purposes, and consolidation should not come at the expense of
+substantive content.
+
+This analysis identifies where consolidation is \emph{technically
+feasible} (44\% of questions). The decision to actually consolidate
+requires: - \textbf{Stakeholder input}: Agency missions and research
+priorities - \textbf{Data quality assessment}: Trade-offs between burden
+and granularity - \textbf{Policy context}: Legislative mandates and user
+needs
+
+\textbf{AI assists, experts decide.} The methodology accelerates
+analysis but does not replace judgment. By routing 75\% of questions to
+auto-processing and 25\% to expert review, we focus human effort where
+it matters most.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Final Recommendations}\label{final-recommendations}
+
+\subsection{For Agencies}\label{for-agencies}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Review F1 questions} (60 questions) - low-hanging fruit for
+  consolidation
+\item
+  \textbf{Evaluate F2 questions} (108 questions) - assess cost-benefit
+  of statistical adjustment
+\item
+  \textbf{Respect F3 questions} (212 questions) - maintain
+  survey-specific content
+\end{enumerate}
+
+\subsection{For Methodologists}\label{for-methodologists}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Validate classifications} - expert review of 93 flagged
+  questions
+\item
+  \textbf{Test consolidation pilots} - measure real-world impact
+\item
+  \textbf{Expand coverage} - apply methodology to additional surveys
+\end{enumerate}
+
+\subsection{For Data Users}\label{for-data-users-1}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Leverage harmonized variables} - enable cross-survey
+  integration
+\item
+  \textbf{Assess fitness-for-purpose} - verify suitability for specific
+  analyses
+\item
+  \textbf{Provide feedback} - inform consolidation priorities
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Conclusion}\label{conclusion-1}
+
+We set out to answer three questions:
+
+\textbf{RQ1: What proportion of federal survey questions can be
+consolidated?} - \textbf{Answer}: 44\% have at least one consolidable
+ACS match (F1 or F2)
+
+\textbf{RQ2: What barriers prevent consolidation?} - \textbf{Answer}:
+97\% of failures stem from Construct/Concept differences, specifically
+concept definitions (CC.1)
+
+\textbf{RQ3: Can AI-assisted methods accelerate this analysis?} -
+\textbf{Answer}: Yes - multi-model ensemble achieves κ=0.845 agreement
+and reduces expert review load by 75\%
+
+This work provides the federal statistical system with an evidence base
+for consolidation decisions, a reproducible methodology for future
+analyses, and specific recommendations for 380 questions. The findings
+demonstrate that AI-assisted methods can accelerate traditionally
+labor-intensive survey harmonization work while preserving expert
+oversight and judgment.
+
+\textbf{The path forward is clear}: Validate, pilot, expand. Survey
+harmonization is no longer limited by analysis capacity - it's a matter
+of prioritization and stakeholder alignment.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Report complete. See Appendices for technical details, taxonomy
+definitions, and expert review tables.}
+
+\part{Appendices}
+
+\chapter{Appendix A: Taxonomy
+Definitions}\label{appendix-a-taxonomy-definitions}
+
+\section{Harmonization Feasibility
+Codes}\label{harmonization-feasibility-codes}
+
+\subsection{F1: Direct Recode}\label{f1-direct-recode}
+
+\textbf{Definition}: Variables are mechanically transformable through
+simple recoding, collapsing categories, or unit conversion.
+
+\textbf{Action Required}: Simple data transformation
+
+\textbf{Characteristics}: - Same underlying construct - Compatible
+measurement scale - Deterministic mapping between responses - No loss of
+information (or acceptable minimal loss)
+
+\textbf{Examples}:
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.5000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Source
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Target
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Transformation
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Age in years (continuous) & Age in 5-year brackets & Group into
+categories \\
+Income in dollars & Income in thousands & Divide by 1,000 \\
+Hours worked (0-168) & Hours worked (0-168) & Direct copy (identical) \\
+Education (8 categories) & Education (4 categories) & Collapse
+categories \\
+\end{longtable}
+
+\textbf{Data Quality}: F1 transformations preserve original information
+or involve only aggregation (no modeling or imputation).
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{F2: Statistical Adjustment}\label{f2-statistical-adjustment}
+
+\textbf{Definition}: Variables require modeling, imputation, bridging
+studies, or statistical harmonization methods to make comparable.
+
+\textbf{Action Required}: Statistical harmonization (modeling,
+imputation, or bridging)
+
+\textbf{Characteristics}: - Related but not identical constructs -
+Requires statistical assumptions - May involve measurement error or
+information loss - Transformation is probabilistic, not deterministic
+
+\textbf{Examples}:
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.5000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Source
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Target
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Transformation
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Weekly work hours & Annual work weeks & Model seasonal patterns, impute
+missing data \\
+Hourly wage (excluding tips) & Hourly wage (including tips) & Impute tip
+proportion based on occupation \\
+Food insecurity (12-item battery) & Food insecurity (6-item battery) &
+Bridging study to map scales \\
+Health insurance (current) & Health insurance (annual) & Model coverage
+transitions \\
+\end{longtable}
+
+\textbf{Data Quality}: F2 transformations introduce modeling assumptions
+and potential bias. Users must assess fitness-for-purpose.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{F3: Incompatible}\label{f3-incompatible}
+
+\textbf{Definition}: Variables measure fundamentally different
+constructs and cannot be harmonized without re-fielding questions.
+
+\textbf{Action Required}: No harmonization possible
+
+\textbf{Characteristics}: - Different underlying constructs - No
+statistical transformation can bridge gap - Conceptual rather than
+operational barriers - Would require new data collection to resolve
+
+\textbf{Examples}:
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2353}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2353}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.5294}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Source
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Target
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Why Incompatible
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+``Do you want to work full-time?'' & ``Did you work last week?'' &
+Intention vs.~behavior \\
+``How many children live with you?'' & ``How many children have you
+given birth to?'' & Household composition vs.~lifetime fertility \\
+``Annual household income'' & ``Hourly wage at main job'' & Different
+income concepts \\
+``Food security score'' & ``SNAP participation'' & Outcome measure
+vs.~program participation \\
+\end{longtable}
+
+\textbf{Barrier Codes}: F3 classifications must include a barrier code
+explaining why harmonization is impossible.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Barrier Code Taxonomy}\label{barrier-code-taxonomy}
+
+When variables are F3 (incompatible), one of the following barrier codes
+applies:
+
+\subsection{Temporal Constraints (TC)}\label{temporal-constraints-tc-1}
+
+Reference period or timing differences that prevent meaningful
+comparison.
+
+\subsubsection{TC.1: Reference Period
+Length}\label{tc.1-reference-period-length}
+
+\textbf{Definition}: Different recall windows or time spans.
+
+\textbf{Examples}: - ``Hours worked last week'' vs.~``Hours worked in
+past 12 months'' - ``Income last month'' vs.~``Income last year'' -
+``Health status today'' vs.~``Health status past year''
+
+\textbf{Why Incompatible}: Different reference periods capture different
+phenomena (short-term vs.~long-term patterns, seasonal effects, recall
+bias).
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{TC.2: Temporal Framing}\label{tc.2-temporal-framing}
+
+\textbf{Definition}: Point-in-time vs.~habitual vs.~retrospective
+framing.
+
+\textbf{Examples}: - ``Did you work last week?'' (point-in-time)
+vs.~``Do you usually work?'' (habitual) - ``Are you currently
+enrolled?'' (present) vs.~``Were you ever enrolled?'' (retrospective) -
+``Last week's income'' vs.~``Usual weekly income''
+
+\textbf{Why Incompatible}: Habitual measures smooth over variation;
+point-in-time measures capture specific instances.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{TC.3: Calendar Alignment}\label{tc.3-calendar-alignment}
+
+\textbf{Definition}: Fixed calendar periods vs.~rolling reference
+periods.
+
+\textbf{Examples}: - ``Income in calendar year 2025'' vs.~``Income in
+past 12 months'' - ``Employment status January 1'' vs.~``Employment
+status on interview date'' - ``Tax year'' vs.~``Fiscal year''
+
+\textbf{Why Incompatible}: Calendar alignment affects comparability
+across respondents interviewed at different times.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Construct/Concept Constraints
+(CC)}\label{constructconcept-constraints-cc}
+
+Concept definition or operationalization differences - the most common
+barrier type.
+
+\subsubsection{CC.1: Concept Definition}\label{cc.1-concept-definition}
+
+\textbf{Definition}: Different meaning of core term or different
+construct entirely.
+
+\textbf{Examples}: - ``Employment'' including vs.~excluding unpaid work
+- ``Income'' including vs.~excluding government transfers -
+``Household'' including vs.~excluding non-relatives - ``Disability''
+based on self-report vs.~functional limitations
+
+\textbf{Why Incompatible}: Measuring fundamentally different things,
+even if using similar terminology.
+
+\textbf{This is the dominant barrier} (70\% of F3 pairs).
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{CC.2: Operationalization}\label{cc.2-operationalization}
+
+\textbf{Definition}: Different behavioral indicators or measurement
+approaches for nominally the same concept.
+
+\textbf{Examples}: - ``Food insecurity'' measured by 12-item battery
+vs.~single question - ``Health status'' measured by self-rating
+vs.~diagnosed conditions - ``Job search'' measured by specific
+activities vs.~general question - ``Poverty'' based on income thresholds
+vs.~consumption measures
+
+\textbf{Why Incompatible}: Different operationalizations capture
+different dimensions of the construct.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{CC.3: Boundary
+Conditions}\label{cc.3-boundary-conditions}
+
+\textbf{Definition}: Different thresholds, cutoffs, or qualifying
+conditions.
+
+\textbf{Examples}: - ``Full-time work'' defined as 35+ hours vs.~40+
+hours - ``Low income'' using different poverty thresholds - ``Recent
+immigrant'' defined as \textless5 years vs.~\textless10 years -
+``Elderly'' defined as 65+ vs.~60+
+
+\textbf{Why Incompatible}: Boundary differences create non-overlapping
+populations or classifications.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{CC.4: Scope Inclusions}\label{cc.4-scope-inclusions}
+
+\textbf{Definition}: Different components counted or included in
+measurement.
+
+\textbf{Examples}: - ``Income'' including vs.~excluding capital gains -
+``Household members'' including vs.~excluding temporary residents -
+``Work hours'' including vs.~excluding overtime - ``Educational
+attainment'' including vs.~excluding vocational training
+
+\textbf{Why Incompatible}: Different scope creates systematically
+different measures.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Population/Coverage Constraints
+(PC)}\label{populationcoverage-constraints-pc}
+
+Universe, frame, or sample design differences.
+
+\subsubsection{PC.1: Universe
+Definition}\label{pc.1-universe-definition}
+
+\textbf{Definition}: Target population differs between surveys.
+
+\textbf{Examples}: - Civilian population vs.~all residents - Adults 18+
+vs.~all household members - US citizens vs.~all residents - Employed
+persons vs.~labor force participants
+
+\textbf{Why Incompatible}: Questions asked of different populations
+cannot be directly compared.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{PC.2: Frame Exclusions}\label{pc.2-frame-exclusions}
+
+\textbf{Definition}: Different sampling frame exclusions.
+
+\textbf{Examples}: - Excluding vs.~including group quarters (prisons,
+dorms, nursing homes) - Excluding vs.~including US territories -
+Excluding vs.~including institutionalized population - Excluding
+vs.~including military bases
+
+\textbf{Why Incompatible}: Systematic exclusions create non-comparable
+samples.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{PC.3: Age Bounds}\label{pc.3-age-bounds}
+
+\textbf{Definition}: Different age eligibility criteria.
+
+\textbf{Examples}: - Labor force questions for 15+ vs.~16+ vs.~18+ -
+Health insurance questions for all ages vs.~non-elderly only - Education
+questions for school-age vs.~all adults
+
+\textbf{Why Incompatible}: Age restrictions prevent full population
+comparison.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{PC.4: Geographic Scope}\label{pc.4-geographic-scope}
+
+\textbf{Definition}: Different geographic coverage.
+
+\textbf{Examples}: - 50 states vs.~50 states + DC + territories -
+Metropolitan areas only vs.~all areas - Border regions vs.~national
+sample - State-specific vs.~national questions
+
+\textbf{Why Incompatible}: Geographic restrictions limit comparability.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Response Scale Constraints
+(RS)}\label{response-scale-constraints-rs}
+
+Scale type, categories, or format differences.
+
+\subsubsection{RS.1: Scale Type}\label{rs.1-scale-type}
+
+\textbf{Definition}: Fundamentally different response formats.
+
+\textbf{Examples}: - Binary (yes/no) vs.~5-point Likert scale -
+Continuous numeric vs.~categorical - Frequency scale vs.~intensity scale
+- Open numeric vs.~bracketed ranges
+
+\textbf{Why Incompatible}: Different scale types capture different
+levels of information and are not directly comparable.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{RS.2: Category Structure}\label{rs.2-category-structure}
+
+\textbf{Definition}: Different number of categories or category
+boundaries within same scale type.
+
+\textbf{Examples}: - 5-point vs.~7-point Likert scale - Income brackets
+with different boundaries - Age categories with different groupings -
+``Often/Sometimes/Rarely'' vs.~``Always/Often/Sometimes/Rarely/Never''
+
+\textbf{Why Incompatible}: Category differences prevent direct mapping
+without information loss or assumptions.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{RS.3: Anchoring/Labels}\label{rs.3-anchoringlabels}
+
+\textbf{Definition}: Different verbal anchors or category labels.
+
+\textbf{Examples}: - ``Strongly agree'' interpreted differently across
+surveys - ``Good health'' vs.~``Excellent health'' as top category -
+``Frequently'' without numeric anchors - Cultural/linguistic differences
+in label interpretation
+
+\textbf{Why Incompatible}: Verbal anchors are subjective and
+survey-specific.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{RS.4: Numeric vs.~Verbal}\label{rs.4-numeric-vs.-verbal}
+
+\textbf{Definition}: Numeric scales vs.~labeled categories.
+
+\textbf{Examples}: - 0-10 slider vs.~``Excellent/Very
+Good/Good/Fair/Poor'' - Days per week (numeric)
+vs.~``Daily/Weekly/Monthly'' (verbal) - Exact count vs.~frequency
+categories
+
+\textbf{Why Incompatible}: Numeric precision differs from categorical
+judgment.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Mode/Context Constraints
+(MC)}\label{modecontext-constraints-mc}
+
+Interview mode or questionnaire context differences.
+
+\subsubsection{MC.1: Interview Mode}\label{mc.1-interview-mode}
+
+\textbf{Definition}: Different data collection modes.
+
+\textbf{Examples}: - CATI (phone) vs.~Web self-administered - In-person
+interview vs.~mail survey - Interviewer-administered
+vs.~self-administered - Video vs.~audio interview
+
+\textbf{Why Incompatible}: Mode effects (social desirability,
+interviewer effects, visual cues) create systematic differences.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{MC.2: Question Routing}\label{mc.2-question-routing}
+
+\textbf{Definition}: Different skip patterns or conditional questions.
+
+\textbf{Examples}: - Asked of all respondents vs.~subset - Follow-up
+question vs.~standalone question - Conditional on prior response
+vs.~unconditional
+
+\textbf{Why Incompatible}: Routing affects who answers and question
+interpretation context.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{MC.3: Contextual Priming}\label{mc.3-contextual-priming}
+
+\textbf{Definition}: Preceding questions affect interpretation.
+
+\textbf{Examples}: - Question order effects - Section context (health
+questions in health module vs.~employment module) - Priming from related
+questions - Survey frame (government survey vs.~academic survey)
+
+\textbf{Why Incompatible}: Context shapes interpretation and response
+patterns.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{MC.4: Proxy Response}\label{mc.4-proxy-response}
+
+\textbf{Definition}: Proxy vs.~self-report rules differ.
+
+\textbf{Examples}: - Self-report only vs.~household head can report for
+all - Proxy allowed with restrictions vs.~always allowed - Age threshold
+for self-report differs
+
+\textbf{Why Incompatible}: Proxy responses differ systematically from
+self-reports.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Processing/Metadata Constraints
+(PM)}\label{processingmetadata-constraints-pm}
+
+Coding, weighting, or documentation differences.
+
+\subsubsection{PM.1: Coding Schemes}\label{pm.1-coding-schemes}
+
+\textbf{Definition}: Different classification systems.
+
+\textbf{Examples}: - Occupation coding differences (SOC 2010 vs.~SOC
+2018) - Industry coding (NAICS 2012 vs.~NAICS 2017) - Geographic coding
+(FIPS vs.~other systems) - Race/ethnicity categories (different
+standards)
+
+\textbf{Why Incompatible}: Different coding prevents direct comparison
+without crosswalks.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{PM.2: Derived Variables}\label{pm.2-derived-variables}
+
+\textbf{Definition}: Different construction algorithms.
+
+\textbf{Examples}: - Poverty calculation methods (official
+vs.~supplemental) - Composite scores with different formulas - Imputed
+variables with different models - Weighted vs.~unweighted aggregates
+
+\textbf{Why Incompatible}: Different construction creates systematically
+different measures.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{PM.3: Documentation Gaps}\label{pm.3-documentation-gaps}
+
+\textbf{Definition}: Insufficient metadata to assess comparability.
+
+\textbf{Examples}: - Missing questionnaire context - Unclear skip
+patterns - Ambiguous variable definitions - Undocumented changes across
+survey years
+
+\textbf{Why Incompatible}: Cannot determine compatibility without
+adequate documentation.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Application Notes}\label{application-notes}
+
+\subsection{Selecting Primary Barrier
+Code}\label{selecting-primary-barrier-code}
+
+When multiple barriers apply, select based on hierarchy: 1. \textbf{CC}
+(Construct) - most fundamental 2. \textbf{TC} (Temporal) - affects
+interpretation 3. \textbf{RS} (Response Scale) - limits comparability 4.
+\textbf{PC} (Population) - affects universe 5. \textbf{MC}
+(Mode/Context) - measurement effects 6. \textbf{PM} (Processing) -
+technical issues
+
+\textbf{Example}: If a question has both CC.1 (different concept) and
+RS.1 (different scale), classify as CC.1 because construct differences
+are more fundamental.
+
+\subsection{Edge Cases}\label{edge-cases}
+
+\textbf{Borderline F2/F3}: When uncertain whether statistical adjustment
+can bridge gap: - \textbf{F2} if adjustment is feasible with reasonable
+assumptions - \textbf{F3} if adjustment requires untenable assumptions
+or would destroy information
+
+\textbf{Multiple sub-codes}: Document all applicable codes in reasoning
+field, but select single primary code for classification.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Citation}\label{citation}
+
+This taxonomy is adapted from:
+
+\begin{itemize}
+\item
+  \textbf{Fortier, I., et al.~(2011)}. Is rigorous retrospective
+  harmonization possible? Application of the DataSHaPER approach across
+  53 large studies. \emph{International Journal of Epidemiology}, 40(5),
+  1314-1328.
+\item
+  \textbf{Fortier, I., et al.~(2017)}. Maelstrom Research guidelines for
+  rigorous retrospective data harmonization. \emph{International Journal
+  of Epidemiology}, 46(1), 103-115.
+\end{itemize}
+
+Extensions and examples specific to federal surveys developed for this
+analysis.
+
+\chapter{Appendix B: Methodology
+Decisions}\label{appendix-b-methodology-decisions}
+
+This appendix documents key methodological decisions made during the
+analysis, including rationale and alternatives considered.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Decision 001: Three-Model
+Ensemble}\label{decision-001-three-model-ensemble}
+
+\textbf{Date}: 2026-01-28
+
+\textbf{Decision}: Use three frontier LLMs (OpenAI gpt-4o-mini,
+Anthropic claude-3-5-haiku, Google gemini-2.0-flash-exp) as independent
+raters.
+
+\textbf{Rationale}: - Reduces single-model bias - Different training
+data and architectures provide diversity - Ensemble agreement validates
+consistency of judgments
+
+\textbf{Alternatives Considered}: - Single model only - rejected due to
+bias risk - Five+ models - rejected due to cost and diminishing returns
+
+\textbf{Outcome}: High inter-rater agreement (κ = 0.845) validated
+approach.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Decision 002: Structured JSON
+Output}\label{decision-002-structured-json-output}
+
+\textbf{Date}: 2026-01-28
+
+\textbf{Decision}: Require models to output structured JSON with
+feasibility, barrier\_code, confidence, and reasoning fields.
+
+\textbf{Rationale}: - Enables automated parsing and aggregation - Forces
+models to provide explicit reasoning - Confidence field supports triage
+
+\textbf{Alternatives Considered}: - Free-text output - rejected due to
+parsing complexity - Single classification only - rejected as
+insufficient for expert review
+
+\textbf{Outcome}: 100\% successful parsing with robust extraction
+strategies.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Decision 003: Parallel Processing with
+Checkpointing}\label{decision-003-parallel-processing-with-checkpointing}
+
+\textbf{Date}: 2026-01-28
+
+\textbf{Decision}: Process pairs in parallel (6 workers) with
+checkpoint/resume capability.
+
+\textbf{Rationale}: - Reduces runtime (hours vs.~days) - Allows graceful
+recovery from API failures - Supports cost control (stop/resume as
+needed)
+
+\textbf{Implementation}: - Batch size: 10 pairs per API call -
+Exponential backoff for rate limits - JSON checkpoint file tracks
+progress
+
+\textbf{Outcome}: Robust execution with zero data loss.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Decision 004: Google Rate Limit
+Acceptance}\label{decision-004-google-rate-limit-acceptance}
+
+\textbf{Date}: 2026-01-29
+
+\textbf{Decision}: Proceed with OpenAI-Anthropic two-way comparison
+after Google rate-limited at 751 pairs (47\%).
+
+\textbf{Rationale}: - Two-way agreement sufficient for validation (κ =
+0.845) - Google subset (751 pairs) confirms consistency (κ = 0.833) -
+Cost/benefit of waiting for Google rate limit unfavorable
+
+\textbf{Alternatives Considered}: - Wait for rate limit reset - rejected
+due to timeline - Replace Google with another model - rejected as Google
+data still valuable validation
+
+\textbf{Outcome}: Primary findings based on OpenAI-Anthropic, Google
+used for validation subset.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Decision 005: Arbitration for Disagreements
+Only}\label{decision-005-arbitration-for-disagreements-only}
+
+\textbf{Date}: 2026-01-29
+
+\textbf{Decision}: Arbitrate only disagreements (339 pairs, 21.2\%), not
+all pairs.
+
+\textbf{Rationale}: - Cost efficiency (arbitration uses stronger models)
+- High-agreement pairs don't benefit from arbitration - Focuses
+arbitrator attention on genuinely uncertain cases
+
+\textbf{Alternatives Considered}: - Arbitrate all pairs - rejected due
+to cost - No arbitration - rejected as disagreements need resolution
+
+\textbf{Outcome}: Arbitration resolved 339 pairs with 87.6\% arbitrator
+agreement.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Decision 006: Question-Level Rollup (Not Pair-Level
+Reporting)}\label{decision-006-question-level-rollup-not-pair-level-reporting}
+
+\textbf{Date}: 2026-01-30
+
+\textbf{Decision}: Report primary findings at question level (380
+questions), not pair level (1,598 pairs).
+
+\textbf{Rationale}: - Pair-level inflates denominator (multiple
+comparisons per question) - Question-level answers stakeholder question:
+``Is this question consolidable?'' - Statistical dependencies at pair
+level violate independence assumptions
+
+\textbf{Alternatives Considered}: - Pair-level only - rejected as
+misleading (one F1 match makes question consolidable regardless of other
+pairs) - Report both - \textbf{SELECTED}: Pair-level for research
+detail, question-level for stakeholder summary
+
+\textbf{Outcome}: Primary findings at question level (44.2\%
+consolidable), pair-level data in appendix.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Decision 007: Best-Match Selection per
+Question}\label{decision-007-best-match-selection-per-question}
+
+\textbf{Date}: 2026-01-30
+
+\textbf{Decision}: For each source question, select single best ACS
+match using hierarchy: F1 \textgreater{} F2 \textgreater{} F3, then
+highest Borda score within tie.
+
+\textbf{Rationale}: - Provides actionable recommendation (one pairing
+per question) - Reflects real-world use case (each question maps to at
+most one alternative) - Simplifies expert review table
+
+\textbf{Alternatives Considered}: - Show all matches - rejected as
+overwhelming for stakeholders - Average across matches - rejected as
+statistically inappropriate (dependencies)
+
+\textbf{Outcome}: 380 question-level records with clear best-match
+recommendation.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Decision 008: Four Scoring Methods (Ensemble
+Approach)}\label{decision-008-four-scoring-methods-ensemble-approach}
+
+\textbf{Date}: 2026-01-30
+
+\textbf{Decision}: Compute four complementary scores: Composite,
+Entropy, Bayesian, Borda.
+
+\textbf{Rationale}: - Different scores capture different dimensions: -
+Composite: Baseline (unanimous/majority) - Entropy: Stability (how much
+they argued) - Bayesian: Probabilistic (with prior beliefs) - Borda:
+Direction (leaning consolidable or not) - Ensemble avoids over-reliance
+on single metric
+
+\textbf{Alternatives Considered}: - Single score only - rejected as
+insufficient to capture complexity - More than four - rejected as
+diminishing returns
+
+\textbf{Outcome}: Borda and Entropy selected for triage (Decision 016).
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Decision 009: Median Split for
+Thresholds}\label{decision-009-median-split-for-thresholds}
+
+\textbf{Date}: 2026-01-30
+
+\textbf{Decision}: Use median split on question-level best-match scores
+to define Borda and Entropy thresholds.
+
+\textbf{Rationale}: - Pragmatic, interpretable (50th percentile) -
+Avoids arbitrary threshold selection - Creates balanced quadrants for
+triage
+
+\textbf{Values}: - Borda median: 0.167 - Entropy median: 0.330
+
+\textbf{Alternatives Considered}: - Optimize thresholds - rejected as no
+ground truth for optimization - Fixed thresholds (0.5, 0.75) - rejected
+as not data-driven
+
+\textbf{Outcome}: Balanced quadrant distribution (Q1=151, Q2=136, Q3=40,
+Q4=53).
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Decision 010: Question-Level Medians (Not
+Pair-Level)}\label{decision-010-question-level-medians-not-pair-level}
+
+\textbf{Date}: 2026-01-30
+
+\textbf{Decision}: Compute threshold medians from 380 question-level
+scores, not 1,598 pair-level scores.
+
+\textbf{Rationale}: - Pair-level distribution dominated by unanimous F3
+pairs (median Borda ≈ 0) - Question-level reflects actual triage
+decision space - Threshold goal is to separate questions, not pairs
+
+\textbf{Alternatives Considered}: - Pair-level medians - rejected as
+produces degenerate thresholds (Borda median ≈ 0) - Fixed thresholds -
+rejected as not data-driven
+
+\textbf{Outcome}: See \texttt{docs/stage4\_ensemble\_methodology.md}
+``Threshold Computation'' section for detailed justification.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Decision 016: Two-Axis Triage Framework (Borda ×
+Entropy)}\label{decision-016-two-axis-triage-framework-borda-entropy}
+
+\textbf{Date}: 2026-01-31
+
+\textbf{Decision}: Use Borda (direction) and Entropy (stability) as
+two-axis triage framework for expert review routing.
+
+\textbf{Rationale}: - \textbf{Borda}: Captures ensemble direction
+(consolidable or not) - \textbf{Entropy}: Captures ensemble stability
+(agreement or disagreement) - \textbf{Orthogonal dimensions}: Separates
+``what's the answer?'' from ``how certain are we?''
+
+\textbf{Quadrant Interpretation}: - Q1 (High Borda, High Entropy):
+Confident consolidable → auto-accept - Q2 (Low Borda, High Entropy):
+Confident non-consolidable → auto-reject - Q3 (High Borda, Low Entropy):
+Uncertain accept (leaning yes but unstable) → \textbf{expert priority} -
+Q4 (Low Borda, Low Entropy): Uncertain reject (ambiguous) → expert
+secondary
+
+\textbf{Alternatives Considered}: 1. Composite score only - rejected as
+single dimension insufficient 2. Entropy only - rejected as doesn't
+indicate direction 3. Bayesian + Borda - rejected as Bayesian highly
+correlated with Borda (r=0.95) 4. \textbf{Borda + Entropy (SELECTED)} -
+orthogonal (r=0.26), complementary dimensions
+
+\textbf{Correlation Analysis}:
+
+\begin{verbatim}
+          Composite  Entropy  Bayesian  Borda
+Composite    1.000    0.398     0.955   0.945
+Entropy      0.398    1.000     0.341   0.260
+Bayesian     0.955    0.341     1.000   0.950
+Borda        0.945    0.260     0.950   1.000
+\end{verbatim}
+
+\textbf{Key Insight}: Borda and Entropy are least correlated (r=0.26),
+maximizing information from two-axis framework.
+
+\textbf{Outcome}: - 76\% auto-processed (Q1 + Q2) - 24\% expert review
+(Q3 + Q4) - Q3 prioritized for review (uncertain accept cases)
+
+\textbf{Framing}: This is an \textbf{operational tool}, not a
+theoretical contribution. We do not claim novelty - the approach is a
+pragmatic application of ensemble scoring for triage purposes. See
+\texttt{docs/stage4\_ensemble\_methodology.md} for extended discussion
+with ``sober framing''.
+
+\textbf{Documentation}: Full decision rationale, correlation analysis,
+and literature review in
+\texttt{docs/methodology\_log\_decision\_016.md}.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Decision 017: Sober Framing for Two-Axis
+Approach}\label{decision-017-sober-framing-for-two-axis-approach}
+
+\textbf{Date}: 2026-01-31
+
+\textbf{Decision}: Frame two-axis triage as operational tool, not
+theoretical contribution.
+
+\textbf{Rationale}: - Approach is pragmatic heuristic for this project -
+No claim of optimality or theoretical novelty - Avoid over-claiming in
+research framing
+
+\textbf{Language Used}: - ``Operational framework'' not ``novel
+methodology'' - ``Useful heuristic'' not ``discovery'' - ``Performed
+well in this context'' not ``best practice''
+
+\textbf{Contrast}: - \textbf{Overstated}: ``We introduce a novel
+two-axis framework\ldots{}'' - \textbf{Appropriate}: ``We use a two-axis
+triage approach (Borda direction × Entropy stability) as an operational
+tool\ldots{}''
+
+\textbf{Documentation}: - Technical details in methodology section -
+``Future Exploration'' section in
+\texttt{stage4\_ensemble\_methodology.md} for research threads -
+Citation queries in \texttt{docs/citation\_queries\_decision\_016.md}
+remain available if needed
+
+\textbf{Outcome}: Clear, honest framing that serves operational needs
+without inflated claims.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Decision 018: Expert Review Tables as Primary
+Deliverable}\label{decision-018-expert-review-tables-as-primary-deliverable}
+
+\textbf{Date}: 2026-01-31
+
+\textbf{Decision}: Generate CSV tables (expert\_review\_cps.csv,
+expert\_review\_foodaps.csv, expert\_review\_combined.csv) as primary
+stakeholder deliverable.
+
+\textbf{Rationale}: - Stakeholders need actionable, reviewable data -
+CSV format enables filtering, sorting, annotation - Includes all context
+(question text, match text, scores, reasoning)
+
+\textbf{Columns Included}: - Source question ID and text - Best ACS
+match ID and text - Feasibility classification (F1/F2/F3) - Barrier code
+(if F3) - Scores (Borda, Entropy) - Triage quadrant (Q1-Q4) - Reasoning
+summary
+
+\textbf{Outcome}: 380 rows ready for expert review and validation.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Decision 019: Visualization
+Strategy}\label{decision-019-visualization-strategy}
+
+\textbf{Date}: 2026-02-02
+
+\textbf{Decision}: Generate both pair-level and question-level
+visualizations.
+
+\textbf{Rationale}: - \textbf{Pair-level} (1,598 pairs): Shows research
+rigor (exhaustive comparison) - \textbf{Question-level} (380 questions):
+Shows practical outcome (consolidation candidates) - Both perspectives
+validate each other and serve different audiences
+
+\textbf{Visualizations Created}: 1. Consolidation rates by survey
+(question-level) 2. Barrier distribution (pair-level) 3. Expert review
+load (question-level) 4. Harmonization code distribution (pair-level) 5.
+Question consolidation distribution (question-level by survey)
+
+\textbf{Outcome}: Comprehensive visual evidence for both research and
+stakeholder audiences.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Decision 020: Pipeline
+Integration}\label{decision-020-pipeline-integration}
+
+\textbf{Date}: 2026-01-31
+
+\textbf{Decision}: Integrate all stages into \texttt{run\_pipeline.py}
+orchestrator with resume capability.
+
+\textbf{Rationale}: - Reproducibility requires unified execution -
+Resume capability handles failures gracefully - Documentation through
+code (pipeline is the specification)
+
+\textbf{Implementation}: - Stage dependencies checked automatically -
+Output validation before proceeding - Command-line flags:
+\texttt{-\/-clean}, \texttt{-\/-from}, \texttt{-\/-only}
+
+\textbf{Outcome}: Full pipeline runnable via single command:
+\texttt{python\ run\_pipeline.py}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Summary of Key Principles}\label{summary-of-key-principles}
+
+Across all decisions, several principles guided methodology:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Transparency}: Document rationale, alternatives, and
+  trade-offs
+\item
+  \textbf{Reproducibility}: Version control, checkpointing,
+  deterministic execution
+\item
+  \textbf{Validation}: Inter-rater agreement, quality checks, expert
+  review
+\item
+  \textbf{Pragmatism}: Operational tools over theoretical claims
+\item
+  \textbf{Stakeholder Focus}: Deliverables answer real questions (``Is
+  this question consolidable?'')
+\end{enumerate}
+
+These principles ensured that analysis serves its intended purpose:
+\textbf{providing evidence for federal survey consolidation decisions}.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{For complete decision log, see}:
+\texttt{docs/methodology\_log.md} (all decisions) and
+\texttt{docs/methodology\_log\_decision\_016.md} (detailed Decision 016
+documentation).
+
+\chapter{Appendix C: Expert Review
+Tables}\label{appendix-c-expert-review-tables}
+
+This appendix describes the expert review deliverables generated from
+the analysis.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Overview}\label{overview-1}
+
+Three CSV files provide complete question-level results for expert
+review and validation:
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2400}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2400}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.5200}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+File
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Rows
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Description
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{expert\_review\_cps.csv} & 240 & CPS questions with ACS
+matches \\
+\texttt{expert\_review\_foodaps.csv} & 140 & FoodAPS questions with ACS
+matches \\
+\texttt{expert\_review\_combined.csv} & 380 & All questions combined \\
+\end{longtable}
+
+\textbf{Location}:
+\texttt{reports/03\_harmonization\_constraints/output/analysis/}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Table Schema}\label{table-schema}
+
+Each file contains 17 columns:
+
+\subsection{Identification}\label{identification}
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Column & Type & Description \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{survey} & string & Source survey (CPS or FOODAPS) \\
+\texttt{source\_q\_id} & string & Source question identifier \\
+\texttt{source\_text} & string & Full source question text \\
+\texttt{best\_match\_q\_id} & string & Best matching ACS question
+identifier \\
+\texttt{best\_match\_text} & string & Full ACS question text \\
+\texttt{pair\_id} & string & Unique pair identifier (source\_target) \\
+\end{longtable}
+
+\subsection{Classification}\label{classification}
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Column & Type & Description \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{best\_feasibility} & string & F1, F2, or F3 \\
+\texttt{has\_consolidable\_path} & boolean & True if F1 or F2 \\
+\texttt{barrier\_code} & string & CC.1, TC.2, etc. (if F3) \\
+\texttt{confidence} & string & HIGH, MODERATE, or LOW \\
+\end{longtable}
+
+\subsection{Scoring}\label{scoring}
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Column & Type & Description \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{score\_borda} & float & Borda count {[}0, 1{]} - direction \\
+\texttt{score\_entropy} & float & Normalized entropy {[}0, 1{]} -
+stability \\
+\texttt{score\_composite} & float & Baseline composite score \\
+\texttt{score\_bayesian} & float & Bayesian score with priors \\
+\end{longtable}
+
+\subsection{Triage}\label{triage}
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Column & Type & Description \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{triage\_quadrant} & string & Q1, Q2, Q3, or Q4 \\
+\end{longtable}
+
+\subsection{Reasoning}\label{reasoning}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2963}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2222}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4815}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Column
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Type
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Description
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{reasoning\_summary} & string & Explanation of classification \\
+\texttt{arbitration\_notes} & string & Additional notes from arbitration
+(if applicable) \\
+\end{longtable}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Triage Quadrants}\label{triage-quadrants}
+
+Questions are assigned to quadrants for prioritization:
+
+\subsection{Q1: Confident Consolidable (151
+questions)}\label{q1-confident-consolidable-151-questions}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Borda}: High (≥0.167)
+\item
+  \textbf{Entropy}: High (≥0.330)
+\item
+  \textbf{Interpretation}: Models agree it's consolidable
+\item
+  \textbf{Action}: Auto-accept, spot-check recommended
+\item
+  \textbf{Expert Review Priority}: Low
+\end{itemize}
+
+\textbf{Example}:
+
+\begin{verbatim}
+Source (CPS): "How many hours per week do you USUALLY work?"
+Target (ACS): "What is your best estimate of hours per week you usually work?"
+Feasibility: F1
+Borda: 1.0, Entropy: 1.0
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Q2: Confident Non-Consolidable (136
+questions)}\label{q2-confident-non-consolidable-136-questions}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Borda}: Low (\textless0.167)
+\item
+  \textbf{Entropy}: High (≥0.330)
+\item
+  \textbf{Interpretation}: Models agree it's not consolidable
+\item
+  \textbf{Action}: Auto-reject, low priority for review
+\item
+  \textbf{Expert Review Priority}: Low
+\end{itemize}
+
+\textbf{Example}:
+
+\begin{verbatim}
+Source (CPS): "Do you WANT to work full-time (35+ hours)?"
+Target (ACS): "Did you work for pay last week?"
+Feasibility: F3 (CC.1)
+Borda: 0.0, Entropy: 0.33
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Q3: Uncertain Accept (40 questions) ⚠️
+PRIORITY}\label{q3-uncertain-accept-40-questions-priority}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Borda}: High (≥0.167)
+\item
+  \textbf{Entropy}: Low (\textless0.330)
+\item
+  \textbf{Interpretation}: Leaning consolidable but unstable (models
+  argued)
+\item
+  \textbf{Action}: \textbf{EXPERT REVIEW REQUIRED} - highest priority
+\item
+  \textbf{Expert Review Priority}: \textbf{HIGH}
+\end{itemize}
+
+\textbf{Why Priority?} - High Borda suggests consolidation potential -
+Low Entropy indicates disagreement or uncertainty - These are ``edge
+cases'' that need human judgment
+
+\textbf{Review Question}: Is consolidation truly feasible despite model
+disagreement?
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Q4: Uncertain Reject (53
+questions)}\label{q4-uncertain-reject-53-questions}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Borda}: Low (\textless0.167)
+\item
+  \textbf{Entropy}: Low (\textless0.330)
+\item
+  \textbf{Interpretation}: Genuinely ambiguous (no clear direction, low
+  agreement)
+\item
+  \textbf{Action}: Expert review - secondary priority
+\item
+  \textbf{Expert Review Priority}: Medium
+\end{itemize}
+
+\textbf{Why Secondary?} - Low Borda suggests non-consolidable lean - Low
+Entropy indicates genuine ambiguity - Less actionable than Q3 (less
+clear consolidation potential)
+
+\textbf{Review Question}: Can expert domain knowledge resolve ambiguity?
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Usage Guide}\label{usage-guide}
+
+\subsection{For Expert Reviewers}\label{for-expert-reviewers}
+
+\textbf{Step 1: Prioritize Q3 Questions (40 questions)}
+
+Focus first on Q3 - these have consolidation potential but model
+uncertainty:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Filter Q3 questions}
+\FunctionTok{grep} \StringTok{",Q3,"}\NormalTok{ expert\_review\_combined.csv }\OperatorTok{\textgreater{}}\NormalTok{ q3\_priority\_review.csv}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Review Criteria}: - Does source question measure same construct
+as target? - Are differences fixable (F2) or fundamental (F3)? - Is
+consolidation desirable from policy/research perspective?
+
+\textbf{Actions}: - \textbf{Confirm F1/F2}: Validate consolidation is
+appropriate - \textbf{Reclassify to F3}: If models missed fundamental
+barrier - \textbf{Add notes}: Document reasoning for stakeholders
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Step 2: Review Q4 Questions (53 questions)}
+
+After Q3, review Q4 - genuinely ambiguous cases:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Filter Q4 questions}
+\FunctionTok{grep} \StringTok{",Q4,"}\NormalTok{ expert\_review\_combined.csv }\OperatorTok{\textgreater{}}\NormalTok{ q4\_secondary\_review.csv}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Review Criteria}: - Why did models disagree? - Is additional
+context needed? - Does domain expertise resolve ambiguity?
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Step 3: Spot-Check Q1/Q2 (287 questions)}
+
+Sample Q1 and Q2 to validate auto-processing quality:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Sample 10\% of Q1 questions}
+\FunctionTok{grep} \StringTok{",Q1,"}\NormalTok{ expert\_review\_combined.csv }\KeywordTok{|} \FunctionTok{shuf} \AttributeTok{{-}n}\NormalTok{ 15 }\OperatorTok{\textgreater{}}\NormalTok{ q1\_spot\_check.csv}
+
+\CommentTok{\# Sample 10\% of Q2 questions}
+\FunctionTok{grep} \StringTok{",Q2,"}\NormalTok{ expert\_review\_combined.csv }\KeywordTok{|} \FunctionTok{shuf} \AttributeTok{{-}n}\NormalTok{ 14 }\OperatorTok{\textgreater{}}\NormalTok{ q2\_spot\_check.csv}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Review Criteria}: - Are high-confidence consolidable (Q1)
+classifications correct? - Are high-confidence non-consolidable (Q2)
+classifications correct? - Any systematic errors that suggest prompt
+refinement?
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{For Data Users}\label{for-data-users-2}
+
+\textbf{Finding Consolidable Questions}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# All consolidable questions (F1 + F2)}
+\FunctionTok{grep} \StringTok{",True,"}\NormalTok{ expert\_review\_combined.csv }\OperatorTok{\textgreater{}}\NormalTok{ consolidable\_questions.csv}
+
+\CommentTok{\# Direct recode only (F1)}
+\FunctionTok{grep} \StringTok{",F1,"}\NormalTok{ expert\_review\_combined.csv }\OperatorTok{\textgreater{}}\NormalTok{ f1\_direct\_recode.csv}
+
+\CommentTok{\# Statistical adjustment (F2)}
+\FunctionTok{grep} \StringTok{",F2,"}\NormalTok{ expert\_review\_combined.csv }\OperatorTok{\textgreater{}}\NormalTok{ f2\_statistical\_adjustment.csv}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Finding Specific Topics}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Employment questions (example)}
+\FunctionTok{grep} \AttributeTok{{-}i} \StringTok{"work\textbackslash{}|employ\textbackslash{}|job\textbackslash{}|hour"}\NormalTok{ expert\_review\_combined.csv }\OperatorTok{\textgreater{}}\NormalTok{ employment\_questions.csv}
+
+\CommentTok{\# Income questions (example)}
+\FunctionTok{grep} \AttributeTok{{-}i} \StringTok{"income\textbackslash{}|earn\textbackslash{}|wage\textbackslash{}|salary"}\NormalTok{ expert\_review\_combined.csv }\OperatorTok{\textgreater{}}\NormalTok{ income\_questions.csv}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{For Survey Designers}\label{for-survey-designers}
+
+\textbf{Identifying Patterns}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Group by barrier code to see common failure modes}
+\FunctionTok{cut} \AttributeTok{{-}d}\StringTok{\textquotesingle{},\textquotesingle{}} \AttributeTok{{-}f9}\NormalTok{ expert\_review\_combined.csv }\KeywordTok{|} \FunctionTok{sort} \KeywordTok{|} \FunctionTok{uniq} \AttributeTok{{-}c} \KeywordTok{|} \FunctionTok{sort} \AttributeTok{{-}rn}
+
+\CommentTok{\# Group by feasibility}
+\FunctionTok{cut} \AttributeTok{{-}d}\StringTok{\textquotesingle{},\textquotesingle{}} \AttributeTok{{-}f7}\NormalTok{ expert\_review\_combined.csv }\KeywordTok{|} \FunctionTok{sort} \KeywordTok{|} \FunctionTok{uniq} \AttributeTok{{-}c}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Use Cases}: - \textbf{Questionnaire design}: Identify wording
+patterns that enable/prevent harmonization - \textbf{New question
+development}: Check if similar questions already harmonized -
+\textbf{Cross-survey integration}: Plan data linkage based on
+consolidable variables
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Summary Statistics}\label{summary-statistics-2}
+
+\subsection{Overall Distribution}\label{overall-distribution}
+
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+Category & CPS & FoodAPS & Combined \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Total} & 240 & 140 & 380 \\
+\textbf{F1} & 37 (15.4\%) & 23 (16.4\%) & 60 (15.8\%) \\
+\textbf{F2} & 63 (26.3\%) & 45 (32.1\%) & 108 (28.4\%) \\
+\textbf{F3} & 140 (58.3\%) & 72 (51.4\%) & 212 (55.8\%) \\
+\textbf{Consolidable} & 100 (41.7\%) & 68 (48.6\%) & 168 (44.2\%) \\
+\end{longtable}
+
+\subsection{Triage Distribution}\label{triage-distribution}
+
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+Quadrant & CPS & FoodAPS & Combined \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Q1} (Auto-accept) & 94 (39.2\%) & 57 (40.7\%) & 151 (39.7\%) \\
+\textbf{Q2} (Auto-reject) & 84 (35.0\%) & 52 (37.1\%) & 136 (35.8\%) \\
+\textbf{Q3} (Priority review) & 26 (10.8\%) & 14 (10.0\%) & 40
+(10.5\%) \\
+\textbf{Q4} (Secondary review) & 36 (15.0\%) & 17 (12.1\%) & 53
+(13.9\%) \\
+\end{longtable}
+
+\subsection{Expert Review Load}\label{expert-review-load-1}
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Category & Questions & \% of Total \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Auto-processed} (Q1 + Q2) & 287 & 75.5\% \\
+\textbf{Expert review} (Q3 + Q4) & 93 & 24.5\% \\
+\textbf{Priority review} (Q3) & 40 & 10.5\% \\
+\end{longtable}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Validation Checklist}\label{validation-checklist}
+
+When validating results, check:
+
+\begin{itemize}
+\tightlist
+\item[$\square$]
+  All 380 questions have exactly one best match
+\item[$\square$]
+  F1/F2 questions have \texttt{has\_consolidable\_path\ =\ True}
+\item[$\square$]
+  F3 questions have valid barrier code (CC.\emph{, TC.}, RS.\emph{,
+  PC.}, MC.\emph{, PM.})
+\item[$\square$]
+  Borda scores in {[}0, 1{]}
+\item[$\square$]
+  Entropy scores in {[}0, 1{]}
+\item[$\square$]
+  Triage quadrant matches Borda-Entropy rules
+\item[$\square$]
+  Reasoning summary provided for all questions
+\item[$\square$]
+  No missing data in required fields
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Contact Information}\label{contact-information}
+
+For questions about expert review tables: - \textbf{Technical issues}:
+See \texttt{docs/SOFTWARE.md} for script documentation -
+\textbf{Methodology questions}: See this report's Methodology section -
+\textbf{Data corrections}: Submit corrections via project repository
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Next Steps}\label{next-steps-1}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Expert validation}: Complete Q3/Q4 review
+\item
+  \textbf{Quality assessment}: Evaluate classification accuracy
+\item
+  \textbf{Feedback integration}: Refine classifications based on expert
+  input
+\item
+  \textbf{Consolidation pilots}: Test F1 recommendations in practice
+\item
+  \textbf{Documentation updates}: Incorporate lessons learned
+\end{enumerate}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Files Ready for Review}: -
+\texttt{output/analysis/expert\_review\_cps.csv} (240 rows) -
+\texttt{output/analysis/expert\_review\_foodaps.csv} (140 rows) -
+\texttt{output/analysis/expert\_review\_combined.csv} (380 rows)
+
+\textbf{Status}: ✅ Ready for expert validation
+
+
+
+
+\end{document}

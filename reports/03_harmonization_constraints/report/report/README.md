@@ -1,0 +1,230 @@
+# Report 03: Survey Question Harmonization Constraints
+
+**Status**: Structure complete, content scaffolded
+**Date Created**: 2026-02-02
+**Format**: Quarto book (HTML + PDF)
+
+---
+
+## Overview
+
+This directory contains the structured report document for Report 03 (Harmonization Constraints Analysis). The report is organized as a Quarto book with standard research paper sections.
+
+---
+
+## Directory Structure
+
+```
+report/
+├── _quarto.yml                  # Quarto configuration
+├── index.qmd                    # Title page/preface
+├── README.md                    # This file
+├── sections/                    # Report chapters
+│   ├── 00_executive_summary.md
+│   ├── 01_introduction.md
+│   ├── 02_background.md
+│   ├── 03_methodology.md
+│   ├── 04_results.md
+│   ├── 05_discussion.md
+│   ├── 06_conclusion.md
+│   ├── 07a_taxonomy_definitions.md
+│   ├── 07b_methodology_decisions.md
+│   └── 07c_expert_review_tables.md
+├── figures/                     # Visualizations (copied from output/visuals/)
+│   ├── barrier_distribution.png
+│   ├── consolidation_rates.png
+│   ├── expert_review_load.png
+│   ├── harmonization_distribution.png
+│   ├── process_flow.png
+│   ├── question_consolidation_distribution.png
+│   └── triage_quadrant.png
+└── _output/                     # Rendered output
+    ├── index.html               # HTML book
+    └── Report-03.pdf            # PDF book (requires LaTeX)
+```
+
+---
+
+## Report Structure
+
+### Main Chapters
+
+1. **Preface** (`index.qmd`): Title page, key findings overview, report structure
+2. **Executive Summary** (00): 1-page summary for stakeholders
+3. **Introduction** (01): Problem statement, research questions, scope
+4. **Background** (02): Harmonization frameworks, prior work, literature review
+5. **Methodology** (03): 5-stage pipeline, ensemble approach, triage framework
+6. **Results** (04): Consolidation rates, barrier analysis, agreement statistics
+7. **Discussion** (05): Interpretation, limitations, implications for practice
+8. **Conclusion** (06): Summary, contributions, future work
+
+### Appendices
+
+- **Appendix A** (07a): Complete taxonomy definitions (F1/F2/F3, barrier codes)
+- **Appendix B** (07b): Methodology decision log with rationales
+- **Appendix C** (07c): Expert review tables documentation
+
+---
+
+## Rendering
+
+### HTML (recommended for initial review)
+
+```bash
+cd report
+quarto render --to html
+```
+
+Output: `_output/index.html`
+
+### PDF (requires LaTeX)
+
+```bash
+cd report
+quarto render --to pdf
+```
+
+Output: `_output/Report-03.pdf`
+
+### Both formats
+
+```bash
+cd report
+quarto render
+```
+
+---
+
+## Content Status
+
+### ✅ Complete Sections
+- Preface (index.qmd)
+- Executive Summary (00) - skeleton with key findings
+- Introduction (01) - full draft
+- Background (02) - full draft with TODO for citations
+- Methodology (03) - comprehensive documentation
+- Results (04) - full draft with visualizations
+- Discussion (05) - comprehensive interpretation
+- Conclusion (06) - full summary and future work
+- Appendix A (07a) - complete taxonomy documentation
+- Appendix B (07b) - complete methodology decisions
+- Appendix C (07c) - complete expert review guide
+
+### 📝 Needs Refinement
+- Executive Summary: Expand to full 1-page summary
+- Background: Add specific citations from literature/ directory
+- Results: Create agreement heatmap visualization (currently TODO)
+
+### ✅ Figures
+All referenced figures present in `figures/`:
+- consolidation_rates.png (44KB)
+- barrier_distribution.png (47KB)
+- expert_review_load.png (60KB)
+- harmonization_distribution.png (323KB)
+- question_consolidation_distribution.png (309KB)
+- triage_quadrant.png (96KB)
+- process_flow.png (33KB)
+
+**Note**: agreement_heatmap.png referenced but not yet created (marked as TODO in results section).
+
+---
+
+## Key Features
+
+### 1. Quarto Book Format
+- Professional multi-chapter document
+- Automatic table of contents
+- Cross-references between sections
+- Multiple output formats (HTML, PDF)
+
+### 2. Content Organization
+- Standard research paper structure (IMRaD format)
+- Comprehensive appendices for technical detail
+- Clear separation of main narrative and supporting material
+
+### 3. Source Integration
+- Pulls from existing `docs/` files where appropriate
+- References specific source documents in comments
+- Avoids duplication - report references working files
+
+### 4. Stakeholder Focus
+- Executive summary for decision-makers
+- Technical methodology for researchers
+- Practical implications for practitioners
+- Expert review guidance in appendices
+
+---
+
+## Relation to Other Documentation
+
+### Working Files (`../docs/`)
+- Lab notebook, technical specs, working analysis
+- More detailed than report (e.g., full decision logs)
+- Report references these for deeper detail
+
+### Presentation (`../presentation/`)
+- Slide deck for oral presentation
+- Separate from written report
+- Uses same figures where appropriate
+
+### Expert Review Tables (`../output/analysis/`)
+- CSV deliverables for stakeholders
+- Documented in Appendix C
+- Generated by pipeline
+
+---
+
+## Content Sources Mapped
+
+| Report Section | Primary Sources |
+|---------------|-----------------|
+| Introduction | `docs/framing_ai_assisted.md`, `docs/stage4_research_framing.md` |
+| Background | `docs/literature/`, `docs/coding_procedure.md`, `docs/taxonomy_v1.md` |
+| Methodology | `docs/pipeline_diagram.md`, `docs/stage4_ensemble_methodology.md`, `docs/SPEC_*.md` |
+| Results | `docs/FINDINGS_R03_*.md`, `output/analysis/*` |
+| Discussion | Research synthesis across all sources |
+| Appendix A | `docs/taxonomy_v1.md`, `docs/coding_procedure.md` |
+| Appendix B | `docs/methodology_log.md`, `docs/methodology_log_decision_016.md` |
+| Appendix C | `docs/SOFTWARE.md`, `output/analysis/expert_review_*.csv` |
+
+---
+
+## Next Steps
+
+### Content Refinement (Priority)
+1. **Expand Executive Summary**: Full 1-page summary for stakeholders
+2. **Add Citations**: Pull specific citations from `literature/` directory into Background
+3. **Create Agreement Heatmap**: Generate visualization for Results section
+4. **Review Pass**: Check all sections for consistency and completeness
+
+### Expert Validation (After Content Complete)
+1. Subject-matter expert review of classifications
+2. Incorporate feedback into Discussion/Conclusion
+3. Update Executive Summary with validated findings
+
+### Final Production
+1. Proofread all sections
+2. Check all cross-references
+3. Generate final PDF
+4. Archive for distribution
+
+---
+
+## Citation
+
+When citing this report:
+
+> Webb, B. (2026). *Survey Question Harmonization Constraints: AI-Assisted Analysis of Federal Survey Consolidation Potential.* Report 03. Federal Survey Concept Mapper Project.
+
+---
+
+## Contact
+
+For questions about the report structure:
+- Technical: See `../docs/SOFTWARE.md`
+- Content: See individual section files
+- Data: See `../output/analysis/`
+
+---
+
+**Status**: ✅ Report structure complete and renderable. Content scaffolded with clear TODOs for refinement.
