@@ -644,6 +644,37 @@ python scripts/build_expert_review_table.py
 
 ---
 
+### 19. `scripts/extract_example_pairs.py`
+
+**Purpose:** Extract compelling example question pairs for presentation materials. Selects high/medium/low consolidability examples with full question text, LLM reasoning, and barrier codes.
+
+**Stage:** 5d - Presentation Materials
+
+**Inputs:**
+- `output/analysis/stage4_question_best_matches.csv`
+- `output/analysis/arbitration_merged.csv`
+- `data/cps_comparison_merged.csv`
+- `data/foodaps_comparison_merged.csv`
+
+**Outputs:**
+- `output/analysis/example_pairs_for_presentation.md` — Formatted examples ready for slides
+- `output/analysis/example_pairs_candidates.csv` — Top 5 candidates per category
+- `output/analysis/example_pairs_README.md` — Usage guide
+
+**Selection Criteria:**
+- **High (F1):** Borda > 0.70, Entropy > 0.80, non-demographic content
+- **Medium (F2):** Borda 0.40-0.70, shows transformation needs
+- **Low (F3):** Borda < 0.30, CC barrier preferred, non-administrative
+
+**Filters:** Excludes demographic questions (age, race, sex) and administrative/metadata questions for more compelling presentation examples.
+
+**Usage:**
+```bash
+python scripts/extract_example_pairs.py
+```
+
+---
+
 ## Configuration
 
 ### `config.yaml`

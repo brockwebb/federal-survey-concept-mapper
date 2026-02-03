@@ -1,0 +1,17 @@
+project:
+  type: default
+  output-dir: _output
+
+format:
+  revealjs:
+    theme: simple
+    slide-number: true
+    transition: fade
+    width: 1600
+    height: 900
+    margin: 0.1
+    center: true
+
+execute:
+  echo: false
+  warning: false

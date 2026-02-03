@@ -1,0 +1,232 @@
+---
+title: "Federal Survey Question Consolidation"
+subtitle: "AI-Assisted Analysis for Burden Reduction"
+author: "Brock Webb"
+date: "2026-02-02"
+format: revealjs
+---
+
+## The Problem {.smaller}
+
+- Federal surveys ask overlapping questions
+- Respondent burden + data silos
+- **This report:** Capstone analysis — which questions can actually consolidate?
+
+::: {.notes}
+Brief — already covered in Reports 1-2
+:::
+
+---
+
+## Why It Matters
+
+- **Burden reduction:** Fewer redundant questions for respondents
+- **Data interoperability:** Enable cross-survey analysis
+- **Resource efficiency:** Focus expert review where it matters
+
+---
+
+## The Challenge
+
+::: {.incremental}
+- Determining consolidation requires expert judgment
+- Traditional approach: weeks/months of manual review
+- Our approach: AI-assisted triage → human experts on highest-ROI decisions
+:::
+
+---
+
+## Starting Point
+
+- **7,400+** survey questions across **49** federal surveys
+- Mapped to Census Bureau standard taxonomy
+- [Report 1 established concept classification]
+
+---
+
+## Concept Classification (Report 1)
+
+- LLM ensemble with arbitrator pattern
+- Each question → best concept match
+- Taxonomy: Demographics, Economics, Education, Health, etc.
+
+![](../output/visuals/process_flow.png){width=80%}
+
+---
+
+## Key Insight
+
+::: {.callout-important}
+Same concept ≠ swappable data
+:::
+
+- "Income" questions can measure completely different constructs
+- Demographics (age, sex, race) = expected overlap (minority of questions)
+- **Specialized content** = where real analysis matters
+
+---
+
+## Harmonization Framework
+
+Adopted standard survey harmonization classification:
+
+| Level | Definition |
+|-------|------------|
+| **F1** | Directly consolidable — no transformation needed |
+| **F2** | Consolidable with transformation — needs recoding |
+| **F3** | Not consolidable — fundamental barriers |
+
+Barrier codes: CC (construct/concept), TC (temporal), RS (response scale)
+
+---
+
+## Pairwise Comparison
+
+- Within concept categories, compare all question pairs
+- **1,598 pairs** analyzed (CPS-ACS, FoodAPS-ACS)
+- Naive but exhaustive — expect many F3, looking for matches
+
+---
+
+## Multi-Model Ensemble
+
+Three frontier models to reduce bias:
+
+| Model | Behavior |
+|-------|----------|
+| OpenAI | Moderate synthesis, slight pro-self bias |
+| Anthropic | High synthesis, neutral |
+| Google | Deferential, conservative |
+
+Different profiles = documented finding, not noise
+
+---
+
+## Agreement & Arbitration
+
+- **κ = 0.845** — high inter-rater agreement
+- Voting, entropy, Borda scoring
+- Arbitration resolves disagreements → final verdict
+
+---
+
+## Question-Level Rollup
+
+- Pair analysis → **380 unique source questions**
+- Each with best ACS match
+- Two-axis triage: Direction (Borda) × Stability (Entropy)
+
+![](../output/visuals/triage_quadrant.png){width=70%}
+
+---
+
+## Headline Results
+
+![](../output/visuals/consolidation_rates.png){width=80%}
+
+- **CPS:** 41.7% consolidable (100 of 240 questions)
+- **FoodAPS:** 48.6% consolidable (68 of 140 questions)
+
+---
+
+## Why Questions Can't Consolidate
+
+![](../output/visuals/barrier_distribution.png){width=80%}
+
+**97% of F3 = Construct/Concept differences (CC)**
+
+Not fixable barriers — fundamentally different measurements
+
+---
+
+## Example: High Consolidability (F1)
+
+**CPS:** "How many hours per week do you USUALLY work?"
+
+**ACS:** "What is your best estimate of hours per week you usually work?"
+
+- Verdict: **F1** (directly consolidable)
+- Confidence: Borda=1.0, Entropy=1.0
+- Same construct, same framing, same reference
+
+---
+
+## Example: Medium Consolidability (F2)
+
+**CPS:** "EXCLUDING overtime, tips, commissions — what is hourly rate?"
+
+**ACS:** "What is your hourly rate of pay?"
+
+- Verdict: **F2** (consolidable with transformation)
+- Transformation needed: scope alignment (ACS includes all components)
+
+---
+
+## Example: Not Consolidable (F3)
+
+**CPS:** "Do you WANT to work full time (35+ hours)?"
+
+**ACS:** "Did this person WORK for pay last week?"
+
+- Verdict: **F3** — Barrier: **CC.1**
+- Same domain (employment), entirely different constructs
+- Preference vs. behavior — not reconcilable
+
+---
+
+## Expert Review Load
+
+![](../output/visuals/expert_review_load.png){width=80%}
+
+- **76%** auto-processed with high confidence
+- **24%** (93 questions) routed to expert review
+- AI handles grunt work; humans judge edge cases
+
+---
+
+## Deliverables
+
+| Output | Description |
+|--------|-------------|
+| 168 consolidable mappings | Specific question-to-question recommendations |
+| 212 non-consolidable | With barrier codes explaining why |
+| 93 for expert review | Flagged for human judgment |
+| Full methodology | Reproducible for additional surveys |
+
+---
+
+## What This Proves
+
+::: {.incremental}
+- AI-assisted methods accelerate traditionally labor-intensive analysis
+- **Days instead of weeks/months**
+- Human oversight preserved throughout
+- Expert judgment focused on highest-ROI decisions
+:::
+
+---
+
+## What's Next
+
+1. Expert validation of recommendations
+2. Expand to additional federal surveys
+3. Application to survey editing/imputation
+
+---
+
+## Summary
+
+- **~44% consolidation potential** identified
+- **97% of failures** = construct differences (not fixable)
+- **Reproducible methodology** for future survey harmonization
+- **Proof of concept:** AI + human expertise scales this work
+
+---
+
+## Questions?
+
+Contact: [your info]
+
+Repository: [link]
+
+Expert review tables: [link to output]

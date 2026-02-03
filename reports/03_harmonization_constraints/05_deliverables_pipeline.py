@@ -9,6 +9,7 @@ Sub-stages:
   5a: Scoring bake-off (4 methods + ensemble)
   5b: Best-match rollup with triage quadrant assignment
   5c: Expert review tables
+  5d: Example pairs for presentation materials
 
 Requires Stage 4 outputs (04_findings_pipeline.py) to exist.
 
@@ -17,6 +18,7 @@ Usage:
     python 05_deliverables_pipeline.py --stage 5a   # Scoring only
     python 05_deliverables_pipeline.py --stage 5b   # Best-match only
     python 05_deliverables_pipeline.py --stage 5c   # Expert tables only
+    python 05_deliverables_pipeline.py --stage 5d   # Example pairs only
     python 05_deliverables_pipeline.py --dry-run    # Show plan without running
 """
 
@@ -64,6 +66,17 @@ STAGES = {
             'classification_distribution.md',
         ],
         'requires': ['stage4_question_best_matches.csv', 'final_verdicts.csv', 'arbitration_merged.csv'],
+    },
+    '5d': {
+        'name': 'Example Pairs for Presentation',
+        'script': 'extract_example_pairs.py',
+        'description': 'Extract compelling examples for slide deck',
+        'outputs': [
+            'example_pairs_for_presentation.md',
+            'example_pairs_candidates.csv',
+            'example_pairs_README.md',
+        ],
+        'requires': ['stage4_question_best_matches.csv', 'arbitration_merged.csv'],
     },
 }
 
@@ -134,6 +147,7 @@ Sub-stages:
   5a  Scoring bake-off (4 methods + ensemble)
   5b  Best-match rollup with triage quadrants
   5c  Expert review tables
+  5d  Example pairs for presentation
 
 Examples:
   python 05_deliverables_pipeline.py              # Run all

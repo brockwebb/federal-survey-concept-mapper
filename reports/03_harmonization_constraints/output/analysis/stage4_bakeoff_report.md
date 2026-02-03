@@ -1,6 +1,6 @@
 # Stage 4: Scoring Bake-Off Report
 
-**Generated:** 2026-01-31T17:00:13.431605
+**Generated:** 2026-02-02T15:03:30.230673
 **Pairs scored:** 1598
 **Vote sources:** 3 raters + 2–3 arbitrators per pair
 

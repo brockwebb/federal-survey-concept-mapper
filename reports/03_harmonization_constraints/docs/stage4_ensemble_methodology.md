@@ -349,6 +349,19 @@ The original ensemble approach (averaging 4 methods) didn't work well because:
                     LOW Stability (classifiers disagreed)
 ```
 
+### Threshold Computation
+
+Triage thresholds are computed from the 380 question-level best-match scores, not the 1,598 pair-level scores.
+
+The pair-level Borda distribution is dominated by unanimous F3 pairs (median ≈ 0), making it unsuitable for quadrant assignment — nearly all pairs would fall into reject quadrants regardless of their relative consolidation potential.
+
+The best-match rollup filters to each question's strongest ACS candidate, creating a distribution where "winners compete against winners." This yields meaningful variance for threshold-based triage:
+
+- **Borda median (question-level):** 0.167
+- **Entropy median (question-level):** 0.330
+
+Median splits on this distribution produce roughly balanced quadrants with actionable routing implications.
+
 ### Operational Routing
 
 | Quadrant | Direction | Stability | Action |

@@ -85,7 +85,7 @@ Two-axis framework using Borda (direction) × Entropy (stability):
 - **Q3:** High Borda + Low Entropy → Edge case, leaning yes but contested (human review priority)
 - **Q4:** Low Borda + Low Entropy → Ambiguous (human review secondary)
 
-Thresholds: median of best-match scores (not pair-level, where the degenerate F3 majority makes Borda median = 0).
+**Triage threshold base:** Question-level best-match scores (n=380), not pair-level (n=1,598). Pair-level median ≈ 0 due to F3 dominance; question-level rollup creates meaningful variance for threshold-based triage.
 
 ### Open Questions Remaining
 - **Layperson framing:** Emphasis on question counts for stakeholder communication (Stage 5)
