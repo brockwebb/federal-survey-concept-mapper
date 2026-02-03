@@ -37,6 +37,7 @@ quarto preview slides.qmd
 presentation/
 ├── _quarto.yml              # Configuration
 ├── slides.qmd               # Main content ← EDIT THIS
+├── images/                  # Local visuals (5 PNG files)
 ├── README.md                # Full documentation
 ├── QUICK_START.md           # This file
 ├── SCAFFOLD_VERIFICATION.md # What was created
@@ -108,16 +109,18 @@ quarto render slides.qmd --to pptx
 
 **Visuals not appearing?**
 ```bash
-# Check visuals exist
-ls -la ../output/visuals/*.png
+# Check visuals exist locally
+ls -la images/*.png
 ```
 
-All 5 visuals should exist:
-- process_flow.png
-- triage_quadrant.png
-- consolidation_rates.png
-- barrier_distribution.png
-- expert_review_load.png
+All 5 visuals should exist in `images/`:
+- process_flow.png (33KB)
+- triage_quadrant.png (96KB)
+- consolidation_rates.png (44KB)
+- barrier_distribution.png (47KB)
+- expert_review_load.png (60KB)
+
+Images are maintained locally for presentation portability.
 
 **Render errors?**
 ```bash

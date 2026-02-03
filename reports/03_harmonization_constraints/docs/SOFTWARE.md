@@ -2,8 +2,8 @@
 
 ## Report 03: Harmonization Constraints
 
-**Version:** 4.0
-**Last Updated:** 2026-01-31
+**Version:** 4.1
+**Last Updated:** 2026-02-02
 **Author:** Brock Webb
 
 ---
@@ -530,7 +530,7 @@ python 04_findings_pipeline.py
 
 ### 15. `05_deliverables_pipeline.py`
 
-**Purpose:** Orchestrate scoring, rollup, and expert review sub-stages.
+**Purpose:** Orchestrate scoring, rollup, expert review, and presentation deliverables.
 
 **Stage:** 5 - Deliverables
 
@@ -538,6 +538,8 @@ python 04_findings_pipeline.py
 - 5a: Scoring bake-off (`scripts/stage4_scoring_bakeoff.py`)
 - 5b: Best-match rollup (`scripts/stage4_best_match_rollup.py`)
 - 5c: Expert review tables (`scripts/build_expert_review_table.py`)
+- 5d: Example pairs for presentation (`scripts/extract_example_pairs.py`)
+- 5e: Sync visuals to presentation (built-in function)
 
 **Usage:**
 ```bash
@@ -545,8 +547,16 @@ python 05_deliverables_pipeline.py              # Run all sub-stages
 python 05_deliverables_pipeline.py --stage 5a   # Scoring only
 python 05_deliverables_pipeline.py --stage 5b   # Best-match only
 python 05_deliverables_pipeline.py --stage 5c   # Expert tables only
+python 05_deliverables_pipeline.py --stage 5d   # Example pairs only
+python 05_deliverables_pipeline.py --stage 5e   # Sync visuals only
 python 05_deliverables_pipeline.py --dry-run    # Show plan without running
 ```
+
+**Stage 5e Details:**
+- Copies all PNG files from `output/visuals/` to `presentation/images/`
+- Ensures presentation is self-contained with latest visuals
+- Preserves original modification timestamps
+- No script dependency — built-in Python function
 
 ---
 

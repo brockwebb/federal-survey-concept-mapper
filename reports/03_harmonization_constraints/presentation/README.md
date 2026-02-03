@@ -9,7 +9,10 @@
 
 - `_quarto.yml` — Quarto project configuration
 - `slides.qmd` — Main presentation content (Quarto markdown)
+- `images/` — Local copy of all visuals (5 PNG files)
 - `README.md` — This file
+- `QUICK_START.md` — Quick reference guide
+- `SCAFFOLD_VERIFICATION.md` — Creation verification report
 
 ---
 
@@ -85,12 +88,14 @@ quarto render slides.qmd --to pptx
 
 ## Assets
 
-All visuals referenced from `../output/visuals/`:
-- `process_flow.png` — Pipeline diagram
-- `triage_quadrant.png` — 2D triage framework
-- `consolidation_rates.png` — Bar chart of consolidability rates
-- `barrier_distribution.png` — Pie chart of F3 barriers
-- `expert_review_load.png` — Stacked bar of triage quadrants
+All visuals are stored locally in `images/`:
+- `process_flow.png` — Pipeline diagram (33KB)
+- `triage_quadrant.png` — 2D triage framework (96KB)
+- `consolidation_rates.png` — Bar chart of consolidability rates (44KB)
+- `barrier_distribution.png` — Pie chart of F3 barriers (47KB)
+- `expert_review_load.png` — Stacked bar of triage quadrants (60KB)
+
+**Note:** Images are copied from `../output/visuals/` and maintained locally for presentation portability.
 
 Example pairs referenced from `../output/analysis/example_pairs_for_presentation.md`
 

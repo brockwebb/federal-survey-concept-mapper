@@ -10,6 +10,7 @@ Sub-stages:
   5b: Best-match rollup with triage quadrant assignment
   5c: Expert review tables
   5d: Example pairs for presentation materials
+  5e: Sync visuals to presentation
 
 Requires Stage 4 outputs (04_findings_pipeline.py) to exist.
 
@@ -19,10 +20,12 @@ Usage:
     python 05_deliverables_pipeline.py --stage 5b   # Best-match only
     python 05_deliverables_pipeline.py --stage 5c   # Expert tables only
     python 05_deliverables_pipeline.py --stage 5d   # Example pairs only
+    python 05_deliverables_pipeline.py --stage 5e   # Sync visuals only
     python 05_deliverables_pipeline.py --dry-run    # Show plan without running
 """
 
 import argparse
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -30,6 +33,9 @@ from pathlib import Path
 BASE_DIR = Path(__file__).parent
 SCRIPTS_DIR = BASE_DIR / "scripts"
 OUTPUT_DIR = BASE_DIR / "output" / "analysis"
+VISUALS_DIR = BASE_DIR / "output" / "visuals"
+PRESENTATION_DIR = BASE_DIR / "presentation"
+PRESENTATION_IMAGES = PRESENTATION_DIR / "images"
 
 STAGES = {
     '5a': {
@@ -78,6 +84,13 @@ STAGES = {
         ],
         'requires': ['stage4_question_best_matches.csv', 'arbitration_merged.csv'],
     },
+    '5e': {
+        'name': 'Sync Visuals to Presentation',
+        'script': None,  # Built-in function
+        'description': 'Copy visuals to presentation/images/ for self-contained deck',
+        'outputs': [],  # Presentation images (outside output/analysis/)
+        'requires': [],  # Visuals should exist but not blocking
+    },
 }
 
 
@@ -91,14 +104,68 @@ def check_prerequisites(stage_key):
     return missing
 
 
+def sync_visuals_to_presentation():
+    """Copy visuals from output/visuals/ to presentation/images/."""
+    print(f"\n  Syncing visuals to presentation...")
+
+    # Create presentation images directory if it doesn't exist
+    PRESENTATION_IMAGES.mkdir(parents=True, exist_ok=True)
+
+    # Check if visuals directory exists
+    if not VISUALS_DIR.exists():
+        print(f"  WARNING: Visuals directory not found: {VISUALS_DIR}")
+        print(f"  Skipping visual sync. Run visualization generation first.")
+        return True
+
+    # Copy all PNG files
+    png_files = list(VISUALS_DIR.glob("*.png"))
+    if not png_files:
+        print(f"  WARNING: No PNG files found in {VISUALS_DIR}")
+        return True
+
+    copied = 0
+    for src in png_files:
+        dst = PRESENTATION_IMAGES / src.name
+        shutil.copy2(src, dst)
+        size_kb = dst.stat().st_size / 1024
+        print(f"  ✓ {src.name} ({size_kb:.1f}KB)")
+        copied += 1
+
+    print(f"\n  Synced {copied} visual(s) to {PRESENTATION_IMAGES}")
+    print(f"  Presentation is now self-contained with latest visuals.")
+    return True
+
+
 def run_stage(stage_key, dry_run=False):
     """Run a single sub-stage."""
     stage = STAGES[stage_key]
-    script_path = SCRIPTS_DIR / stage['script']
 
     print(f"\n{'=' * 60}")
     print(f"STAGE {stage_key.upper()}: {stage['name']}")
     print(f"  {stage['description']}")
+
+    # Special handling for stage 5e (visual sync)
+    if stage_key == '5e':
+        print(f"  Action: Built-in function")
+        print(f"{'=' * 60}")
+
+        if dry_run:
+            print(f"\n  [DRY RUN] Would sync visuals from {VISUALS_DIR}")
+            print(f"  Target: {PRESENTATION_IMAGES}")
+            png_files = list(VISUALS_DIR.glob("*.png")) if VISUALS_DIR.exists() else []
+            print(f"  Files to copy: {len(png_files)}")
+            for f in png_files:
+                print(f"    - {f.name}")
+            return True
+
+        # Run visual sync
+        success = sync_visuals_to_presentation()
+        if success:
+            print(f"\n  [OK] {stage['name']} complete.")
+        return success
+
+    # Standard script-based stage
+    script_path = SCRIPTS_DIR / stage['script']
     print(f"  Script: {script_path.name}")
     print(f"{'=' * 60}")
 
@@ -148,6 +215,7 @@ Sub-stages:
   5b  Best-match rollup with triage quadrants
   5c  Expert review tables
   5d  Example pairs for presentation
+  5e  Sync visuals to presentation
 
 Examples:
   python 05_deliverables_pipeline.py              # Run all

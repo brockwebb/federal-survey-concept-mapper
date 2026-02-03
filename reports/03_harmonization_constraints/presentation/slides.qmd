@@ -50,7 +50,7 @@ Brief — already covered in Reports 1-2
 - Each question → best concept match
 - Taxonomy: Demographics, Economics, Education, Health, etc.
 
-![](../output/visuals/process_flow.png){width=80%}
+![](images/process_flow.png){width=80%}
 
 ---
 
@@ -116,13 +116,13 @@ Different profiles = documented finding, not noise
 - Each with best ACS match
 - Two-axis triage: Direction (Borda) × Stability (Entropy)
 
-![](../output/visuals/triage_quadrant.png){width=70%}
+![](images/triage_quadrant.png){width=70%}
 
 ---
 
 ## Headline Results
 
-![](../output/visuals/consolidation_rates.png){width=80%}
+![](images/consolidation_rates.png){width=80%}
 
 - **CPS:** 41.7% consolidable (100 of 240 questions)
 - **FoodAPS:** 48.6% consolidable (68 of 140 questions)
@@ -131,11 +131,22 @@ Different profiles = documented finding, not noise
 
 ## Why Questions Can't Consolidate
 
-![](../output/visuals/barrier_distribution.png){width=80%}
+![](images/barrier_distribution.png){width=80%}
 
 **97% of F3 = Construct/Concept differences (CC)**
 
 Not fixable barriers — fundamentally different measurements
+
+---
+
+## Harmonization Code Distribution
+
+![](images/harmonization_distribution.png){width=95%}
+
+::: {.notes}
+Left: Overall F1/F2/F3 distribution across 1,598 pairs
+Right: Top 10 barrier sub-codes for F3 pairs - CC.1 (concept definition) dominates at 70%
+:::
 
 ---
 
@@ -176,7 +187,7 @@ Not fixable barriers — fundamentally different measurements
 
 ## Expert Review Load
 
-![](../output/visuals/expert_review_load.png){width=80%}
+![](images/expert_review_load.png){width=80%}
 
 - **76%** auto-processed with high confidence
 - **24%** (93 questions) routed to expert review
@@ -230,3 +241,174 @@ Contact: [your info]
 Repository: [link]
 
 Expert review tables: [link to output]
+
+---
+
+# Appendix {.appendix}
+
+---
+
+## Pipeline Architecture
+
+![](images/architecture_pipeline.png){width=90%}
+
+---
+
+## LLM Ensemble Pattern
+
+![](images/architecture_ensemble.png){width=90%}
+
+---
+
+## Question-Level Rollup
+
+![](images/architecture_rollup.png){width=90%}
+
+---
+
+## Harmonization Code Distribution
+
+![](images/harmonization_distribution.png){width=95%}
+
+::: {.notes}
+Left: Overall F1/F2/F3 distribution across 1,598 pairs
+Right: Top 10 barrier sub-codes for F3 pairs - CC.1 (concept definition) dominates at 70%
+:::
+
+---
+
+## Question-Level Consolidation Distribution
+
+![](images/question_consolidation_distribution.png){width=95%}
+
+::: {.notes}
+Left: CPS (41.7% consolidable) vs FOODAPS (48.6% consolidable) breakdown
+Right: F3 questions by barrier code - CC.1 dominates at 76.9% of non-consolidable questions
+:::
+
+---
+
+## Harmonization Taxonomy {.smaller}
+
+**Primary Source:** Fortier et al. (2011, 2017) DataSHaPER/Maelstrom framework
+
+**Supporting:** Wolf et al. (2016), Saris & Gallhofer (2014), Slomczynski & Tomescu-Dubrow (2018)
+
+| Code | Feasibility | Definition | Action Required |
+|------|-------------|------------|-----------------|
+| **F1** | **Direct recode** | Mechanically transformable with simple recoding or collapsing | Simple data transformation |
+| **F2** | **Statistical adjustment** | Requires modeling, imputation, or bridging studies | Statistical harmonization |
+| **F3** | **Incompatible** | Fundamentally different constructs; not harmonizable without re-fielding | No harmonization possible |
+
+::: {.notes}
+Fortier et al. (2011) found 38% of variables could be harmonized across 53 studies
+:::
+
+---
+
+## Barrier Code Taxonomy (1/3) {.smaller}
+
+### Temporal Constraints (TC)
+
+| Code | Subtype | Definition | Example |
+|------|---------|------------|---------|
+| **TC** | Temporal/Chronological | Reference period or timing differences | — |
+| TC.1 | Reference period length | Different recall windows | 7-day vs 12-month |
+| TC.2 | Temporal framing | Point-in-time vs habitual vs retrospective | "last week" vs "usually" |
+| TC.3 | Calendar alignment | Fixed vs rolling reference periods | Calendar year vs "past 12 months" |
+
+### Construct Constraints (CC)
+
+| Code | Subtype | Definition | Example |
+|------|---------|------------|---------|
+| **CC** | Construct/Concept | Concept definition or operationalization differences | — |
+| CC.1 | Concept definition | Different meaning of core term | "Employment" including/excluding unpaid work |
+| CC.2 | Operationalization | Different behavioral indicators | "Food insecurity" via different batteries |
+| CC.3 | Boundary conditions | Different thresholds or cutoffs | Income brackets with different boundaries |
+| CC.4 | Scope inclusions | Different components counted | "Income" including/excluding specific sources |
+
+---
+
+## Barrier Code Taxonomy (2/3) {.smaller}
+
+### Population/Coverage Constraints (PC)
+
+| Code | Subtype | Definition | Example |
+|------|---------|------------|---------|
+| **PC** | Population/Coverage | Universe, frame, or sample design differences | — |
+| PC.1 | Universe definition | Target population differs | Civilian vs all residents |
+| PC.2 | Frame exclusions | Different sampling exclusions | Group quarters, territories |
+| PC.3 | Age bounds | Different age eligibility | 15+ vs 16+ vs 18+ |
+| PC.4 | Geographic scope | Different geographic coverage | 50 states vs states + territories |
+
+### Response Scale Constraints (RS)
+
+| Code | Subtype | Definition | Example |
+|------|---------|------------|---------|
+| **RS** | Response Scale | Scale type, categories, or format differences | — |
+| RS.1 | Scale type | Fundamentally different formats | Binary vs 5-point vs continuous |
+| RS.2 | Category structure | Different number/boundaries | 5-point vs 7-point Likert |
+| RS.3 | Anchoring/labels | Different verbal anchors | "Strongly agree" differences |
+| RS.4 | Numeric vs verbal | Number scale vs labeled categories | 0-10 slider vs frequency labels |
+
+---
+
+## Barrier Code Taxonomy (3/3) {.smaller}
+
+### Mode/Context Constraints (MC)
+
+| Code | Subtype | Definition | Example |
+|------|---------|------------|---------|
+| **MC** | Mode/Context | Interview mode or questionnaire context differences | — |
+| MC.1 | Interview mode | Different data collection modes | CATI vs web self-administered |
+| MC.2 | Question routing | Different skip patterns | Subset vs all respondents |
+| MC.3 | Contextual priming | Preceding questions affect interpretation | Question order effects |
+| MC.4 | Proxy response | Proxy vs self-report rules | Household head vs individual |
+
+### Processing/Metadata Constraints (PM)
+
+| Code | Subtype | Definition | Example |
+|------|---------|------------|---------|
+| **PM** | Processing/Metadata | Coding, weighting, or documentation differences | — |
+| PM.1 | Coding schemes | Different classification systems | Occupation coding differences |
+| PM.2 | Derived variables | Different construction algorithms | Poverty calculation methods |
+| PM.3 | Documentation gaps | Insufficient metadata | Missing questionnaire context |
+
+---
+
+## Triage Quadrants: Operational Framework {.smaller}
+
+Two-axis classification using Borda (direction) and Entropy (stability):
+
+| Quadrant | Borda | Entropy | Count | Description | Action |
+|----------|-------|---------|-------|-------------|--------|
+| **Q1** | High | High | 151 | Confident consolidable — classifiers agreed, leaning accept | Auto-process, spot-check |
+| **Q2** | Low | High | 136 | Confident non-consolidable — classifiers agreed, leaning reject | Auto-process, low priority |
+| **Q3** | High | Low | 40 | Uncertain accept — leaning yes but contested | **Expert review priority** |
+| **Q4** | Low | Low | 53 | Uncertain reject — genuinely ambiguous | Expert review secondary |
+
+**Thresholds:** Median split on question-level best-match scores
+
+- Borda median: 0.167
+- Entropy median: 0.330
+
+**Rationale:** Separates "what's the answer?" (Borda) from "how much did they argue?" (Entropy)
+
+---
+
+## Key Citations {.smaller}
+
+**Harmonization Framework:**
+
+- Fortier, I., et al. (2011). Is rigorous retrospective harmonization possible? Application of the DataSHaPER approach across 53 large studies. *International Journal of Epidemiology*, 40(5), 1314-1328.
+- Fortier, I., et al. (2017). Maelstrom Research guidelines for rigorous retrospective data harmonization. *International Journal of Epidemiology*, 46(1), 103-115.
+
+**Survey Methodology:**
+
+- Wolf, C., et al. (2016). Harmonizing survey questions between cultures and over time. In *The SAGE Handbook of Survey Methodology* (pp. 502-524). SAGE.
+- Saris, W. E., & Gallhofer, I. N. (2014). *Design, Evaluation, and Analysis of Questionnaires for Survey Research* (2nd ed.). Wiley.
+
+**Data Harmonization:**
+
+- Slomczynski, K. M., & Tomescu-Dubrow, I. (2018). Basic principles of survey data recycling. In *Advances in Comparative Survey Methods* (pp. 937-962). Wiley.
+- Tomescu-Dubrow, I., et al. (Eds.). (2024). *Survey Data Harmonization in the Social Sciences*. Wiley.
