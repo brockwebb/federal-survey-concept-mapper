@@ -147,6 +147,22 @@
 
 
 \makeatletter
+\@ifpackageloaded{tcolorbox}{}{\usepackage[skins,breakable]{tcolorbox}}
+\@ifpackageloaded{fontawesome5}{}{\usepackage{fontawesome5}}
+\definecolor{quarto-callout-color}{HTML}{909090}
+\definecolor{quarto-callout-note-color}{HTML}{0758E5}
+\definecolor{quarto-callout-important-color}{HTML}{CC1914}
+\definecolor{quarto-callout-warning-color}{HTML}{EB9113}
+\definecolor{quarto-callout-tip-color}{HTML}{00A047}
+\definecolor{quarto-callout-caution-color}{HTML}{FC5300}
+\definecolor{quarto-callout-color-frame}{HTML}{acacac}
+\definecolor{quarto-callout-note-color-frame}{HTML}{4582ec}
+\definecolor{quarto-callout-important-color-frame}{HTML}{d9534f}
+\definecolor{quarto-callout-warning-color-frame}{HTML}{f0ad4e}
+\definecolor{quarto-callout-tip-color-frame}{HTML}{02b875}
+\definecolor{quarto-callout-caution-color-frame}{HTML}{fd7e14}
+\makeatother
+\makeatletter
 \@ifpackageloaded{bookmark}{}{\usepackage{bookmark}}
 \makeatother
 \makeatletter
@@ -214,7 +230,7 @@
 \subtitle{AI-Assisted Analysis of Federal Survey Consolidation
 Potential}
 \author{Brock Webb}
-\date{2026-02-02}
+\date{2026-02-03}
 \begin{document}
 \maketitle
 
@@ -233,6 +249,23 @@ Constraints}\label{survey-question-harmonization-constraints}
 AI-Assisted Analysis of Federal Survey Consolidation Potential
 
 \hfill\break
+
+\begin{tcolorbox}[enhanced jigsaw, breakable, left=2mm, bottomrule=.15mm, coltitle=black, colback=white, toptitle=1mm, bottomtitle=1mm, colbacktitle=quarto-callout-warning-color!10!white, titlerule=0mm, leftrule=.75mm, arc=.35mm, colframe=quarto-callout-warning-color-frame, rightrule=.15mm, toprule=.15mm, title=\textcolor{quarto-callout-warning-color}{\faExclamationTriangle}\hspace{0.5em}{DRAFT Notice}, opacitybacktitle=0.6, opacityback=0]
+
+\textbf{DRAFT} --- These materials are in development and have not been
+independently validated. The author makes no claims regarding validity
+until formal review is complete.
+
+\end{tcolorbox}
+
+\begin{tcolorbox}[enhanced jigsaw, breakable, left=2mm, bottomrule=.15mm, coltitle=black, colback=white, toptitle=1mm, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, titlerule=0mm, leftrule=.75mm, arc=.35mm, colframe=quarto-callout-note-color-frame, rightrule=.15mm, toprule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Disclaimer}, opacitybacktitle=0.6, opacityback=0]
+
+The views expressed in this report are the author's own and do not
+necessarily represent the views of the U.S. Census Bureau or the U.S.
+Department of Commerce. This is exploratory research conducted to assess
+the feasibility of AI-assisted survey analysis methods.
+
+\end{tcolorbox}
 
 \bookmarksetup{startatroot}
 
@@ -1424,7 +1457,7 @@ Results}\label{overall-question-level-results}
 
 \begin{figure}[H]
 
-{\centering \pandocbounded{\includegraphics[keepaspectratio]{sections/figures/consolidation_rates.png}}
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{sections/../figures/consolidation_rates.png}}
 
 }
 
@@ -1474,7 +1507,7 @@ remain viable - F3 questions need deeper examination of barriers
 
 \begin{figure}[H]
 
-{\centering \pandocbounded{\includegraphics[keepaspectratio]{sections/figures/barrier_distribution.png}}
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{sections/../figures/barrier_distribution.png}}
 
 }
 
@@ -1548,7 +1581,7 @@ Distribution}\label{question-level-barrier-distribution}
 
 \begin{figure}[H]
 
-{\centering \pandocbounded{\includegraphics[keepaspectratio]{sections/figures/question_consolidation_distribution.png}}
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{sections/../figures/question_consolidation_distribution.png}}
 
 }
 
@@ -1583,7 +1616,7 @@ consolidable path tend to have fundamental concept mismatches.
 
 \begin{figure}[H]
 
-{\centering \includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{sections/figures/agreement_heatmap.png}
+{\centering \includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{sections/../figures/agreement_heatmap.png}
 
 }
 
@@ -1658,7 +1691,7 @@ triage signal.
 
 \begin{figure}[H]
 
-{\centering \pandocbounded{\includegraphics[keepaspectratio]{sections/figures/expert_review_load.png}}
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{sections/../figures/expert_review_load.png}}
 
 }
 

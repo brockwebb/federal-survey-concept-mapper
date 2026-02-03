@@ -32,7 +32,7 @@
 | `02_arbitration_pipeline.py` | Arbitrate (3 arbitrators) | `python 02_arbitration_pipeline.py --arbitrator {anthropic,openai,google}` |
 | `03_analysis_pipeline.py` | Post-arbitration analysis | `python 03_analysis_pipeline.py` |
 | `04_findings_pipeline.py` | Question-level consolidability | `python 04_findings_pipeline.py` |
-| `05_deliverables_pipeline.py` | Scoring, rollup, expert tables | `python 05_deliverables_pipeline.py` |
+| `05_deliverables_pipeline.py` | Scoring, rollup, expert tables, visuals, PDF | `python 05_deliverables_pipeline.py --stage all` |
 | `run_pipeline.py` | Orchestrate full pipeline | `python run_pipeline.py --stage all` |
 | `scripts/analyze_barrier_results.py` | Basic agreement stats | `python scripts/analyze_barrier_results.py` |
 | `scripts/confusion_matrix_analysis.py` | Confusion matrices | `python scripts/confusion_matrix_analysis.py` |
@@ -44,6 +44,7 @@
 | `scripts/stage4_scoring_bakeoff.py` | 4-method scoring comparison | `python scripts/stage4_scoring_bakeoff.py` |
 | `scripts/stage4_best_match_rollup.py` | Best ACS match + triage quadrant | `python scripts/stage4_best_match_rollup.py` |
 | `scripts/build_expert_review_table.py` | Expert review deliverables | `python scripts/build_expert_review_table.py` |
+| `scripts/stage4_model_validation_visuals.py` | Model validation visualizations + narratives | `python scripts/stage4_model_validation_visuals.py` |
 | `scripts/04_stage3_arbitration.py` | Stage 3 analysis + final verdicts | `python scripts/04_stage3_arbitration.py` |
 | `scripts/qc_stage3_arbitration.py` | Stage 3 QC (11 checks) | `python scripts/qc_stage3_arbitration.py` |
 | `scripts/clean_rater_data.py` | Dedupe/validate rater data | `python scripts/clean_rater_data.py` |
@@ -91,7 +92,8 @@ reports/03_harmonization_constraints/
 │   ├── stage4_scoring_bakeoff.py        # Stage 5a: 4-method scoring comparison
 │   ├── stage4_best_match_rollup.py      # Stage 5b: Best match per question + triage
 │   ├── stage4_triage_assignment.py      # Pair-level triage (superseded by best_match_rollup)
-│   └── build_expert_review_table.py     # Stage 5c: Expert review deliverables
+│   ├── build_expert_review_table.py     # Stage 5c: Expert review deliverables
+│   └── stage4_model_validation_visuals.py  # Stage 5f: Model validation visualizations
 │
 ├── docs/
 │   └── pipeline_diagram.md     # Pipeline data flow diagram (Mermaid)

@@ -1,5 +1,10 @@
 # Report 03: Harmonization Barrier Analysis
 
+> **DRAFT** — These materials are in development and have not been independently validated.
+>
+> **Disclaimer**: The views expressed are the author's own and do not necessarily
+> represent the views of the U.S. Census Bureau or the U.S. Department of Commerce.
+
 ## Setup Instructions
 
 ### 1. Copy data files to the data directory:

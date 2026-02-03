@@ -11,6 +11,8 @@ Sub-stages:
   5c: Expert review tables
   5d: Example pairs for presentation materials
   5e: Sync visuals to presentation
+  5f: Model validation visualizations and narratives
+  5g: Render slides to PDF
 
 Requires Stage 4 outputs (04_findings_pipeline.py) to exist.
 
@@ -21,6 +23,8 @@ Usage:
     python 05_deliverables_pipeline.py --stage 5c   # Expert tables only
     python 05_deliverables_pipeline.py --stage 5d   # Example pairs only
     python 05_deliverables_pipeline.py --stage 5e   # Sync visuals only
+    python 05_deliverables_pipeline.py --stage 5f   # Model validation visuals only
+    python 05_deliverables_pipeline.py --stage 5g   # Render slides to PDF
     python 05_deliverables_pipeline.py --dry-run    # Show plan without running
 """
 
@@ -91,6 +95,23 @@ STAGES = {
         'outputs': [],  # Presentation images (outside output/analysis/)
         'requires': [],  # Visuals should exist but not blocking
     },
+    '5f': {
+        'name': 'Model Validation Visualizations',
+        'script': 'stage4_model_validation_visuals.py',
+        'description': 'Generate model validation heatmaps, charts, and narratives',
+        'outputs': [
+            'stage4_construct_validity.md',
+            'stage4_cost_quality_summary.md',
+        ],
+        'requires': ['stage2_agreement_metrics.json', 'stage3_arbitration_metrics.json'],
+    },
+    '5g': {
+        'name': 'Render Slides to PDF',
+        'script': None,  # Built-in function
+        'description': 'Export slide deck to PDF for GitHub distribution',
+        'outputs': [],  # slides.pdf in presentation/ (outside output/analysis/)
+        'requires': [],  # Slides should exist but not blocking
+    },
 }
 
 
@@ -136,6 +157,50 @@ def sync_visuals_to_presentation():
     return True
 
 
+def render_slides_pdf():
+    """Render slide deck to PDF for GitHub distribution."""
+    print(f"\n  Rendering slides to PDF...")
+
+    slides_qmd = PRESENTATION_DIR / "slides.qmd"
+
+    if not slides_qmd.exists():
+        print(f"  WARNING: Slides not found: {slides_qmd}")
+        print(f"  Skipping PDF render.")
+        return False
+
+    try:
+        result = subprocess.run(
+            ["quarto", "render", str(slides_qmd), "--to", "pdf"],
+            capture_output=True,
+            text=True,
+            cwd=str(PRESENTATION_DIR)
+        )
+
+        if result.returncode != 0:
+            print(f"  ERROR: Quarto PDF render failed")
+            print(f"  {result.stderr}")
+            return False
+
+        # Quarto puts PDF in _output/ directory
+        pdf_output = PRESENTATION_DIR / "_output" / "slides.pdf"
+        pdf_dest = PRESENTATION_DIR / "slides.pdf"
+
+        if pdf_output.exists():
+            # Copy to presentation root for easier access
+            shutil.copy2(pdf_output, pdf_dest)
+            size_mb = pdf_dest.stat().st_size / (1024 * 1024)
+            print(f"  ✓ PDF created: {pdf_dest.name} ({size_mb:.1f}MB)")
+            return True
+        else:
+            print(f"  WARNING: PDF not found after render")
+            return False
+
+    except FileNotFoundError:
+        print(f"  ERROR: Quarto not found. Install with: brew install quarto")
+        print(f"  Or skip PDF generation — HTML slides work fine.")
+        return False
+
+
 def run_stage(stage_key, dry_run=False):
     """Run a single sub-stage."""
     stage = STAGES[stage_key]
@@ -144,7 +209,7 @@ def run_stage(stage_key, dry_run=False):
     print(f"STAGE {stage_key.upper()}: {stage['name']}")
     print(f"  {stage['description']}")
 
-    # Special handling for stage 5e (visual sync)
+    # Special handling for built-in functions (5e, 5g)
     if stage_key == '5e':
         print(f"  Action: Built-in function")
         print(f"{'=' * 60}")
@@ -160,6 +225,23 @@ def run_stage(stage_key, dry_run=False):
 
         # Run visual sync
         success = sync_visuals_to_presentation()
+        if success:
+            print(f"\n  [OK] {stage['name']} complete.")
+        return success
+
+    if stage_key == '5g':
+        print(f"  Action: Built-in function")
+        print(f"{'=' * 60}")
+
+        if dry_run:
+            slides_qmd = PRESENTATION_DIR / "slides.qmd"
+            print(f"\n  [DRY RUN] Would render: {slides_qmd}")
+            print(f"  Output: {PRESENTATION_DIR / 'slides.pdf'}")
+            print(f"  Command: quarto render slides.qmd --to pdf")
+            return True
+
+        # Run PDF render
+        success = render_slides_pdf()
         if success:
             print(f"\n  [OK] {stage['name']} complete.")
         return success
@@ -216,6 +298,8 @@ Sub-stages:
   5c  Expert review tables
   5d  Example pairs for presentation
   5e  Sync visuals to presentation
+  5f  Model validation visualizations and narratives
+  5g  Render slides to PDF
 
 Examples:
   python 05_deliverables_pipeline.py              # Run all

@@ -5,6 +5,18 @@ author: "Brock Webb"
 date: today
 ---
 
+::: {.callout-warning}
+## DRAFT Notice
+
+**DRAFT** — These materials are in development and have not been independently validated. The author makes no claims regarding validity until formal review is complete.
+:::
+
+::: {.callout-note}
+## Disclaimer
+
+The views expressed in this report are the author's own and do not necessarily represent the views of the U.S. Census Bureau or the U.S. Department of Commerce. This is exploratory research conducted to assess the feasibility of AI-assisted survey analysis methods.
+:::
+
 # Preface {.unnumbered}
 
 This report presents findings from an AI-assisted analysis of federal survey question consolidation potential. Using a multi-model ensemble approach, we analyzed 1,598 question pairs from the Current Population Survey (CPS) and FoodAPS against the American Community Survey (ACS) to determine:
