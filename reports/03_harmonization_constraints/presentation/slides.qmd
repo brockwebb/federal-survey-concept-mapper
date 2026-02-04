@@ -1,17 +1,17 @@
 ---
 title: "Federal Survey Question Consolidation"
-subtitle: "AI-Assisted Analysis for Burden Reduction | DRAFT — Not validated for citation"
+subtitle: "DRAFT — not validated — see disclaimer slide"
 author: "Brock Webb"
 date: "2026-02-02"
 format:
   revealjs:
-    footer: "Views are author's own, not U.S. Census Bureau. DRAFT — Not validated."
+    footer: "DRAFT — not validated — see disclaimer"
 ---
 
 ## Disclaimer
 
 ::: {.callout-warning}
-**DRAFT** — These materials are in development and have not been independently validated.
+**DRAFT** — These materials are in development and have not been independently validated. The author makes no claims regarding validity until formal review is complete.
 :::
 
 The views expressed are the author's own and do not necessarily represent the views of the U.S. Census Bureau or the U.S. Department of Commerce.
