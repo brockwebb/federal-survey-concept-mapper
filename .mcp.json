@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "trace": {
+      "command": "/opt/anaconda3/envs/survey-mapper/bin/python3.12",
+      "args": [
+        "-m",
+        "mcp_server.server"
+      ],
+      "cwd": "/Users/brock/Documents/GitHub/federal-survey-concept-mapper",
+      "env": {
+        "TRACE_DIR": "/Users/brock/Documents/GitHub/federal-survey-concept-mapper/.trace"
+      }
+    }
+  }
+}

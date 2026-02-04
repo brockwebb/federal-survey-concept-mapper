@@ -1,7 +1,7 @@
 survey,final_L1,count,barrier_name,pct_of_f3
-CPS,CC,800,Construct/Concept,0.9615
-CPS,TC,20,Temporal/Chronological,0.024
-CPS,RS,8,Response Scale,0.0096
+CPS,CC,797,Construct/Concept,0.9614
+CPS,TC,20,Temporal/Chronological,0.0241
+CPS,RS,8,Response Scale,0.0097
 CPS,PC,4,Population/Coverage,0.0048
 FOODAPS,CC,439,Construct/Concept,0.9734
 FOODAPS,RS,5,Response Scale,0.0111

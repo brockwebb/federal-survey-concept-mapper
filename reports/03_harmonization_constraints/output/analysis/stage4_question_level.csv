@@ -38,7 +38,7 @@ CPS,CPS_13,"Have I missed any lodgers, boarders, or persons you employ who live 
 CPS,CPS_130,Does (your/his/her) disability prevent (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
 CPS,CPS_131,Does (your/his/her) disability prevent (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
 CPS,CPS_132,Does (your/his/her) disability prevent (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_133,Does (your/his/her) disability prevent (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
+CPS,CPS_133,Does (your/his/her) disability prevent (you/he/she) from accepting any kind of work during the next six months?,6,True,False,True,False,F2
 CPS,CPS_134,Does (your/his/her) disability prevent (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
 CPS,CPS_135,(Do / Does) (name/you) have a disability that prevents (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
 CPS,CPS_136,(Do / Does) (name/you) have a disability that prevents (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
@@ -204,7 +204,7 @@ CPS,CPS_63,Does (your/his/her) disability prevent (you/he/she) from accepting an
 CPS,CPS_64,Does (your/his/her) disability prevent (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
 CPS,CPS_65,Does (your/his/her) disability prevent (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
 CPS,CPS_66,(Do / Does) (name/you) have a disability that prevents (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_67,(Do / Does) (name/you) have a disability that prevents (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
+CPS,CPS_67,(Do / Does) (name/you) have a disability that prevents (you/he/she) from accepting any kind of work during the next six months?,6,True,False,True,False,F2
 CPS,CPS_68,(Do / Does) (name/you) have a disability that prevents (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
 CPS,CPS_69,(Do / Does) (name/you) have a disability that prevents (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
 CPS,CPS_7,Is this (name of person talking about)’s usual place of residence?,4,False,False,False,True,F3

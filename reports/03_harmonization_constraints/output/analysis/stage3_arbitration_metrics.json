@@ -1,20 +1,20 @@
 {
   "metadata": {
-    "generated_at": "2026-01-30T22:19:35.538839",
+    "generated_at": "2026-02-04T13:54:36.640014",
     "spec_version": "SPEC-R03-S3-001 v1.0",
     "script": "scripts/04_stage3_arbitration.py",
     "two_way_n": 1598,
-    "three_way_n": 503,
+    "three_way_n": 751,
     "openai_count": 1598,
     "anthropic_count": 1598,
-    "google_count": 503,
+    "google_count": 751,
     "google_limitation": "CPS only, rate-limited at 250/day",
     "tiebreaker": "OpenAI arbitrator used for two-way disagreements"
   },
   "validation_checks": {
     "openai_count": 1598,
     "anthropic_count": 1598,
-    "google_count": 503,
+    "google_count": 751,
     "rater_count": 1598,
     "openai_null_L1": 0,
     "openai_invalid_L1": 0,
@@ -59,63 +59,63 @@
     }
   },
   "three_way_agreement": {
-    "n_pairs": 503,
+    "n_pairs": 751,
     "coverage": "CPS subset only (Google limited)",
     "L1": {
-      "fleiss_kappa": 0.833,
-      "krippendorff_alpha": 0.833,
+      "fleiss_kappa": 0.843,
+      "krippendorff_alpha": 0.843,
       "interpretation": "Almost Perfect",
       "quality_gate_passed": true
     },
     "L1_pairwise": {
       "OA_vs_AN": {
-        "percent_agreement": 93.6,
-        "cohens_kappa": 0.813,
+        "percent_agreement": 95.7,
+        "cohens_kappa": 0.823,
         "interpretation": "Almost Perfect"
       },
       "OA_vs_GO": {
-        "percent_agreement": 93.0,
-        "cohens_kappa": 0.795,
-        "interpretation": "Substantial"
+        "percent_agreement": 95.3,
+        "cohens_kappa": 0.807,
+        "interpretation": "Almost Perfect"
       },
       "AN_vs_GO": {
-        "percent_agreement": 95.8,
-        "cohens_kappa": 0.887,
+        "percent_agreement": 97.2,
+        "cohens_kappa": 0.894,
         "interpretation": "Almost Perfect"
       }
     },
     "full_barrier_code": {
-      "fleiss_kappa": 0.747,
-      "krippendorff_alpha": 0.747,
+      "fleiss_kappa": 0.733,
+      "krippendorff_alpha": 0.733,
       "interpretation": "Substantial",
       "quality_gate_passed": false
     },
     "full_barrier_code_pairwise": {
       "OA_vs_AN": {
-        "percent_agreement": 81.9,
-        "cohens_kappa": 0.714,
+        "percent_agreement": 83.6,
+        "cohens_kappa": 0.692,
         "interpretation": "Substantial"
       },
       "OA_vs_GO": {
-        "percent_agreement": 81.1,
-        "cohens_kappa": 0.702,
+        "percent_agreement": 82.7,
+        "cohens_kappa": 0.673,
         "interpretation": "Substantial"
       },
       "AN_vs_GO": {
-        "percent_agreement": 89.3,
-        "cohens_kappa": 0.827,
+        "percent_agreement": 91.3,
+        "cohens_kappa": 0.835,
         "interpretation": "Almost Perfect"
       }
     },
     "feasibility": {
-      "fleiss_kappa": 0.871,
-      "krippendorff_alpha": 0.872,
+      "fleiss_kappa": 0.864,
+      "krippendorff_alpha": 0.864,
       "interpretation": "Almost Perfect",
       "quality_gate_passed": true
     },
     "binary_consolidability": {
-      "fleiss_kappa": 0.903,
-      "krippendorff_alpha": 0.903,
+      "fleiss_kappa": 0.893,
+      "krippendorff_alpha": 0.893,
       "interpretation": "Almost Perfect",
       "quality_gate_passed": true
     }
@@ -152,18 +152,18 @@
       "feas_overrides_of_unanimous": 0
     },
     "google": {
-      "n_pairs": 503,
-      "L1_concordance_with_majority_pct": 95.5,
-      "L2_concordance_with_majority_pct": 93.0,
-      "feasibility_concordance_with_majority_pct": 97.0,
+      "n_pairs": 751,
+      "L1_concordance_with_majority_pct": 97.0,
+      "L2_concordance_with_majority_pct": 94.9,
+      "feasibility_concordance_with_majority_pct": 97.7,
       "L1_concordance_with_unanimous_pct": 100.0,
       "L2_concordance_with_unanimous_pct": 100.0,
       "feasibility_concordance_with_unanimous_pct": 100.0,
-      "n_unanimous_L1_cases": 383,
+      "n_unanimous_L1_cases": 631,
       "L1_overrides_of_unanimous": 0,
-      "n_unanimous_L2_cases": 244,
+      "n_unanimous_L2_cases": 361,
       "L2_overrides_of_unanimous": 0,
-      "n_unanimous_feas_cases": 382,
+      "n_unanimous_feas_cases": 524,
       "feas_overrides_of_unanimous": 0
     }
   },
@@ -221,13 +221,13 @@
       "interpretation": "backwards"
     },
     "google": {
-      "n_pairs": 503,
-      "n_raters_unanimous": 383,
+      "n_pairs": 751,
+      "n_raters_unanimous": 631,
       "n_raters_split": 120,
       "synthesis_when_unanimous": {
-        "n": 383,
-        "synthesis_count": 32,
-        "rate_pct": 8.4
+        "n": 631,
+        "synthesis_count": 41,
+        "rate_pct": 6.5
       },
       "synthesis_when_split": {
         "n": 120,
@@ -235,15 +235,15 @@
         "rate_pct": 2.5
       },
       "confusion_matrix": {
-        "TP": 32,
-        "FN": 351,
+        "TP": 41,
+        "FN": 590,
         "FP": 3,
         "TN": 117
       },
-      "precision": 0.914,
-      "recall": 0.084,
-      "f1": 0.153,
-      "synthesis_rate_overall": 7.0,
+      "precision": 0.932,
+      "recall": 0.065,
+      "f1": 0.121,
+      "synthesis_rate_overall": 5.9,
       "interpretation": "deferential"
     }
   },
@@ -293,25 +293,25 @@
       }
     },
     "google": {
-      "n_total": 503,
+      "n_total": 751,
       "position_counts": {
-        "A": 240,
-        "B": 158,
-        "C": 70,
-        "synthesis": 35
+        "A": 305,
+        "B": 271,
+        "C": 131,
+        "synthesis": 44
       },
-      "synthesis_rate": 7.0,
-      "n_non_synthesis": 468,
+      "synthesis_rate": 5.9,
+      "n_non_synthesis": 707,
       "chi_square_test": {
-        "chi_square": 92.667,
+        "chi_square": 72.181,
         "p_value": 0.0,
         "significant_at_05": true,
         "observed": {
-          "A": 240,
-          "B": 158,
-          "C": 70
+          "A": 305,
+          "B": 271,
+          "C": 131
         },
-        "expected_each": 156.0
+        "expected_each": 235.7
       }
     }
   },
@@ -345,17 +345,17 @@
       }
     },
     "google": {
-      "n_non_synthesis": 468,
-      "same_family_selected": 76,
-      "same_family_rate_pct": 16.2,
+      "n_non_synthesis": 707,
+      "same_family_selected": 131,
+      "same_family_rate_pct": 18.5,
       "expected_rate_pct": 33.3,
-      "chi_square": 61.538,
+      "chi_square": 69.728,
       "p_value": 0.0,
       "significant_at_05": true,
       "rater_selection_breakdown": {
-        "openai": 226,
-        "anthropic": 166,
-        "google": 76
+        "anthropic": 306,
+        "openai": 270,
+        "google": 131
       }
     }
   },
@@ -381,18 +381,18 @@
         "PM": 0.2
       },
       "feasibility_distribution": {
-        "F3": 832,
-        "F2": 151,
+        "F3": 829,
+        "F2": 154,
         "F1": 47
       },
       "feasibility_percentages": {
-        "F3": 80.8,
-        "F2": 14.7,
+        "F3": 80.5,
+        "F2": 15.0,
         "F1": 4.6
       },
       "binary_consolidability": {
-        "Not_Consolidable": 832,
-        "Consolidable": 198
+        "Not_Consolidable": 829,
+        "Consolidable": 201
       },
       "top_L2_barriers": {
         "CC.1": 610,
@@ -454,6 +454,6 @@
     },
     "unanimous_rate": 91.2,
     "two_way_agreement_rate": 98.2,
-    "three_way_coverage": 31.5
+    "three_way_coverage": 47.0
   }
 }

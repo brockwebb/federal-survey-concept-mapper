@@ -1,14 +1,14 @@
 {
   "CPS": {
     "total_questions": 240,
-    "consolidable_questions": 100,
-    "consolidation_rate": 0.4167,
+    "consolidable_questions": 102,
+    "consolidation_rate": 0.425,
     "direct_f1_questions": 37,
     "direct_f1_rate": 0.1542,
-    "conditional_f2_questions": 63,
-    "conditional_f2_rate": 0.2625,
-    "not_consolidable_f3_questions": 140,
-    "not_consolidable_f3_rate": 0.5833
+    "conditional_f2_questions": 65,
+    "conditional_f2_rate": 0.2708,
+    "not_consolidable_f3_questions": 138,
+    "not_consolidable_f3_rate": 0.575
   },
   "FOODAPS": {
     "total_questions": 140,

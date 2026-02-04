@@ -15,7 +15,7 @@ CPS,Employment Status,215,49,6,43,166,0.2279
 CPS,School Enrollment,9,2,0,2,7,0.2222
 CPS,Commute/Commuting,5,1,0,1,4,0.2
 CPS,Unemployment,26,1,0,1,25,0.0385
-CPS,Disability,339,5,2,3,334,0.0147
+CPS,Disability,339,8,2,6,331,0.0236
 CPS,Citizenship,2,0,0,0,2,0.0
 CPS,Foreign Born,5,0,0,0,5,0.0
 CPS,Household,52,0,0,0,52,0.0

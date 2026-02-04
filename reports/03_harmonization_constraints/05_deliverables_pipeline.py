@@ -158,47 +158,62 @@ def sync_visuals_to_presentation():
 
 
 def render_slides_pdf():
-    """Render slide deck to PDF for GitHub distribution."""
+    """Render slide decks to PDF for GitHub distribution."""
     print(f"\n  Rendering slides to PDF...")
 
-    slides_qmd = PRESENTATION_DIR / "slides.qmd"
+    decks = [
+        "slides_3a_findings.qmd",
+        "slides_3b_methodology.qmd",
+        "slides.qmd"  # Keep original for backup
+    ]
 
-    if not slides_qmd.exists():
-        print(f"  WARNING: Slides not found: {slides_qmd}")
-        print(f"  Skipping PDF render.")
-        return False
+    success_count = 0
+    for deck_name in decks:
+        slides_qmd = PRESENTATION_DIR / deck_name
 
-    try:
-        result = subprocess.run(
-            ["quarto", "render", str(slides_qmd), "--to", "pdf"],
-            capture_output=True,
-            text=True,
-            cwd=str(PRESENTATION_DIR)
-        )
+        if not slides_qmd.exists():
+            print(f"  WARNING: Slides not found: {deck_name}")
+            continue
 
-        if result.returncode != 0:
-            print(f"  ERROR: Quarto PDF render failed")
-            print(f"  {result.stderr}")
+        try:
+            print(f"  Rendering {deck_name}...")
+            result = subprocess.run(
+                ["quarto", "render", str(slides_qmd), "--to", "pdf"],
+                capture_output=True,
+                text=True,
+                cwd=str(PRESENTATION_DIR)
+            )
+
+            if result.returncode != 0:
+                print(f"  ERROR: Quarto PDF render failed for {deck_name}")
+                print(f"  {result.stderr}")
+                continue
+
+            # Quarto puts PDF in _output/ directory
+            pdf_name = deck_name.replace('.qmd', '.pdf')
+            pdf_output = PRESENTATION_DIR / "_output" / pdf_name
+            pdf_dest = PRESENTATION_DIR / pdf_name
+
+            if pdf_output.exists():
+                # Copy to presentation root for easier access
+                shutil.copy2(pdf_output, pdf_dest)
+                size_mb = pdf_dest.stat().st_size / (1024 * 1024)
+                print(f"  ✓ PDF created: {pdf_name} ({size_mb:.1f}MB)")
+                success_count += 1
+            else:
+                print(f"  WARNING: PDF not found after render for {deck_name}")
+
+        except FileNotFoundError:
+            print(f"  ERROR: Quarto not found. Install with: brew install quarto")
+            print(f"  Or skip PDF generation — HTML slides work fine.")
             return False
 
-        # Quarto puts PDF in _output/ directory
-        pdf_output = PRESENTATION_DIR / "_output" / "slides.pdf"
-        pdf_dest = PRESENTATION_DIR / "slides.pdf"
-
-        if pdf_output.exists():
-            # Copy to presentation root for easier access
-            shutil.copy2(pdf_output, pdf_dest)
-            size_mb = pdf_dest.stat().st_size / (1024 * 1024)
-            print(f"  ✓ PDF created: {pdf_dest.name} ({size_mb:.1f}MB)")
-            return True
-        else:
-            print(f"  WARNING: PDF not found after render")
-            return False
-
-    except FileNotFoundError:
-        print(f"  ERROR: Quarto not found. Install with: brew install quarto")
-        print(f"  Or skip PDF generation — HTML slides work fine.")
+    if success_count == 0:
+        print(f"  ERROR: No slide decks were successfully rendered")
         return False
+
+    print(f"  ✓ Successfully rendered {success_count}/{len(decks)} slide decks")
+    return True
 
 
 def run_stage(stage_key, dry_run=False):

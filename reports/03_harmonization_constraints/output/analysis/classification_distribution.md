@@ -1,6 +1,6 @@
 # Classification Distribution Summary
 
-*Generated: 2026-02-02*
+*Generated: 2026-02-04*
 
 ## By Survey and Feasibility
 
@@ -9,8 +9,8 @@
 | Feasibility | Count | % |
 |-------------|------:|--:|
 | F1 | 37 | 15.4% |
-| F2 | 63 | 26.2% |
-| F3 | 140 | 58.3% |
+| F2 | 65 | 27.1% |
+| F3 | 138 | 57.5% |
 
 ### FOODAPS (N=140 questions)
 

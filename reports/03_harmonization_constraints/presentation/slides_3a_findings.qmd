@@ -1,0 +1,271 @@
+---
+title: "AI-Assisted Survey Question Harmonization: Findings from CPS and FoodAPS Analysis"
+subtitle: "DRAFT — not validated — see disclaimer slide"
+author: "Brock Webb"
+date: "February 2026"
+format:
+  revealjs:
+    theme: default
+    footer: "DRAFT — not validated — see disclaimer"
+    slide-number: true
+  pdf:
+    pdf-engine: xelatex
+---
+
+## Disclaimer
+
+::: {.callout-warning}
+**DRAFT** — These materials are in development and have not been independently validated.
+:::
+
+The views expressed are the author's own and do not necessarily represent the views of the U.S. Census Bureau or the U.S. Department of Commerce.
+
+This is exploratory research assessing feasibility of AI-assisted survey analysis methods.
+
+::: {.notes}
+For detailed methodology validation, see Report 3B: AI Methodology Validation
+:::
+
+---
+
+## Why It Matters
+
+**For Respondents:**
+- Declining survey response rates + increasing costs
+- Overlapping questions create unnecessary burden
+- Consolidation reduces redundant questions
+
+**For Federal Agencies:**
+- **Expert time is the scarce resource**, not expert capability
+- Traditional approach: weeks/months of manual comparison
+- **Our goal:** Multiply expert effectiveness → faster burden reduction
+
+::: {.notes}
+Dual value proposition: (1) Burden reduction for respondents (2) Expert efficiency to achieve it faster
+:::
+
+---
+
+## The Challenge
+
+::: {.incremental}
+- Determining consolidation **requires expert judgment** (this doesn't change)
+- Traditional timeline: **weeks to months** for manual review of 1,598 pairs
+- Our approach: **AI handles pre-work, experts focus on highest-value decisions**
+- Result: Structured expert review table ready for validation
+:::
+
+---
+
+## What Experts Get
+
+| What AI Provides | What Experts Do |
+|------------------|-----------------|
+| Pre-screened pairs with best matches | Validate match quality |
+| Initial F1/F2/F3 classification | Confirm or override |
+| Documented reasoning | Understand and critique |
+| Confidence scores | Prioritize review effort |
+| Barrier codes | Verify diagnosis |
+
+**76%** classified with high confidence → spot-check
+**24%** flagged for expert review → where judgment adds most value
+
+---
+
+## Starting Point
+
+- **7,400+** survey questions across **49** federal surveys
+- Mapped to Census Bureau standard taxonomy
+- [Report 1 established concept classification]
+
+---
+
+## Method Overview {.smaller}
+
+::: {.incremental}
+- Multi-model LLM ensemble approach (brief validation — see Report 3B for details)
+- Three frontier models to reduce bias
+- **High inter-rater agreement (κ = 0.845)** = well-defined task
+- **< 1 day processing time** for work that traditionally takes weeks/months
+:::
+
+::: {.notes}
+For detailed methodology validation including construct validity analysis, arbitrator behavioral differences, and cost/quality tradeoffs, see Report 3B
+:::
+
+---
+
+## Harmonization Framework
+
+Adopted standard survey harmonization classification:
+
+| Level | Definition |
+|-------|------------|
+| **F1** | Directly consolidable — no transformation needed |
+| **F2** | Consolidable with transformation — needs recoding |
+| **F3** | Not consolidable — fundamental barriers |
+
+Barrier codes: CC (construct/concept), TC (temporal), RS (response scale)
+
+---
+
+## Headline Results
+
+![](images/consolidation_rates.png){width=80%}
+
+- **CPS:** 41.7% consolidable (100 of 240 questions)
+- **FoodAPS:** 48.6% consolidable (68 of 140 questions)
+
+<!-- MANUAL_UPDATE: consolidation rates from stage4_survey_summary.json -->
+
+---
+
+## Why Questions Can't Consolidate
+
+![](images/barrier_distribution.png){width=80%}
+
+**97% of F3 = Construct/Concept differences (CC)**
+
+Not fixable barriers — fundamentally different measurements
+
+---
+
+## Harmonization Code Distribution
+
+![](images/harmonization_distribution.png){width=95%}
+
+::: {.notes}
+Left: Overall F1/F2/F3 distribution across 1,598 pairs
+Right: Top 10 barrier sub-codes for F3 pairs - CC.1 (concept definition) dominates at 70%
+:::
+
+---
+
+## Example: High Consolidability (F1)
+
+**CPS:** "How many hours per week do you USUALLY work?"
+
+**ACS:** "What is your best estimate of hours per week you usually work?"
+
+- Verdict: **F1** (directly consolidable)
+- Confidence: Borda=1.0, Entropy=1.0
+- Same construct, same framing, same reference
+
+---
+
+## Example: Medium Consolidability (F2)
+
+**CPS:** "EXCLUDING overtime, tips, commissions — what is hourly rate?"
+
+**ACS:** "What is your hourly rate of pay?"
+
+- Verdict: **F2** (consolidable with transformation)
+- Transformation needed: scope alignment (ACS includes all components)
+
+---
+
+## Example: Not Consolidable (F3)
+
+**CPS:** "Do you WANT to work full time (35+ hours)?"
+
+**ACS:** "Did this person WORK for pay last week?"
+
+- Verdict: **F3** — Barrier: **CC.1**
+- Same domain (employment), entirely different constructs
+- Preference vs. behavior — not reconcilable
+
+---
+
+## Expert Review Triage
+
+![](images/triage_quadrant.png){width=70%}
+
+- Two-axis classification: Direction (Borda) × Stability (Entropy)
+- **76%** (287 questions) = high confidence → spot-check recommended
+- **24%** (93 questions) = flagged for expert review
+
+::: {.notes}
+Traditional: Expert reviews all 1,598 pairs = weeks/months
+AI-assisted: Expert reviews 93 flagged questions = focused effort on highest-ROI decisions
+:::
+
+---
+
+## Expert Review Load
+
+![](images/expert_review_load.png){width=80%}
+
+- **This IS the efficiency gain:** Experts review 93 questions, not 1,598 pairs
+- AI provides initial judgment, experts provide final validation
+- Focus expert time where it adds most value
+
+---
+
+## Deliverables
+
+**Primary:** Expert review table (`expert_review_combined.csv`)
+- 380 questions with best ACS matches
+- F1/F2/F3 classifications with confidence scores
+- Barrier codes and reasoning for each decision
+- Triage routing (Q1-Q4) for prioritized review
+
+**Breakdown:**
+- 168 consolidable (F1+F2) — ready for validation
+- 212 non-consolidable (F3) — with documented barriers
+- 93 flagged for expert review — highest-value decisions
+- Full methodology — reproducible for additional surveys
+
+---
+
+## What This Proves
+
+::: {.incremental}
+- **< 1 day processing time** for work that traditionally takes weeks/months
+- **Expert efficiency → faster burden reduction** — identify consolidation opportunities at scale
+- **Human oversight preserved throughout** — AI provides initial judgment, experts validate
+- **The table is the deliverable** — 380 questions, pre-analyzed, ready for expert review
+:::
+
+::: {.notes}
+AI doesn't replace burden reduction goals — it accelerates the path to achieving them through expert efficiency
+:::
+
+---
+
+## What's Next
+
+1. Expert validation of recommendations
+2. Expand to additional federal surveys
+3. Application to survey editing/imputation
+
+---
+
+## Summary
+
+**Findings:**
+- **~44% consolidation potential** — 168 questions could reduce respondent burden
+- **97% of failures** = construct differences (not fixable)
+
+**Method:**
+- **< 1 day processing** for work that traditionally takes weeks/months
+- **AI provides initial judgment, experts provide final validation**
+- **The real product:** 380 questions, pre-analyzed, ready for expert review
+
+**Impact:** Accelerates path to burden reduction through expert efficiency
+
+::: {.notes}
+Expert review table: output/analysis/expert_review_combined.csv
+Dual value: (1) Identifies burden reduction opportunities (2) Efficiently, preserving expert judgment
+
+For AI methodology validation details, see Report 3B
+:::
+
+---
+
+## Questions?
+
+Contact: [your info]
+
+Repository: [link]
+
+Expert review tables: [link to output]

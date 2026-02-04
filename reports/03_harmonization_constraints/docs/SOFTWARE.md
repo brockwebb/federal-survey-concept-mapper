@@ -790,7 +790,10 @@ python 03_analysis_pipeline.py
 # 4. Findings Stage
 python 04_findings_pipeline.py
 
-# 5. Deliverables Stage (requires Stage 4 outputs)
+# 5. Model Validation Visuals (must run BEFORE deliverables)
+python scripts/stage4_model_validation_visuals.py
+
+# 6. Deliverables Stage (requires Stage 4 + visuals)
 python 05_deliverables_pipeline.py
 # Or run sub-stages individually:
 # python scripts/stage4_scoring_bakeoff.py         # 5a: Scoring

@@ -1,6 +1,6 @@
 # Stage 4: Question-Level Consolidability Findings
 
-**Generated:** 2026-01-31T06:25:45.519959
+**Generated:** 2026-02-04T13:54:50.320926
 
 ## Executive Summary
 
@@ -9,10 +9,10 @@ This analysis answers the core research question: **What proportion of source su
 Consolidability is determined at the *question* level — a source question is consolidable if it has **at least one** ACS pair rated F1 (direct recode) or F2 (statistical adjustment).
 
 ### CPS
-- **100/240 (41.7%) questions have at least one consolidable path to ACS**
+- **102/240 (42.5%) questions have at least one consolidable path to ACS**
   - Direct recode (F1): 37 (15.4%)
-  - Statistical adjustment (F2): 63 (26.2%)
-  - Not consolidable (F3): 140 (58.3%)
+  - Statistical adjustment (F2): 65 (27.1%)
+  - Not consolidable (F3): 138 (57.5%)
 
 ### FOODAPS
 - **68/140 (48.6%) questions have at least one consolidable path to ACS**
@@ -26,7 +26,7 @@ Pair-level consolidability rates understate the true consolidation potential bec
 
 | Survey | Pair-Level Rate | Question-Level Rate | Unique Questions | Total Pairs |
 |--------|----------------|--------------------|-----------------:|------------:|
-| CPS | 19.2% | 41.7% | 240 | 1030 |
+| CPS | 19.5% | 42.5% | 240 | 1030 |
 | FOODAPS | 20.6% | 48.6% | 140 | 568 |
 
 ## Barriers to Consolidation (F3 Pairs)
@@ -37,7 +37,7 @@ Among pairs rated not consolidable (F3), the dominant barrier types are:
 
 | Barrier | Description | Count | % of F3 |
 |---------|-------------|------:|--------:|
-| CC | Construct/Concept | 800 | 96.2% |
+| CC | Construct/Concept | 797 | 96.1% |
 | TC | Temporal/Chronological | 20 | 2.4% |
 | RS | Response Scale | 8 | 1.0% |
 | PC | Population/Coverage | 4 | 0.5% |
@@ -98,12 +98,12 @@ Consolidation rates by subtopic (pair-level):
 
 ## F2 Transformation Requirements
 
-There are **241 pairs** rated F2 (statistical adjustment needed).
+There are **244 pairs** rated F2 (statistical adjustment needed).
 Barrier types requiring transformation:
 
 | Survey | Barrier | Count |
 |--------|---------|------:|
-| CPS | CC (Construct/Concept) | 71 |
+| CPS | CC (Construct/Concept) | 74 |
 | CPS | MC (Mode/Context) | 4 |
 | CPS | PC (Population/Coverage) | 3 |
 | CPS | RS (Response Scale) | 16 |
@@ -118,7 +118,7 @@ Barrier types requiring transformation:
 
 If consolidable questions could be replaced by ACS equivalents:
 
-- **CPS:** 100 of 240 questions could potentially be eliminated (41.7%)
+- **CPS:** 102 of 240 questions could potentially be eliminated (42.5%)
 - **FOODAPS:** 68 of 140 questions could potentially be eliminated (48.6%)
 
 *Caveat: This is an upper bound. Practical consolidation depends on use case, statistical precision requirements, and institutional constraints.*
