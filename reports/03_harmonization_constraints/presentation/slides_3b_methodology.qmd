@@ -8,8 +8,10 @@ format:
     theme: default
     footer: "DRAFT — not validated — see disclaimer"
     slide-number: true
-  pdf:
-    pdf-engine: xelatex
+  beamer:
+    aspectratio: 169
+    theme: default
+    classoption: handout
 ---
 
 ## Disclaimer
@@ -55,7 +57,7 @@ For survey-specific findings, see Report 3A: Survey Harmonization Findings
 ![](images/architecture_pipeline.png){width=90%}
 
 1. **Rating tier:** 3 fast models independently classify all pairs
-2. **Arbitration tier:** 3 flagship models resolve disagreements
+2. **Arbitration tier:** 3 flagship models independently re-evaluate ALL pairs
 3. **Triage tier:** Best-match rollup with confidence scoring
 
 ---
@@ -112,7 +114,7 @@ Convergence INCREASES with reasoning depth (0.611 → 0.843)
 
 - **κ = 0.843** (Fleiss) — almost perfect agreement
 - Flagship models with deeper reasoning → higher convergence
-- Arbitration tier successfully resolves rater disagreements
+- Full arbitration coverage enables behavioral analysis across all pairs
 
 ---
 

@@ -8,8 +8,10 @@ format:
     theme: default
     footer: "DRAFT — not validated — see disclaimer"
     slide-number: true
-  pdf:
-    pdf-engine: xelatex
+  beamer:
+    aspectratio: 169
+    theme: default
+    classoption: handout
 ---
 
 ## Disclaimer
@@ -74,7 +76,7 @@ Dual value proposition: (1) Burden reduction for respondents (2) Expert efficien
 
 ## Starting Point
 
-- **7,400+** survey questions across **49** federal surveys
+- **6,987** survey questions across **47** federal survey instruments
 - Mapped to Census Bureau standard taxonomy
 - [Report 1 established concept classification]
 

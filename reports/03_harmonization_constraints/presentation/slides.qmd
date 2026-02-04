@@ -6,6 +6,10 @@ date: "2026-02-02"
 format:
   revealjs:
     footer: "DRAFT — not validated — see disclaimer"
+  beamer:
+    aspectratio: 169
+    theme: default
+    classoption: handout
 ---
 
 ## Disclaimer
@@ -78,7 +82,7 @@ Dual value proposition: (1) Burden reduction for respondents (2) Expert efficien
 
 ## Starting Point
 
-- **7,400+** survey questions across **49** federal surveys
+- **6,987** survey questions across **47** federal survey instruments
 - Mapped to Census Bureau standard taxonomy
 - [Report 1 established concept classification]
 
@@ -145,8 +149,8 @@ Different profiles = documented finding, not noise
 ## Agreement & Arbitration
 
 - **κ = 0.845** — high inter-rater agreement
-- Voting, entropy, Borda scoring
-- Arbitration resolves disagreements → final verdict
+- ALL pairs sent to arbitration (not just disagreements)
+- Enables full behavioral analysis + final verdict
 
 ---
 
@@ -201,7 +205,7 @@ Not a bug — a feature. Diversity captures multiple valid interpretations.
 
 | Arbitrator | Synthesis Rate | Style |
 |------------|---------------|-------|
-| Google (Gemini 3 Pro) | 7% | Deferential — trusts raters |
+| Google (Gemini 3 Pro) | 6% | Deferential — trusts raters |
 | OpenAI (GPT-5.2) | 59% | Balanced |
 | Anthropic (Claude Opus 4.5) | 77% | Active synthesis |
 
@@ -235,7 +239,7 @@ The 3rd model catches what any 2 would miss.
 |------------|----------------------|----------|--------------|
 | OpenAI | 51.8% | 33.3% | Yes (p<0.001) |
 | Anthropic | 36.8% | 33.3% | **No** (p=0.159) |
-| Google | 16.2% | 33.3% | Yes — AGAINST own |
+| Google | 18.5% | 33.3% | Yes — AGAINST own |
 
 **Finding:** Anthropic shows no same-vendor preference. Google actively avoids own vendor.
 

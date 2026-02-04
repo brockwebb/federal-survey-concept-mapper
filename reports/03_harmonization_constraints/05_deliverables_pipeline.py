@@ -178,7 +178,7 @@ def render_slides_pdf():
         try:
             print(f"  Rendering {deck_name}...")
             result = subprocess.run(
-                ["quarto", "render", str(slides_qmd), "--to", "pdf"],
+                ["quarto", "render", str(slides_qmd), "--to", "beamer"],
                 capture_output=True,
                 text=True,
                 cwd=str(PRESENTATION_DIR)
@@ -252,7 +252,7 @@ def run_stage(stage_key, dry_run=False):
             slides_qmd = PRESENTATION_DIR / "slides.qmd"
             print(f"\n  [DRY RUN] Would render: {slides_qmd}")
             print(f"  Output: {PRESENTATION_DIR / 'slides.pdf'}")
-            print(f"  Command: quarto render slides.qmd --to pdf")
+            print(f"  Command: quarto render slides.qmd --to beamer")
             return True
 
         # Run PDF render
