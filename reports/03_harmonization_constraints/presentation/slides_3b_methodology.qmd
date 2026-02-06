@@ -52,13 +52,56 @@ For survey-specific findings, see Report 3A: Survey Harmonization Findings
 
 ---
 
-## Three-Tier Architecture
+## Analysis Pipeline
 
-![](images/architecture_pipeline.png){width=90%}
+```{mermaid}
+flowchart TB
+    pairs["1,598 Question Pairs\n(CPS-ACS, FoodAPS-ACS)"]
 
-1. **Rating tier:** 3 fast models independently classify all pairs
-2. **Arbitration tier:** 3 flagship models independently re-evaluate ALL pairs
-3. **Triage tier:** Best-match rollup with confidence scoring
+    subgraph rating["Rating Tier — Fast Models"]
+        direction LR
+        r1["GPT-4o-mini"]
+        r2["Claude Haiku 4.5"]
+        r3["Gemini 2 Flash"]
+    end
+
+    subgraph arb["Arbitration Tier — Flagship Models"]
+        direction LR
+        a1["GPT-5.2"]
+        a2["Claude Opus 4.5"]
+        a3["Gemini 3 Pro"]
+    end
+
+    rollup["Question-Level Rollup\n1,598 pairs → 380 questions\nBest-match selection"]
+
+    output["Expert Review Table\n380 questions with classifications,\nconfidence scores, barrier codes,\ntriage routing"]
+
+    pairs --> rating
+    pairs --> arb
+    rating --> rollup
+    arb --> rollup
+    rollup --> output
+```
+
+::: {.notes}
+Key: Both tiers process ALL pairs independently. This is parallel evaluation at two cost/quality points, not a filter-funnel. Enables full behavioral comparison between tiers.
+:::
+
+---
+
+## Validation at Each Stage {.smaller}
+
+| Stage | What Happens | Validation | Key Finding |
+|-------|-------------|------------|-------------|
+| **Input** | 1,598 question pairs (CPS-ACS, FoodAPS-ACS) | — | — |
+| **Rating** | 3 fast models independently classify all pairs (F1/F2/F3 + barrier) | Inter-rater: κ=0.611 (substantial) | Independent architectures converge — task well-defined |
+| **Arbitration** | 3 flagship models independently re-evaluate ALL pairs | Inter-arbitrator: κ=0.843 (almost perfect) | Deeper reasoning → higher convergence |
+| **Rollup** | 1,598 pairs → 380 questions; best-match + Borda/Entropy scoring | Triage quadrant assignment | 76% auto-process, 24% expert review |
+| **Output** | Expert review table with classifications, confidence, reasoning | — | 380 questions, pre-analyzed, ready for validation |
+
+::: {.notes}
+Pipeline A (diagram): how data flows through models. Pipeline B (this table): what we measured at each stage and what it means. Validation runs ON outputs of processing — separate concerns.
+:::
 
 ---
 
@@ -210,9 +253,8 @@ The 3rd model's value is highest when first two disagree.
 - **Behavioral diversity** provides multiple valid perspectives
 - **Cost/quality tradeoffs** enable scaling to larger datasets
 - **Transparent biases** better than hidden single-model assumptions
+- **Reusable methodology** for harmonization analysis across additional survey pairs
 :::
-
-**Reusable methodology for future survey harmonization work**
 
 ---
 
@@ -236,7 +278,7 @@ The 3rd model's value is highest when first two disagree.
 - Quantified single-model risk
 - Vendor bias patterns identified
 
-**Impact:** Validated methodology for AI-assisted survey analysis
+**Impact:** Validated methodology for AI-assisted survey harmonization — enabling systematic bridge variable identification across the federal survey landscape
 
 ::: {.notes}
 For survey-specific findings and burden reduction implications, see Report 3A

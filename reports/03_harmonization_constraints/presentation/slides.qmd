@@ -1,5 +1,5 @@
 ---
-title: "Federal Survey Question Consolidation"
+title: "AI-Assisted Federal Survey Harmonization"
 subtitle: "DRAFT — not validated — see disclaimer slide"
 author: "Brock Webb"
 date: "2026-02-02"
@@ -26,30 +26,24 @@ This is exploratory research assessing feasibility of AI-assisted survey analysi
 
 ## The Problem {.smaller}
 
-- Federal surveys ask overlapping questions
-- Respondent burden + data silos
-- **This report:** Capstone analysis — which questions can actually consolidate?
+The federal statistical system collects rich data across dozens of instruments — but that data largely sits in silos. Surveys share useful touchpoints that could serve as bridge variables for cross-survey linkage, but identifying those connections at scale requires systematic analysis that exceeds what any individual researcher can hold in working memory.
+
+**This report:** Which survey questions can serve as bridge variables for enrichment, and which may be directly interchangeable?
 
 ::: {.notes}
-Brief — already covered in Reports 1-2
+Brief — already covered in Reports 1-2. Reframed from burden reduction to enrichment opportunity.
 :::
 
 ---
 
 ## Why It Matters
 
-**For Respondents:**
-- Declining survey response rates + increasing costs
-- Overlapping questions create unnecessary burden
-- Consolidation reduces redundant questions
+The federal statistical system already collects an enormous mosaic of data. The gap isn't in what we collect — it's in our ability to connect it. AI-assisted harmonization analysis reveals where surveys share useful touchpoints that can serve as bridge variables, increasing explanatory power without collecting a single additional data point.
 
-**For Federal Agencies:**
-- **Expert time is the scarce resource**, not expert capability
-- Traditional approach: weeks/months of manual comparison
-- **Our goal:** Multiply expert effectiveness → faster burden reduction
+Where questions may be interchangeable, the same analysis identifies consolidation opportunities — with the added benefit of encouraging language standardization across instruments.
 
 ::: {.notes}
-Dual value proposition: (1) Burden reduction for respondents (2) Expert efficiency to achieve it faster
+Primary value: enrichment through cross-survey linkage — fill coverage gaps, enhance data quality from existing investment. Secondary value: consolidation where feasible, done rigorously to minimize data quality loss. Better explanatory power may naturally reduce survey count, tolerate higher non-response, and decrease expensive follow-ups.
 :::
 
 ---
@@ -57,10 +51,10 @@ Dual value proposition: (1) Burden reduction for respondents (2) Expert efficien
 ## The Challenge
 
 ::: {.incremental}
-- Determining consolidation **requires expert judgment** (this doesn't change)
+- Characterizing harmonization potential **requires expert judgment** (this doesn't change)
 - Traditional timeline: **weeks to months** for manual review of 1,598 pairs
-- Our approach: **AI handles pre-work, experts focus on highest-value decisions**
-- Result: Structured expert review table ready for validation
+- Our approach: **AI handles classification, experts focus on highest-value decisions**
+- Result: Bridge variable quality assessment + expert review table ready for validation
 :::
 
 ---
@@ -148,7 +142,7 @@ Different profiles = documented finding, not noise
 
 ## Agreement & Arbitration
 
-- **κ = 0.845** — high inter-rater agreement
+- **κ = 0.843** — high inter-rater agreement
 - ALL pairs sent to arbitration (not just disagreements)
 - Enables full behavioral analysis + final verdict
 
@@ -158,14 +152,14 @@ Different profiles = documented finding, not noise
 
 **Construct Validity:**
 - Three different architectures (OpenAI, Anthropic, Google) with different training
-- **High convergence (κ = 0.845)** = task is well-defined, not model artifact
+- **High convergence (κ = 0.843)** = task is well-defined, not model artifact
 
 **Documented Behavioral Differences:**
 - Google: Deferential, conservative (low synthesis)
 - OpenAI: Moderate synthesis, slight self-bias
 - Anthropic: High synthesis, neutral
 
-**Cost/Quality Design:** Fast models rate → flagship models arbitrate
+**Parallel evaluation:** Fast models rate, flagship models arbitrate — both process all pairs independently
 
 **Result:** Reusable methodology for future survey harmonization work
 
@@ -272,18 +266,22 @@ The 3rd model catches what any 2 would miss.
 
 ![](images/consolidation_rates.png){width=80%}
 
-- **CPS:** 41.7% consolidable (100 of 240 questions)
-- **FoodAPS:** 48.6% consolidable (68 of 140 questions)
+- **CPS:** 42.5% harmonizable (102 of 240 questions) — potential bridge variables for cross-survey linkage
+- **FoodAPS:** 48.6% harmonizable (68 of 140 questions)
+
+::: {.notes}
+F1 = high-quality bridge variables (direct linkage). F2 = usable bridges with adjustment. These are the touchpoints that enable cross-survey enrichment.
+:::
 
 ---
 
-## Why Questions Can't Consolidate
+## Characterizing Bridge Variable Quality
 
 ![](images/barrier_distribution.png){width=80%}
 
-**97% of F3 = Construct/Concept differences (CC)**
+**97% of F3 constraints = Construct/Concept differences (CC)**
 
-Not fixable barriers — fundamentally different measurements
+These aren't failures — they're quality indicators. F3 pairs with CC barriers measure fundamentally different constructs and cannot serve as bridge variables. The remaining F3 barriers (temporal, response scale) indicate potentially usable linkages with known limitations.
 
 ---
 
@@ -357,8 +355,8 @@ AI-assisted: Expert reviews 93 flagged questions = focused effort on highest-ROI
 - Triage routing (Q1-Q4) for prioritized review
 
 **Breakdown:**
-- 168 consolidable (F1+F2) — ready for validation
-- 212 non-consolidable (F3) — with documented barriers
+- 170 harmonizable (F1+F2) — bridge variable candidates ready for validation
+- 210 constrained (F3) — with documented quality limitations
 - 93 flagged for expert review — highest-value decisions
 - Full methodology — reproducible for additional surveys
 
@@ -368,41 +366,41 @@ AI-assisted: Expert reviews 93 flagged questions = focused effort on highest-ROI
 
 ::: {.incremental}
 - **< 1 day processing time** for work that traditionally takes weeks/months
-- **Expert efficiency → faster burden reduction** — identify consolidation opportunities at scale
-- **Human oversight preserved throughout** — AI provides initial judgment, experts validate
-- **The table is the deliverable** — 380 questions, pre-analyzed, ready for expert review
+- **Bridge variable identification at scale** — systematic harmonization analysis across entire survey topology
+- **Human oversight preserved throughout** — AI provides initial classification, experts validate
+- **The table is the deliverable** — 380 questions with harmonization quality scores, ready for expert review
 :::
 
 ::: {.notes}
-AI doesn't replace burden reduction goals — it accelerates the path to achieving them through expert efficiency
+Primary: enrichment through bridge variables. Secondary: consolidation where questions are truly interchangeable. Both delivered in the same expert review table.
 :::
 
 ---
 
 ## What's Next
 
-1. Expert validation of recommendations
-2. Expand to additional federal surveys
-3. Application to survey editing/imputation
+1. Expert validation of harmonization classifications
+2. Cross-survey enrichment analysis — identifying multi-hop bridge variable paths across the full survey topology (Report 04)
+3. Expand to additional federal surveys
 
 ---
 
 ## Summary
 
 **Findings:**
-- **~44% consolidation potential** — 168 questions could reduce respondent burden
-- **97% of failures** = construct differences (not fixable)
+- **~45% harmonization potential** — 170 questions identified as bridge variable candidates (F1+F2)
+- **97% of constraints** = construct differences — quality indicators, not failures
 
 **Method:**
 - **< 1 day processing** for work that traditionally takes weeks/months
-- **AI provides initial judgment, experts provide final validation**
-- **The real product:** 380 questions, pre-analyzed, ready for expert review
+- **AI provides initial classification, experts provide final validation**
+- **The real product:** 380 questions with harmonization quality scores, ready for expert review
 
-**Impact:** Accelerates path to burden reduction through expert efficiency
+**Impact:** Enables cross-survey data enrichment from existing federal data collection. Where questions are interchangeable, consolidation with language standardization becomes feasible.
 
 ::: {.notes}
 Expert review table: output/analysis/expert_review_combined.csv
-Dual value: (1) Identifies burden reduction opportunities (2) Efficiently, preserving expert judgment
+Primary: bridge variable catalog for cross-survey enrichment. Secondary: consolidation opportunities where questions are truly interchangeable.
 :::
 
 ---
@@ -439,21 +437,11 @@ The 3rd model's value is highest when first two disagree.
 
 ---
 
-## Pipeline Architecture
+## Pipeline Architecture (Detail)
 
-![](images/architecture_pipeline.png){width=90%}
-
----
-
-## LLM Ensemble Pattern
-
-![](images/architecture_ensemble.png){width=90%}
-
----
-
-## Question-Level Rollup
-
-![](images/architecture_rollup.png){width=90%}
+See main presentation slides for:
+- **Analysis Pipeline** — mermaid diagram showing data flow through rating and arbitration tiers
+- **Validation at Each Stage** — table showing measurement and findings at each pipeline stage
 
 ---
 
