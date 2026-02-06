@@ -1,19 +1,25 @@
-# Ignore cached models (too large for git)
-models/roberta-large/
+# =============================================================================
+# Build artifacts — NEVER commit these
+# =============================================================================
 
-# Ignore archive folder
-archive/
+# Quarto
+_output/
+.quarto/
+*_files/
 
-# Ignore handoffs folder
-handoffs/
+# LaTeX
+*.aux
+*.log
+*.toc
+*.tex
+*.out
+*.fls
+*.fdb_latexmk
+*.synctex.gz
 
-# Ingnore claude code tasks
-cc_tasks/
-
-# File system
-**/.DS_Store
-
+# =============================================================================
 # Python
+# =============================================================================
 __pycache__/
 *.py[cod]
 *$py.class
@@ -25,40 +31,41 @@ ENV/
 build/
 develop-eggs/
 dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
 
 # Jupyter
 .ipynb_checkpoints/
-*.ipynb_checkpoints
 
-# IDE
+# =============================================================================
+# IDE / OS
+# =============================================================================
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
-
-# Data files (may be large)
-data/raw/*.csv
-output/embeddings/*.npy
-output/embeddings/*.pkl
-
-# OS
 .DS_Store
 Thumbs.db
 
+# =============================================================================
 # Secrets
+# =============================================================================
 .env
 *.key
 config/api_keys.yaml
+
+# =============================================================================
+# Large files
+# =============================================================================
+models/roberta-large/
+output/embeddings/*.npy
+output/embeddings/*.pkl
+
+# =============================================================================
+# Archive / scratch (tracked but don't clutter)
+# =============================================================================
+archive/
+handoffs/
+cc_tasks/
