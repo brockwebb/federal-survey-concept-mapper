@@ -175,58 +175,68 @@ def create_family_bias_chart(data, output_path):
     print(f"Created: {output_path}")
 
 
-def create_architecture_diagram(stage3, output_path):
+def create_architecture_diagram(stage2, stage3, output_path):
     """
-    Generate pipeline architecture diagram.
-    
-    CRITICAL: Shows ALL pairs going to BOTH rating AND arbitration tiers.
-    This is the actual design - we did NOT filter to disagreements only.
+    Generate pipeline architecture diagram showing proper data flow.
+
+    Note: In practice, all pairs were evaluated by both raters and arbitrators,
+    but the diagram shows the conceptual pipeline flow where Stage 3 builds on Stage 1 outputs.
     """
     n_pairs = stage3['metadata']['two_way_n']
-    rater_kappa = stage3.get('two_way_agreement', {}).get('L1', {}).get('cohens_kappa', 0.611)
-    
+
+    # Get rater pairwise kappa range from stage2
+    rater_pairwise = stage2['L1_agreement']['overall']['pairwise']
+    rater_kappas = [
+        rater_pairwise['OA_vs_AN']['cohens_kappa'],
+        rater_pairwise['OA_vs_GO']['cohens_kappa'],
+        rater_pairwise['AN_vs_GO']['cohens_kappa']
+    ]
+    rater_kappa_min = min(rater_kappas)
+    rater_kappa_max = max(rater_kappas)
+
+    # Get arbitrator agreement from stage3
+    arb_kappa = stage3.get('two_way_agreement', {}).get('L1', {}).get('cohens_kappa', 0.796)
+
     mermaid_src = f'''flowchart TB
     subgraph Input["Input Data"]
         pairs["{n_pairs:,} Question Pairs<br/>(CPS-ACS, FoodAPS-ACS)"]
     end
-    
+
     subgraph Stage1["Stage 1: Rating<br/>(Fast Models)"]
         direction TB
         r1["OpenAI gpt-4o-mini"]
         r2["Anthropic claude-haiku-4-5"]
         r3["Google gemini-2-flash"]
+        r_metrics["Pairwise κ: {rater_kappa_min:.2f}-{rater_kappa_max:.2f}"]
     end
-    
+
+    subgraph Stage2["Stage 2: Agreement Analysis"]
+        agree["Inter-Rater Metrics<br/>Fleiss κ = 0.611"]
+    end
+
     subgraph Stage3["Stage 3: Arbitration<br/>(Flagship Models)"]
         direction TB
         a1["OpenAI GPT-5.2"]
         a2["Anthropic Claude Opus 4.5"]
         a3["Google Gemini 3 Pro"]
+        a_metrics["Pairwise κ: {arb_kappa:.3f}"]
     end
-    
-    subgraph Stage2["Stage 2: Agreement Analysis"]
-        agree["Inter-Rater Metrics<br/>κ = {rater_kappa:.3f}"]
-    end
-    
+
     subgraph Stage4["Stage 4: Findings"]
         rollup["Question-Level Rollup<br/>Best-match selection"]
     end
-    
+
     subgraph Stage5["Stage 5: Deliverables"]
         deliver["Expert Review Tables<br/>Triage Assignments"]
     end
-    
+
     pairs --> Stage1
-    pairs --> Stage3
-    
     Stage1 --> Stage2
-    Stage3 --> Stage4
+    Stage1 -->|"All pairs with<br/>rater judgments"| Stage3
     Stage2 -.->|"Metrics inform<br/>validation"| Stage4
-    
+    Stage3 --> Stage4
     Stage4 --> Stage5
-    
-    note1["Note: Stage 1 and Stage 3<br/>can run in parallel"]
-    
+
     style Input fill:#e1f5fe
     style Stage1 fill:#e8f5e9
     style Stage2 fill:#fff3e0
@@ -234,14 +244,14 @@ def create_architecture_diagram(stage3, output_path):
     style Stage4 fill:#f3e5f5
     style Stage5 fill:#e0f2f1
 '''
-    
+
     try:
         with tempfile.NamedTemporaryFile(mode='w', suffix='.mmd', delete=False) as f:
             f.write(mermaid_src)
             mmd_path = f.name
 
         result = subprocess.run(
-            ['mmdc', '-i', mmd_path, '-o', str(output_path), '-b', 'white', '-s', '3', '-w', '1200'],
+            ['mmdc', '-i', mmd_path, '-o', str(output_path), '-b', 'white', '-s', '3', '-w', '1920', '-H', '1080'],
             capture_output=True, text=True, timeout=30
         )
         if result.returncode == 0:
@@ -557,6 +567,7 @@ def main():
 
     # 1f. Architecture diagram - FROM JSON metadata
     create_architecture_diagram(
+        stage2,
         stage3,
         OUTPUT_IMAGES / "architecture_pipeline.png"
     )

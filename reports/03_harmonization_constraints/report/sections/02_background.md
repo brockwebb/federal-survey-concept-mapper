@@ -59,6 +59,18 @@ When variables are classified as F3 (incompatible), the framework identifies spe
 
 **See Appendix A** for complete taxonomy definitions with examples.
 
+## Cross-Survey Data Enrichment
+
+Harmonized survey questions serve a dual purpose beyond instrument consolidation: they function as **bridge variables** enabling cross-survey statistical linkage and data enrichment.
+
+**Statistical data fusion** (also called synthetic matching or data integration) is an established technique that combines information from multiple data sources when direct record linkage is not possible (D'Orazio et al., 2006; Rässler, 2002). The key requirement is a set of overlapping variables — bridge variables — measured in both datasets that enable statistical matching.
+
+In the federal survey ecosystem, overlapping questions across surveys represent potential bridge variables. However, the sheer scale of the system (7,000+ questions across 48 surveys) has prevented systematic identification of these opportunities. Individual researchers identify linkage possibilities through domain knowledge and manual review, but no infrastructure exists for discovering cross-survey enrichment patterns at scale.
+
+As federal survey response rates decline (ACS from mid-90s to ~85%, CPS around 70%), extracting more analytical value from existing data becomes increasingly critical. Cross-survey enrichment through bridge variables offers this capability without requiring additional respondent contact or data collection. The DataSHaPER harmonization framework — originally developed for epidemiological research — provides quality ratings for potential bridge variables (F1 = direct use, F2 = methodological adjustment needed, F3 = not viable).
+
+This analysis demonstrates that AI-assisted harmonization analysis can systematically identify bridge variables across the federal survey ecosystem, enabling data enrichment strategies that complement traditional consolidation approaches.
+
 ## Related Literature
 
 <!-- TODO: Add key citations from docs/literature/ -->
@@ -103,29 +115,31 @@ Report 03 (this report) takes the validated pairwise comparisons from Report 02 
 
 ## Census Bureau Context
 
-<!-- TODO: Add context about Census Bureau surveys and integration goals -->
-
 The Census Bureau conducts multiple surveys covering demographics, economics, housing, and social conditions:
 - **ACS**: Comprehensive demographic/economic data, ~3.5M households annually
 - **CPS**: Labor force statistics, ~60K households monthly
 - **SIPP**: Household dynamics and program participation
 - **Others**: American Housing Survey, Survey of Income and Program Participation, etc.
 
-Harmonization across these surveys would enable:
-- Cross-survey data integration
-- Reduced respondent burden through shared questions
-- Improved data quality through consistent measurement
-- Resource efficiency in questionnaire design
+**Declining response rates** create urgency for extracting more value from existing data. ACS response rates have declined from the mid-90s to approximately 85%, while CPS response rates hover around 70%. This trend makes cross-survey data enrichment increasingly valuable: harmonized questions serve as bridge variables enabling statistical linkage, which expands analytical capabilities without requiring additional respondent contact.
+
+Harmonization across these surveys enables:
+- **Cross-survey data enrichment**: Using bridge variables to integrate datasets and increase explanatory power
+- **Improved inference**: Combining specialized survey content for richer analysis
+- **Reduced respondent burden**: Secondary benefit through potential survey consolidation where feasible
+- **Improved data quality**: Consistent measurement across surveys
+- **Resource efficiency**: Coordinated questionnaire design
 
 ## Research Gap
 
 While survey harmonization frameworks exist (DataSHaPER, SDR methodology), **no prior work has**:
-1. Applied these frameworks systematically to federal survey questions at scale
-2. Used AI-assisted methods to accelerate the classification process
-3. Quantified consolidation potential across major federal surveys
-4. Developed operational triage frameworks for expert review prioritization
+1. Characterized federal survey overlaps as potential bridge variables for statistical data fusion and cross-survey enrichment
+2. Applied harmonization frameworks systematically to federal survey questions at scale
+3. Used AI-assisted methods to accelerate the classification process
+4. Quantified harmonization potential across major federal surveys and identified linkage-ready bridge variables
+5. Developed operational triage frameworks for expert review prioritization
 
-This report addresses these gaps.
+This report addresses these gaps, with primary focus on identifying bridge variables for cross-survey data enrichment and secondary findings on consolidation potential.
 
 ---
 

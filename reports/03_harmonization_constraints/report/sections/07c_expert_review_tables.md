@@ -38,7 +38,7 @@ Each file contains 17 columns:
 | Column | Type | Description |
 |--------|------|-------------|
 | `best_feasibility` | string | F1, F2, or F3 |
-| `has_consolidable_path` | boolean | True if F1 or F2 |
+| `has_harmonizable_path` | boolean | True if F1 or F2 |
 | `barrier_code` | string | CC.1, TC.2, etc. (if F3) |
 | `confidence` | string | HIGH, MODERATE, or LOW |
 
@@ -70,11 +70,11 @@ Each file contains 17 columns:
 
 Questions are assigned to quadrants for prioritization:
 
-### Q1: Confident Consolidable (151 questions)
+### Q1: Confident Harmonizable (151 questions)
 
 - **Borda**: High (≥0.167)
 - **Entropy**: High (≥0.330)
-- **Interpretation**: Models agree it's consolidable
+- **Interpretation**: Models agree it's harmonizable
 - **Action**: Auto-accept, spot-check recommended
 - **Expert Review Priority**: Low
 
@@ -88,7 +88,7 @@ Borda: 1.0, Entropy: 1.0
 
 ---
 
-### Q2: Confident Non-Consolidable (136 questions)
+### Q2: Confident Non-Harmonizable (136 questions)
 
 - **Borda**: Low (<0.167)
 - **Entropy**: High (≥0.330)
@@ -256,7 +256,7 @@ cut -d',' -f7 expert_review_combined.csv | sort | uniq -c
 | **F1** | 37 (15.4%) | 23 (16.4%) | 60 (15.8%) |
 | **F2** | 63 (26.3%) | 45 (32.1%) | 108 (28.4%) |
 | **F3** | 140 (58.3%) | 72 (51.4%) | 212 (55.8%) |
-| **Consolidable** | 100 (41.7%) | 68 (48.6%) | 168 (44.2%) |
+| **Harmonizable** | 100 (41.7%) | 68 (48.6%) | 168 (44.2%) |
 
 ### Triage Distribution
 
@@ -282,7 +282,7 @@ cut -d',' -f7 expert_review_combined.csv | sort | uniq -c
 When validating results, check:
 
 - [ ] All 380 questions have exactly one best match
-- [ ] F1/F2 questions have `has_consolidable_path = True`
+- [ ] F1/F2 questions have `has_harmonizable_path = True`
 - [ ] F3 questions have valid barrier code (CC.*, TC.*, RS.*, PC.*, MC.*, PM.*)
 - [ ] Borda scores in [0, 1]
 - [ ] Entropy scores in [0, 1]

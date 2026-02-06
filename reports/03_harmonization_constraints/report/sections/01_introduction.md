@@ -5,31 +5,33 @@
 
 ## Problem Statement
 
-The federal statistical system conducts dozens of surveys annually, many asking overlapping questions about demographics, economics, health, and social conditions. This redundancy creates:
+The federal statistical system conducts dozens of surveys annually, many asking overlapping questions about demographics, economics, health, and social conditions. These overlaps represent both analytical opportunities and challenges:
 
-1. **Respondent burden**: Same households answering similar questions across multiple surveys
-2. **Data integration challenges**: Incompatible question wording prevents cross-survey analysis
-3. **Resource inefficiency**: Agencies duplicating effort in questionnaire design and data collection
+1. **Untapped analytical potential**: Overlapping questions across surveys represent bridge variables that could enable cross-survey statistical linkage, increasing explanatory power without additional data collection. Currently, this potential remains largely unrealized due to the difficulty of systematically identifying harmonizable questions across the ecosystem.
 
-Determining which questions can be consolidated or harmonized requires deep subject-matter expertise and traditionally involves weeks or months of manual review by survey methodologists.
+2. **Declining response rates**: As survey participation drops (ACS response rates declined from mid-90s to ~85%, CPS around 70%), extracting more value from existing data becomes critical. Cross-survey enrichment through linkage provides this — using bridge variables to integrate datasets and expand analytical capabilities.
+
+3. **Respondent burden**: Overlaps also represent potential for survey streamlining. Same households answering similar questions across multiple surveys creates unnecessary burden, and consolidation where feasible offers a secondary benefit.
+
+Determining which questions are harmonizable — and characterizing the quality of potential bridge variables — requires deep subject-matter expertise and traditionally involves weeks or months of manual review by survey methodologists.
 
 ## Research Questions
 
 This report addresses three core questions:
 
-### RQ1: Consolidation Potential
-**What proportion of federal survey questions can be consolidated with existing ACS questions?**
+### RQ1: Harmonization Potential
+**What proportion of federal survey questions are harmonizable — serving as potential bridge variables for cross-survey data enrichment?**
 
-- Hypothesis: Significant consolidation potential exists but requires systematic identification
+- Hypothesis: Significant harmonization potential exists but requires systematic identification
 - Approach: Exhaustive pairwise comparison of CPS/FoodAPS questions against ACS
-- Outcome: Quantify F1 (direct), F2 (with adjustment), F3 (incompatible) rates
+- Outcome: Quantify F1 (direct harmonization), F2 (harmonization with adjustment), F3 (not harmonizable) rates and identify linkage-ready bridge variables
 
-### RQ2: Barrier Taxonomy
-**What barriers prevent survey question consolidation?**
+### RQ2: Linkage Quality Constraints
+**What barriers prevent survey question harmonization, and how do these constraints define where cross-survey linkage is viable?**
 
-- Hypothesis: Most barriers stem from construct differences, not operational issues
-- Approach: Classify failures using DataSHaPER/Maelstrom harmonization framework
-- Outcome: Identify primary barrier types and their prevalence
+- Hypothesis: Most barriers stem from construct differences, not operational issues; these barriers characterize linkage quality constraints
+- Approach: Classify incompatibilities using DataSHaPER/Maelstrom harmonization framework
+- Outcome: Identify primary barrier types, their prevalence, and implications for bridge variable quality
 
 ### RQ3: AI-Assisted Methods
 **Can AI-assisted methods accelerate this traditionally labor-intensive analysis?**
@@ -55,7 +57,7 @@ We adopt the DataSHaPER/Maelstrom retrospective harmonization framework:
 
 ### What This Report Is NOT
 - Not a recommendation to eliminate any surveys (policy decision)
-- Not a claim that all F1/F2 pairs should be consolidated (requires stakeholder input)
+- Not a claim that all harmonizable pairs should be linked — fitness-for-purpose assessment is required for each enrichment use case
 - Not a replacement for expert judgment (AI assists, experts decide)
 
 ## Prior Work
@@ -83,10 +85,10 @@ The remainder of this report is organized as:
 
 This work contributes:
 
-1. **Empirical findings** on federal survey consolidation potential (~44%)
-2. **Barrier taxonomy application** showing CC dominance (97% of failures)
-3. **Operational triage framework** (two-axis: Borda direction × Entropy stability)
-4. **Reproducible methodology** for AI-assisted survey harmonization
+1. **Bridge variable catalog** identifying harmonization potential across federal surveys (~44% harmonizable), characterizing 168 linkage-ready questions for cross-survey data enrichment
+2. **Linkage quality characterization** showing CC dominance (97% of incompatibilities), defining precisely where cross-survey enrichment is viable and where surveys serve distinct analytical purposes
+3. **Operational triage framework** (two-axis: Borda direction × Entropy stability) enabling efficient expert review prioritization
+4. **Reproducible methodology** for AI-assisted survey harmonization scalable to the entire federal survey ecosystem
 
 ---
 

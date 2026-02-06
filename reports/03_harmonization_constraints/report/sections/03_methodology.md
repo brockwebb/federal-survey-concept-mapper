@@ -4,7 +4,7 @@
 
 ## Overview
 
-We developed a 5-stage pipeline for AI-assisted survey harmonization analysis:
+We developed a 5-stage pipeline for AI-assisted survey harmonization analysis. The pipeline characterizes harmonization potential across federal surveys, identifying bridge variables for cross-survey data enrichment and characterizing linkage quality constraints that define where cross-survey integration is viable.
 
 ```
 Stage 1: Rating (3-model ensemble)
