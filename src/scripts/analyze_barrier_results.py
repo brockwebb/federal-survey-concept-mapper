@@ -16,12 +16,15 @@ from sklearn.metrics import cohen_kappa_score
 from collections import Counter
 import sys
 
-sys.path.insert(0, str(Path(__file__).parent))
+# Path setup for post-restructure layout
+SRC_DIR = Path(__file__).resolve().parent.parent    # .../src/
+REPO_ROOT = SRC_DIR.parent                           # repo root
+sys.path.insert(0, str(SRC_DIR))                     # enables lib imports
 from lib.io_utils import ensure_dir
 
 # Configuration
-RESULTS_DIR = Path(__file__).parent.parent / 'output' / 'results'
-OUTPUT_DIR = Path(__file__).parent.parent / 'output' / 'analysis'
+RESULTS_DIR = REPO_ROOT / "output" / "report_03" / "results"
+OUTPUT_DIR = REPO_ROOT / "output" / "report_03" / "analysis"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 sns.set_style('whitegrid')

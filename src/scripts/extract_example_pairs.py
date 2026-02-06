@@ -10,7 +10,11 @@ import json
 from pathlib import Path
 
 # Paths
-BASE = Path(__file__).parent.parent
+# Path setup for post-restructure layout
+SRC_DIR = Path(__file__).resolve().parent.parent
+REPO_ROOT = SRC_DIR.parent
+sys.path.insert(0, str(SRC_DIR))
+BASE = REPO_ROOT  # backward compat alias
 BEST_MATCHES = BASE / "output/analysis/stage4_question_best_matches.csv"
 ARBITRATION = BASE / "output/analysis/arbitration_merged.csv"
 CPS_COMP = BASE / "data/cps_comparison_merged.csv"

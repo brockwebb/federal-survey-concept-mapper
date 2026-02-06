@@ -24,7 +24,10 @@ from collections import defaultdict
 import sys
 
 # Add lib to path
-sys.path.insert(0, str(Path(__file__).parent))
+# Path setup for post-restructure layout
+SRC_DIR = Path(__file__).resolve().parent.parent    # .../src/
+REPO_ROOT = SRC_DIR.parent                           # repo root
+sys.path.insert(0, str(SRC_DIR))                     # enables lib imports
 from lib.io_utils import load_config
 
 
@@ -452,11 +455,11 @@ def generate_markdown_report(report_data, output_path):
 
 def main():
     # Setup paths
-    base_dir = Path(__file__).parent.parent
-    analysis_dir = base_dir / "output" / "analysis"
+    base_dir = REPO_ROOT  # post-restructure: use repo root
+    analysis_dir = base_dir / "output" / "report_03" / "analysis"
 
     # Load config and data
-    config = load_config(base_dir / "config.yaml")
+    config = load_config(base_dir / "config" / "report_03.yaml")
     merged_file = analysis_dir / "arbitration_merged.csv"
 
     print(f"Loading {merged_file.name}...")

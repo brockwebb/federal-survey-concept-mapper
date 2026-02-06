@@ -34,10 +34,12 @@ import subprocess
 import sys
 from pathlib import Path
 
-BASE_DIR = Path(__file__).parent
-SCRIPTS_DIR = BASE_DIR / "scripts"
-OUTPUT_DIR = BASE_DIR / "output" / "analysis"
-VISUALS_DIR = BASE_DIR / "output" / "visuals"
+# Path setup for post-restructure layout
+SRC_DIR = Path(__file__).resolve().parent.parent    # .../src/
+REPO_ROOT = SRC_DIR.parent                           # repo root
+SCRIPTS_DIR = SRC_DIR / "scripts"
+OUTPUT_DIR = REPO_ROOT / "output" / "report_03" / "analysis"
+VISUALS_DIR = REPO_ROOT / "output" / "report_03" / "visuals"
 PRESENTATION_DIR = BASE_DIR / "presentation"
 PRESENTATION_IMAGES = PRESENTATION_DIR / "images"
 

@@ -25,14 +25,17 @@ import numpy as np
 import pandas as pd
 from scipy.stats import spearmanr
 
-sys.path.insert(0, str(Path(__file__).parent))
+# Path setup for post-restructure layout
+SRC_DIR = Path(__file__).resolve().parent.parent    # .../src/
+REPO_ROOT = SRC_DIR.parent                           # repo root
+sys.path.insert(0, str(SRC_DIR))                     # enables lib imports
 from lib.io_utils import ensure_dir
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
 log = logging.getLogger(__name__)
 
 BASE_DIR = Path(__file__).parent.parent
-OUTPUT_DIR = BASE_DIR / "output" / "analysis"
+OUTPUT_DIR = REPO_ROOT / "output" / "report_03" / "analysis"
 
 FEAS_LEVELS = ['F1', 'F2', 'F3']
 METHODS = ['composite', 'entropy', 'bayesian', 'borda']

@@ -22,15 +22,18 @@ from datetime import datetime
 import pandas as pd
 
 # Add scripts/ to path for lib imports
-sys.path.insert(0, str(Path(__file__).parent / "scripts"))
+# Path setup for post-restructure layout
+SRC_DIR = Path(__file__).resolve().parent.parent    # .../src/
+REPO_ROOT = SRC_DIR.parent                           # repo root
+sys.path.insert(0, str(SRC_DIR))                     # enables lib imports
 from lib.io_utils import load_config, ensure_dir, load_merged_csv
 from lib.taxonomy import BARRIER_L1, FEASIBILITY_LEVELS
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
 log = logging.getLogger(__name__)
 
-BASE_DIR = Path(__file__).parent
-OUTPUT_DIR = BASE_DIR / "output" / "analysis"
+# Path setup for post-restructure layout
+OUTPUT_DIR = REPO_ROOT / "output" / "report_03" / "analysis"
 
 
 # ---------------------------------------------------------------------------
@@ -42,8 +45,8 @@ def load_data():
     verdicts = pd.read_csv(OUTPUT_DIR / "final_verdicts.csv")
     log.info(f"Loaded {len(verdicts)} verdict rows")
 
-    cps_map = load_merged_csv(BASE_DIR / "data" / "cps_comparison_merged.csv")
-    foodaps_map = load_merged_csv(BASE_DIR / "data" / "foodaps_comparison_merged.csv")
+    cps_map = load_merged_csv(REPO_ROOT / "data" / "processed" / "cps_comparison_merged.csv")
+    foodaps_map = load_merged_csv(REPO_ROOT / "data" / "processed" / "foodaps_comparison_merged.csv")
 
     # Select mapping columns
     map_cols = ['pair_id', 'survey_q_id', 'survey_text', 'acs_q_id', 'acs_text', 'subtopic']

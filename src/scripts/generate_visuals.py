@@ -24,9 +24,13 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import pandas as pd
 
-BASE = Path(__file__).parent.parent
-ANALYSIS = BASE / "output" / "analysis"
-VISUALS = BASE / "output" / "visuals"
+# Path setup for post-restructure layout
+SRC_DIR = Path(__file__).resolve().parent.parent
+REPO_ROOT = SRC_DIR.parent
+sys.path.insert(0, str(SRC_DIR))
+BASE = REPO_ROOT  # backward compat alias
+ANALYSIS = BASE / "output" / "report_03" / "analysis"
+VISUALS = BASE / "output" / "report_03" / "visuals"
 
 # Palette
 GREEN = "#4CAF50"

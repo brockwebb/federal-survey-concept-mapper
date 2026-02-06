@@ -26,7 +26,10 @@ from pathlib import Path
 from datetime import datetime
 from collections import Counter
 
-sys.path.insert(0, str(Path(__file__).parent))
+# Path setup for post-restructure layout
+SRC_DIR = Path(__file__).resolve().parent.parent    # .../src/
+REPO_ROOT = SRC_DIR.parent                           # repo root
+sys.path.insert(0, str(SRC_DIR))                     # enables lib imports
 from lib.stats import (
     cohens_kappa,
     fleiss_kappa,
@@ -49,7 +52,7 @@ ABBREV = {'openai': 'OA', 'anthropic': 'AN', 'google': 'GO'}
 
 def load_arbitration_data(base_dir):
     """Load all arbitration JSONL files and rater data."""
-    analysis_dir = base_dir / 'output' / 'analysis'
+    analysis_dir = base_dir / "output" / "report_03" / "analysis"
 
     arb = {}
     for name in ARBITRATORS:
@@ -1223,8 +1226,8 @@ def generate_report(metrics, output_path):
 # ---------------------------------------------------------------------------
 
 def main():
-    base_dir = Path(__file__).parent.parent  # scripts/ -> project root
-    analysis_dir = base_dir / 'output' / 'analysis'
+    base_dir = REPO_ROOT  # post-restructure: use repo root  # scripts/ -> project root
+    analysis_dir = base_dir / "output" / "report_03" / "analysis"
 
     print("=" * 60)
     print("Stage 3 Arbitration Analysis")

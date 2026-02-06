@@ -25,7 +25,10 @@ import pandas as pd
 import numpy as np
 
 # Add lib to path
-sys.path.insert(0, str(Path(__file__).parent))
+# Path setup for post-restructure layout
+SRC_DIR = Path(__file__).resolve().parent.parent    # .../src/
+REPO_ROOT = SRC_DIR.parent                           # repo root
+sys.path.insert(0, str(SRC_DIR))                     # enables lib imports
 from lib.stats import cohens_kappa, fleiss_kappa, percent_agreement, interpret_kappa
 from lib.taxonomy import extract_l1, BARRIER_L1
 from lib.io_utils import load_config, ensure_dir

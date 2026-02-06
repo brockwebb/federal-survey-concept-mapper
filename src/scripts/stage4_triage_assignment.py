@@ -20,7 +20,7 @@ import json
 from pathlib import Path
 
 # Paths
-ANALYSIS_DIR = Path(__file__).parent.parent / "output" / "analysis"
+ANALYSIS_DIR = REPO_ROOT / "output" / "report_03" / "analysis"
 INPUT_FILE = ANALYSIS_DIR / "stage4_bakeoff_scores.csv"
 OUTPUT_FILE = ANALYSIS_DIR / "stage4_triage_assignments.csv"
 SUMMARY_FILE = ANALYSIS_DIR / "stage4_triage_summary.json"

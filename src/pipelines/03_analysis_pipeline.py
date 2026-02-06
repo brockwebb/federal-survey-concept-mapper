@@ -22,8 +22,10 @@ import sys
 from pathlib import Path
 
 
-BASE_DIR = Path(__file__).parent
-SCRIPTS_DIR = BASE_DIR / "scripts"
+# Path setup for post-restructure layout
+SRC_DIR = Path(__file__).resolve().parent.parent    # .../src/
+REPO_ROOT = SRC_DIR.parent                           # repo root
+SCRIPTS_DIR = SRC_DIR / "scripts"
 
 
 STAGES = {
@@ -64,7 +66,7 @@ def run_stage(stage_num):
     print('=' * 60)
 
     cmd = [sys.executable, str(script_path)] + stage['args']
-    result = subprocess.run(cmd, cwd=BASE_DIR)
+    result = subprocess.run(cmd, cwd=REPO_ROOT)
 
     if result.returncode != 0:
         print(f"ERROR: Stage {stage_num} failed with code {result.returncode}")

@@ -21,7 +21,10 @@ from datetime import datetime
 from collections import OrderedDict
 
 # Add lib to path
-sys.path.insert(0, str(Path(__file__).parent))
+# Path setup for post-restructure layout
+SRC_DIR = Path(__file__).resolve().parent.parent    # .../src/
+REPO_ROOT = SRC_DIR.parent                           # repo root
+sys.path.insert(0, str(SRC_DIR))                     # enables lib imports
 from lib.io_utils import load_config, load_jsonl, save_jsonl
 
 
@@ -147,13 +150,13 @@ def merge_arbitrators(arbitrator_data):
 
 def main():
     # Setup paths
-    base_dir = Path(__file__).parent.parent
-    results_dir = base_dir / "output" / "results"
-    analysis_dir = base_dir / "output" / "analysis"
+    base_dir = REPO_ROOT  # post-restructure: use repo root
+    results_dir = base_dir / "output" / "report_03" / "results"
+    analysis_dir = base_dir / "output" / "report_03" / "analysis"
     analysis_dir.mkdir(parents=True, exist_ok=True)
 
     # Load config
-    config = load_config(base_dir / "config.yaml")
+    config = load_config(base_dir / "config" / "report_03.yaml")
 
     # Initialize cleaning log
     cleaning_log = {

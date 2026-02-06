@@ -18,11 +18,14 @@ from pathlib import Path
 from collections import Counter
 import sys
 
-sys.path.insert(0, str(Path(__file__).parent))
+# Path setup for post-restructure layout
+SRC_DIR = Path(__file__).resolve().parent.parent    # .../src/
+REPO_ROOT = SRC_DIR.parent                           # repo root
+sys.path.insert(0, str(SRC_DIR))                     # enables lib imports
 from lib.io_utils import ensure_dir
 
 # Paths
-ANALYSIS_DIR = Path(__file__).parent.parent / "output" / "analysis"
+ANALYSIS_DIR = REPO_ROOT / "output" / "report_03" / "analysis"
 MERGED_CSV = ANALYSIS_DIR / "barrier_coding_merged.csv"
 OUTPUT_DIR = ANALYSIS_DIR / "confusion_analysis"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)

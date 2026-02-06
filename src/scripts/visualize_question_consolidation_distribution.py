@@ -11,7 +11,10 @@ import seaborn as sns
 from pathlib import Path
 
 # Paths
-BASE_DIR = Path(__file__).parent.parent
+# Path setup for post-restructure layout
+SRC_DIR = Path(__file__).resolve().parent.parent    # .../src/
+REPO_ROOT = SRC_DIR.parent                           # repo root
+sys.path.insert(0, str(SRC_DIR))                     # enables lib imports
 QUESTION_DATA = BASE_DIR / "output/analysis/stage4_question_best_matches.csv"
 PAIR_DATA = BASE_DIR / "output/analysis/final_verdicts.csv"
 OUTPUT_FILE = BASE_DIR / "presentation/images/question_consolidation_distribution.png"

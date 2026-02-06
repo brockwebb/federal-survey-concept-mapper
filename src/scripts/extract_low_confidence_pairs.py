@@ -16,8 +16,12 @@ import pandas as pd
 from pathlib import Path
 
 # Paths
-BASE = Path(__file__).parent.parent
-OUTPUT_DIR = BASE / "output" / "analysis"
+# Path setup for post-restructure layout
+SRC_DIR = Path(__file__).resolve().parent.parent
+REPO_ROOT = SRC_DIR.parent
+sys.path.insert(0, str(SRC_DIR))
+BASE = REPO_ROOT  # backward compat alias
+OUTPUT_DIR = BASE / "output" / "report_03" / "analysis"
 QUESTION_MATCHING_DIR = BASE.parent.parent / "output" / "question_matching"
 
 def main():

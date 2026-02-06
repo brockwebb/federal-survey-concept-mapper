@@ -24,7 +24,10 @@ from datetime import datetime
 
 import pandas as pd
 
-sys.path.insert(0, str(Path(__file__).parent))
+# Path setup for post-restructure layout
+SRC_DIR = Path(__file__).resolve().parent.parent    # .../src/
+REPO_ROOT = SRC_DIR.parent                           # repo root
+sys.path.insert(0, str(SRC_DIR))                     # enables lib imports
 from lib.io_utils import ensure_dir
 from lib.taxonomy import BARRIER_L1, BARRIER_CODES
 
@@ -32,7 +35,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(mess
 log = logging.getLogger(__name__)
 
 BASE_DIR = Path(__file__).parent.parent
-OUTPUT_DIR = BASE_DIR / "output" / "analysis"
+OUTPUT_DIR = REPO_ROOT / "output" / "report_03" / "analysis"
 
 # Subcode definitions (from taxonomy_v1.md)
 SUBCODE_DEFS = {
@@ -98,8 +101,8 @@ def build_expert_table():
 
     # Load source question mappings for full (untruncated) text
     from lib.io_utils import load_merged_csv
-    cps_map = load_merged_csv(BASE_DIR / "data" / "cps_comparison_merged.csv")
-    foodaps_map = load_merged_csv(BASE_DIR / "data" / "foodaps_comparison_merged.csv")
+    cps_map = load_merged_csv(REPO_ROOT / "data" / "processed" / "cps_comparison_merged.csv")
+    foodaps_map = load_merged_csv(REPO_ROOT / "data" / "processed" / "foodaps_comparison_merged.csv")
     map_cols = ['pair_id', 'survey_q_id', 'survey_text', 'acs_q_id', 'acs_text', 'subtopic']
     question_map = pd.concat([cps_map[map_cols], foodaps_map[map_cols]], ignore_index=True)
 

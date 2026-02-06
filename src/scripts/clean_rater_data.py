@@ -185,13 +185,13 @@ def merge_raters(rater_data, config):
 
 def main():
     # Setup paths
-    base_dir = Path(__file__).parent.parent
-    results_dir = base_dir / "output" / "results"
-    analysis_dir = base_dir / "output" / "analysis"
+    base_dir = REPO_ROOT  # post-restructure: use repo root
+    results_dir = base_dir / "output" / "report_03" / "results"
+    analysis_dir = base_dir / "output" / "report_03" / "analysis"
     ensure_dir(analysis_dir)
 
     # Load config
-    config = load_config(base_dir / "config.yaml")
+    config = load_config(base_dir / "config" / "report_03.yaml")
 
     print("=" * 60)
     print("RATER DATA CLEANING (Stage 1)")
