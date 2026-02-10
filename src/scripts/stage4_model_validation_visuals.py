@@ -17,21 +17,21 @@ This ensures reruns produce outputs consistent with upstream pipeline stages.
 
 import json
 import subprocess
+import sys
 import tempfile
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 from pathlib import Path
 
-# Paths
 # Path setup for post-restructure layout
 SRC_DIR = Path(__file__).resolve().parent.parent    # .../src/
 REPO_ROOT = SRC_DIR.parent                           # repo root
 sys.path.insert(0, str(SRC_DIR))                     # enables lib imports
-STAGE2_METRICS = BASE_DIR / "output/analysis/stage2_agreement_metrics.json"
-STAGE3_METRICS = BASE_DIR / "output/analysis/stage3_arbitration_metrics.json"
-OUTPUT_IMAGES = BASE_DIR / "presentation/images"
-OUTPUT_ANALYSIS = BASE_DIR / "output/analysis"
+STAGE2_METRICS = REPO_ROOT / "output/report_03/analysis/stage2_agreement_metrics.json"
+STAGE3_METRICS = REPO_ROOT / "output/report_03/analysis/stage3_arbitration_metrics.json"
+OUTPUT_IMAGES = REPO_ROOT / "output/report_03/visuals"
+OUTPUT_ANALYSIS = REPO_ROOT / "output/report_03/analysis"
 
 # Model display names
 MODEL_NAMES = {

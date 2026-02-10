@@ -1,0 +1,5 @@
+---
+title: "LLM-Assisted Concept Mapping of Federal Survey Questions"
+---
+
+This report establishes the feasibility of using large language models to classify federal survey questions into a unified taxonomy, producing a master cross-survey concept map across 48 instruments and ~7,000 questions.

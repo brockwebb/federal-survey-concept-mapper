@@ -82,7 +82,7 @@ At the question level (212 F3 questions):
 
 ### Inter-Rater Reliability
 
-![Agreement Heatmap](../figures/agreement_heatmap.png){width=70%}
+![Agreement Heatmap](../figures/rater_agreement_heatmap.png){width=70%}
 
 <!-- TODO: Create agreement heatmap if not exists -->
 

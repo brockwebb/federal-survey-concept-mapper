@@ -5,18 +5,18 @@ Generate visualization of harmonization code distribution.
 Shows F1/F2/F3 counts and breakdown of F3 by barrier sub-codes.
 """
 
+import sys
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from pathlib import Path
 
-# Paths
 # Path setup for post-restructure layout
 SRC_DIR = Path(__file__).resolve().parent.parent    # .../src/
 REPO_ROOT = SRC_DIR.parent                           # repo root
 sys.path.insert(0, str(SRC_DIR))                     # enables lib imports
-DATA_FILE = BASE_DIR / "output/analysis/final_verdicts.csv"
-OUTPUT_FILE = BASE_DIR / "presentation/images/harmonization_distribution.png"
+DATA_FILE = REPO_ROOT / "output/report_03/analysis/final_verdicts.csv"
+OUTPUT_FILE = REPO_ROOT / "output/report_03/visuals/harmonization_distribution.png"
 
 def load_data():
     """Load final verdicts data."""

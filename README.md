@@ -2,7 +2,7 @@
 
 **Thesis**: The federal government already collects an enormous mosaic of survey data across dozens of agencies. AI-assisted harmonization analysis can reveal how to assemble that mosaic into a more complete picture — enabling cross-survey data enrichment without collecting a single additional data point — and can compress what traditionally takes months of expert review into weeks.
 
-📄 **[Executive Fact Sheet](reports/fact_sheet/)** — One-page plain-language overview for leadership ([PDF](reports/fact_sheet/_output/index.pdf))
+📄 **[Executive Fact Sheet](output/fact_sheet/fact_sheet.pdf)** — One-page plain-language overview for leadership
 
 ## Research Overview
 
@@ -19,7 +19,7 @@ The project progresses through four reports, each building on the prior:
 
 Dual-LLM classification (Claude Haiku 4.5, GPT-5-mini) of 6,987 questions across 48 surveys into a hierarchical Census-derived taxonomy. Established that LLMs achieve high agreement (Cohen's κ = 0.84) on concept categorization, producing a master cross-survey concept map. Also documented that embedding-based clustering fails for this domain due to extreme baseline similarity (99.16%) in standardized government language.
 
-- **Report**: [`reports/01_llm_concept_mapping/`](reports/01_llm_concept_mapping/)
+- **Report source**: [`reports/01_llm_concept_mapping/`](reports/01_llm_concept_mapping/)
 - **Output data**: [`output/report_01/`](output/report_01/)
 
 ### Report 02 — Question-Level Consolidation Analysis
@@ -27,7 +27,8 @@ Dual-LLM classification (Claude Haiku 4.5, GPT-5-mini) of 6,987 questions across
 
 Developed pairwise question matching for CPS-ACS and FoodAPS-ACS survey pairs. Multi-model comparison across rater generations, fuzzy matching baselines, and LLM classification. Produced 1,598 candidate pairs for detailed harmonization analysis.
 
-- **Report**: [`reports/02_question_consolidation/`](reports/02_question_consolidation/)
+- **Report source**: [`reports/02_question_consolidation/`](reports/02_question_consolidation/)
+- **Rendered report**: [`output/report_02/FULL_REPORT.pdf`](output/report_02/FULL_REPORT.pdf)
 - **Output data**: [`output/report_02/`](output/report_02/)
 
 ### Report 03 — Harmonization Constraints Analysis
@@ -35,9 +36,8 @@ Developed pairwise question matching for CPS-ACS and FoodAPS-ACS survey pairs. M
 
 Three-rater ensemble (OpenAI, Anthropic, Google) with multi-model arbitration to classify harmonization barriers across 1,598 pairs. Key findings: ~44% of questions are harmonizable (bridge-variable quality), with ~11% directly consolidable. Barrier taxonomy (Construct/Concept, Temporal/Collection, Reference/Scope, Practical/Cost) characterizes precisely where linkage works and where it doesn't. Discovered significant behavioral differences between LLM arbitrators (synthesis rates: Google 7%, OpenAI 59%, Anthropic 77%).
 
-- **Report**: [`reports/03_harmonization_constraints/`](reports/03_harmonization_constraints/)
-  - Full Quarto report: [`reports/03_harmonization_constraints/report/`](reports/03_harmonization_constraints/report/)
-  - Slide decks: [`reports/03_harmonization_constraints/presentation/`](reports/03_harmonization_constraints/presentation/)
+- **Report source**: [`reports/03_harmonization_constraints/`](reports/03_harmonization_constraints/)
+- **Rendered slides**: [`output/report_03/pdf/`](output/report_03/pdf/) (findings, methodology, combined)
 - **Output data**: [`output/report_03/`](output/report_03/)
 - **Pipeline code**: [`src/pipelines/`](src/pipelines/) (Stages 1–5)
 - **Analysis scripts**: [`src/scripts/`](src/scripts/)
@@ -47,22 +47,24 @@ Three-rater ensemble (OpenAI, Anthropic, Google) with multi-model arbitration to
 
 Will extend analysis to the full survey network, using AI to identify connection patterns (multi-hop bridge variables) that exceed human working memory limitations. Validates AI classifications empirically using public microdata from CPS and ACS (IPUMS) to test whether "harmonizable" pairs show comparable response distributions.
 
-- **Report**: [`reports/04_empirical_validation/`](reports/04_empirical_validation/)
+- **Report source**: [`reports/04_empirical_validation/`](reports/04_empirical_validation/)
 - **Vision doc**: [`docs/project/REPORT_04_VISION_cross_survey_enrichment.md`](docs/project/REPORT_04_VISION_cross_survey_enrichment.md)
 
 ## Repository Structure
 
 ```
+├── report_builder.py         # Build all reports from root (python report_builder.py)
 ├── reports/                  # Report source files (Quarto/Markdown)
 │   ├── fact_sheet/           # Executive one-pager (Quarto → PDF)
 │   ├── 01_llm_concept_mapping/
 │   ├── 02_question_consolidation/
 │   ├── 03_harmonization_constraints/
 │   └── 04_empirical_validation/
-├── output/                   # Generated outputs per report
+├── output/                   # Committed deliverables and data per report
+│   ├── fact_sheet/           # Rendered fact sheet PDF
 │   ├── report_01/            # Master dataset, visualizations, comparisons
-│   ├── report_02/            # Question matching results, treemaps
-│   ├── report_03/            # Barrier analysis, arbitration, stage 1-4 outputs
+│   ├── report_02/            # Full report PDF, question matching results, treemaps
+│   ├── report_03/            # Slide PDFs, barrier analysis, arbitration, stage 1-4 outputs
 │   └── report_04/            # (empty, planned)
 ├── src/
 │   ├── core/                 # Report 01-02 scripts
@@ -108,18 +110,22 @@ API keys required in `.env` for OpenAI, Anthropic, and Google (Report 03 pipelin
 
 ## Building Reports
 
-All reports are compiled from **section source files** using [Quarto](https://quarto.org/). Do not edit rendered outputs directly — edit the section files under each report's `sections/` directory, then re-render.
+All reports are compiled from **section source files** using [Quarto](https://quarto.org/). Do not edit rendered outputs directly — edit the markdown files under each report's `sections/` directory, then rebuild.
 
-| Deliverable | Source Directory | Render Command |
-|:---|:---|:---|
-| **Fact Sheet** (PDF) | `reports/fact_sheet/` | `cd reports/fact_sheet && quarto render` |
-| **Report 02** (PDF + HTML) | `reports/02_question_consolidation/` | `cd reports/02_question_consolidation && quarto render` |
-| **Report 03 — Report** (PDF + HTML) | `reports/03_harmonization_constraints/report/` | `cd reports/03_harmonization_constraints/report && quarto render` |
-| **Report 03 — Slides** (RevealJS) | `reports/03_harmonization_constraints/presentation/` | `cd reports/03_harmonization_constraints/presentation && quarto render` |
+A single build script at the repo root handles rendering, visual generation, and copying deliverables to `output/` (where they're tracked in git).
 
-Report 01 (`reports/01_llm_concept_mapping/`) does not yet have a Quarto build — it is structured as standalone markdown sections.
+```bash
+python report_builder.py              # build everything
+python report_builder.py status       # check what exists / what's missing
+python report_builder.py fact_sheet   # build just the fact sheet
+python report_builder.py r01          # Report 01
+python report_builder.py r02          # Report 02
+python report_builder.py r03          # Report 03 (visuals + report + slides)
+python report_builder.py r03-visuals  # regenerate Report 03 charts only
+python report_builder.py list         # show all targets
+```
 
-Outputs land in each directory's `_output/` folder. The `_quarto.yml` in each directory defines the chapter order, format options, and bibliography. If you add or reorder sections, update `_quarto.yml` to match.
+Quarto renders to local `_output/` directories (gitignored). The build script automatically copies final deliverables to `output/` for git tracking. The `_quarto.yml` in each report directory defines chapter order, format options, and bibliography — if you add or reorder sections, update it to match.
 
 ## License
 

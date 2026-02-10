@@ -227,12 +227,6 @@ The 3rd model's value is highest when first two disagree.
 
 ---
 
-## LLM Ensemble Pattern
-
-![](images/architecture_ensemble.png){width=90%}
-
----
-
 ## Methodology Validation Summary
 
 | Validation Check | Result | Interpretation |
