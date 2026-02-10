@@ -1,0 +1,32 @@
+project:
+  type: default
+  output-dir: _output
+
+format:
+  pdf:
+    documentclass: article
+    papersize: letter
+    geometry:
+      - margin=0.75in
+    fontsize: 10pt
+    colorlinks: true
+    linkcolor: "blue"
+    toc: false
+    number-sections: false
+    keep-tex: false
+    include-in-header:
+      text: |
+        \usepackage{titling}
+        \usepackage{booktabs}
+        \usepackage{enumitem}
+        \setlist{nosep, leftmargin=*}
+        \pretitle{\begin{center}\LARGE\bfseries}
+        \posttitle{\par\end{center}\vskip -1em}
+        \preauthor{\begin{center}\normalsize}
+        \postauthor{\par\end{center}}
+        \predate{\begin{center}\small}
+        \postdate{\par\end{center}\vskip -1em}
+        \pagenumbering{gobble}
+  html:
+    theme: cosmo
+    toc: false

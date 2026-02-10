@@ -1,0 +1,66 @@
+---
+title: "AI-Assisted Federal Survey Harmonization"
+subtitle: "Research Fact Sheet"
+date: "February 10, 2026"
+---
+
+\vspace{-0.5em}
+
+> **The federal government already collects a massive mosaic of survey data. AI can map how those pieces fit together, unlocking new analytical power without collecting a single additional data point.**
+
+\vspace{-0.5em}
+
+## What's the problem?
+
+The federal statistical system operates **48+ surveys** containing over **7,000 overlapping questions**, designed independently by different agencies for different purposes.
+No complete map exists showing where surveys overlap, where they're compatible, and where the differences matter.
+Building that map manually — collecting all instruments, systematically comparing question pairs, classifying harmonization barriers, validating results, and documenting findings — represents months of effort for a skilled research team.
+This research accomplished that work in weeks using AI-assisted methods, at a total API cost under \$100.
+
+## Why should leadership care?
+
+**Response rates are declining across federal surveys.** Every year, it costs more to collect less.
+Meanwhile, the government already *has* enormous data that could answer questions no single survey can — if the connections between surveys were mapped and quality-scored.
+
+The primary value is **data enrichment**: using overlapping questions as bridge variables to link surveys into richer analytical datasets.
+A secondary value is identifying where **instrument consolidation** could reduce respondent burden.
+Enrichment gives every agency *more* capability. Nobody loses anything.
+
+## How is this different?
+
+Traditional survey harmonization is manual, slow, and limited to 2–3 surveys at a time.
+This research uses **multiple large language models independently rating question pairs**, with ensemble methods and multi-model arbitration to ensure reliability.
+The approach holds the *entire federal survey topology* in view simultaneously, finding connections no individual expert could surface — not because experts lack intelligence, but because no human holds 7,000 questions in working memory at once.
+
+## What does the evidence show?
+
+| Validation Check | Result | Interpretation |
+|:---|:---|:---|
+| Do AI raters agree with each other? | 3 independent models, substantial agreement | Task is well-defined; results reflect real question properties |
+| Do AI arbitrators converge? | Near-perfect agreement on verdicts ($\kappa$ = 0.84–0.90) | High confidence in final harmonization judgments |
+| Are rates consistent across surveys? | CPS→ACS: 42.5%; FoodAPS→ACS: 48.6% | Stable rates suggest a general property, not a survey-specific artifact |
+| Do easy questions score easy? | Race, age, relationship: near-100% consolidability | Framework has face validity |
+| Does the framework explain *why* things fail? | Construct mismatch dominates failures (~96%) | Correctly identifies barrier types, not just pass/fail |
+| Is the work reproducible? | Full pipeline, data, and code are public | Any researcher can verify results |
+| Is it cost-effective? | Under \$100 total API cost for 1,598 pair analysis | Orders of magnitude cheaper than equivalent manual review |
+
+## Key findings
+
+**~45% of questions** across two major survey pairs (CPS and FoodAPS vs. ACS) have at least one viable harmonization path:
+
+- **Tier 1 — Direct recode** (~16%): Close enough to link with simple recoding. High-confidence bridges.
+- **Tier 2 — Statistical adjustment** (~29%): Linkable with documented transformations. Usable bridges with known limitations.
+- **Tier 3 — Not linkable** (~55%): Different constructs. The framework correctly identifies these and explains why.
+
+## What's at stake?
+
+Without this work, the federal survey ecosystem continues as isolated silos. Declining response rates erode quality with no compensating strategy. Cross-survey analytical opportunities — connections that could inform policy without additional collection — remain invisible. Other national statistical offices are already investing in these capabilities.
+
+## What's next?
+
+**Report 04** extends the analysis from pairwise comparisons to the full multi-survey network, discovering multi-hop enrichment paths (Survey A → B → C) across all 48 surveys — connections that exceed any individual researcher's working memory.
+
+\vspace{0.5em}
+\noindent\rule{\textwidth}{0.4pt}
+\scriptsize
+**DRAFT** — These results are preliminary and have not been independently validated or peer reviewed. Full methodology, data, and code: [github.com/brockwebb/federal-survey-concept-mapper](https://github.com/brockwebb/federal-survey-concept-mapper). The views expressed are the author's own and do not necessarily represent the views of the U.S. Census Bureau or the U.S. Department of Commerce.
