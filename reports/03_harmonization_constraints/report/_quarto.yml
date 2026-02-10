@@ -22,6 +22,9 @@ book:
         - sections/07b_methodology_decisions.md
         - sections/07c_expert_review_tables.md
 
+bibliography: references.bib
+csl: apa.csl
+
 format:
   pdf:
     documentclass: report
