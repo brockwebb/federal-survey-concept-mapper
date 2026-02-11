@@ -16,6 +16,8 @@ format:
     keep-tex: false
     include-in-header:
       text: |
+        \usepackage{fontspec}
+        \setmainfont{Source Sans Pro}
         \usepackage{titling}
         \usepackage{booktabs}
         \usepackage{enumitem}

@@ -1,12 +1,12 @@
 # Federal Survey Harmonization Research
 
-**Thesis**: The federal government already collects an enormous mosaic of survey data across dozens of agencies. AI-assisted harmonization analysis can reveal how to assemble that mosaic into a more complete picture — enabling cross-survey data enrichment without collecting a single additional data point — and can compress what traditionally takes months of expert review into weeks.
+**Thesis**: The federal government already collects an enormous mosaic of survey data across the Census Bureau's demographic survey programs. AI-assisted harmonization analysis can reveal how to assemble that mosaic into a more complete picture — enabling cross-survey data enrichment without collecting a single additional data point — and can compress what traditionally takes months of expert review into weeks.
 
 📄 **[Executive Fact Sheet](output/fact_sheet/fact_sheet.pdf)** — One-page plain-language overview for leadership
 
 ## Research Overview
 
-This project analyzes ~7,000 questions across 48 federal surveys to identify harmonization opportunities: overlapping questions that can serve as **bridge variables** for cross-survey data integration, increasing analytical power from existing collections. A secondary benefit: the same analysis identifies where instrument consolidation could reduce respondent burden.
+This project analyzes ~7,000 questions across 47 Census Bureau demographic surveys to identify harmonization opportunities: overlapping questions that can serve as **bridge variables** for cross-survey data integration, increasing analytical power from existing collections. A secondary benefit: the same analysis identifies where instrument consolidation could reduce respondent burden.
 
 The work demonstrates that AI-assisted classification (multi-model ensemble with arbitration) achieves strong inter-rater reliability (κ = 0.53–0.84 depending on classification level) at total API costs under $100, validating AI as a practical accelerant for survey methodology research.
 
@@ -17,7 +17,7 @@ The project progresses through four reports, each building on the prior:
 ### Report 01 — LLM Concept Mapping
 *Can AI reliably categorize federal survey questions into a unified taxonomy?*
 
-Dual-LLM classification (Claude Haiku 4.5, GPT-5-mini) of 6,987 questions across 48 surveys into a hierarchical Census-derived taxonomy. Established that LLMs achieve high agreement (Cohen's κ = 0.84) on concept categorization, producing a master cross-survey concept map. Also documented that embedding-based clustering fails for this domain due to extreme baseline similarity (99.16%) in standardized government language.
+Dual-LLM classification (Claude Haiku 4.5, GPT-5-mini) of 6,987 questions across 47 Census Bureau demographic surveys into a hierarchical Census-derived taxonomy. Established that LLMs achieve high agreement (Cohen's κ = 0.84) on concept categorization, producing a master cross-survey concept map. Also documented that embedding-based clustering fails for this domain due to extreme baseline similarity (99.16%) in standardized government language.
 
 - **Report source**: [`reports/01_llm_concept_mapping/`](reports/01_llm_concept_mapping/)
 - **Output data**: [`output/report_01/`](output/report_01/)
@@ -45,7 +45,7 @@ Three-rater ensemble (OpenAI, Anthropic, Google) with multi-model arbitration to
 ### Report 04 — Cross-Survey Enrichment Discovery *(Planned)*
 *Can AI discover multi-hop enrichment pathways across the full federal survey topology?*
 
-Will extend analysis to the full survey network, using AI to identify connection patterns (multi-hop bridge variables) that exceed human working memory limitations. Validates AI classifications empirically using public microdata from CPS and ACS (IPUMS) to test whether "harmonizable" pairs show comparable response distributions.
+Will extend analysis to the full 47-survey network, using AI to identify connection patterns (multi-hop bridge variables) that exceed human working memory limitations. Validates AI classifications empirically using public microdata from CPS and ACS (IPUMS) to test whether "harmonizable" pairs show comparable response distributions.
 
 - **Report source**: [`reports/04_empirical_validation/`](reports/04_empirical_validation/)
 - **Vision doc**: [`docs/project/REPORT_04_VISION_cross_survey_enrichment.md`](docs/project/REPORT_04_VISION_cross_survey_enrichment.md)
@@ -89,7 +89,7 @@ Will extend analysis to the full survey network, using AI to identify connection
 
 ## Data
 
-Source data: ~7,000 questions from 48 publicly available federal survey instruments. See [`data/raw/`](data/raw/).
+Source data: ~7,000 questions from 47 publicly available Census Bureau demographic survey instruments. See [`data/raw/`](data/raw/).
 
 ## Setup
 
