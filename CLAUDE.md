@@ -5,8 +5,7 @@
 ```
 ├── data/
 │   ├── raw/                    # Input data (untouched)
-│   ├── processed/              # Pipeline outputs (CSV, JSONL)
-│   └── reference/              # Lookup tables, taxonomies
+│   └── processed/              # Pipeline outputs (CSV, JSONL, embeddings)
 ├── src/
 │   ├── core/                   # Report 01/02 era scripts
 │   ├── pipelines/              # Report 03+ pipeline stages (01-05)
@@ -16,24 +15,41 @@
 │   └── report_02/              # Report 02 build scripts
 ├── output/
 │   ├── report_01/              # Report 01 analysis artifacts
+│   │   ├── analysis/           # Analysis outputs
+│   │   ├── arbitration_final/  # Final arbitration results
+│   │   ├── comparison/         # Comparison data
+│   │   ├── final/              # Final outputs
+│   │   ├── results/            # Raw results
+│   │   └── visualizations/     # Generated figures
 │   ├── report_02/              # Report 02 analysis artifacts
+│   │   ├── data/               # Processed data
+│   │   ├── figures/            # Generated figures
+│   │   └── question_matching/  # Question matching results
 │   ├── report_03/              # Report 03 analysis artifacts
 │   │   ├── analysis/           # JSON, CSV analysis files
 │   │   ├── checkpoints/        # API call checkpoints
 │   │   ├── results/            # Raw API results
 │   │   ├── visuals/            # Generated figures
 │   │   └── pdf/                # Rendered slide PDFs
-│   └── report_04/              # Report 04 (empirical validation)
+│   ├── report_04/              # Report 04 (empirical validation)
+│   │   ├── analysis/           # Analysis outputs
+│   │   ├── data/               # Processed data
+│   │   └── figures/            # Generated figures
+│   └── fact_sheet/             # Fact sheet outputs (PDF)
 ├── reports/                    # ONLY publishable Quarto content
 │   ├── 01_llm_concept_mapping/
 │   ├── 02_question_consolidation/
 │   ├── 03_harmonization_constraints/
 │   │   ├── report/             # Quarto report
 │   │   └── presentation/       # Quarto slides
-│   └── 04_empirical_validation/
+│   ├── 04_empirical_validation/
+│   └── fact_sheet/             # Fact sheet Quarto source
+├── models/                     # Downloaded models (e.g., roberta-large)
 ├── docs/                       # Project-level docs, methodology logs
 ├── config/                     # Configuration files
-└── archive/                    # Old/superseded artifacts
+├── archive/                    # Old/superseded artifacts
+├── handoffs/                   # (Optional) Session handoff documentation
+└── cc_tasks/                   # (Optional) Claude Code task planning files
 ```
 
 ## Key Principles
