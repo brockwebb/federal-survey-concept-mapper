@@ -33,18 +33,32 @@ STAGE3_METRICS = REPO_ROOT / "output/report_03/analysis/stage3_arbitration_metri
 OUTPUT_IMAGES = REPO_ROOT / "output/report_03/visuals"
 OUTPUT_ANALYSIS = REPO_ROOT / "output/report_03/analysis"
 
-# Model display names
-MODEL_NAMES = {
-    'openai': 'OpenAI GPT-5.2',
-    'anthropic': 'Anthropic Claude Opus 4.5',
-    'google': 'Google Gemini 3 Pro'
-}
+# Model display names — loaded from config/report_03.yaml
+# NEVER hardcode model names. They drift across sessions.
+import yaml
 
-RATER_NAMES = {
-    'openai': 'GPT-5-mini',
-    'anthropic': 'Claude Haiku 4.5',
-    'google': 'Gemini 3 Flash'
-}
+def _load_model_names():
+    """Load model names from config, the single source of truth."""
+    config_path = REPO_ROOT / "config" / "report_03.yaml"
+    with open(config_path, 'r') as f:
+        config = yaml.safe_load(f)
+    
+    arbitrators = config['arbitrators']
+    raters = config['raters']
+    
+    model_names = {
+        'openai': f"OpenAI {arbitrators['openai']['model']}",
+        'anthropic': f"Anthropic {arbitrators['anthropic']['model']}",
+        'google': f"Google {arbitrators['google']['model']}",
+    }
+    rater_names = {
+        'openai': f"{raters['openai']['model']}",
+        'anthropic': f"{raters['anthropic']['model']}",
+        'google': f"{raters['google']['model']}",
+    }
+    return model_names, rater_names
+
+MODEL_NAMES, RATER_NAMES = _load_model_names()
 
 
 def load_metrics():
@@ -538,7 +552,7 @@ def main():
 
     # 1b. Arbitrator agreement heatmap - FROM JSON
     arbitrator_kappas = extract_arbitrator_kappas(stage3)
-    labels_arb = ['GPT-5.2', 'Claude Opus 4.5', 'Gemini 3 Pro']
+    labels_arb = list(MODEL_NAMES.values())
     create_agreement_heatmap(
         arbitrator_kappas,
         "Arbitrator Inter-Model Agreement (Cohen's κ)",

@@ -1,6 +1,58 @@
 # Federal Survey Concept Mapper — Project Guide
 
-## Repository Layout (post-restructure)
+## Critical Reference Documents
+
+- **`docs/NUMBERS_MAP.md`** — Single source of truth for every key number. Traces all metrics to their source files/JSON paths. ALWAYS check this before citing any number in reports or deliverables.
+- **`docs/SCRIPT_ARTIFACT_MAP.md`** — Maps every generated figure, table, and analysis output to the script that produces it and its input data.
+- **`reports/master/NARRATIVE_CHECKLIST.md`** — Lightweight V&V checklist for the master report. Every claim, its supporting number, and the source. Quick-check version of NUMBERS_MAP.
+
+## Project Scope (DO NOT DEVIATE)
+
+- **47 Census Bureau demographic survey instruments** (not 48, not "federal surveys" broadly)
+- **~7,000 questions** (6,987 deduplicated from 7,419 raw)
+- **NOT cross-agency** — Census Bureau only
+- ACS is the anchor survey for harmonization comparisons
+- CPS and FoodAPS are the two source surveys evaluated so far
+
+## Narrative Arc
+
+1. Classify ~7,000 questions by Census topic/subtopic (Ch 2)
+2. Identify concept overlap across surveys, select ACS as anchor (Ch 3)
+3. Pair overlapping questions, evaluate harmonization feasibility with barrier taxonomy (Ch 4)
+4. Collapse pairs to question-level results: 42-49% of source questions have harmonization paths (Ch 5)
+5. Expert validation and multi-hop enrichment discovery (Report 04, TBD)
+
+## Report Structure (post-restructure Feb 2026)
+
+```
+reports/
+├── master/                     # THE master report (Quarto book)
+│   ├── _quarto.yml
+│   ├── index.qmd
+│   ├── NARRATIVE_CHECKLIST.md  # V&V checklist
+│   ├── chapters/
+│   │   ├── 01_introduction.qmd
+│   │   ├── 02_classification.qmd
+│   │   ├── 03_survey_overlap.qmd
+│   │   ├── 04_pairwise_harmonization.qmd
+│   │   ├── 05_results.qmd
+│   │   ├── 06_implications.qmd
+│   │   └── 07_limitations.qmd
+│   └── appendices/
+│       ├── A_architecture.qmd
+│       └── B_taxonomy.qmd
+├── tevv/                       # TEVV companion doc (skeleton)
+├── methodology/                # Methodology companion doc (skeleton)
+├── fact_sheet/                 # Approved fact sheet (stays as-is)
+└── 04_empirical_validation/    # Report 04 (TBD)
+
+archive/research_notes/         # Former Reports 01, 02, 03
+├── 01_llm_concept_mapping/
+├── 02_question_consolidation/
+└── 03_harmonization_constraints/
+```
+
+## Repository Layout
 
 ```
 ├── data/
@@ -15,41 +67,18 @@
 │   └── report_02/              # Report 02 build scripts
 ├── output/
 │   ├── report_01/              # Report 01 analysis artifacts
-│   │   ├── analysis/           # Analysis outputs
-│   │   ├── arbitration_final/  # Final arbitration results
-│   │   ├── comparison/         # Comparison data
-│   │   ├── final/              # Final outputs
-│   │   ├── results/            # Raw results
-│   │   └── visualizations/     # Generated figures
 │   ├── report_02/              # Report 02 analysis artifacts
-│   │   ├── data/               # Processed data
-│   │   ├── figures/            # Generated figures
-│   │   └── question_matching/  # Question matching results
 │   ├── report_03/              # Report 03 analysis artifacts
 │   │   ├── analysis/           # JSON, CSV analysis files
-│   │   ├── checkpoints/        # API call checkpoints
-│   │   ├── results/            # Raw API results
 │   │   ├── visuals/            # Generated figures
-│   │   └── pdf/                # Rendered slide PDFs
-│   ├── report_04/              # Report 04 (empirical validation)
-│   │   ├── analysis/           # Analysis outputs
-│   │   ├── data/               # Processed data
-│   │   └── figures/            # Generated figures
-│   └── fact_sheet/             # Fact sheet outputs (PDF)
+│   │   └── ...
+│   └── report_04/              # Report 04 (TBD)
 ├── reports/                    # ONLY publishable Quarto content
-│   ├── 01_llm_concept_mapping/
-│   ├── 02_question_consolidation/
-│   ├── 03_harmonization_constraints/
-│   │   ├── report/             # Quarto report
-│   │   └── presentation/       # Quarto slides
-│   ├── 04_empirical_validation/
-│   └── fact_sheet/             # Fact sheet Quarto source
-├── models/                     # Downloaded models (e.g., roberta-large)
-├── docs/                       # Project-level docs, methodology logs
-├── config/                     # Configuration files
-├── archive/                    # Old/superseded artifacts
-├── handoffs/                   # (Optional) Session handoff documentation
-└── cc_tasks/                   # (Optional) Claude Code task planning files
+├── config/                     # Configuration files (report_03.yaml)
+├── docs/                       # NUMBERS_MAP, SCRIPT_ARTIFACT_MAP
+├── archive/                    # Old/superseded artifacts + research notes
+├── handoffs/                   # Session handoff documentation
+└── cc_tasks/                   # Claude Code task planning files
 ```
 
 ## Key Principles
@@ -57,6 +86,8 @@
 - **One canonical location**: Each file type lives in exactly one place
 - **reports/ = publishable only**: No pipeline code, data, or scripts
 - **Figures via symlinks**: reports/ reference output/ figures via relative symlinks
+- **All model names from config**: `config/report_03.yaml` — NEVER hardcode
+- **Numbers from NUMBERS_MAP**: Every metric traces to a source file
 
 ## Pipeline Stages (Report 03)
 1. `src/pipelines/01_barrier_pipeline.py` — Barrier classification (3 LLM raters)
@@ -69,15 +100,3 @@
 - `src/lib/io_utils.py` — File I/O helpers
 - `src/lib/stats.py` — Statistical functions (kappa, agreement)
 - `src/lib/taxonomy.py` — Barrier taxonomy definitions
-
-## Import Convention
-After restructure, imports use:
-```python
-from src.lib.stats import compute_kappa
-from src.lib.io_utils import load_jsonl
-```
-
-## Rollback
-```bash
-git reset --hard pre-restructure
-```
