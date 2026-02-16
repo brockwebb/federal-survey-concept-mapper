@@ -1,0 +1,41 @@
+# Survey Overlap: Finding the Connections {#sec-overlap}
+
+## Selecting an Anchor Survey
+
+With 47 survey instruments classified into a common taxonomy, the next question is: which surveys share conceptual ground? Evaluating all possible survey pairs (over 1,000 combinations) is neither practical nor necessary. Instead, the analysis uses the **American Community Survey (ACS)** as an anchor — the reference point against which other surveys are compared.
+
+ACS is the natural anchor for several reasons: it is the Census Bureau's largest ongoing household survey, it covers the broadest range of demographic, economic, housing, and social topics, and its results are widely used as denominators and control totals across the federal statistical system. If a question on another survey can be harmonized with anything, ACS is the most likely match.
+
+## The ACS "Family" of Surveys
+
+Using the classified subtopic taxonomy, the analysis identifies surveys with the highest conceptual overlap with ACS — surveys that share the most subtopic categories. These form ACS's "family" of related surveys:
+
+| Survey | Shared Subtopic Intersections | Subtopics Covered |
+|--------|-----------------------------:|------------------:|
+| SIPP | 577 | 38 |
+| AHS | 460 | 34 |
+| CE | 283 | 30 |
+| CPS | 181 | 25 |
+| FoodAPS | 123 | 23 |
+
+"Shared subtopic intersections" counts question-by-subtopic overlaps, not unique questions — a survey with many questions in a shared subtopic will show a higher count. This reflects both breadth of overlap and depth of coverage within shared topics.
+
+## Selecting Survey Pairs for Deep Analysis
+
+From the ACS family, the analysis selects **CPS** and **FoodAPS** for detailed pairwise harmonization evaluation. These two surveys represent different points on the spectrum:
+
+- **CPS** is a large, established survey with broad demographic and economic content, expected to share substantial ground with ACS.
+- **FoodAPS** is a smaller, specialized survey focused on food acquisition, expected to share less ground but to test whether the methodology works for purpose-specific surveys.
+
+If harmonization rates are stable across these different survey types, that suggests the results reflect a general property of the survey ecosystem rather than a survey-specific artifact.
+
+<!-- TODO: Consider adding overlap heatmap or network diagram here -->
+
+<!--
+CHECKLIST (from NARRATIVE_CHECKLIST.md):
+- [x] ACS as anchor — justified
+- [x] Family 2 table with 5 surveys
+- [x] SIPP highest at 577
+- [x] CPS and FoodAPS selected — justified
+- [ ] TODO: Overlap visualization (heatmap or network from Report 01)
+-->

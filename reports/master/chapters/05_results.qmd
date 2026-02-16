@@ -1,0 +1,74 @@
+# Results {#sec-results}
+
+## Question-Level Harmonization Rates
+
+Collapsing from pair-level to question-level — does each source question have at least one ACS question it can harmonize with? — produces the central finding:
+
+<!-- TODO: Insert consolidation_rates.png figure -->
+
+| Survey | Total Questions | F1 (Direct) | F2 (Conditional) | F3 (Not Feasible) | Harmonizable | Rate |
+|--------|---------------:|------------:|-----------------:|-------------------:|-------------:|-----:|
+| CPS | 240 | 37 (15.4%) | 65 (27.1%) | 138 (57.5%) | 102 | 42.5% |
+| FoodAPS | 140 | 23 (16.4%) | 45 (32.1%) | 72 (51.4%) | 68 | 48.6% |
+
+<!-- ✅ RECONCILED 2026-02-14: stage4_survey_summary.json confirms 102/42.5%. Stale exec summary said 100/41.7%. -->
+
+Approximately **45% of source questions** have at least one viable harmonization path to ACS. The rates are remarkably stable across the two survey pairs despite their different purposes — CPS is a broad labor force survey, FoodAPS is a specialized food acquisition survey. This stability suggests the result reflects a structural property of the survey ecosystem, not a survey-specific artifact.
+
+### Interpreting the Tiers
+
+- **F1 questions (~16%)** are high-quality bridge variables. The source and ACS questions measure the same construct with compatible response formats. Cross-survey linkage requires only simple recoding.
+- **F2 questions (~29%)** are usable bridge variables requiring documented statistical adjustment — typically temporal alignment or scale transformation. The underlying construct is the same; the measurement approach differs in addressable ways.
+- **F3 questions (~55%)** have characterized barriers that prevent harmonization. The barrier diagnosis explains specifically *why* — information that is itself valuable for survey design.
+
+### Pair-Level vs. Question-Level Rates
+
+| Survey | Pair-Level Rate | Question-Level Rate |
+|--------|:-:|:-:|
+| CPS | 19.5% | 42.5% |
+| FoodAPS | 20.6% | 48.6% |
+
+The pair-level rates are much lower because each question is paired with many unrelated ACS questions (the combinatorial design). The question-level rate — "does this question have *any* viable match?" — is the operationally meaningful metric.
+
+## Barrier Analysis
+
+Among questions rated not harmonizable (F3), what prevents harmonization?
+
+<!-- TODO: Insert barrier_distribution.png figure -->
+
+| Barrier | CPS | FoodAPS |
+|---------|:---:|:-------:|
+| CC (Construct/Concept) | 85.1% | 88.9% |
+| TC (Temporal) | 7.9% | 5.5% |
+| RS (Response Scale) | 4.1% | 3.3% |
+| PC (Population) | 0.7% | 0.9% |
+| MC (Mode/Context) | 1.0% | 0.7% |
+| PM (Precision) | 0.2% | 0.2% |
+
+Construct mismatch dominates at ~87%. This is expected and, in an important sense, *desirable*: most question pairs that can't harmonize are measuring fundamentally different things. The surveys are specialized for a reason.
+
+The actionable insight is in the remaining ~13%. Questions blocked by temporal mismatches, response scale differences, or population coverage gaps represent potentially addressable barriers — cases where survey redesign or statistical methods could unlock additional harmonization.
+
+## Expert Review Triage
+
+Not all questions receive a confident automated verdict. The triage system routes uncertain cases to expert review:
+
+<!-- TODO: Insert expert_review_load.png figure -->
+
+- **~76% auto-processed** with high confidence — no expert input needed
+- **~24% (93 questions)** routed to expert review — uncertain or contested ratings
+
+This division of labor is the design intent: AI handles the breadth (1,598 pairs across thousands of questions), while human experts focus their limited time on the genuinely ambiguous cases where judgment matters most.
+
+<!--
+CHECKLIST (from NARRATIVE_CHECKLIST.md):
+- [x] CPS: 42.5% (102/240)
+- [x] FoodAPS: 48.6% (68/140)
+- [x] F1 ~16%, F2 ~29%, F3 ~55%
+- [x] CC dominates ~87%
+- [x] TC ~7%, RS ~4%
+- [x] Pair-level vs question-level explained
+- [x] 76% auto-processed, 93 for expert review
+- [ ] TODO: Insert figures (consolidation_rates, barrier_distribution, expert_review_load)
+- [ ] ⚠ RECONCILE: CPS count 100 vs 102
+-->

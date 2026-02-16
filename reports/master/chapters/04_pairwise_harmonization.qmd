@@ -1,0 +1,79 @@
+# Pairwise Harmonization Assessment {#sec-pairwise}
+
+## From Overlap to Evaluation
+
+Knowing that two surveys share a subtopic is not the same as knowing their questions are compatible. Two surveys might both ask about household income, but one asks about annual income before taxes while the other asks about monthly take-home pay — same concept, different constructs.
+
+This stage evaluates each question pair directly: given a question from CPS or FoodAPS and a question from ACS that share the same subtopic, can these two questions be harmonized? If not, what specific barrier prevents it?
+
+## Pair Generation
+
+Questions sharing the same subtopic classification between a source survey and ACS are paired for evaluation. This combinatorial approach produces:
+
+| Survey Pair | Total Pairs | Unique Source Questions |
+|-------------|------------:|------------------------:|
+| CPS–ACS | 1,030 | 240 |
+| FoodAPS–ACS | 568 | 140 |
+| **Total** | **1,598** | **380** |
+
+The pair count is deliberately large. Each source question is paired with every ACS question sharing its subtopic, so most pairs will be unrelated — a CPS question about employment status might be paired with an ACS question about industry, simply because both fall under "Economic.Employment." The low pair-level harmonization rates reflect this combinatorial design; the meaningful metric is the question-level rate (whether each source question has *at least one* viable ACS match).
+
+## Multi-Model Rating
+
+Three independent AI models from competing vendors rate every pair:
+
+| Role | Model | Vendor |
+|------|-------|--------|
+| Rater 1 | GPT-5-mini | OpenAI |
+| Rater 2 | Claude Haiku 4.5 | Anthropic |
+| Rater 3 | Gemini 3 Flash | Google |
+
+Each model independently assigns a feasibility code (F1: direct recode, F2: statistical adjustment, F3: not feasible) and, for F3 pairs, a barrier code identifying the specific obstacle (construct mismatch, temporal mismatch, response scale difference, etc.).
+
+Using three models from three different vendors is the methodological equivalent of independent expert raters. No single vendor's training data, alignment approach, or reasoning patterns can dominate the results.
+
+### Rater Agreement
+
+At the initial rating stage, the three models achieved moderate agreement:
+
+- **Fleiss' κ = 0.611** for primary barrier classification
+- **Fleiss' κ = 0.537** for feasibility classification
+
+These are solid starting points but leave room for meaningful disagreement, particularly on edge cases where reasonable judges might differ.
+
+## Arbitration
+
+Where raters disagree, three independent arbitrator models — one from each vendor, but using each vendor's more capable model — review the disagreement and render a verdict:
+
+| Role | Model | Vendor |
+|------|-------|--------|
+| Arbitrator 1 | GPT-5.2 | OpenAI |
+| Arbitrator 2 | Claude Opus 4.5 | Anthropic |
+| Arbitrator 3 | Gemini 3 Pro | Google |
+
+The arbitration stage substantially improved agreement:
+
+| Metric | Pre-Arbitration (κ) | Post-Arbitration (κ) | Improvement |
+|--------|:-------------------:|:--------------------:|:-----------:|
+| Feasibility | 0.537 | **0.843** | +0.306 |
+| Primary barrier | 0.611 | 0.796 | +0.185 |
+| Binary (harmonizable/not) | — | **0.896** | — |
+
+Post-arbitration feasibility agreement (κ = 0.843) falls in the "almost perfect" range by standard interpretation guidelines. Both feasibility and binary quality gates passed.
+
+This pattern — moderate initial agreement improving to near-perfect after structured arbitration — validates the multi-model approach. The task is well-defined enough that independent models converge when given the opportunity to resolve ambiguity.
+
+<!-- 
+CHECKLIST (from NARRATIVE_CHECKLIST.md):
+- [x] 1,598 total pairs (1,030 CPS + 568 FoodAPS)
+- [x] 380 unique source questions (240 + 140)
+- [x] 3 rater models from config
+- [x] 3 arbitrator models from config
+- [x] Rater κ = 0.611
+- [x] Post-arbitration κ = 0.843 (feasibility)
+- [x] Post-arbitration binary κ = 0.896
+- [x] Quality gates passed
+- [x] Explained why pair count is large (combinatorial)
+- [ ] TODO: Consider adding rater agreement heatmap figure
+- [ ] TODO: Consider adding arbitrator synthesis rate figure
+-->

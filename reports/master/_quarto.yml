@@ -1,0 +1,49 @@
+project:
+  type: book
+  output-dir: _output
+
+book:
+  title: "AI-Assisted Federal Survey Harmonization"
+  subtitle: "Cross-Survey Integration Analysis of 47 Census Bureau Demographic Surveys"
+  author: "Brock Webb"
+  date: today
+  chapters:
+    - index.qmd
+    - chapters/01_introduction.qmd
+    - chapters/02_classification.qmd
+    - chapters/03_survey_overlap.qmd
+    - chapters/04_pairwise_harmonization.qmd
+    - chapters/05_results.qmd
+    - chapters/06_implications.qmd
+    - chapters/07_limitations.qmd
+    - part: "Appendices"
+      chapters:
+        - appendices/A_architecture.qmd
+        - appendices/B_taxonomy.qmd
+
+bibliography: references.bib
+csl: apa.csl
+
+format:
+  pdf:
+    documentclass: report
+    papersize: letter
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    colorlinks: true
+    linkcolor: "blue"
+    geometry:
+      - margin=1in
+    fig-pos: "htbp"
+    keep-tex: false
+    include-in-header:
+      text: |
+        \usepackage{fontspec}
+        \setmainfont{Source Sans Pro}
+        \usepackage{booktabs}
+  html:
+    theme: cosmo
+    toc: true
+    toc-depth: 3
+    number-sections: true

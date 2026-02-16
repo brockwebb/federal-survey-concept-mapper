@@ -1,0 +1,27 @@
+project:
+  type: book
+  output-dir: _output
+
+book:
+  title: "Methodology"
+  subtitle: "AI-Assisted Federal Survey Harmonization"
+  author: "Brock Webb"
+  date: today
+  chapters:
+    - index.qmd
+
+format:
+  pdf:
+    documentclass: report
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    colorlinks: true
+    margin-left: 1in
+    margin-right: 1in
+    mainfont: "Source Sans Pro"
+    sansfont: "Source Sans Pro"
+  html:
+    theme: cosmo
+    toc: true
+    number-sections: true

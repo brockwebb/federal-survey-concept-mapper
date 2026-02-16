@@ -1,0 +1,47 @@
+# Limitations and Next Steps {#sec-limitations}
+
+## Current Limitations
+
+### Scope
+
+This analysis evaluates two survey pairs (CPS–ACS and FoodAPS–ACS) out of a possible 46 pairings with ACS alone — and many more across the full 47-survey topology. The stable harmonization rates across these two different survey types are encouraging, but broader coverage is needed to confirm the pattern holds.
+
+### AI Judgment vs. Expert Judgment
+
+The harmonization assessments are AI-generated. While multi-model agreement is high (κ = 0.843 post-arbitration) and the methodology includes systematic arbitration, the results have not been validated against independent expert judgment. The 93 questions routed to expert review represent the cases where AI confidence is lowest and human input is most needed.
+
+### Combinatorial Pairing
+
+The current approach pairs every source question with every ACS question sharing a subtopic. This produces many obviously unrelated pairs, inflating the denominator and depressing pair-level rates. More targeted pairing strategies — using semantic similarity or embedding-based matching — could improve efficiency while maintaining coverage.
+
+### ACS as Sole Anchor
+
+ACS is a natural anchor given its breadth, but it is not the only possible reference point. Some survey pairs (e.g., CPS–SIPP) may have stronger harmonization potential with each other than either has with ACS. The multi-hop analysis planned for Report 04 will address this.
+
+## Next Steps
+
+### Report 04: Multi-Survey Network Analysis
+
+The next phase extends from pairwise comparison to the full multi-survey network, discovering integration paths across all 47 Census demographic surveys — including multi-hop paths (Survey A → B → C) where direct harmonization is not possible but indirect linkage through intermediate surveys is.
+
+### Expert Validation
+
+The 93 questions flagged for expert review should be evaluated by subject-matter experts in relevant survey areas. This validation step both confirms the AI results and identifies any systematic biases in the automated assessment.
+
+### Enrichment Pilots
+
+The bridge variable inventory should be tested in practice: can analysts actually link survey data using the identified harmonizable questions, and does the linkage produce meaningful analytical gains?
+
+### Methodology Extension
+
+The methodology is designed to scale beyond Census Bureau surveys. The same approach can evaluate harmonization potential across the broader federal statistical system, identifying cross-agency integration opportunities.
+
+<!--
+CHECKLIST (from NARRATIVE_CHECKLIST.md):
+- [x] No new numbers
+- [x] Honest about scope (2 pairs of 46+)
+- [x] AI vs expert judgment limitation
+- [x] Report 04 next steps
+- [x] Expert validation needed
+- [x] Extension path clear
+-->

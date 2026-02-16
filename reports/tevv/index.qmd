@@ -1,0 +1,66 @@
+---
+title: "Test, Evaluation, Validation, and Verification"
+---
+
+# TEVV Document — Skeleton
+
+**Status:** To be completed after master report is finalized.
+
+This document provides validation metrics and evaluation results per NIST AI Risk Management Framework (RMF) guidelines. All source material is in `archive/research_notes/` (former Reports 01–03).
+
+## Planned Sections
+
+### 1. Inter-Rater Agreement Analysis
+
+- All kappa scores (Cohen's, Fleiss') across pipeline stages
+- Raw agreement percentages
+- Stratified agreement by survey, topic, barrier type
+- The kappa paradox: interpretation challenges when one category dominates
+
+*Source data:* `output/report_03/analysis/stage2_agreement_metrics.json`
+
+### 2. Arbitration Methodology and Results
+
+- Arbitration protocol (independent models, cross-vendor)
+- Pre- vs post-arbitration agreement improvement
+- Quality gate definitions and pass/fail results
+- Coverage analysis (two-way vs three-way arbitration)
+
+*Source data:* `output/report_03/analysis/stage3_arbitration_metrics.json`
+
+### 3. Multi-Model Behavioral Analysis
+
+- Synthesis rates by vendor (Google ~7%, OpenAI ~59%, Anthropic ~77%)
+- Pro-self bias detection
+- Deferential vs synthesizing arbitration patterns
+- Family bias analysis
+
+*Source data:* `output/report_03/analysis/stage3_arbitration_metrics.json`, `output/report_03/visuals/`
+
+### 4. Classification Validation (Report 01)
+
+- Dual-model agreement on topic/subtopic classification
+- Topic distribution consistency across models
+- Confidence calibration
+
+*Source data:* `output/report_01/comparison/agreement_summary.csv`
+
+### 5. Construct Validity
+
+- Sanity checks: demographics score ~100% consolidable
+- Barrier distribution matches domain expectations
+- Cross-survey rate stability
+
+*Source data:* `output/report_03/analysis/stage4_construct_validity.md`
+
+### 6. Cost-Quality Analysis
+
+- API cost per stage
+- Quality vs cost tradeoffs across model tiers
+- Efficiency comparison with manual methods
+
+*Source data:* `output/report_03/analysis/stage4_cost_quality_summary.md`
+
+---
+
+*References master report for context. See `archive/research_notes/` for full research notes.*

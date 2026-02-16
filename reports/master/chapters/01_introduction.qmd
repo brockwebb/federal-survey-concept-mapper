@@ -1,0 +1,27 @@
+# Introduction {#sec-introduction}
+
+The Census Bureau conducts a broad portfolio of surveys covering demographics, economics, housing, health, education, and more. This research examines 47 of those survey instruments — a substantial cross-section of the Bureau's demographic survey programs — containing approximately 7,000 questions in total. These 47 instruments do not represent the full scope of Census Bureau data collection, but they cover much of the demographic survey landscape and provide a meaningful test bed for cross-survey analysis.
+
+Each of these surveys was designed for a specific analytical purpose. The Current Population Survey tracks labor force dynamics. The American Community Survey provides community-level demographic and economic profiles. The Consumer Expenditure Survey measures household spending. The National Health Interview Survey captures health status and access to care. And so on, across dozens of specialized instruments fielded on different schedules, to different populations, with different reference periods.
+
+These surveys were built independently, and for good reason: different research questions demand different measurement approaches. But that independence comes at a cost. Where surveys ask similar questions about similar topics, those overlapping questions represent an untapped resource. A shared question about household income on two different surveys can serve as a bridge variable — a connection point that allows analysts to link findings across surveys, increasing the analytical value of each collection without adding respondent burden.
+
+No comprehensive map of these connections has existed. Building one manually would require a research team to compare thousands of questions across dozens of instruments, a task that takes months and exceeds practical limits not because of complexity, but because of scale. No individual, however expert, holds 7,000 questions in working memory at once.
+
+This research used AI-assisted methods to build that map at scale, with built-in safeguards for transparency, traceability, and bias mitigation — including independent models from multiple vendors and structured arbitration for disagreements. The complete analysis was conducted in weeks at a total cost under $100 in computing resources. The methodology is described briefly in context throughout this report, with architectural diagrams in Appendix A and full details in the companion Methodology and TEVV documents.
+
+This report presents the results: a scored inventory of harmonization opportunities organized around the American Community Survey as a central reference point. For two survey pairs examined in detail — CPS and FoodAPS, each compared against ACS — the inventory identifies which questions have direct counterparts, which require statistical adjustment to align, and which measure fundamentally different constructs. These findings are intended to support survey managers in identifying where cross-survey integration adds value and where instruments can be better aligned.
+
+<!-- 
+CHECKLIST (from NARRATIVE_CHECKLIST.md):
+- [x] 47 instruments — framed as subset of demographic surveys
+- [x] ~7,000 questions
+- [x] Census Bureau scope
+- [x] Bridge variables framing
+- [x] API cost ~$100
+- [x] Methodology light — safeguards mentioned, details deferred
+- [x] ACS as anchor
+- [x] CPS and FoodAPS named
+- [x] Deliverable described (scored inventory)
+- [x] Appendix A and companion docs referenced
+-->

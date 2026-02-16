@@ -1,0 +1,77 @@
+---
+title: "Methodology"
+---
+
+# Methodology Document — Skeleton
+
+**Status:** To be completed after master report is finalized.
+
+This document provides detailed methodology for the AI-assisted survey harmonization research. All source material is in `archive/research_notes/` (former Reports 01–03).
+
+## Planned Sections
+
+### 1. Data Preparation
+
+- Survey instrument collection and digitization
+- Question deduplication (7,419 raw → 6,987 deduplicated)
+- Survey instrument inventory (47 instruments across ~30 programs)
+
+### 2. Classification Framework
+
+- Census topic/subtopic taxonomy design
+- Dual-model classification protocol (GPT-4o, Claude 3.5 Sonnet)
+- Consensus resolution for classification disagreements
+- Confidence scoring
+
+### 3. Survey Overlap Analysis
+
+- Concept overlap computation methodology
+- ACS anchor selection rationale
+- Survey family identification algorithm
+- Pair selection criteria
+
+### 4. Barrier Taxonomy
+
+- Taxonomy development process
+- Six barrier categories with sub-codes
+- Three feasibility tiers
+- Prompt engineering for consistent barrier application
+
+### 5. Multi-Model Rating Protocol
+
+- Three-rater independent assessment design
+- Model selection rationale (vendor diversity, capability tier)
+- Temperature and parameter settings (from `config/report_03.yaml`)
+- Rate limiting and checkpoint/resume architecture
+
+### 6. Arbitration Protocol
+
+- Disagreement detection and routing
+- Arbitrator model selection (higher capability tier)
+- Arbitration prompt design
+- Verdict aggregation rules
+
+### 7. Question-Level Rollup
+
+- Pair-to-question collapse logic
+- Two-axis triage scoring (Borda direction × Entropy stability)
+- Expert review routing criteria
+- Quality gate definitions
+
+### 8. Statistical Framework
+
+- Cohen's kappa and Fleiss' kappa interpretation
+- The kappa paradox in skewed distributions
+- Agreement stratification (by survey, topic, barrier)
+- Statistical power considerations
+
+### 9. Reproducibility
+
+- Pipeline architecture (5 stages, JSON intermediate files)
+- Configuration-driven model parameters
+- Checkpoint/resume for API reliability
+- Public code and data repository
+
+---
+
+*References master report for context. See `archive/research_notes/` for full research notes.*

@@ -1,0 +1,38 @@
+# Harmonization Taxonomy {#sec-taxonomy .unnumbered}
+
+This appendix defines the barrier and feasibility codes used throughout the analysis.
+
+## Feasibility Codes
+
+| Code | Name | Definition | Action |
+|------|------|------------|--------|
+| **F1** | Direct Recode | Questions measure the same construct with compatible response formats. Harmonization requires only simple recoding or value mapping. | High-quality bridge variable. Use directly. |
+| **F2** | Statistical Adjustment | Questions measure the same underlying construct but differ in measurement approach (reference period, response scale, level of detail). Harmonization requires documented statistical transformation. | Usable bridge variable with known limitations. |
+| **F3** | Not Feasible | Questions measure fundamentally different constructs or have barriers that cannot be addressed through statistical methods. | Not a bridge variable. Barrier code explains why. |
+
+## Barrier Codes
+
+Applied to F3 pairs to characterize the specific obstacle preventing harmonization.
+
+| Code | Name | Definition | Example |
+|------|------|------------|---------|
+| **CC** | Construct/Concept | Questions measure fundamentally different things despite shared subtopic classification. | "Do you want to work full-time?" (intention) vs. "Did you work last week?" (behavior) |
+| **TC** | Temporal/Chronological | Questions measure similar constructs but with incompatible reference periods. | Annual income vs. monthly income; "last week" vs. "last 12 months" |
+| **RS** | Response Scale | Questions measure similar constructs but use incompatible response formats. | Open-ended dollar amount vs. income brackets; yes/no vs. Likert scale |
+| **PC** | Population/Coverage | Questions target different populations or have different universe definitions. | Adults 18+ vs. children under 18; civilians vs. all persons |
+| **MC** | Mode/Context | Questions differ in collection mode or survey context in ways that affect comparability. | Self-report vs. interviewer-observed; standalone vs. follow-up question |
+| **PM** | Precision/Measurement | Questions measure similar constructs at different levels of precision or detail. | Exact age vs. age bracket; specific occupation vs. broad industry |
+
+## Construct Barrier Sub-Codes
+
+The dominant barrier category (CC) is further divided:
+
+| Sub-Code | Name | Share of CC |
+|----------|------|:-----------:|
+| **CC.1** | Concept definition | ~73% |
+| **CC.2** | Operationalization | ~20% |
+| **CC.4** | Scope inclusion | ~7% |
+
+- **CC.1** indicates the questions address different concepts entirely (e.g., employment status vs. occupation type).
+- **CC.2** indicates the same broad concept is operationalized differently in ways that prevent direct comparison.
+- **CC.4** indicates different scope boundaries within the same concept area.

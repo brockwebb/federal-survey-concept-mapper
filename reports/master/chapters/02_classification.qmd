@@ -1,0 +1,45 @@
+# Classification: Mapping the Terrain {#sec-classification}
+
+## Approach
+
+Before evaluating harmonization potential, every question must be classified into a common vocabulary. Two independent large language models — OpenAI GPT-4o and Anthropic Claude 3.5 Sonnet — classified each of the 6,954 analyzable questions by Census topic and subtopic.
+
+Using two models from different vendors serves as a built-in reliability check: where both models agree, confidence is high; where they disagree, the classification is flagged for closer examination.
+
+## Agreement
+
+The two models agreed on topic-level classification for 89.2% of questions (Cohen's κ = 0.839), indicating near-perfect agreement. Subtopic-level agreement was lower at 69.7% (κ = 0.687), reflecting the finer granularity and greater ambiguity of subtopic distinctions.
+
+Both levels exceed standard thresholds for substantial agreement (κ > 0.6), confirming that the classification task is well-defined and that the resulting taxonomy is not an artifact of any single model's tendencies.
+
+## Topic Distribution
+
+<!-- FIGURE: TBD — needs review of available visuals before selecting -->
+
+The classified questions distribute across five broad Census topics:
+
+| Topic | Approx. Count | Share |
+|-------|-------------:|------:|
+| Economic | ~2,980 | 42.8% |
+| Social | ~2,467 | 35.5% |
+| Housing | ~967 | 13.9% |
+| Demographic | ~369 | 5.3% |
+| Government | ~167 | 2.4% |
+
+Economic and Social questions together account for more than three-quarters of all survey content, reflecting the Census Bureau's core mission areas.
+
+## Cost and Efficiency
+
+The complete dual-model classification of all questions cost approximately $15 in API fees and completed in roughly two hours of wall-clock time. A traditional manual classification of this scope would represent weeks of analyst effort.
+
+<!-- 
+CHECKLIST (from NARRATIVE_CHECKLIST.md):
+- [x] 2 models (GPT-4o, Claude 3.5 Sonnet)
+- [x] 6,954 questions classified
+- [x] 89.2% topic agreement, κ=0.839
+- [x] 69.7% subtopic agreement, κ=0.687
+- [x] Topic distribution table
+- [x] ~$15 cost
+- [ ] TODO: Figure — topic distribution visualization
+- [ ] TODO: Consider whether to include subtopic-level distribution or save for methodology doc
+-->

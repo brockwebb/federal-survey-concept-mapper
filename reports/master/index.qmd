@@ -1,0 +1,20 @@
+---
+title: "AI-Assisted Federal Survey Harmonization"
+---
+
+::: {.content-visible when-format="html"}
+This report presents a systematic analysis of harmonization potential across 47 Census Bureau demographic survey instruments containing approximately 7,000 questions. Using multi-model AI-assisted methods, the research identifies cross-survey integration opportunities, characterizes harmonization barriers, and produces actionable inventories of bridge variables for data enrichment.
+
+For methodology details, see the companion [Methodology Document](../methodology/). For validation metrics, see the companion [TEVV Document](../tevv/).
+:::
+
+\vspace{1em}
+
+**DRAFT** — These results are preliminary and have not been independently validated or peer reviewed.
+
+Full methodology, data, and code: [github.com/brockwebb/federal-survey-concept-mapper](https://github.com/brockwebb/federal-survey-concept-mapper)
+
+\vspace{0.5em}
+\noindent\rule{\textwidth}{0.4pt}
+\scriptsize
+The views expressed are the author's own and do not necessarily represent the views of the U.S. Census Bureau or the U.S. Department of Commerce.
