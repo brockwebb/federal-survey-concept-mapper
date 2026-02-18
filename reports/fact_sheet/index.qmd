@@ -8,7 +8,7 @@ date: "February 10, 2026"
 
 ## What's the problem?
 
-The Census Bureau fields **47 demographic surveys** containing approximately **7,000 questions**, each designed for a specific analytical purpose.
+This research examines **47 Census Bureau demographic survey instruments** containing approximately **7,000 questions**, each designed for a specific analytical purpose.
 No complete map exists showing where these surveys overlap, where their questions are compatible, and where the differences matter.
 Building that map manually represents months of effort for a skilled research team.
 This research accomplished that work in weeks using AI-assisted methods, at a total API cost under \$100.
