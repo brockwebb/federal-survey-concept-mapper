@@ -19,7 +19,7 @@
 1. Classify ~7,000 questions by Census topic/subtopic (Ch 2)
 2. Identify concept overlap across surveys, select ACS as anchor (Ch 3)
 3. Pair overlapping questions, evaluate harmonization feasibility with barrier taxonomy (Ch 4)
-4. Collapse pairs to question-level results: 42-49% of source questions have harmonization paths (Ch 5)
+4. Collapse pairs to question-level results: source questions with harmonization paths reported per survey (Ch 5). See NUMBERS_MAP for current rates.
 5. Expert validation and multi-hop enrichment discovery (Report 04, TBD)
 
 ## Report Structure (post-restructure Feb 2026)
@@ -40,7 +40,8 @@ reports/
 │   │   └── 07_limitations.qmd
 │   └── appendices/
 │       ├── A_architecture.qmd
-│       └── B_taxonomy.qmd
+│       ├── B_taxonomy.qmd
+│       └── C_tevv.qmd
 ├── tevv/                       # TEVV companion doc (skeleton)
 ├── methodology/                # Methodology companion doc (skeleton)
 ├── fact_sheet/                 # Approved fact sheet (stays as-is)
@@ -80,6 +81,14 @@ archive/research_notes/         # Former Reports 01, 02, 03
 ├── handoffs/                   # Session handoff documentation
 └── cc_tasks/                   # Claude Code task planning files
 ```
+
+## Active Task Roadmap
+
+**File:** `reports/master/TASK_ROADMAP.md` — 31 tasks across 7 blocks, risk-prioritized.
+
+Check TASK_ROADMAP.md for current status. Do NOT duplicate status here — that's how stale data happens.
+
+**Critical distinction:** Barrier taxonomy (classification scheme for results) ≠ TEVV (evidence the methodology is trustworthy). They connect at ONE point: SME review validates classification accuracy. Do not conflate.
 
 ## Key Principles
 - **Source vs Generated**: `src/` has code, `output/` has generated artifacts
