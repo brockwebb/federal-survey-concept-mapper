@@ -129,31 +129,40 @@
 
 ## 5. Complete Funnel (Best Available)
 
-### CPS Funnel (CORRECTED)
+### CPS Funnel (FULLY CORRECTED)
 
 ```
 211 total CPS questions (PublicSurveyQuestionsMap.csv)
   ↓
 211 questions classified (Report 01)
   ↓
-~164 unique CPS questions entered pairing
+164 unique CPS questions entered pairing (with concept overlap)
   → Some questions paired in multiple subtopics → 250 question-subtopic IDs
   → 1,092 total question pairs generated
-  ↓ [Filtered out: 10 IDs = 8 unique questions rated 'yes' by both models]
-240 question-subtopic IDs assessed = 157 unique CPS question texts
+  ↓ [Pre-filter: 62 pairs (24 unique questions) where both models='yes']
+  ├─ 7 questions appear ONLY in pre-filtered set → **Harmonizable (highest confidence)**
+  └─ 17 questions appear in both pre-filtered AND assessed (multi-subtopic pairing)
+  ↓
+240 question-subtopic IDs sent to barrier pipeline = 157 unique CPS question texts
   → 1,030 pairs rated (per stage2_agreement_metrics.json)
   ↓
-  ├─ 37 IDs (15.4%) → F1 (direct recode viable)
-  ├─ 65 IDs (27.1%) → F2 (statistical adjustment needed)
-  └─ 138 IDs (57.5%) → F3 (incompatible)
+  ├─ 37 IDs (32 unique) → F1 (direct recode viable)
+  ├─ 65 IDs (55 unique) → F2 (statistical adjustment needed)
+  └─ 138 IDs (73 unique) → F3 (incompatible)
 
-RESULT: 102/240 IDs (42.5%) reported in stage4_survey_summary.json
-       **CORRECTED: 86/157 unique questions (54.8%) have harmonization paths**
+RESULT (pipeline output): 102/240 IDs (42.5%) in stage4_survey_summary.json
+       **CORRECTED (unique texts): 86/157 assessed questions (54.8%)**
+       **FULLY CORRECTED (with pre-filtered): 93/164 paired questions (56.7%)**
+         = 86 from barrier assessment + 7 pre-filtered only
 ```
 
-**Key insight:** The 240/250 are question-subtopic combination IDs. The actual unique question count assessed is **157 CPS questions** (of 211 total = 74.4% assessed).
+**Key insights:**
+- 240/250 are question-subtopic combination IDs, not unique questions
+- 157 unique CPS questions were barrier-coded
+- 7 additional unique questions were pre-filtered as easily harmonizable
+- **Total harmonizable: 93/211 CPS questions (44.1%)**
 
-### FoodAPS Funnel (CORRECTED)
+### FoodAPS Funnel (FULLY CORRECTED)
 
 ```
 462 total FoodAPS questions (all 4 instruments)
@@ -164,25 +173,34 @@ RESULT: 102/240 IDs (42.5%) reported in stage4_survey_summary.json
   ↓
 462 questions classified (Report 01)
   ↓ [Selection based on subtopic overlap with ACS — exact logic unknown]
-~123 unique FoodAPS questions entered pairing (26.6% of total)
+123 unique FoodAPS questions entered pairing (26.6% of total)
   → Some questions paired in multiple subtopics → 150 question-subtopic IDs
   → 610 total question pairs generated
   → INSTRUMENT BREAKDOWN: UNKNOWN (text matching failed)
-  ↓ [Filtered out: 10 IDs rated 'yes' by both models]
-140 question-subtopic IDs assessed = 118 unique FoodAPS question texts
+  ↓ [Pre-filter: 42 pairs (14 unique questions) where both models='yes']
+  ├─ 5 questions appear ONLY in pre-filtered set → **Harmonizable (highest confidence)**
+  └─ 9 questions appear in both pre-filtered AND assessed (multi-subtopic pairing)
+  ↓
+140 question-subtopic IDs sent to barrier pipeline = 118 unique FoodAPS question texts
   → 568 pairs rated (per stage2_agreement_metrics.json)
   ↓
-  ├─ 23 IDs (16.4%) → F1 (direct recode viable)
-  ├─ 45 IDs (32.1%) → F2 (statistical adjustment needed)
-  └─ 72 IDs (51.4%) → F3 (incompatible)
+  ├─ 23 IDs (19 unique) → F1 (direct recode viable)
+  ├─ 45 IDs (38 unique) → F2 (statistical adjustment needed)
+  └─ 72 IDs (66 unique) → F3 (incompatible)
 
-RESULT: 68/140 IDs (48.6%) reported in stage4_survey_summary.json
-       **CORRECTED: 56/118 unique questions (47.5%) have harmonization paths**
+RESULT (pipeline output): 68/140 IDs (48.6%) in stage4_survey_summary.json
+       **CORRECTED (unique texts): 56/118 assessed questions (47.5%)**
+       **FULLY CORRECTED (with pre-filtered): 61/123 paired questions (49.6%)**
+         = 56 from barrier assessment + 5 pre-filtered only
 ```
 
-**Key insight:** The 140/150 are question-subtopic combination IDs. The actual unique question count assessed is **118 FoodAPS questions** (of 462 total = 25.5% assessed).
+**Key insights:**
+- 140/150 are question-subtopic combination IDs, not unique questions
+- 118 unique FoodAPS questions were barrier-coded
+- 5 additional unique questions were pre-filtered as easily harmonizable
+- **Total harmonizable: 61/462 FoodAPS questions (13.2%)**
 
-**Still unknown:** Breakdown by instrument (which of the 4 FoodAPS instruments contributed to the 118 questions).
+**Still unknown:** Breakdown by instrument (which of the 4 FoodAPS instruments contributed to the 123 paired questions).
 
 ### ACS (Anchor Survey)
 
@@ -271,14 +289,21 @@ Combined: [UNKNOWN - need to count unique ACS questions across both]
 
 ## 8. Recommendations for Master Report Ch 5
 
-### ✅ RESOLVED — Use Corrected Unique Question Counts
+### ✅ FULLY RESOLVED — Use Corrected Counts Including Pre-Filtered
 
-**Discrepancies resolved (2026-02-19).** The 240/140 are question-subtopic IDs, not unique questions. Use corrected rates:
+**All discrepancies resolved (2026-02-19).** The 240/140 are question-subtopic IDs, not unique questions. The 86/56 harmonizable counts exclude pre-filtered "yes" questions. Use fully corrected counts:
 
-- **CPS: 86/157 unique questions = 54.8%** (not 102/240 IDs = 42.5%)
-- **FoodAPS: 56/118 unique questions = 47.5%** (not 68/140 IDs = 48.6%)
-- Both rates are of questions assessed (with concept overlap), not total survey questions
-- For total survey denominators: 86/211 CPS = 40.8%, 56/462 FoodAPS = 12.1%
+**Harmonizable questions (final):**
+- **CPS: 93 unique questions** = 86 (barrier-assessed F1+F2) + 7 (pre-filtered both='yes')
+- **FoodAPS: 61 unique questions** = 56 (barrier-assessed F1+F2) + 5 (pre-filtered both='yes')
+
+**Harmonization rates:**
+- **Of paired questions (with concept overlap):**
+  - CPS: 93/164 = **56.7%**
+  - FoodAPS: 61/123 = **49.6%**
+- **Of total survey questions:**
+  - CPS: 93/211 = **44.1%**
+  - FoodAPS: 61/462 = **13.2%**
 
 ### Immediate Actions
 
@@ -297,19 +322,23 @@ Combined: [UNKNOWN - need to count unique ACS questions across both]
    - Note that percentages are relative to questions with concept overlap, not total survey questions
    - Acknowledge the 312 excluded FoodAPS questions
 
-### Suggested Narrative for Ch 5 (CORRECTED)
+### Suggested Narrative for Ch 5 (FULLY CORRECTED)
 
-**Option A (Recommended):** Report verified unique question counts
+**Option A (Recommended):** Report complete harmonizable counts with breakdown
 
-> "Of the 157 CPS questions and 118 FoodAPS questions that had Census topic overlap with ACS and entered the harmonization assessment, 54.8% (86) and 47.5% (56) respectively were classified as having viable harmonization paths (F1 or F2 feasibility). These represent 74% of CPS questions (157/211) and 26% of FoodAPS questions (118/462) from the full survey instruments."
+> "Of the 164 CPS questions and 123 FoodAPS questions that had Census topic overlap with ACS, 93 CPS questions (56.7%) and 61 FoodAPS questions (49.6%) have viable harmonization paths. This includes 86 CPS and 56 FoodAPS questions rated F1 (direct recode) or F2 (statistical adjustment) through barrier assessment, plus 7 CPS and 5 FoodAPS questions pre-identified as easily harmonizable by both classification models. These represent 44.1% of all CPS questions (93/211) and 13.2% of all FoodAPS questions (61/462) across 4 instruments."
 
 **Option B (Transparent with full funnel):** Show complete progression
 
-> "The 211-question CPS survey and 462-question FoodAPS survey (4 instruments) yielded 157 and 118 questions respectively with Census topic overlap with ACS. Among these assessed questions, 86 CPS questions (54.8%) and 56 FoodAPS questions (47.5%) have viable harmonization paths requiring either direct recoding (F1) or statistical adjustment (F2)."
+> "The 211-question CPS survey yielded 164 questions (78%) with Census topic overlap with ACS. Among these, 93 questions (56.7%) have viable harmonization paths. The 462-question FoodAPS survey (4 instruments) yielded 123 questions (27%) with overlap, of which 61 (49.6%) are harmonizable. Harmonization feasibility was determined through multi-model barrier assessment (86 CPS, 56 FoodAPS) supplemented by pre-filtered high-confidence matches (7 CPS, 5 FoodAPS)."
 
 **Option C (Conservative - rates of total survey):** Report against full survey denominators
 
-> "Among the 211 CPS questions, 86 (40.8%) have viable harmonization paths with ACS. Among the 462 FoodAPS questions across 4 instruments, 56 (12.1%) have viable harmonization paths. These rates reflect both concept overlap requirements (74% of CPS, 26% of FoodAPS had overlap) and feasibility assessment outcomes."
+> "Among the 211 CPS questions, 93 (44.1%) have viable harmonization paths with ACS. Among the 462 FoodAPS questions across 4 instruments, 61 (13.2%) have viable harmonization paths. These rates reflect both concept overlap requirements (78% of CPS, 27% of FoodAPS) and multi-model feasibility assessment, including questions pre-identified as easily harmonizable by both classification models."
+
+**Option D (Technical detail):** Explain the two-stage process
+
+> "Question harmonization feasibility was assessed through a two-stage process. First, question pairs were classified by two models for consolidation potential; pairs rated 'yes' by both models (7 CPS, 5 FoodAPS unique questions) were categorized as easily harmonizable. Remaining pairs underwent detailed barrier coding by three rater models with arbitration, yielding 86 additional CPS questions and 56 additional FoodAPS questions with F1 or F2 feasibility. In total, 93/211 CPS questions (44.1%) and 61/462 FoodAPS questions (13.2%) have viable harmonization paths with ACS."
 
 ---
 
@@ -363,6 +392,55 @@ Combined: [UNKNOWN - need to count unique ACS questions across both]
 - **FoodAPS: 56/118 = 47.5%** (not 48.6%)
 
 **Pipeline issue:** `src/pipelines/04_findings_pipeline.py` aggregates by `survey_q_id` (line 87), not by unique question text, so it counts question-subtopic combination IDs.
+
+---
+
+### CRITICAL CORRECTION 2: Pre-Filtered "Yes" Questions Missing
+
+**Investigation (2026-02-19 evening):** The 86/56 harmonizable counts are INCOMPLETE. They exclude pre-filtered "yes" questions.
+
+**Background:** The barrier pipeline (`01_barrier_pipeline.py:107-110`) pre-filters out pairs where BOTH models rated consolidation_potential='yes'. These are the easiest harmonization candidates — demographic basics like sex, age, citizenship, education. They never enter the barrier assessment pipeline, so they never get verdicts, so the findings pipeline never counts them.
+
+**Pre-filtered "yes" pairs:**
+
+| Survey | Total Pairs | Unique IDs | **Unique Question Texts** |
+|--------|-------------|------------|---------------------------|
+| CPS | 62 | 29 | **24** |
+| FoodAPS | 42 | 24 | **14** |
+
+**Overlap check:** Some pre-filtered questions also appear in the assessed set (same question paired in multiple subtopics — some pairs got "yes" ratings, others went through barrier assessment).
+
+| Survey | Pre-filtered Total | Also Assessed (overlap) | **ONLY Pre-filtered** |
+|--------|-------------------|-------------------------|----------------------|
+| CPS | 24 | 17 | **7** |
+| FoodAPS | 14 | 9 | **5** |
+
+**The 7 CPS and 5 FoodAPS "pre-filtered only" questions:**
+- Were rated 'yes' (easily consolidatable) by both models in ALL subtopics they appeared in
+- Never went through barrier coding
+- Are NOT in the 86/56 counts
+- **SHOULD be counted as harmonizable** — they're the highest-confidence matches
+
+**Examples of pre-filtered-only CPS questions:**
+1. (Are / Is) (name/you) a CITIZEN of the United States?
+2. What is (name of person talking about)'s sex?
+3. What is (name's/your) date of birth?
+4. What is the highest level of school (name/you) (have/has) completed or the highest degree (name/you) (have/has) received?
+
+**Examples of pre-filtered-only FoodAPS questions:**
+1. Is NAME male or female?
+2. What is NAME's date of birth?
+3. What is the highest level of school you completed or the highest degree you received?
+
+**FINAL CORRECTED HARMONIZATION COUNTS:**
+- **CPS: 93 unique questions** = 86 (assessed F1+F2) + 7 (pre-filtered only)
+- **FoodAPS: 61 unique questions** = 56 (assessed F1+F2) + 5 (pre-filtered only)
+
+**FINAL CORRECTED HARMONIZATION RATES:**
+- **CPS: 93/164 paired = 56.7%** (of questions with concept overlap)
+- **CPS: 93/211 total = 44.1%** (of all CPS questions)
+- **FoodAPS: 61/123 paired = 49.6%** (of questions with concept overlap)
+- **FoodAPS: 61/462 total = 13.2%** (of all FoodAPS questions across 4 instruments)
 
 ---
 
@@ -436,24 +514,36 @@ Combined: [UNKNOWN - need to count unique ACS questions across both]
 
 ## 11. Conclusion
 
-We have **mostly resolved the funnel discrepancies**:
+We have **fully resolved the funnel discrepancies** and identified the complete harmonizable question counts:
 
 ✅ **Fully Resolved:**
 - CPS: 211 → 250 → 240 transitions explained (question-subtopic IDs + intentional filtering)
 - FoodAPS: 150 → 140 transition explained (same pattern)
-- Both surveys losing 10: explained (coincidence in filtering)
-- Correct unique question counts identified (157 CPS, 118 FoodAPS)
+- Both surveys losing 10: explained (coincidence in filtering — both had 10 IDs pre-filtered as both='yes')
+- Correct unique question counts identified (164 CPS paired, 123 FoodAPS paired)
+- **Pre-filtered "yes" questions found and counted:** 7 CPS, 5 FoodAPS additional harmonizable questions
+- Complete harmonizable counts: **93 CPS, 61 FoodAPS**
 
 ⚠️ **Remaining Gap:**
-- FoodAPS instrument breakdown: Cannot determine which of 4 instruments contributed to the 118 questions
+- FoodAPS instrument breakdown: Cannot determine which of 4 instruments contributed to the 123 paired questions
   - Attempted text matching to raw data failed (questions transformed during pair generation)
   - Would require either: (a) original pair generation script inspection, (b) ID mapping file, or (c) manual review
 
+**Final Numbers for Ch 5:**
+
+| Survey | Total Questions | Paired (overlap) | Assessed | Pre-filtered | **Total Harmonizable** | Rate (of paired) | Rate (of total) |
+|--------|----------------|------------------|----------|--------------|----------------------|------------------|-----------------|
+| **CPS** | 211 | 164 (78%) | 157 | 24 (7 unique) | **93** | **56.7%** | **44.1%** |
+| **FoodAPS** | 462 | 123 (27%) | 118 | 14 (5 unique) | **61** | **49.6%** | **13.2%** |
+
+**Breakdown of harmonizable questions:**
+- **CPS 93** = 86 from barrier assessment (32 F1 + 55 F2 unique texts) + 7 pre-filtered only
+- **FoodAPS 61** = 56 from barrier assessment (19 F1 + 38 F2 unique texts) + 5 pre-filtered only
+
 **Recommendations for Ch 5:**
-1. **Use unique question counts, not IDs:** Report against 157 CPS and 118 FoodAPS unique questions
-2. **Be transparent about IDs vs questions:** Note that 240/140 are question-subtopic combinations (some questions paired in multiple subtopics)
-3. **Acknowledge FoodAPS gap:** State that the 118 questions are drawn from 4 FoodAPS instruments (totaling 462 questions) but specific instrument breakdown is not available
-4. **Report corrected rates:**
-   - Of assessed questions: **54.8% CPS** (86/157), **47.5% FoodAPS** (56/118)
-   - Of total survey questions: **40.8% CPS** (86/211), **12.1% FoodAPS** (56/462)
-5. **Use Option A narrative** (see Section 8) for clearest presentation
+1. **Use complete harmonizable counts:** 93 CPS, 61 FoodAPS (includes pre-filtered high-confidence matches)
+2. **Explain the two-stage assessment:** Pre-filter for easy matches (both models='yes'), then barrier-code remaining pairs
+3. **Report both rate types:** Of paired questions (56.7% CPS, 49.6% FoodAPS) AND of total survey (44.1% CPS, 13.2% FoodAPS)
+4. **Be transparent about IDs vs questions:** Note that pipeline outputs report question-subtopic combination IDs, but stakeholder-relevant metric is unique questions
+5. **Use Option A or D narrative** (see Section 8) for clearest presentation
+6. **Acknowledge FoodAPS instrument gap:** 123 questions drawn from 4 instruments (totaling 462), but specific breakdown not available
