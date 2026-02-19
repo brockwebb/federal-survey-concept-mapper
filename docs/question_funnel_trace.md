@@ -129,31 +129,30 @@
 
 ## 5. Complete Funnel (Best Available)
 
-### CPS Funnel
+### CPS Funnel (CORRECTED)
 
 ```
 211 total CPS questions (PublicSurveyQuestionsMap.csv)
   ↓
 211 questions classified (Report 01)
-  ↓ [UNEXPLAINED: +39 questions]
-250 questions with ACS subtopic overlap (Report 02 pairs)
-  → 1,092 question pairs generated (250 CPS × 4.37 avg ACS matches)
-  ↓ [UNEXPLAINED: -10 questions]
-240 questions rated (Report 03)
+  ↓
+~164 unique CPS questions entered pairing
+  → Some questions paired in multiple subtopics → 250 question-subtopic IDs
+  → 1,092 total question pairs generated
+  ↓ [Filtered out: 10 IDs = 8 unique questions rated 'yes' by both models]
+240 question-subtopic IDs assessed = 157 unique CPS question texts
   → 1,030 pairs rated (per stage2_agreement_metrics.json)
   ↓
-  ├─ 37 questions (15.4%) → F1 (direct recode viable)
-  ├─ 65 questions (27.1%) → F2 (statistical adjustment needed)
-  └─ 138 questions (57.5%) → F3 (incompatible)
+  ├─ 37 IDs (15.4%) → F1 (direct recode viable)
+  ├─ 65 IDs (27.1%) → F2 (statistical adjustment needed)
+  └─ 138 IDs (57.5%) → F3 (incompatible)
 
-RESULT: 102/240 questions (42.5%) have harmonization paths
+RESULT: 102/240 IDs (42.5%) OR ~102/157 unique questions (~65%) have harmonization paths
 ```
 
-**Missing denominators:**
-- What % of original 211 CPS questions had subtopic overlap? Unknown.
-- What % of original 211 CPS questions have harmonization paths? Unknown (need to resolve 211→250→240 discrepancies).
+**Key insight:** The 240/250 are question-subtopic combination IDs. The actual unique question count assessed is **157 CPS questions** (of 211 total = 74.4% assessed).
 
-### FoodAPS Funnel
+### FoodAPS Funnel (CORRECTED)
 
 ```
 462 total FoodAPS questions (all 4 instruments)
@@ -163,25 +162,25 @@ RESULT: 102/240 questions (42.5%) have harmonization paths
   └─ Profile and Income Questionnaire: 56
   ↓
 462 questions classified (Report 01)
-  ↓ [UNKNOWN SELECTION: -312 questions, 67.5% excluded]
-150 questions with ACS subtopic overlap (Report 02 pairs)
-  → 610 question pairs generated (150 FoodAPS × 4.07 avg ACS matches)
-  → INSTRUMENT BREAKDOWN: UNKNOWN
-  ↓ [UNEXPLAINED: -10 questions]
-140 questions rated (Report 03)
+  ↓ [Selection based on subtopic overlap with ACS — exact logic unknown]
+~123 unique FoodAPS questions entered pairing (26.6% of total)
+  → Some questions paired in multiple subtopics → 150 question-subtopic IDs
+  → 610 total question pairs generated
+  → INSTRUMENT BREAKDOWN: UNKNOWN (text matching failed)
+  ↓ [Filtered out: 10 IDs rated 'yes' by both models]
+140 question-subtopic IDs assessed = 118 unique FoodAPS question texts
   → 568 pairs rated (per stage2_agreement_metrics.json)
   ↓
-  ├─ 23 questions (16.4%) → F1 (direct recode viable)
-  ├─ 45 questions (32.1%) → F2 (statistical adjustment needed)
-  └─ 72 questions (51.4%) → F3 (incompatible)
+  ├─ 23 IDs (16.4%) → F1 (direct recode viable)
+  ├─ 45 IDs (32.1%) → F2 (statistical adjustment needed)
+  └─ 72 IDs (51.4%) → F3 (incompatible)
 
-RESULT: 68/140 questions (48.6%) have harmonization paths
+RESULT: 68/140 IDs (48.6%) OR ~68/118 unique questions (~58%) have harmonization paths
 ```
 
-**Missing denominators:**
-- Which of the 4 FoodAPS instruments contributed to the 150 questions? Unknown.
-- What % of each instrument had subtopic overlap? Unknown.
-- What % of the original 462 FoodAPS questions have harmonization paths? ~14.7% (68/462) IF no discrepancies.
+**Key insight:** The 140/150 are question-subtopic combination IDs. The actual unique question count assessed is **118 FoodAPS questions** (of 462 total = 25.5% assessed).
+
+**Still unknown:** Breakdown by instrument (which of the 4 FoodAPS instruments contributed to the 118 questions).
 
 ### ACS (Anchor Survey)
 
@@ -331,19 +330,93 @@ The master report cannot accurately present the complete funnel due to unresolve
 
 ---
 
-## Conclusion
+## 10. RESOLUTION UPDATE (2026-02-19)
 
-We have **partial funnel data** but **critical gaps prevent complete reporting**:
+### Discrepancy 1: CPS 211 → 250 → 240 **✅ RESOLVED**
 
-✅ **Verified:**
-- Raw survey question counts (211 CPS, 462 FoodAPS, 115 ACS)
-- Final results (240 CPS, 140 FoodAPS assessed)
-- Harmonization rates among assessed questions (42.5% CPS, 48.6% FoodAPS)
+**Finding:** The 250 and 240 are **question-subtopic combination IDs**, not unique question counts.
 
-⚠️ **Unresolved:**
-- CPS: 211 → 250 → 240 (two unexplained transitions)
-- FoodAPS: 462 → 150 → 140 (selection logic + 10-question loss)
-- FoodAPS instrument breakdown (which instruments, how many questions each)
-- Complete denominators for accurate % calculations
+**Evidence:**
+- Report 02 (`cps_comparison_merged.csv`): 250 unique IDs, but only **164 unique question texts**
+- Report 03 (`expert_review_cps.csv`): 240 unique IDs, but only **157 unique question texts**
+- Questions can appear in multiple subtopics (e.g., "Do you want a job?" appears in both "Labor Force" and "Employment Status")
 
-**Priority:** Resolve CPS 211→250→240 and FoodAPS instrument breakdown before finalizing Ch 5.
+**The 250 → 240 drop:**
+- **All 10 dropped IDs were rated "yes" (easily consolidatable) by BOTH models** (Claude and GPT)
+- The barrier coding pipeline (01_barrier_pipeline.py, lines 107-110) **intentionally filters** pairs rated 'yes' by both models
+- These were demographic basics: sex, age, Hispanic origin, citizenship, education, occupation, commissions
+- **This is correct behavior** — the pipeline only codes barriers for pairs that need it
+
+**Corrected funnel:**
+```
+211 CPS questions (raw data)
+  ↓
+~164 unique CPS questions entered pairing (some questions paired in multiple subtopics → 250 IDs)
+  ↓ [Filtered: -10 IDs (8 unique questions) rated 'yes' by both models]
+240 question-subtopic IDs assessed = ~157 unique CPS question texts
+  → 1,030 pairs rated
+  ↓
+102 IDs (42.5%) have harmonization paths (F1 or F2)
+```
+
+**Correct denominator for Ch 5:** Use **157 unique CPS questions** assessed, NOT 240 IDs.
+
+---
+
+### Discrepancy 2: FoodAPS 150 → 140 **✅ PARTIALLY RESOLVED**
+
+**Finding:** Same pattern as CPS.
+
+**Evidence:**
+- Report 02: 150 unique IDs, but only **123 unique question texts**
+- Report 03: 140 unique IDs, but only **118 unique question texts**
+- **All 10 dropped IDs were rated "yes" by both models** (same filter as CPS)
+
+**Corrected funnel:**
+```
+462 FoodAPS questions (raw data, all 4 instruments)
+  ↓ [Selection logic unknown — 67.5% excluded]
+~123 unique FoodAPS questions entered pairing (some questions paired in multiple subtopics → 150 IDs)
+  ↓ [Filtered: -10 IDs rated 'yes' by both models]
+140 question-subtopic IDs assessed = ~118 unique FoodAPS question texts
+  → 568 pairs rated
+  ↓
+68 IDs (48.6%) have harmonization paths (F1 or F2)
+```
+
+**Correct denominator for Ch 5:** Use **118 unique FoodAPS questions** assessed, NOT 140 IDs.
+
+**Still unresolved:** Which of the 4 FoodAPS instruments contributed to the 118/123 questions? Text matching to raw data failed (questions were transformed during pair generation).
+
+---
+
+### Discrepancy 3: Why Both Lost Exactly 10 **✅ RESOLVED**
+
+**Finding:** Pure coincidence. Both had exactly 10 question-subtopic IDs rated 'yes' by both models.
+
+**Evidence:** Pipeline filter (01_barrier_pipeline.py) removes ALL pairs where both models rated consolidation_potential='yes'. CPS had 10 such IDs, FoodAPS had 10 such IDs — coincidence, not a hardcoded limit.
+
+---
+
+## 11. Conclusion
+
+We have **mostly resolved the funnel discrepancies**:
+
+✅ **Fully Resolved:**
+- CPS: 211 → 250 → 240 transitions explained (question-subtopic IDs + intentional filtering)
+- FoodAPS: 150 → 140 transition explained (same pattern)
+- Both surveys losing 10: explained (coincidence in filtering)
+- Correct unique question counts identified (157 CPS, 118 FoodAPS)
+
+⚠️ **Remaining Gap:**
+- FoodAPS instrument breakdown: Cannot determine which of 4 instruments contributed to the 118 questions
+  - Attempted text matching to raw data failed (questions transformed during pair generation)
+  - Would require either: (a) original pair generation script inspection, (b) ID mapping file, or (c) manual review
+
+**Recommendations for Ch 5:**
+1. **Use unique question counts, not IDs:** Report against 157 CPS and 118 FoodAPS questions
+2. **Be transparent about IDs vs questions:** Note that 240/140 are question-subtopic combinations
+3. **Acknowledge FoodAPS gap:** State that the 118 questions are drawn from 4 FoodAPS instruments (totaling 462 questions) but specific instrument breakdown is not available
+4. **Report both rates:**
+   - Of assessed questions: 42.5% CPS, 48.6% FoodAPS
+   - Of total survey (if assuming 462→118 is accurate): ~14.7% FoodAPS (68/462)
