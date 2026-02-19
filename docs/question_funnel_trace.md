@@ -147,7 +147,8 @@
   ├─ 65 IDs (27.1%) → F2 (statistical adjustment needed)
   └─ 138 IDs (57.5%) → F3 (incompatible)
 
-RESULT: 102/240 IDs (42.5%) OR ~102/157 unique questions (~65%) have harmonization paths
+RESULT: 102/240 IDs (42.5%) reported in stage4_survey_summary.json
+       **CORRECTED: 86/157 unique questions (54.8%) have harmonization paths**
 ```
 
 **Key insight:** The 240/250 are question-subtopic combination IDs. The actual unique question count assessed is **157 CPS questions** (of 211 total = 74.4% assessed).
@@ -175,7 +176,8 @@ RESULT: 102/240 IDs (42.5%) OR ~102/157 unique questions (~65%) have harmonizati
   ├─ 45 IDs (32.1%) → F2 (statistical adjustment needed)
   └─ 72 IDs (51.4%) → F3 (incompatible)
 
-RESULT: 68/140 IDs (48.6%) OR ~68/118 unique questions (~58%) have harmonization paths
+RESULT: 68/140 IDs (48.6%) reported in stage4_survey_summary.json
+       **CORRECTED: 56/118 unique questions (47.5%) have harmonization paths**
 ```
 
 **Key insight:** The 140/150 are question-subtopic combination IDs. The actual unique question count assessed is **118 FoodAPS questions** (of 462 total = 25.5% assessed).
@@ -269,13 +271,14 @@ Combined: [UNKNOWN - need to count unique ACS questions across both]
 
 ## 8. Recommendations for Master Report Ch 5
 
-### Current Limitation
+### ✅ RESOLVED — Use Corrected Unique Question Counts
 
-The master report cannot accurately present the complete funnel due to unresolved discrepancies. Reporting "48.6% (68/140)" is technically correct but misleading without context:
+**Discrepancies resolved (2026-02-19).** The 240/140 are question-subtopic IDs, not unique questions. Use corrected rates:
 
-- Is 140 questions the right denominator? (FoodAPS has 462 questions total)
-- Should we report against all FoodAPS questions (68/462 = 14.7%)?
-- Or report against the subset with concept overlap (need to know which 150/462 were selected)?
+- **CPS: 86/157 unique questions = 54.8%** (not 102/240 IDs = 42.5%)
+- **FoodAPS: 56/118 unique questions = 47.5%** (not 68/140 IDs = 48.6%)
+- Both rates are of questions assessed (with concept overlap), not total survey questions
+- For total survey denominators: 86/211 CPS = 40.8%, 56/462 FoodAPS = 12.1%
 
 ### Immediate Actions
 
@@ -294,19 +297,19 @@ The master report cannot accurately present the complete funnel due to unresolve
    - Note that percentages are relative to questions with concept overlap, not total survey questions
    - Acknowledge the 312 excluded FoodAPS questions
 
-### Suggested Narrative for Ch 5
+### Suggested Narrative for Ch 5 (CORRECTED)
 
-**Option A (Conservative):** Report only what we can verify
+**Option A (Recommended):** Report verified unique question counts
 
-> "Of the [240/140] source survey questions that had subtopic overlap with ACS and entered the harmonization assessment, [42.5%/48.6%] were classified as having viable harmonization paths (F1 or F2). This represents a subset of the full survey instruments; complete funnel statistics require additional investigation."
+> "Of the 157 CPS questions and 118 FoodAPS questions that had Census topic overlap with ACS and entered the harmonization assessment, 54.8% (86) and 47.5% (56) respectively were classified as having viable harmonization paths (F1 or F2 feasibility). These represent 74% of CPS questions (157/211) and 26% of FoodAPS questions (118/462) from the full survey instruments."
 
-**Option B (Transparent):** Acknowledge the gaps
+**Option B (Transparent with full funnel):** Show complete progression
 
-> "The CPS and FoodAPS surveys contain [211/462] questions respectively. Of these, [240/140] questions with Census topic overlap with ACS were assessed for harmonization potential. Among these assessed questions, [42.5%/48.6%] have viable harmonization paths. The selection criteria and complete funnel from total survey questions to assessed questions requires further investigation to report accurately."
+> "The 211-question CPS survey and 462-question FoodAPS survey (4 instruments) yielded 157 and 118 questions respectively with Census topic overlap with ACS. Among these assessed questions, 86 CPS questions (54.8%) and 56 FoodAPS questions (47.5%) have viable harmonization paths requiring either direct recoding (F1) or statistical adjustment (F2)."
 
-**Option C (Best-effort with caveats):** Use available data with clear disclaimers
+**Option C (Conservative - rates of total survey):** Report against full survey denominators
 
-> "Among CPS questions with concept overlap with ACS (N=240, representing [UNKNOWN%] of the 211-question survey), 42.5% have viable harmonization paths. Among FoodAPS questions assessed (N=140, drawn from 4 survey instruments totaling 462 questions), 48.6% have viable harmonization paths. Full instrument-level breakdowns and selection criteria are documented in [methodology companion doc]."
+> "Among the 211 CPS questions, 86 (40.8%) have viable harmonization paths with ACS. Among the 462 FoodAPS questions across 4 instruments, 56 (12.1%) have viable harmonization paths. These rates reflect both concept overlap requirements (74% of CPS, 26% of FoodAPS had overlap) and feasibility assessment outcomes."
 
 ---
 
@@ -331,6 +334,39 @@ The master report cannot accurately present the complete funnel due to unresolve
 ---
 
 ## 10. RESOLUTION UPDATE (2026-02-19)
+
+### CRITICAL CORRECTION: Harmonizable Counts Also Inflated
+
+**Investigation (2026-02-19 afternoon):** The 102 CPS and 68 FoodAPS harmonizable question counts in `stage4_survey_summary.json` are ALSO inflated by question-subtopic IDs.
+
+**Evidence:**
+- **CPS:** 102 IDs with F1/F2 = only **86 unique question texts**
+- **FoodAPS:** 68 IDs with F1/F2 = only **56 unique question texts**
+
+**Complete breakdown verification:**
+
+| Survey | Metric | IDs | Unique Texts |
+|--------|--------|-----|--------------|
+| CPS | Total assessed | 240 | 157 |
+| CPS | F1 (direct recode) | 37 | 32 |
+| CPS | F2 (statistical adj) | 65 | 55 |
+| CPS | **F1+F2 (harmonizable)** | **102** | **86** |
+| CPS | F3 (incompatible) | 138 | 73 |
+| FoodAPS | Total assessed | 140 | 118 |
+| FoodAPS | F1 (direct recode) | 23 | 19 |
+| FoodAPS | F2 (statistical adj) | 45 | 38 |
+| FoodAPS | **F1+F2 (harmonizable)** | **68** | **56** |
+| FoodAPS | F3 (incompatible) | 72 | 66 |
+
+**CORRECTED HARMONIZATION RATES:**
+- **CPS: 86/157 = 54.8%** (not 42.5%)
+- **FoodAPS: 56/118 = 47.5%** (not 48.6%)
+
+**Pipeline issue:** `src/pipelines/04_findings_pipeline.py` aggregates by `survey_q_id` (line 87), not by unique question text, so it counts question-subtopic combination IDs.
+
+---
+
+## 10. RESOLUTION UPDATE (2026-02-19 morning)
 
 ### Discrepancy 1: CPS 211 → 250 → 240 **✅ RESOLVED**
 
@@ -414,9 +450,10 @@ We have **mostly resolved the funnel discrepancies**:
   - Would require either: (a) original pair generation script inspection, (b) ID mapping file, or (c) manual review
 
 **Recommendations for Ch 5:**
-1. **Use unique question counts, not IDs:** Report against 157 CPS and 118 FoodAPS questions
-2. **Be transparent about IDs vs questions:** Note that 240/140 are question-subtopic combinations
+1. **Use unique question counts, not IDs:** Report against 157 CPS and 118 FoodAPS unique questions
+2. **Be transparent about IDs vs questions:** Note that 240/140 are question-subtopic combinations (some questions paired in multiple subtopics)
 3. **Acknowledge FoodAPS gap:** State that the 118 questions are drawn from 4 FoodAPS instruments (totaling 462 questions) but specific instrument breakdown is not available
-4. **Report both rates:**
-   - Of assessed questions: 42.5% CPS, 48.6% FoodAPS
-   - Of total survey (if assuming 462→118 is accurate): ~14.7% FoodAPS (68/462)
+4. **Report corrected rates:**
+   - Of assessed questions: **54.8% CPS** (86/157), **47.5% FoodAPS** (56/118)
+   - Of total survey questions: **40.8% CPS** (86/211), **12.1% FoodAPS** (56/462)
+5. **Use Option A narrative** (see Section 8) for clearest presentation
