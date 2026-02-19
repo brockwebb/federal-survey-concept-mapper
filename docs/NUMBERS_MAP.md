@@ -28,7 +28,7 @@
 | Subtopic agreement (%) | 69.7% | `output/report_01/comparison/agreement_summary.csv` | `Subtopic Agreement %` = 69.69 |
 | Cohen's κ (topics) | 0.839 | `output/report_01/comparison/agreement_summary.csv` | `Cohen's Kappa (Topics)` = 0.8389 |
 | Cohen's κ (subtopics) | 0.687 | `output/report_01/comparison/agreement_summary.csv` | `Cohen's Kappa (Subtopics)` = 0.6869 |
-| Classification models | 2 | — | OpenAI GPT-4o, Anthropic Claude 3.5 Sonnet |
+| Classification models | 2 | — | OpenAI GPT-5-mini, Anthropic Claude Haiku 4.5 |
 | API cost (approx) | ~$15 | Manual estimate | For dual-model classification of all questions |
 | Processing time | ~2 hours | Manual estimate | Wall clock for full pipeline |
 
@@ -91,7 +91,7 @@ Plus feasibility codes: F1 (direct recode), F2 (statistical adjustment needed), 
 
 | Metric | Value | Source File | Path |
 |--------|-------|-------------|------|
-| Rater models | 3 | — | OpenAI GPT-4o, Anthropic Claude 3.5 Sonnet, Google Gemini 1.5 Pro |
+| Rater models | 3 | — | OpenAI gpt-5-mini, Anthropic claude-haiku-4-5-20251001, Google gemini-3-flash-preview |
 | Total pairs rated | 1,598 | `output/report_03/analysis/stage2_agreement_metrics.json` | `metadata.total_pairs` |
 | CPS pairs | 1,030 | same | `L1_agreement.stratified.by_survey.CPS.n_pairs` |
 | FoodAPS pairs | 568 | same | `L1_agreement.stratified.by_survey.FOODAPS.n_pairs` |

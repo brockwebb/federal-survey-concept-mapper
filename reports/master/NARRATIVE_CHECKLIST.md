@@ -23,7 +23,7 @@
 
 | Claim | Number | Source |
 |-------|--------|--------|
-| Dual-model classification | 2 models | OpenAI GPT-4o, Anthropic Claude 3.5 Sonnet |
+| Dual-model classification | 2 models | OpenAI GPT-5-mini, Anthropic Claude Haiku 4.5 |
 | Questions classified | 6,954 | `output/report_01/final/master_dataset.csv` |
 | Topic-level agreement | 89.2% (κ=0.839) | `output/report_01/comparison/agreement_summary.csv` |
 | Subtopic-level agreement | 69.7% (κ=0.687) | same |
@@ -122,4 +122,4 @@ Feasibility codes (F1, F2, F3) with definitions.
 1. ~~**CPS consolidable count:**~~ ✅ Resolved — 102 (42.5%) per `stage4_survey_summary.json`. Stale exec summary said 100.
 2. ~~**Combined count:**~~ ✅ Resolved — 170 per source of truth. Stale exec summary said 168.
 3. ~~**Pair-level barrier %s:**~~ ✅ Resolved — `barrier_summary_by_survey.csv` uses **all pairs per survey** as denominator (CPS=1,030, FoodAPS=568), giving CC=85.1%/88.9%. Report 03 exec summary used F3-only denominator (giving 96.5%). Master report Ch 5 uses the per-survey all-pairs framing from the CSV. Both are correct; different denominators.
-4. **Report 01 classification models** (GPT-4o, Claude 3.5 Sonnet) vs **Report 03 rater models** (GPT-5-mini, Claude Haiku 4.5, Gemini 3 Flash). These are different stages — don't conflate. Master report handles this correctly (Ch 2 vs Ch 4).
+4. **Report 01 classification models** (GPT-5-mini, Claude Haiku 4.5) vs **Report 03 rater models** (gpt-5-mini, claude-haiku-4-5-20251001, gemini-3-flash-preview). These are different stages with different model versions — don't conflate. Master report handles this correctly (Ch 2 vs Ch 4).

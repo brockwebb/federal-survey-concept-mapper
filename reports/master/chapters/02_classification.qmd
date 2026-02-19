@@ -2,7 +2,7 @@
 
 ## Approach
 
-Before evaluating harmonization potential, every question must be classified into a common vocabulary. Two independent large language models — OpenAI GPT-4o and Anthropic Claude 3.5 Sonnet — classified each of the 6,954 analyzable questions by Census topic and subtopic.
+Before evaluating harmonization potential, every question must be classified into a common vocabulary. Two independent large language models — OpenAI GPT-5-mini and Anthropic Claude Haiku 4.5 — classified each of the 6,954 analyzable questions by Census topic and subtopic.
 
 Using two models from different vendors serves as a built-in reliability check: where both models agree, confidence is high; where they disagree, the classification is flagged for closer examination.
 
@@ -34,7 +34,7 @@ The complete dual-model classification of all questions cost approximately $15 i
 
 <!-- 
 CHECKLIST (from NARRATIVE_CHECKLIST.md):
-- [x] 2 models (GPT-4o, Claude 3.5 Sonnet)
+- [x] 2 models (GPT-5-mini, Claude Haiku 4.5)
 - [x] 6,954 questions classified
 - [x] 89.2% topic agreement, κ=0.839
 - [x] 69.7% subtopic agreement, κ=0.687

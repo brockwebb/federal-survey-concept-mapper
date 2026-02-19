@@ -19,7 +19,7 @@ This document provides detailed methodology for the AI-assisted survey harmoniza
 ### 2. Classification Framework
 
 - Census topic/subtopic taxonomy design
-- Dual-model classification protocol (GPT-4o, Claude 3.5 Sonnet)
+- Dual-model classification protocol (GPT-5-mini, Claude Haiku 4.5)
 - Consensus resolution for classification disagreements
 - Confidence scoring
 
