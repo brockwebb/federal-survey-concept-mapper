@@ -1,38 +1,152 @@
-# Harmonization Taxonomy {#sec-taxonomy .unnumbered}
+# Harmonization Barrier Taxonomy {#sec-taxonomy .unnumbered}
 
-This appendix defines the barrier and feasibility codes used throughout the analysis.
+This appendix defines the barrier codes and feasibility classifications used throughout this report.
+The taxonomy draws on established survey harmonization frameworks, adapted for application to federal demographic surveys.
+Each code is grounded in the survey methodology literature and mapped to its primary source below.
 
-## Feasibility Codes
+## Framework Provenance
 
-| Code | Name | Definition | Action |
-|------|------|------------|--------|
-| **F1** | Direct Recode | Questions measure the same construct with compatible response formats. Harmonization requires only simple recoding or value mapping. | High-quality bridge variable. Use directly. |
-| **F2** | Statistical Adjustment | Questions measure the same underlying construct but differ in measurement approach (reference period, response scale, level of detail). Harmonization requires documented statistical transformation. | Usable bridge variable with known limitations. |
-| **F3** | Not Feasible | Questions measure fundamentally different constructs or have barriers that cannot be addressed through statistical methods. | Not a bridge variable. Barrier code explains why. |
+The classification schemes used in this analysis are not novel constructs.
+They are adaptations of frameworks developed for and deployed in large-scale, operational survey harmonization programs worldwide.
+
+The feasibility tiers (F1/F2/F3) derive from the DataSHaPER/Maelstrom Research framework [@fortier2011; @fortier2017], which was developed through collaboration with over 100 investigators across 15 countries and tested across 53 large epidemiological studies encompassing 6.9 million participants.
+The Maelstrom guidelines have since been adopted by the BioSHaRE-EU consortium (Biobank Standardisation and Harmonisation for Research Excellence in the European Union), the Canadian Partnership for Tomorrow Project, the BBMRI-LPC (Biobanking and Biomolecular Resources Research Infrastructure — Large Prospective Cohorts), the InterConnect global diabetes research initiative, and the Swiss Population Health Network Cohort Consortium, among others.
+The Maelstrom Research catalogue hosts metadata from over 370 individual studies across multiple international networks, a number that continues to grow as new consortia adopt the framework.
+
+The barrier codes (TC, CC, PC, RS, MC, PM) synthesize terminology from several complementary frameworks.
+@wolf2016, published in the SAGE Handbook of Survey Methodology, codifies harmonization barrier categories drawn from decades of practice in cross-national survey programs including the International Social Survey Programme (ISSP; 45 member nations since 1984), the European Social Survey (ESS; 31 countries), and the Eurobarometer (European Commission, continuous since 1974).
+@slomczynski2018 contributes the Survey Data Recycling (SDR) framework, which harmonized data across 23 international survey programs covering political attitudes, social capital, and well-being.
+@saris2014 provides the response scale quality dimensions used in psychometric and survey design practice internationally.
+@oleksiyenko2018 addresses processing error identification across the same cross-national survey ecosystem.
+
+The comprehensive state-of-the-art reference is @tomescudubrow2024, which consolidates ex-ante and ex-post harmonization methodologies across these programs.
+
+In short: every code in this taxonomy maps to a concept that has been operationalized, tested, and refined across programs spanning dozens of countries, millions of respondents, and decades of continuous operation.
+We adapted these frameworks for application to federal demographic surveys within a single national statistical system — a narrower scope than the cross-national programs where they originated, but one that faces the same fundamental harmonization barriers.
+
+## Feasibility Classification
+
+The feasibility tier assigned to each question pair reflects the practical effort required to use one survey's question as a bridge variable for another.
+This three-tier scheme adapts the DataSHaPER compatibility framework [@fortier2011; @fortier2017].
+
+| Code | Name | Definition | Practical Implication |
+|------|------|------------|----------------------|
+| **F1** | Direct Recode | Questions measure the same construct with compatible response formats. Harmonization requires only deterministic recoding, category collapsing, or unit conversion. | High-quality bridge variable. Usable with minimal documentation. |
+| **F2** | Statistical Adjustment | Questions measure the same underlying construct but differ in measurement approach — reference period, response scale, or level of detail. Harmonization requires a documented statistical transformation with stated assumptions. | Usable bridge variable with known limitations. Requires methodological transparency. |
+| **F3** | Incompatible | Questions measure fundamentally different constructs or have barriers that no statistical method can adequately address. | Not a bridge variable. The barrier code explains the specific obstacle. |
+
+In the DataSHaPER literature, @fortier2011 found that 38% of variable-study pairs across 53 studies could be harmonized, with "essential" demographic variables achieving 62% compatibility.
+Our analysis finds broadly comparable rates for federal demographic surveys (see @sec-results).
 
 ## Barrier Codes
 
-Applied to F3 pairs to characterize the specific obstacle preventing harmonization.
+When a question pair is classified F3 (incompatible), one of six barrier codes identifies the nature of the obstacle.
+These codes synthesize multiple established frameworks: @wolf2016 on question-level harmonization barriers, @slomczynski2018 on methodological variability across survey programs, @saris2014 on response scale characteristics, and @oleksiyenko2018 on processing errors.
+@tbl-barrier-codes summarizes the taxonomy with literature provenance.
 
-| Code | Name | Definition | Example |
-|------|------|------------|---------|
-| **CC** | Construct/Concept | Questions measure fundamentally different things despite shared subtopic classification. | "Do you want to work full-time?" (intention) vs. "Did you work last week?" (behavior) |
-| **TC** | Temporal/Chronological | Questions measure similar constructs but with incompatible reference periods. | Annual income vs. monthly income; "last week" vs. "last 12 months" |
-| **RS** | Response Scale | Questions measure similar constructs but use incompatible response formats. | Open-ended dollar amount vs. income brackets; yes/no vs. Likert scale |
-| **PC** | Population/Coverage | Questions target different populations or have different universe definitions. | Adults 18+ vs. children under 18; civilians vs. all persons |
-| **MC** | Mode/Context | Questions differ in collection mode or survey context in ways that affect comparability. | Self-report vs. interviewer-observed; standalone vs. follow-up question |
-| **PM** | Precision/Measurement | Questions measure similar constructs at different levels of precision or detail. | Exact age vs. age bracket; specific occupation vs. broad industry |
+| Code | Name | Definition | Primary Source | Example from Data |
+|------|------|------------|----------------|-------------------|
+| **TC** | Temporal | Reference period or timing differences prevent meaningful comparison | @wolf2016; @fortier2011 | "Hours worked last week" vs. "usual hours worked per year" |
+| **CC** | Construct | Concept definition or operationalization differences — the questions measure different things despite shared topic area | @wolf2016; @fortier2011 | "Do you want to work full-time?" (intention) vs. "Did you work last week?" (behavior) |
+| **PC** | Population/Coverage | Target population, sampling frame, or eligibility criteria differ between surveys | @slomczynski2018 | Adults 18+ vs. persons 15+; civilian noninstitutional vs. all residents |
+| **RS** | Response Scale | Scale type, category structure, or response format differences prevent direct comparison | @saris2014 | Open-ended dollar amount vs. income brackets with different boundaries |
+| **MC** | Mode/Context | Interview mode or questionnaire context introduces systematic differences | @wolf2016 | Self-administered web survey vs. interviewer-administered telephone survey |
+| **PM** | Processing/Metadata | Coding schemes, derived variable algorithms, or documentation gaps prevent assessment | @oleksiyenko2018 | SOC 2010 occupation codes vs. SOC 2018 codes without crosswalk |
 
-## Construct Barrier Sub-Codes
+: Harmonization barrier codes with literature provenance. {#tbl-barrier-codes}
 
-The dominant barrier category (CC) is further divided:
+@tbl-literature-crosswalk maps each code to its corresponding terminology in the source literature, enabling readers familiar with those frameworks to locate our analysis within the established landscape.
 
-| Sub-Code | Name | Share of CC |
-|----------|------|:-----------:|
-| **CC.1** | Concept definition | ~73% |
-| **CC.2** | Operationalization | ~20% |
-| **CC.4** | Scope inclusion | ~7% |
+| Our Code | Wolf et al. (2016) | Fortier et al. (2011) | Slomczynski & Tomescu-Dubrow (2018) |
+|----------|--------------------|-----------------------|--------------------------------------|
+| TC | Reference period differences | Reference period | Temporal variability |
+| CC | Concept differences | Inferential equivalence | Source variable properties |
+| PC | — | Observational units | Sampling design |
+| RS | Response format differences | — | — |
+| MC | Questionnaire context | Mode of administration | Mode effects |
+| PM | — | — | Data processing |
 
-- **CC.1** indicates the questions address different concepts entirely (e.g., employment status vs. occupation type).
-- **CC.2** indicates the same broad concept is operationalized differently in ways that prevent direct comparison.
-- **CC.4** indicates different scope boundaries within the same concept area.
+: Literature crosswalk mapping taxonomy codes to established terminology. {#tbl-literature-crosswalk}
+
+## Barrier Subtypes
+
+Each barrier code includes subtypes that capture the specific nature of the difference.
+Subtypes are documented in the analysis data and available for expert review but are summarized here for reference.
+
+### TC — Temporal Constraints
+
+Based on @wolf2016 "reference period differences" and @fortier2011 finding that reference period characteristics predict harmonization potential.
+
+- **TC.1 Reference period length.** Different recall windows (e.g., 7-day vs. 12-month).
+- **TC.2 Temporal framing.** Point-in-time vs. habitual vs. retrospective framing (e.g., "last week" vs. "usually").
+- **TC.3 Calendar alignment.** Fixed calendar periods vs. rolling reference periods (e.g., "calendar year 2025" vs. "past 12 months").
+
+### CC — Construct Constraints
+
+Based on @wolf2016 "concept differences" and @fortier2011 requirement of "inferential equivalence."
+CC is the dominant barrier category in our data.
+
+- **CC.1 Concept definition.** Different meaning of core term (e.g., "employment" including or excluding unpaid family work).
+- **CC.2 Operationalization.** Different behavioral indicators for nominally the same concept (e.g., 12-item vs. single-question food insecurity measurement).
+- **CC.3 Boundary conditions.** Different thresholds or cutoffs (e.g., "full-time" defined as 35+ vs. 40+ hours).
+- **CC.4 Scope inclusions.** Different components counted (e.g., "income" including or excluding capital gains).
+
+### PC — Population/Coverage Constraints
+
+Based on @slomczynski2018 treatment of "methodological variability between survey projects" including sampling design.
+
+- **PC.1 Universe definition.** Target population differs (e.g., civilian noninstitutional vs. all residents).
+- **PC.2 Frame exclusions.** Different sampling frame exclusions (e.g., group quarters, territories).
+- **PC.3 Age bounds.** Different age eligibility (e.g., 15+ vs. 16+ vs. 18+).
+- **PC.4 Geographic scope.** Different geographic coverage (e.g., 50 states vs. 50 states plus territories).
+
+### RS — Response Scale Constraints
+
+Based on @saris2014 response scale quality dimensions.
+
+- **RS.1 Scale type.** Fundamentally different response formats (e.g., binary vs. 5-point Likert).
+- **RS.2 Category structure.** Different numbers or boundaries of categories within the same scale type.
+- **RS.3 Anchoring/labels.** Different verbal anchors or category labels.
+- **RS.4 Numeric vs. verbal.** Numeric scales vs. labeled categories (e.g., 0–10 slider vs. frequency labels).
+
+### MC — Mode/Context Constraints
+
+Based on @wolf2016 "questionnaire context differences."
+
+- **MC.1 Interview mode.** Different data collection modes (e.g., CATI vs. web self-administered).
+- **MC.2 Question routing.** Different skip patterns affect who answers and in what context.
+- **MC.3 Contextual priming.** Preceding questions affect interpretation.
+- **MC.4 Proxy response.** Different rules for proxy vs. self-report.
+
+### PM — Processing/Metadata Constraints
+
+Based on @oleksiyenko2018 identification of processing errors in cross-national surveys.
+
+- **PM.1 Coding schemes.** Different classification systems (e.g., SOC 2010 vs. SOC 2018).
+- **PM.2 Derived variables.** Different construction algorithms for composite measures.
+- **PM.3 Documentation gaps.** Insufficient metadata to assess comparability.
+
+## Coding Hierarchy
+
+When multiple barriers apply to a single pair, the primary barrier is assigned according to the following hierarchy, which reflects the degree to which each barrier type is fundamental vs. remediable:
+
+1. **CC** (Construct) — most fundamental; questions measure different things
+2. **TC** (Temporal) — affects what the measurement captures
+3. **RS** (Response Scale) — limits mechanical comparability
+4. **PC** (Population) — affects who is measured
+5. **MC** (Mode/Context) — introduces systematic measurement effects
+6. **PM** (Processing) — technical rather than conceptual
+
+All applicable barrier codes are documented in the analysis data; the hierarchy determines which code is reported as primary.
+
+## References
+
+All citations are listed in the report bibliography.
+The primary sources for this taxonomy are:
+
+- @wolf2016 — core barrier categories for question-level harmonization
+- @fortier2011 and @fortier2017 — DataSHaPER/Maelstrom compatibility framework and feasibility tiers
+- @saris2014 — response scale quality dimensions
+- @slomczynski2018 — ex-post harmonization methodology and population/sampling variability
+- @oleksiyenko2018 — processing error identification
+- @tomescudubrow2024 — comprehensive state-of-the-art reference

@@ -1,47 +1,23 @@
 # Limitations and Next Steps {#sec-limitations}
 
-## Current Limitations
+This analysis evaluates two survey pairs — CPS–ACS and FoodAPS–ACS — out of 46 possible pairings with ACS as anchor, and many more across the full 47-survey topology. The 164 CPS questions and 123 FoodAPS questions assessed here represent those with Census topic overlap with ACS. Of these, 154 questions (93 CPS, 61 FoodAPS) have viable harmonization paths, yielding rates of 56.7% and 49.6% respectively. The consistency of these rates across two different survey types is encouraging, but broader coverage is needed to confirm the pattern holds. The remaining survey pairs — including high-value connections like CPS–SIPP, NHIS–AHS, and cross-domain pairings between economic and social surveys — await similar assessment. The combinatorial scale is substantial: with 47 surveys, there are over 1,000 possible pairwise comparisons before considering multi-hop paths.
 
-### Scope
+The harmonization assessments are AI-generated using multi-model rating and arbitration. Post-arbitration agreement on feasibility ratings is high (κ = 0.843), but the results have not been validated against independent expert judgment. The methodology intentionally pre-filters easily harmonizable pairs (demographic basics like age, sex, citizenship) and routes only barrier cases through detailed coding, maximizing resource efficiency while maintaining assessment quality. Expert validation should focus on the 275 barrier-coded questions to confirm AI judgment aligns with domain expertise, particularly for questions rated at the F1/F2 boundary where statistical adjustment requirements are most sensitive to context.
 
-This analysis evaluates two survey pairs (CPS–ACS and FoodAPS–ACS) out of a possible 46 pairings with ACS alone — and many more across the full 47-survey topology. The stable harmonization rates across these two different survey types are encouraging, but broader coverage is needed to confirm the pattern holds.
+The current pairing strategy joins every source question with every ACS question sharing a Census subtopic classification. This simple approach ensures coverage but produces many unrelated pairs, inflating the pair-level denominator. More targeted matching — using semantic embeddings or concept similarity — could improve efficiency while maintaining recall. The question-level aggregation applied here mitigates this limitation by focusing on the stakeholder-relevant metric: how many source questions have at least one viable match, regardless of the total number of pairs generated.
 
-### AI Judgment vs. Expert Judgment
-
-The harmonization assessments are AI-generated. While multi-model agreement is high (κ = 0.843 post-arbitration) and the methodology includes systematic arbitration, the results have not been validated against independent expert judgment. The 93 questions routed to expert review represent the cases where AI confidence is lowest and human input is most needed.
-
-### Combinatorial Pairing
-
-The current approach pairs every source question with every ACS question sharing a subtopic. This produces many obviously unrelated pairs, inflating the denominator and depressing pair-level rates. More targeted pairing strategies — using semantic similarity or embedding-based matching — could improve efficiency while maintaining coverage.
-
-### ACS as Sole Anchor
-
-ACS is a natural anchor given its breadth, but it is not the only possible reference point. Some survey pairs (e.g., CPS–SIPP) may have stronger harmonization potential with each other than either has with ACS. The multi-hop analysis planned for Report 04 will address this.
-
-## Next Steps
-
-### Report 04: Multi-Survey Network Analysis
-
-The next phase extends from pairwise comparison to the full multi-survey network, discovering integration paths across all 47 Census demographic surveys — including multi-hop paths (Survey A → B → C) where direct harmonization is not possible but indirect linkage through intermediate surveys is.
-
-### Expert Validation
-
-The 93 questions flagged for expert review should be evaluated by subject-matter experts in relevant survey areas. This validation step both confirms the AI results and identifies any systematic biases in the automated assessment.
-
-### Enrichment Pilots
-
-The bridge variable inventory should be tested in practice: can analysts actually link survey data using the identified harmonizable questions, and does the linkage produce meaningful analytical gains?
-
-### Methodology Extension
-
-The methodology is designed to scale beyond Census Bureau surveys. The same approach can evaluate harmonization potential across the broader federal statistical system, identifying cross-agency integration opportunities.
+ACS serves as anchor given its comprehensive coverage of Census demographic topics, but it is not the only reference point. Some survey pairs may have stronger harmonization potential with each other than either has with ACS. Report 04 addresses this through multi-survey network analysis, discovering integration paths across the full topology including multi-hop connections where Survey A harmonizes with B, B with C, enabling indirect linkage. The total analysis cost for this proof of concept was under $100, demonstrating that AI-based feasibility assessment can operate at a scale infeasible for manual expert review. The methodology is designed to extend beyond Census Bureau surveys to the broader federal statistical system, enabling cross-agency integration assessment at negligible marginal cost per survey pair.
 
 <!--
 CHECKLIST (from NARRATIVE_CHECKLIST.md):
-- [x] No new numbers
-- [x] Honest about scope (2 pairs of 46+)
-- [x] AI vs expert judgment limitation
-- [x] Report 04 next steps
-- [x] Expert validation needed
-- [x] Extension path clear
+- [x] Continuous prose, no headers
+- [x] Corrected numbers (154 harmonizable = 93 CPS + 61 FoodAPS)
+- [x] Honest about scope (2 of 46+ possible pairings)
+- [x] AI vs expert judgment limitation (κ = 0.843)
+- [x] Combinatorial pairing limitation addressed
+- [x] ACS as sole anchor limitation
+- [x] Report 04 next steps (multi-survey network)
+- [x] Expert validation needed (275 barrier-coded questions)
+- [x] Extension path (scales beyond Census Bureau)
+- [x] Cost efficiency noted (< $100)
 -->

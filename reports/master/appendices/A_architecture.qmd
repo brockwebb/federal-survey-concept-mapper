@@ -1,50 +1,5 @@
 # Architecture and Data Flow {#sec-architecture .unnumbered}
 
-This appendix provides pipeline architecture diagrams for each stage of the analysis. No prose justification — the diagrams stand alone. For methodology details, see the companion [Methodology Document](../methodology/).
+Pipeline architecture diagrams for each analysis stage are in development. The analysis proceeds through five stages: topic classification, multi-model rating, arbitration, findings rollup, and deliverable generation. For methodology details, see the companion Methodology Document.
 
-## Stage 1: Topic Classification
-
-<!-- TODO: Insert classification pipeline diagram -->
-<!-- Input: 6,987 deduplicated questions → 2 LLM classifiers → topic/subtopic assignments → agreement analysis -->
-
-\vspace{2em}
-*Diagram: Classification pipeline — to be inserted*
-
-## Stage 2: Multi-Model Rating
-
-<!-- TODO: Insert rating pipeline diagram -->
-<!-- Input: 1,598 question pairs → 3 independent raters → barrier + feasibility codes → agreement metrics -->
-
-\vspace{2em}
-*Diagram: Rating pipeline — to be inserted*
-
-## Stage 3: Arbitration
-
-<!-- TODO: Insert arbitration pipeline diagram -->
-<!-- Input: Disagreement pairs → 3 independent arbitrators → final verdicts → quality gates -->
-
-\vspace{2em}
-*Diagram: Arbitration pipeline — to be inserted*
-
-## Stage 4: Findings Rollup
-
-<!-- TODO: Insert findings pipeline diagram -->
-<!-- Input: Final verdicts → pair-to-question collapse → triage scoring → expert review routing -->
-
-\vspace{2em}
-*Diagram: Findings rollup — to be inserted*
-
-## Stage 5: Deliverables
-
-<!-- TODO: Insert deliverables pipeline diagram -->
-<!-- Input: Question-level results → report generation → expert review tables → visualizations -->
-
-\vspace{2em}
-*Diagram: Deliverables pipeline — to be inserted*
-
-<!--
-NOTE: Existing Mermaid-based diagrams in output/report_03/visuals/ include:
-- architecture_pipeline.png
-- process_flow.png
-These may serve as starting points but should be reviewed for accuracy against current pipeline.
--->
+Diagrams will be added in a subsequent revision.

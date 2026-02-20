@@ -2,3 +2,6 @@ _output/
 .quarto/
 *.pdf
 *.html
+
+/.quarto/
+**/*.quarto_ipynb

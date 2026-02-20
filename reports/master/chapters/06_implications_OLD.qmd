@@ -1,0 +1,42 @@
+# Implications {#sec-implications}
+
+## Cross-Survey Enrichment
+
+The primary value of this research is not consolidation — it is enrichment. The ~170 harmonizable questions identified across CPS and FoodAPS represent bridge variables: connection points that enable analysts to link data across surveys, increasing the explanatory power of each survey without additional data collection.
+
+Consider a concrete example: if a CPS question about household income is harmonizable with an ACS question about the same construct, analysts can use that shared variable to bring ACS's detailed geographic and demographic data into a CPS analysis, or vice versa. The surveys remain independent collections, but their analytical value compounds through linkage.
+
+This framing matters for institutional adoption. Proposing to consolidate surveys triggers defensive responses — agencies protect their instruments. Proposing to enrich surveys through cross-linkage creates positive-sum outcomes: every agency gains analytical capability without losing any existing collection.
+
+## The Barrier Taxonomy as a Design Tool
+
+The ~55% of questions rated not harmonizable are not failures — they are precisely characterized. The barrier taxonomy tells survey managers exactly *why* two questions can't harmonize: different constructs, different reference periods, different response scales, different target populations.
+
+This diagnostic information has independent value for survey design. When a new survey is being developed, the barrier taxonomy provides a checklist: if you want this question to serve as a bridge variable with ACS, here are the specific design choices that will make that possible (or prevent it).
+
+## AI as Analytical Infrastructure
+
+The methodology demonstrates that multi-model AI systems can perform classification and evaluation tasks at a scale and speed that would be impractical for human analysts alone. The key design principles:
+
+- **Multi-vendor independence** prevents single-model bias
+- **Structured arbitration** resolves disagreements systematically
+- **Triage routing** preserves human judgment for genuinely ambiguous cases
+- **Full reproducibility** — all data, code, and prompts are public
+
+The total API cost for the entire analysis — classification, rating, and arbitration of ~7,000 questions — was under $100. The equivalent manual effort would represent months of skilled analyst time.
+
+## In-Sourcing Before Out-Sourcing
+
+As response rates decline and alternative data sources proliferate, the federal statistical system faces pressure to look outward for data. This research argues for looking inward first: the Census Bureau already collects enormous data across 47 demographic surveys. Before investing in new data sources, agencies should understand and exploit the connections between existing collections.
+
+The harmonization inventory produced by this research is a first step toward that understanding.
+
+<!--
+CHECKLIST (from NARRATIVE_CHECKLIST.md):
+- [x] ~170 bridge variables
+- [x] Enrichment > consolidation framing
+- [x] Barrier taxonomy as design tool
+- [x] AI methodology value prop
+- [x] In-sourcing message
+- [x] Cost: <$100 total
+-->

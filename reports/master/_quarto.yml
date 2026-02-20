@@ -20,6 +20,7 @@ book:
       chapters:
         - appendices/A_architecture.qmd
         - appendices/B_taxonomy.qmd
+        - appendices/C_tevv.qmd
 
 bibliography: references.bib
 csl: apa.csl
@@ -39,8 +40,6 @@ format:
     keep-tex: false
     include-in-header:
       text: |
-        \usepackage{fontspec}
-        \setmainfont{Source Sans Pro}
         \usepackage{booktabs}
   html:
     theme: cosmo

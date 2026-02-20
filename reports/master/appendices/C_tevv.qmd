@@ -1,0 +1,86 @@
+# TEVV Framework {#sec-tevv .unnumbered}
+
+This appendix presents the Test, Evaluation, Verification, and Validation (TEVV) evidence supporting the AI-assisted methodology used in this research.
+The report claims that multiple AI models can classify survey question pairs with sufficient reliability to guide expert review and inform harmonization decisions.
+This appendix provides the evidence for that claim — and states honestly where the evidence is established, where it is partial, and where it requires further validation.
+
+## Approach
+
+The TEVV framework maps the quality measures built into the analysis pipeline against the NIST AI Risk Management Framework (AI RMF 1.0) trustworthiness characteristics.
+This is not a compliance exercise — NIST AI RMF is a voluntary framework, and this research is not a deployed AI system.
+The crosswalk serves a different purpose: it demonstrates that the pipeline's quality measures address recognized dimensions of AI trustworthiness, and it identifies where gaps remain.
+
+The key insight from related work in AI-mediated federal statistical data consultation is that domain quality frameworks (in our case, the survey harmonization literature) and AI trustworthiness frameworks (NIST AI RMF) address overlapping but distinct concerns.
+Standard survey harmonization practice does not account for AI-specific failure modes such as fabricated harmonization paths or confidently asserted equivalence where none exists.
+Conversely, the NIST framework does not address domain-specific concerns like construct equivalence or reference period alignment.
+A complete evaluation requires both.
+
+## Crosswalk: Pipeline Quality Measures × NIST AI RMF {#tbl-tevv-crosswalk}
+
+@tbl-nist-crosswalk maps each pipeline quality measure to the NIST AI RMF characteristic it addresses, with the current evidence status.
+
+| Pipeline Quality Measure | What It Demonstrates | NIST AI RMF Characteristic | Evidence Status |
+|--------------------------|---------------------|---------------------------|----------------|
+| **Multi-vendor rater agreement** (3 independent models from different vendors classify each pair) | Independent replication: classifications are not artifacts of a single model's training data or biases | Valid & Reliable | ✅ Established. Cohen's κ and Fleiss' κ computed at rater stage. |
+| **Randomized presentation order** (question A/B order randomized for each rater) | Order invariance: results are not artifacts of presentation sequence | Valid & Reliable | ✅ Established. Randomization documented in pipeline. |
+| **Multi-vendor arbitration** (3 independent arbitrators from different vendors resolve disagreements) | Vendor independence at resolution stage: arbitration outcomes are not dominated by one vendor's behavior | Valid & Reliable; Accountable & Transparent | ✅ Established. Behavioral analysis shows distinct arbitrator patterns (synthesis rates, selection biases). |
+| **Structured arbitration protocol** (arbitrators see all three rater outputs, must select or synthesize, must provide reasoning) | Decision traceability: every arbitrated outcome has a documented rationale | Accountable & Transparent; Explainable & Interpretable | ✅ Established. All arbitration records include reasoning field. |
+| **Public code, prompts, and data** (full pipeline, all prompt templates, and all anonymized outputs are available) | Transparency and reproducibility: another researcher can inspect and replicate the entire analysis | Accountable & Transparent | ✅ Established. GitHub repository with complete pipeline. |
+| **Deterministic pipeline** (same inputs, same random seeds, same outputs) | Reproducibility: results are not artifacts of non-deterministic inference | Valid & Reliable | ✅ Established. Pipeline uses fixed seeds; checkpoint/resume architecture. |
+| **Human SME review** (domain experts review a sample of classified pairs to validate assignments) | Classification accuracy: the AI assigned the correct barrier codes and feasibility tiers | Valid & Reliable | ⬜ By design, not yet executed. SME review protocol defined below. |
+| **AI-specific failure mode awareness** (see @sec-ai-failure-mode) | Fabrication detection: the AI did not invent harmonization paths that do not exist | Valid & Reliable | ⚠️ Partially addressed. Multi-vendor agreement provides indirect evidence; direct validation requires SME review. |
+
+: Pipeline quality measures mapped to NIST AI RMF 1.0 trustworthiness characteristics. {#tbl-nist-crosswalk}
+
+### NIST Characteristics Not Applicable
+
+Three NIST AI RMF characteristics do not apply meaningfully to this research context:
+
+- **Safe.** This is an offline classification task on public survey metadata. There is no deployment context where misclassification creates physical safety risk. The relevant harm — misguided harmonization decisions — is addressed through the SME review gate before any operational use.
+- **Secure & Resilient.** The pipeline processes public metadata through commercial APIs. There are no adversarial attack surfaces relevant to the classification task itself. Standard API security practices apply but are not a research contribution.
+- **Privacy-Enhanced.** All input data is public survey questionnaire text. No personally identifiable information is processed at any stage.
+
+These are stated as not applicable rather than forced into the framework. The NIST AI RMF explicitly notes that not all characteristics apply to all AI systems.
+
+### Fair with Harmful Bias Managed
+
+The relevant bias concern in this context is epistemic rather than demographic: do the AI models systematically favor or disfavor certain barrier codes, feasibility tiers, or survey pairs?
+The behavioral analysis of arbitrator patterns (see @sec-results) provides direct evidence on this question.
+Different vendors exhibit measurably different synthesis rates and selection patterns, which is why multi-vendor design is a trustworthiness feature rather than a convenience.
+No single vendor's behavioral pattern determines the final classification.
+
+## The AI-Specific Failure Mode {#sec-ai-failure-mode}
+
+Standard survey harmonization quality frameworks address whether harmonization decisions are methodologically sound — correct construct mapping, appropriate statistical adjustments, defensible feasibility assessments.
+They do not address an AI-specific failure mode: **confident fabrication of harmonization paths that do not exist.**
+
+An AI model could, in principle, assert that two questions measure the same construct when they do not, or propose a statistical bridge where the underlying concepts are incommensurable.
+This is the "N/A cell" in the domain framework × NIST AI RMF crosswalk: the survey harmonization literature was not designed to address AI failure modes, and the absence of coverage is expected rather than a deficiency in those frameworks.
+
+Multi-vendor agreement mitigates this risk indirectly — independent fabrication of the same incorrect harmonization path by three different vendors is unlikely.
+But indirect mitigation is not validation.
+
+Direct validation of classification accuracy requires human domain experts who know these surveys to review a sample of classified pairs and confirm or reject the AI's assignments.
+This is why SME review is a design feature of the methodology, not an afterthought.
+The pipeline produces the candidate classifications and confidence-ranked expert review lists; human judgment determines whether those classifications are correct.
+
+## SME Review Protocol {#sec-sme-protocol}
+
+The following protocol is designed for the planned expert validation stage:
+
+**Sample selection.** Pairs are drawn from each triage quadrant to ensure coverage across the confidence spectrum. The two-axis triage framework (direction × stability) prioritizes review effort toward cases where it matters most: edge cases where models agree on direction but disagree on barrier specifics (high direction, low stability) and ambiguous cases where neither direction nor barrier assignment is clear (low direction, low stability). High-confidence pairs from both the consolidable and non-consolidable quadrants are also sampled to verify that AI confidence tracks accuracy.
+
+**Review format.** For each sampled pair, the expert sees the two question texts, the assigned barrier code and feasibility tier, and the reasoning provided by the model. The expert is asked: (1) Is the barrier code correct? (2) Is the feasibility tier correct? (3) If not, what is the correct classification and why?
+
+**Agreement metric.** Expert-AI agreement is computed per barrier code and feasibility tier. Systematic disagreement patterns (e.g., experts consistently upgrading F3 to F2 for a particular barrier type) are diagnostic and inform taxonomy refinement.
+
+**What constitutes success.** The methodology does not require perfect AI-expert agreement. It requires that AI classifications are sufficiently accurate to direct expert attention efficiently — that the triage system puts the right pairs in front of the right reviewers. Residual disagreement between AI and expert judgment is expected and informative.
+
+## Summary
+
+The pipeline provides strong evidence of process reliability: multiple independent models agree at measured rates, presentation order does not determine outcomes, arbitration follows a transparent protocol, and the entire analysis is reproducible and publicly inspectable.
+
+What the pipeline does not provide — by design — is direct evidence of classification accuracy.
+That evidence requires human expert review, which the methodology is designed to produce as a next step.
+This is not a gap; it is the boundary between what AI-assisted methods can establish autonomously (process quality) and what requires human domain expertise (outcome quality).
+The TEVV framework makes this boundary explicit.
