@@ -5,7 +5,7 @@ project:
 book:
   title: "AI-Assisted Federal Survey Harmonization"
   subtitle: "Cross-Survey Integration Analysis of 47 Census Bureau Demographic Surveys"
-  author: "Brock Webb"
+  #author: "Brock Webb"
   date: today
   chapters:
     - index.qmd
