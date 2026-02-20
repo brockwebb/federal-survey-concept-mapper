@@ -4,7 +4,7 @@
 
 - **`docs/NUMBERS_MAP.md`** — Single source of truth for every key number. Traces all metrics to their source files/JSON paths. ALWAYS check this before citing any number in reports or deliverables.
 - **`docs/SCRIPT_ARTIFACT_MAP.md`** — Maps every generated figure, table, and analysis output to the script that produces it and its input data.
-- **`reports/master/NARRATIVE_CHECKLIST.md`** — Lightweight V&V checklist for the master report. Every claim, its supporting number, and the source. Quick-check version of NUMBERS_MAP.
+- **`report/NARRATIVE_CHECKLIST.md`** — Lightweight V&V checklist for the master report. Every claim, its supporting number, and the source. Quick-check version of NUMBERS_MAP.
 
 ## Project Scope (DO NOT DEVIATE)
 
@@ -22,11 +22,11 @@
 4. Collapse pairs to question-level results: source questions with harmonization paths reported per survey (Ch 5). See NUMBERS_MAP for current rates.
 5. Expert validation and multi-hop enrichment discovery (Report 04, TBD)
 
-## Report Structure (post-restructure Feb 2026)
+## Deliverables and Working Materials (post-restructure Feb 2026)
 
+**Two deliverables at top level:**
 ```
-reports/
-├── master/                     # THE master report (Quarto book)
+├── report/                     # THE master report (Quarto book) — the only Quarto build target
 │   ├── _quarto.yml
 │   ├── index.qmd
 │   ├── NARRATIVE_CHECKLIST.md  # V&V checklist
@@ -42,12 +42,24 @@ reports/
 │       ├── A_architecture.qmd
 │       ├── B_taxonomy.qmd
 │       └── C_tevv.qmd
-├── tevv/                       # TEVV companion doc (skeleton)
-├── methodology/                # Methodology companion doc (skeleton)
-├── fact_sheet/                 # Approved fact sheet (stays as-is)
-└── 04_empirical_validation/    # Report 04 (TBD)
+└── fact_sheet/                 # Executive one-page fact sheet (approved deliverable)
 
-archive/research_notes/         # Former Reports 01, 02, 03
+**Working materials under stages/:**
+stages/
+├── 01_classification/          # Stage 1: Topic classification
+│   ├── notes/                  # Lab notebooks (former reports/01_llm_concept_mapping/)
+│   └── data/                   # Classification results (former output/report_01/)
+├── 02_overlap/                 # Stage 2: Question overlap analysis
+│   ├── notes/                  # Lab notebooks (former reports/02_question_consolidation/)
+│   └── data/                   # Pair generation results (former output/report_02/)
+├── 03_harmonization/           # Stage 3: Harmonization constraints
+│   ├── notes/                  # Lab notebooks (former reports/03_harmonization_constraints/)
+│   └── data/                   # Barrier analysis results (former output/report_03/)
+├── 04_enrichment/              # Stage 4: Cross-survey enrichment (planned)
+└── tevv/                       # TEVV documentation working materials
+
+**Archived content:**
+archive/research_notes/         # Historical lab notes from early development
 ├── 01_llm_concept_mapping/
 ├── 02_question_consolidation/
 └── 03_harmonization_constraints/
@@ -56,45 +68,45 @@ archive/research_notes/         # Former Reports 01, 02, 03
 ## Repository Layout
 
 ```
+├── report/                     # Master report (Quarto book) — the only Quarto build target
+├── fact_sheet/                 # Executive one-page fact sheet
+├── stages/                     # Pipeline working materials (see "Deliverables and Working Materials" above)
+│   ├── 01_classification/      # notes/ + data/ for Stage 1
+│   ├── 02_overlap/             # notes/ + data/ for Stage 2
+│   ├── 03_harmonization/       # notes/ + data/ for Stage 3
+│   ├── 04_enrichment/          # Stage 4 planning
+│   └── tevv/                   # TEVV working materials
 ├── data/
 │   ├── raw/                    # Input data (untouched)
 │   └── processed/              # Pipeline outputs (CSV, JSONL, embeddings)
 ├── src/
 │   ├── core/                   # Report 01/02 era scripts
-│   ├── pipelines/              # Report 03+ pipeline stages (01-05)
+│   ├── pipelines/              # Pipeline stages (01-05)
 │   ├── scripts/                # One-off analysis scripts
 │   ├── lib/                    # Shared utilities (io_utils, stats, taxonomy)
 │   ├── notebooks/              # Jupyter exploration notebooks
 │   └── report_02/              # Report 02 build scripts
-├── output/
-│   ├── report_01/              # Report 01 analysis artifacts
-│   ├── report_02/              # Report 02 analysis artifacts
-│   ├── report_03/              # Report 03 analysis artifacts
-│   │   ├── analysis/           # JSON, CSV analysis files
-│   │   ├── visuals/            # Generated figures
-│   │   └── ...
-│   └── report_04/              # Report 04 (TBD)
-├── reports/                    # ONLY publishable Quarto content
 ├── config/                     # Configuration files (report_03.yaml)
 ├── docs/                       # NUMBERS_MAP, SCRIPT_ARTIFACT_MAP
-├── archive/                    # Old/superseded artifacts + research notes
+├── archive/                    # Old/superseded artifacts + historical research notes
 ├── handoffs/                   # Session handoff documentation
 └── cc_tasks/                   # Claude Code task planning files
 ```
 
 ## Active Task Roadmap
 
-**File:** `reports/master/TASK_ROADMAP.md` — 31 tasks across 7 blocks, risk-prioritized.
+**File:** `report/TASK_ROADMAP.md` — 31 tasks across 7 blocks, risk-prioritized.
 
 Check TASK_ROADMAP.md for current status. Do NOT duplicate status here — that's how stale data happens.
 
 **Critical distinction:** Barrier taxonomy (classification scheme for results) ≠ TEVV (evidence the methodology is trustworthy). They connect at ONE point: SME review validates classification accuracy. Do not conflate.
 
 ## Key Principles
-- **Source vs Generated**: `src/` has code, `output/` has generated artifacts
+- **Source vs Generated**: `src/` has code, `stages/0X_*/data/` has generated artifacts
 - **One canonical location**: Each file type lives in exactly one place
-- **reports/ = publishable only**: No pipeline code, data, or scripts
-- **Figures via symlinks**: reports/ reference output/ figures via relative symlinks
+- **report/ = the only Quarto build target**: Build: `cd report && quarto render`
+- **Data lives with its stage**: Pipeline data under `stages/01_classification/data/`, `stages/02_overlap/data/`, `stages/03_harmonization/data/`
+- **Figures via symlinks**: report/ references stage data figures via relative symlinks
 - **All model names from config**: `config/report_03.yaml` — NEVER hardcode
 - **Numbers from NUMBERS_MAP**: Every metric traces to a source file
 

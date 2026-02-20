@@ -6,7 +6,7 @@ The harmonization assessments are AI-generated using multi-model rating and arbi
 
 The current pairing strategy joins every source question with every ACS question sharing a Census subtopic classification. This simple approach ensures coverage but produces many unrelated pairs, inflating the pair-level denominator. More targeted matching — using semantic embeddings or concept similarity — could improve efficiency while maintaining recall. The question-level aggregation applied here mitigates this limitation by focusing on the stakeholder-relevant metric: how many source questions have at least one viable match, regardless of the total number of pairs generated.
 
-ACS serves as anchor given its comprehensive coverage of Census demographic topics, but it is not the only reference point. Some survey pairs may have stronger harmonization potential with each other than either has with ACS. Report 04 addresses this through multi-survey network analysis, discovering integration paths across the full topology including multi-hop connections where Survey A harmonizes with B, B with C, enabling indirect linkage. The total analysis cost for this proof of concept was under $100, demonstrating that AI-based feasibility assessment can operate at a scale infeasible for manual expert review. The methodology is designed to extend beyond Census Bureau surveys to the broader federal statistical system, enabling cross-agency integration assessment at negligible marginal cost per survey pair.
+ACS serves as anchor given its comprehensive coverage of Census demographic topics, but it is not the only reference point. Some survey pairs may have stronger harmonization potential with each other than either has with ACS. Stage 4 addresses this through multi-survey network analysis, discovering integration paths across the full topology including multi-hop connections where Survey A harmonizes with B, B with C, enabling indirect linkage. The total analysis cost for this proof of concept was under $100, demonstrating that AI-based feasibility assessment can operate at a scale infeasible for manual expert review. The methodology is designed to extend beyond Census Bureau surveys to the broader federal statistical system, enabling cross-agency integration assessment at negligible marginal cost per survey pair.
 
 <!--
 CHECKLIST (from NARRATIVE_CHECKLIST.md):
@@ -16,7 +16,7 @@ CHECKLIST (from NARRATIVE_CHECKLIST.md):
 - [x] AI vs expert judgment limitation (κ = 0.843)
 - [x] Combinatorial pairing limitation addressed
 - [x] ACS as sole anchor limitation
-- [x] Report 04 next steps (multi-survey network)
+- [x] Stage 4 next steps (multi-survey network)
 - [x] Expert validation needed (275 barrier-coded questions)
 - [x] Extension path (scales beyond Census Bureau)
 - [x] Cost efficiency noted (< $100)
