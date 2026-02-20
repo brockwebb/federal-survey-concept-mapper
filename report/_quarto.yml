@@ -38,6 +38,8 @@ format:
       - margin=1in
     fig-pos: "htbp"
     keep-tex: false
+    linestretch: 1.25
+    mainfont: "Palatino"
     include-in-header:
       text: |
         \usepackage{booktabs}
