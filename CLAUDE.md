@@ -47,14 +47,14 @@
 **Working materials under stages/:**
 stages/
 ├── 01_classification/          # Stage 1: Topic classification
-│   ├── notes/                  # Lab notebooks (former reports/01_llm_concept_mapping/)
-│   └── data/                   # Classification results (former output/report_01/)
+│   ├── notes/                  # Lab notebooks
+│   └── data/                   # Classification results
 ├── 02_overlap/                 # Stage 2: Question overlap analysis
-│   ├── notes/                  # Lab notebooks (former reports/02_question_consolidation/)
-│   └── data/                   # Pair generation results (former output/report_02/)
+│   ├── notes/                  # Lab notebooks
+│   └── data/                   # Pair generation results
 ├── 03_harmonization/           # Stage 3: Harmonization constraints
-│   ├── notes/                  # Lab notebooks (former reports/03_harmonization_constraints/)
-│   └── data/                   # Barrier analysis results (former output/report_03/)
+│   ├── notes/                  # Lab notebooks
+│   └── data/                   # Barrier analysis results
 ├── 04_enrichment/              # Stage 4: Cross-survey enrichment (planned)
 └── tevv/                       # TEVV documentation working materials
 
