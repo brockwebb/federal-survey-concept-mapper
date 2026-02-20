@@ -1,13 +1,14 @@
 # Federal Survey Harmonization Research
 
-**Thesis**: The federal government already collects an enormous mosaic of survey data across the Census Bureau's demographic survey programs. AI-assisted harmonization analysis can reveal how to assemble that mosaic into a more complete picture — enabling cross-survey data enrichment without collecting a single additional data point — and can compress what traditionally takes months of expert review into weeks.
+The federal government already collects an enormous mosaic of survey data across the Census Bureau's demographic survey programs. AI-assisted harmonization analysis can reveal how to assemble that mosaic into a more complete picture — enabling cross-survey data enrichment without collecting a single additional data point — and can compress what traditionally takes months of expert review into weeks.
 
 ## Read This
 
-📄 **Master Report** — [`report/`](report/) — Classification of ~7,000 questions across 47 Census Bureau demographic surveys, overlap analysis, and detailed harmonization results for CPS–ACS and FoodAPS–ACS pairs.
-Build: `cd report && quarto render`
+📄 **[Master Report (PDF)](report/AI-Assisted-Federal-Survey-Harmonization.pdf)** — Classification of ~7,000 questions across 47 Census Bureau demographic surveys, overlap analysis, and harmonization results for CPS–ACS and FoodAPS–ACS pairs.
 
-📄 **Executive Fact Sheet** — [`fact_sheet/`](fact_sheet/) — One-page overview *(to be rendered: `cd fact_sheet && quarto render`)*
+📄 **[Executive Fact Sheet (PDF)](fact_sheet/fact_sheet.pdf)** — One-page overview.
+
+Report source: [`report/`](report/). Build: `cd report && quarto render`
 
 ## Key Results
 
@@ -38,35 +39,18 @@ The analysis progressed through three completed stages. The directories below co
 
 ```
 ├── report/                   # Master report (Quarto book)
-│   ├── chapters/             # Report chapters 1-7
-│   ├── appendices/           # Appendices A-C
-│   ├── _quarto.yml           # Quarto configuration
-│   └── references.bib        # Bibliography
 ├── fact_sheet/               # Executive one-page fact sheet
-├── docs/stages/
-│   ├── 01_classification/    # Stage 1: Topic classification
-│   │   ├── notes/            # Lab notebooks
-│   │   └── data/             # Classification results
-│   ├── 02_overlap/           # Stage 2: Question overlap analysis
-│   │   ├── notes/            # Lab notebooks
-│   │   └── data/             # Pair generation results
-│   ├── 03_harmonization/     # Stage 3: Harmonization constraints
-│   │   ├── notes/            # Lab notebooks
-│   │   └── data/             # Barrier analysis results
-│   ├── 04_enrichment/        # Stage 4: Cross-survey enrichment (planned)
-│   └── tevv/                 # TEVV documentation working materials
-├── src/
-│   ├── pipelines/            # Stage 3 pipeline code (stages 1-5)
-│   ├── scripts/              # Analysis and visualization scripts
-│   ├── lib/                  # Shared utilities
-│   └── notebooks/            # Jupyter exploration notebooks
-├── data/
-│   ├── raw/                  # Original survey question CSVs
-│   └── processed/            # Cleaned, paired data
-├── config/                   # Pipeline configurations
-├── docs/                     # Documentation, methodology notes
-├── archive/                  # Historical artifacts, old PDFs
-└── requirements.txt          # Python dependencies
+├── docs/
+│   └── stages/               # Pipeline working materials
+│       ├── 01_classification/
+│       ├── 02_overlap/
+│       ├── 03_harmonization/
+│       ├── 04_enrichment/
+│       └── tevv/
+├── src/                      # Analysis code
+├── data/                     # Source data
+├── config/                   # Configuration files
+└── archive/                  # Historical artifacts
 ```
 
 ## Data

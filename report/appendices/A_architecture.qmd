@@ -1,5 +1,5 @@
 # Architecture and Data Flow {#sec-architecture .unnumbered}
 
-Pipeline architecture diagrams for each analysis stage are in development. The analysis proceeds through five stages: topic classification, multi-model rating, arbitration, findings rollup, and deliverable generation. For methodology details, see the companion Methodology Document.
+Pipeline architecture diagrams for each analysis stage are in development. The analysis proceeds through five stages: topic classification, multi-model rating, arbitration, findings rollup, and deliverable generation.
 
 Diagrams will be added in a subsequent revision.
