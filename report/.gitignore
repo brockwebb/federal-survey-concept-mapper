@@ -3,5 +3,8 @@ _output/
 *.pdf
 *.html
 
+# Exception: track the built report PDF at report root for README linking
+!AI-Assisted-Federal-Survey-Harmonization.pdf
+
 /.quarto/
 **/*.quarto_ipynb
