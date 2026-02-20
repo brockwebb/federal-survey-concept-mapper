@@ -54,7 +54,7 @@ The methodology extends naturally to surveys across the broader federal statisti
 
 ## What's next?
 
-**Report 04** moves from pairwise comparisons to the full multi-survey network, discovering multi-hop integration paths (Survey A to B to C) across all 47 Census demographic surveys.
+**Stage 4** moves from pairwise comparisons to the full multi-survey network, discovering multi-hop integration paths (Survey A to B to C) across all 47 Census demographic surveys.
 
 \vspace{0.5em}
 \noindent\rule{\textwidth}{0.4pt}
