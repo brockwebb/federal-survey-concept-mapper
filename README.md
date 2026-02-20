@@ -15,7 +15,7 @@ The analysis identified 154 harmonizable questions (93 from CPS, 61 from FoodAPS
 
 ## Companion Documents
 
-- **TEVV Report** *(planned)* — Test, Evaluation, Verification & Validation documentation mapping pipeline measures to NIST AI RMF 1.0 trustworthiness characteristics. Includes a novel crosswalk between FCSM 20-04 and NIST AI RMF 1.0 — no published crosswalk between these frameworks currently exists. Working materials: [`stages/tevv/`](stages/tevv/)
+- **TEVV Report** *(planned)* — Test, Evaluation, Verification & Validation documentation mapping pipeline measures to NIST AI RMF 1.0 trustworthiness characteristics. Includes a novel crosswalk between FCSM 20-04 and NIST AI RMF 1.0 — no published crosswalk between these frameworks currently exists. Working materials: [`docs/stages/tevv/`](docs/stages/tevv/)
 - **Barrier Taxonomy** — [`report/appendices/B_taxonomy.qmd`](report/appendices/B_taxonomy.qmd) — Barrier codes (CC, TC, RS, PC, MC, PM) and feasibility tiers (F1/F2/F3)
 
 ## Pipeline Working Directories
@@ -24,14 +24,14 @@ The analysis progressed through three completed stages. The directories below co
 
 | Directory | Contents |
 |-----------|----------|
-| `stages/01_classification/notes/` | Topic classification lab notes |
-| `stages/01_classification/data/` | Classification data artifacts (CSV, JSON) |
-| `stages/02_overlap/notes/` | Overlap analysis lab notes |
-| `stages/02_overlap/data/` | Pair generation data artifacts |
-| `stages/03_harmonization/notes/` | Barrier analysis lab notes |
-| `stages/03_harmonization/data/` | Barrier results, arbitration, analysis JSONs |
-| `stages/04_enrichment/` | Stage 4 planning (cross-survey enrichment discovery) |
-| `stages/tevv/` | TEVV working materials |
+| `docs/stages/01_classification/notes/` | Topic classification lab notes |
+| `docs/stages/01_classification/data/` | Classification data artifacts (CSV, JSON) |
+| `docs/stages/02_overlap/notes/` | Overlap analysis lab notes |
+| `docs/stages/02_overlap/data/` | Pair generation data artifacts |
+| `docs/stages/03_harmonization/notes/` | Barrier analysis lab notes |
+| `docs/stages/03_harmonization/data/` | Barrier results, arbitration, analysis JSONs |
+| `docs/stages/04_enrichment/` | Stage 4 planning (cross-survey enrichment discovery) |
+| `docs/stages/tevv/` | TEVV working materials |
 | `src/pipelines/` | Pipeline code |
 
 ## Repository Structure
@@ -43,7 +43,7 @@ The analysis progressed through three completed stages. The directories below co
 │   ├── _quarto.yml           # Quarto configuration
 │   └── references.bib        # Bibliography
 ├── fact_sheet/               # Executive one-page fact sheet
-├── stages/
+├── docs/stages/
 │   ├── 01_classification/    # Stage 1: Topic classification
 │   │   ├── notes/            # Lab notebooks
 │   │   └── data/             # Classification results

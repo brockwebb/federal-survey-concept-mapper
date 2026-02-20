@@ -44,8 +44,8 @@
 │       └── C_tevv.qmd
 └── fact_sheet/                 # Executive one-page fact sheet (approved deliverable)
 
-**Working materials under stages/:**
-stages/
+**Working materials under docs/stages/:**
+docs/stages/
 ├── 01_classification/          # Stage 1: Topic classification
 │   ├── notes/                  # Lab notebooks
 │   └── data/                   # Classification results
@@ -70,12 +70,16 @@ archive/research_notes/         # Historical lab notes from early development
 ```
 ├── report/                     # Master report (Quarto book) — the only Quarto build target
 ├── fact_sheet/                 # Executive one-page fact sheet
-├── stages/                     # Pipeline working materials (see "Deliverables and Working Materials" above)
-│   ├── 01_classification/      # notes/ + data/ for Stage 1
-│   ├── 02_overlap/             # notes/ + data/ for Stage 2
-│   ├── 03_harmonization/       # notes/ + data/ for Stage 3
-│   ├── 04_enrichment/          # Stage 4 planning
-│   └── tevv/                   # TEVV working materials
+├── docs/
+│   ├── stages/                 # Pipeline working materials (see "Deliverables and Working Materials" above)
+│   │   ├── 01_classification/  # notes/ + data/ for Stage 1
+│   │   ├── 02_overlap/         # notes/ + data/ for Stage 2
+│   │   ├── 03_harmonization/   # notes/ + data/ for Stage 3
+│   │   ├── 04_enrichment/      # Stage 4 planning
+│   │   └── tevv/               # TEVV working materials
+│   ├── NUMBERS_MAP.md
+│   ├── SCRIPT_ARTIFACT_MAP.md
+│   └── ...other project docs...
 ├── data/
 │   ├── raw/                    # Input data (untouched)
 │   └── processed/              # Pipeline outputs (CSV, JSONL, embeddings)
@@ -102,10 +106,10 @@ Check TASK_ROADMAP.md for current status. Do NOT duplicate status here — that'
 **Critical distinction:** Barrier taxonomy (classification scheme for results) ≠ TEVV (evidence the methodology is trustworthy). They connect at ONE point: SME review validates classification accuracy. Do not conflate.
 
 ## Key Principles
-- **Source vs Generated**: `src/` has code, `stages/0X_*/data/` has generated artifacts
+- **Source vs Generated**: `src/` has code, `docs/stages/0X_*/data/` has generated artifacts
 - **One canonical location**: Each file type lives in exactly one place
 - **report/ = the only Quarto build target**: Build: `cd report && quarto render`
-- **Data lives with its stage**: Pipeline data under `stages/01_classification/data/`, `stages/02_overlap/data/`, `stages/03_harmonization/data/`
+- **Data lives with its stage**: Pipeline data under `docs/stages/01_classification/data/`, `docs/stages/02_overlap/data/`, `docs/stages/03_harmonization/data/`
 - **Figures via symlinks**: report/ references stage data figures via relative symlinks
 - **All model names from config**: `config/report_03.yaml` — NEVER hardcode
 - **Numbers from NUMBERS_MAP**: Every metric traces to a source file
