@@ -94,8 +94,8 @@
 | ACS bridge targets | ⚠️ **51 of 115** (44.3%) | `stage4_question_best_matches.csv` joined via q_id through `stage4_question_level.csv` — corrected 2026-02-28 from 50 (mixed methodology) |
 | Three-way bridge variables | **17** ACS questions serve both CPS and FoodAPS | same |
 | Fan-in ratio | **2.78** source questions per ACS target | 142/51 — corrected 2026-02-28 from 2.84 |
-| Expert review load reduced | ~76% auto-processed | `stage4_survey_summary.json` triage data — **needs revalidation against corrected counts** |
-| Questions flagged for expert review | 93 | same — **needs revalidation** |
+| Expert review load reduced | **80% auto-processed** (220/275) | `stage4_question_best_matches.csv` triage quadrants — Q1=124 auto-accept, Q2=96 auto-reject, corrected 2026-02-28 |
+| Questions flagged for expert review | **55** (Q3=15, Q4=40) | same — corrected 2026-02-28 from 93 (inflated) |
 
 **Narrative goal:** Cross-survey enrichment > consolidation. In-sourcing value. AI handles breadth, humans judge edges.
 
@@ -127,4 +127,4 @@ Feasibility codes (F1, F2, F3) with definitions.
 3. ~~**Pair-level barrier %s:**~~ ✅ Resolved — `barrier_summary_by_survey.csv` uses **all pairs per survey** as denominator (CPS=1,030, FoodAPS=568), giving CC=85.1%/88.9%. Report 03 exec summary used F3-only denominator (giving 96.5%). Master report Ch 5 uses the per-survey all-pairs framing from the CSV. Both are correct; different denominators. **Pair-level numbers are NOT affected by the inflation correction.**
 4. **Report 01 classification models** (GPT-5-mini, Claude Haiku 4.5) vs **Report 03 rater models** (gpt-5-mini, claude-haiku-4-5-20251001, gemini-3-flash-preview). These are different stages with different model versions — don't conflate. Master report handles this correctly (Ch 2 vs Ch 4).
 5. **⚠️ INFLATION CORRECTION (2026-02-27):** `stage4_question_level.csv` assigns separate IDs per question-subtopic-pairing context, inflating unique question counts. All question-level numbers in chapters 3-6 currently cite inflated values and need updating. Corrected source of truth: `docs/validation/question_counts.json`. Complete trace: `docs/validation/number_flow.md`. See `docs/NUMBERS_MAP.md` Step 4, Step 7, Step 7b.
-6. **Expert review load (76%, 93 questions):** These numbers derived from inflated counts and need revalidation against corrected question totals.
+6. ~~**Expert review load (76%, 93 questions):**~~ ✅ Resolved 2026-02-28 → **80% auto-processed (220/275), 55 questions for expert review (Q3=15, Q4=40).** Triage computed from corrected `stage4_question_best_matches.csv`.

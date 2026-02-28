@@ -15,7 +15,7 @@ from pathlib import Path
 SRC_DIR = Path(__file__).resolve().parent.parent    # .../src/
 REPO_ROOT = SRC_DIR.parent                           # repo root
 sys.path.insert(0, str(SRC_DIR))                     # enables lib imports
-DATA_FILE = REPO_ROOT / "output/report_03/analysis/final_verdicts.csv"
+DATA_FILE = REPO_ROOT / "docs/stages/03_harmonization/data/analysis/final_verdicts.csv"
 OUTPUT_FILE = REPO_ROOT / "output/report_03/visuals/harmonization_distribution.png"
 
 def load_data():

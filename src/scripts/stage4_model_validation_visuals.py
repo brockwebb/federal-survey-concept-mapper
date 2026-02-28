@@ -28,10 +28,10 @@ from pathlib import Path
 SRC_DIR = Path(__file__).resolve().parent.parent    # .../src/
 REPO_ROOT = SRC_DIR.parent                           # repo root
 sys.path.insert(0, str(SRC_DIR))                     # enables lib imports
-STAGE2_METRICS = REPO_ROOT / "output/report_03/analysis/stage2_agreement_metrics.json"
-STAGE3_METRICS = REPO_ROOT / "output/report_03/analysis/stage3_arbitration_metrics.json"
+STAGE2_METRICS = REPO_ROOT / "docs/stages/03_harmonization/data/analysis/stage2_agreement_metrics.json"
+STAGE3_METRICS = REPO_ROOT / "docs/stages/03_harmonization/data/analysis/stage3_arbitration_metrics.json"
 OUTPUT_IMAGES = REPO_ROOT / "output/report_03/visuals"
-OUTPUT_ANALYSIS = REPO_ROOT / "output/report_03/analysis"
+OUTPUT_ANALYSIS = REPO_ROOT / "docs/stages/03_harmonization/data/analysis"
 
 # Model display names — loaded from config/report_03.yaml
 # NEVER hardcode model names. They drift across sessions.
