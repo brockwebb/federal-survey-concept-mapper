@@ -4,6 +4,9 @@
 
 - **`docs/NUMBERS_MAP.md`** — Single source of truth for every key number. Traces all metrics to their source files/JSON paths. ALWAYS check this before citing any number in reports or deliverables.
 - **`docs/SCRIPT_ARTIFACT_MAP.md`** — Maps every generated figure, table, and analysis output to the script that produces it and its input data.
+- **`docs/FIGURE_MAP.md`** — Master report figure traceability: script, input data, output file, chapter reference, and style convention for every figure and architecture diagram.
+- **`docs/validation/question_counts.json`** — Validated question counts per instrument and survey program, computed from raw data. All figure scripts read from this file, not hardcoded values.
+- **`src/validation/validate_complete.py`** — Complete validation suite (~80 checks). Run after ANY number change. Validates raw data, pairing chain, rating metrics, dedup, ACS-side, round-trip traces, arithmetic, and cross-document consistency. Exit 0=pass, 1=fail, 2=warn.
 - **`report/NARRATIVE_CHECKLIST.md`** — Lightweight V&V checklist for the master report. Every claim, its supporting number, and the source. Quick-check version of NUMBERS_MAP.
 
 ## Project Scope (DO NOT DEVIATE)
@@ -125,3 +128,13 @@ Check TASK_ROADMAP.md for current status. Do NOT duplicate status here — that'
 - `src/lib/io_utils.py` — File I/O helpers
 - `src/lib/stats.py` — Statistical functions (kappa, agreement)
 - `src/lib/taxonomy.py` — Barrier taxonomy definitions
+
+## Figure Style Convention
+- **Style source**: `assets/census_plot_style.py` (symlink → `central_library/style/census_plot_style.py`)
+- **Import**: `from census_plot_style import COLORS, paper_theme, save_figure`
+- **Palette**: U.S. Census Bureau xdgov Data Design Standards, Section 508 compliant
+- **Output**: PDF at 300 DPI, 6.5in max width (letter paper with 1in margins)
+- **Theme**: `paper_theme()` — serif font, minimal grid, bottom legend
+- **Writing conventions**: Follow `central_library/crosswalks/fcsm_nist/WRITING_CONVENTIONS.md`
+- **No bold in prose, no em dashes, no "novel," no throat-clearing, no self-congratulation**
+- Figure scripts go in `src/figures/`, outputs go in `report/figures/`

@@ -12,7 +12,7 @@ Report source: [`report/`](report/). Build: `cd report && quarto render`
 
 ## Key Results
 
-The analysis identified 154 harmonizable questions (93 from CPS, 61 from FoodAPS) as candidate bridge variables for cross-survey data enrichment with ACS. Topic-level classification achieved Cohen's κ = 0.84; post-arbitration harmonization agreement reached κ = 0.843. A barrier taxonomy characterizes why the remaining questions cannot harmonize, creating a diagnostic tool for future survey design. Total API cost across all analysis stages was under $100.
+The analysis identified 142 harmonizable questions (86 from CPS, 56 from FoodAPS) as candidate bridge variables for cross-survey data enrichment with ACS, mapping to 51 of 115 ACS questions (44.3%) as bridge targets. Topic-level classification achieved Cohen's κ = 0.84; post-arbitration harmonization agreement reached κ = 0.843. A barrier taxonomy characterizes why the remaining questions cannot harmonize, creating a diagnostic tool for future survey design. Total API cost across all analysis stages was under $100.
 
 ## Companion Documents
 

@@ -1,0 +1,84 @@
+{
+  "metadata": {
+    "source_files": [
+      "data/raw/PublicSurveyQuestionsMap.csv",
+      "docs/stages/03_harmonization/data/analysis/stage4_question_level.csv"
+    ],
+    "generated": "2026-02-28T00:42:44.562462",
+    "script": "src/validation/validate_question_counts.py",
+    "note": "Initial validation run. Validation script should be rerun to regenerate."
+  },
+  "raw_data": {
+    "total_deduplicated_questions": 6987,
+    "total_instrument_columns": 47,
+    "questions_on_1_survey": 6910,
+    "questions_on_2plus_surveys": 1,
+    "literal_question_sharing": {
+      "ACS_CPS": 0,
+      "ACS_FoodAPS": 0,
+      "CPS_FoodAPS": 0
+    }
+  },
+  "acs_family_counts": {
+    "ACS": 115,
+    "CPS": 211,
+    "FoodAPS": 462,
+    "SIPP": 1218,
+    "AHS": 744,
+    "CE": 1106
+  },
+  "pairing_stage": {
+    "CPS": {
+      "raw_survey_questions": 211,
+      "inflated_entering_pairing": 240,
+      "unique_entering_pairing": 157,
+      "pct_of_survey": 74.4,
+      "not_paired_reason": "question subtopics with no ACS coverage"
+    },
+    "FoodAPS": {
+      "raw_survey_questions": 462,
+      "inflated_entering_pairing": 140,
+      "unique_entering_pairing": 118,
+      "pct_of_survey": 25.5,
+      "not_paired_reason": "question subtopics with no ACS coverage"
+    }
+  },
+  "question_level_results": {
+    "CPS": {
+      "unique_questions": 157,
+      "inflated_count": 240,
+      "inflation_cause": "dual-subtopic classification assigns multiple IDs to same question text",
+      "F1": 32,
+      "F2": 54,
+      "F3": 71,
+      "consolidable": 86,
+      "rate": 54.8
+    },
+    "FoodAPS": {
+      "unique_questions": 118,
+      "inflated_count": 140,
+      "inflation_cause": "dual-subtopic classification assigns multiple IDs to same question text",
+      "F1": 19,
+      "F2": 37,
+      "F3": 62,
+      "consolidable": 56,
+      "rate": 47.5
+    },
+    "note": "Corrected counts collapse duplicate question texts to single entries, taking best feasibility across all subtopic-pairings"
+  },
+  "known_issues": {
+    "inflation_source": "stage4_question_level.csv assigns separate IDs per subtopic-pairing context, not per unique question",
+    "numbers_map_corrected": "2026-02-27 — NUMBERS_MAP.md updated with all corrected values, inflation warning added",
+    "narrative_checklist_corrected": "2026-02-27 — NARRATIVE_CHECKLIST.md updated, stale values flagged",
+    "readme_corrected": "2026-02-27 — README.md Key Results updated (was 154/93/61, now 142/86/56)",
+    "still_needs_correction": [
+      "report/chapters/03_survey_overlap.qmd — still cites 380/240/140",
+      "report/chapters/05_results.qmd — still cites inflated rates",
+      "report/chapters/06_implications.qmd — still cites inflated rates and counts",
+      "src/figures/fig03_paired_topic_composition.py — reads from inflated source data",
+      "stage4_topic_breakdown.csv — inflated, needs dedup for subtopic breakdowns",
+      "Expert review load (76%, 93 questions) — needs revalidation",
+      "fact_sheet.pdf — may cite stale numbers, no .qmd source found"
+    ]
+  }
+}

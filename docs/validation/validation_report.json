@@ -1,0 +1,716 @@
+{
+  "metadata": {
+    "generated": "2026-02-28T06:01:28.176299",
+    "script": "src/validation/validate_complete.py",
+    "repo_root": "/Users/brock/Documents/GitHub/federal-survey-concept-mapper"
+  },
+  "summary": {
+    "total": 113,
+    "pass": 113,
+    "fail": 0,
+    "warn": 0,
+    "skip": 0,
+    "verdict": "PASS"
+  },
+  "checks": [
+    {
+      "name": "file_exists_raw_csv",
+      "status": "PASS",
+      "message": "raw_csv: found at data/raw/PublicSurveyQuestionsMap.csv",
+      "details": {}
+    },
+    {
+      "name": "raw_row_count",
+      "status": "PASS",
+      "message": "Raw CSV row count: 6987 (expected 6987)",
+      "details": {
+        "actual": 6987,
+        "expected": 6987
+      }
+    },
+    {
+      "name": "raw_col_count",
+      "status": "PASS",
+      "message": "Survey instrument columns: 47 (expected 47)",
+      "details": {
+        "actual": 47,
+        "expected": 47
+      }
+    },
+    {
+      "name": "acs_raw_count",
+      "status": "PASS",
+      "message": "ACS raw questions: 115 (expected 115)",
+      "details": {}
+    },
+    {
+      "name": "cps_raw_count",
+      "status": "PASS",
+      "message": "CPS raw questions: 211 (expected 211)",
+      "details": {}
+    },
+    {
+      "name": "foodaps_raw_count",
+      "status": "PASS",
+      "message": "FoodAPS raw questions: 462 (expected 462)",
+      "details": {}
+    },
+    {
+      "name": "literal_sharing_acs_cps",
+      "status": "PASS",
+      "message": "ACS-CPS literal sharing: 0 (expected 0)",
+      "details": {}
+    },
+    {
+      "name": "literal_sharing_acs_food",
+      "status": "PASS",
+      "message": "ACS-FoodAPS literal sharing: 0 (expected 0)",
+      "details": {}
+    },
+    {
+      "name": "literal_sharing_cps_food",
+      "status": "PASS",
+      "message": "CPS-FoodAPS literal sharing: 0 (expected 0)",
+      "details": {}
+    },
+    {
+      "name": "file_exists_cps_pairs",
+      "status": "PASS",
+      "message": "cps_pairs: found at docs/stages/02_overlap/data/question_matching/cps/cps_candidate_pairs_all.csv",
+      "details": {}
+    },
+    {
+      "name": "file_exists_foodaps_pairs",
+      "status": "PASS",
+      "message": "foodaps_pairs: found at docs/stages/02_overlap/data/question_matching/foodaps/foodaps_candidate_pairs_all.csv",
+      "details": {}
+    },
+    {
+      "name": "file_exists_final_verdicts",
+      "status": "PASS",
+      "message": "final_verdicts: found at docs/stages/03_harmonization/data/analysis/final_verdicts.csv",
+      "details": {}
+    },
+    {
+      "name": "file_exists_question_level",
+      "status": "PASS",
+      "message": "question_level: found at docs/stages/03_harmonization/data/analysis/stage4_question_level.csv",
+      "details": {}
+    },
+    {
+      "name": "cps_pair_count_gte",
+      "status": "PASS",
+      "message": "CPS candidate pairs: 1092 (expected >= 1030, rated=1030)",
+      "details": {}
+    },
+    {
+      "name": "foodaps_pair_count_gte",
+      "status": "PASS",
+      "message": "FoodAPS candidate pairs: 610 (expected >= 568, rated=568)",
+      "details": {}
+    },
+    {
+      "name": "total_pair_count_gte",
+      "status": "PASS",
+      "message": "Total candidate pairs: 1702 (expected >= 1598, rated=1598)",
+      "details": {}
+    },
+    {
+      "name": "pair_ids_no_overlap",
+      "status": "PASS",
+      "message": "Pair ID overlap: 0 (expected 0)",
+      "details": {}
+    },
+    {
+      "name": "cps_unique_qids_in_pairs",
+      "status": "PASS",
+      "message": "CPS unique q_ids in pairs: 250",
+      "details": {
+        "value": 250
+      }
+    },
+    {
+      "name": "food_unique_qids_in_pairs",
+      "status": "PASS",
+      "message": "FoodAPS unique q_ids in pairs: 150",
+      "details": {
+        "value": 150
+      }
+    },
+    {
+      "name": "cps_acs_in_pairs",
+      "status": "PASS",
+      "message": "Unique ACS q_ids in CPS pairs: 76",
+      "details": {}
+    },
+    {
+      "name": "food_acs_in_pairs",
+      "status": "PASS",
+      "message": "Unique ACS q_ids in FoodAPS pairs: 86",
+      "details": {}
+    },
+    {
+      "name": "verdicts_count",
+      "status": "PASS",
+      "message": "Final verdicts: 1598 (expected 1598)",
+      "details": {}
+    },
+    {
+      "name": "verdicts_subset_of_candidates",
+      "status": "PASS",
+      "message": "All verdict IDs found in candidate pairs: True (0 orphan verdicts)",
+      "details": {
+        "in_verdicts_not_candidates": 0,
+        "candidates_not_rated": 104
+      }
+    },
+    {
+      "name": "verdict_survey_split",
+      "status": "PASS",
+      "message": "Verdict survey split: CPS=1030, FoodAPS=568",
+      "details": {}
+    },
+    {
+      "name": "valid_feasibility_codes",
+      "status": "PASS",
+      "message": "Feasibility codes: {'F1', 'F2', 'F3'} (expected subset of {'F1', 'F2', 'F3'})",
+      "details": {}
+    },
+    {
+      "name": "pair_feas_sum_cps",
+      "status": "PASS",
+      "message": "CPS pair feasibility sum: 47+154+829=1030 (expected 1030)",
+      "details": {}
+    },
+    {
+      "name": "pair_feas_sum_food",
+      "status": "PASS",
+      "message": "FoodAPS pair feasibility sum: 27+90+451=568 (expected 568)",
+      "details": {}
+    },
+    {
+      "name": "pair_rate_cps",
+      "status": "PASS",
+      "message": "CPS pair-level consolidation rate: 19.5% (expected ~19.5%)",
+      "details": {}
+    },
+    {
+      "name": "pair_rate_food",
+      "status": "PASS",
+      "message": "FoodAPS pair-level consolidation rate: 20.6% (expected ~20.6%)",
+      "details": {}
+    },
+    {
+      "name": "file_exists_stage2_metrics",
+      "status": "PASS",
+      "message": "stage2_metrics: found at docs/stages/03_harmonization/data/analysis/stage2_agreement_metrics.json",
+      "details": {}
+    },
+    {
+      "name": "file_exists_stage3_metrics",
+      "status": "PASS",
+      "message": "stage3_metrics: found at docs/stages/03_harmonization/data/analysis/stage3_arbitration_metrics.json",
+      "details": {}
+    },
+    {
+      "name": "s2_total_pairs",
+      "status": "PASS",
+      "message": "Stage 2 total pairs: 1598 (expected 1598)",
+      "details": {}
+    },
+    {
+      "name": "s2_fleiss_feasibility",
+      "status": "PASS",
+      "message": "Stage 2 Fleiss' kappa (feasibility): 0.537 (expected 0.537)",
+      "details": {}
+    },
+    {
+      "name": "s2_fleiss_l1",
+      "status": "PASS",
+      "message": "Stage 2 Fleiss' kappa (L1): 0.611 (expected 0.611)",
+      "details": {}
+    },
+    {
+      "name": "s3_two_way_n",
+      "status": "PASS",
+      "message": "Stage 3 two-way N: 1598 (expected 1598)",
+      "details": {}
+    },
+    {
+      "name": "s3_cohen_feasibility",
+      "status": "PASS",
+      "message": "Stage 3 Cohen's kappa (feasibility, 2-way): 0.843 (expected 0.843)",
+      "details": {}
+    },
+    {
+      "name": "s3_cohen_binary",
+      "status": "PASS",
+      "message": "Stage 3 Cohen's kappa (binary, 2-way): 0.896 (expected 0.896)",
+      "details": {}
+    },
+    {
+      "name": "ql_inflated_cps",
+      "status": "PASS",
+      "message": "stage4_question_level.csv CPS rows (inflated): 240 (expected 240)",
+      "details": {}
+    },
+    {
+      "name": "ql_inflated_foodaps",
+      "status": "PASS",
+      "message": "stage4_question_level.csv FoodAPS rows (inflated): 140 (expected 140)",
+      "details": {}
+    },
+    {
+      "name": "dedup_CPS_unique",
+      "status": "PASS",
+      "message": "CPS unique questions: 157 (expected 157)",
+      "details": {}
+    },
+    {
+      "name": "dedup_CPS_F1",
+      "status": "PASS",
+      "message": "CPS F1: 32 (expected 32)",
+      "details": {}
+    },
+    {
+      "name": "dedup_CPS_F2",
+      "status": "PASS",
+      "message": "CPS F2: 54 (expected 54)",
+      "details": {}
+    },
+    {
+      "name": "dedup_CPS_F3",
+      "status": "PASS",
+      "message": "CPS F3: 71 (expected 71)",
+      "details": {}
+    },
+    {
+      "name": "dedup_FoodAPS_unique",
+      "status": "PASS",
+      "message": "FoodAPS unique questions: 118 (expected 118)",
+      "details": {}
+    },
+    {
+      "name": "dedup_FoodAPS_F1",
+      "status": "PASS",
+      "message": "FoodAPS F1: 19 (expected 19)",
+      "details": {}
+    },
+    {
+      "name": "dedup_FoodAPS_F2",
+      "status": "PASS",
+      "message": "FoodAPS F2: 37 (expected 37)",
+      "details": {}
+    },
+    {
+      "name": "dedup_FoodAPS_F3",
+      "status": "PASS",
+      "message": "FoodAPS F3: 62 (expected 62)",
+      "details": {}
+    },
+    {
+      "name": "arithmetic_CPS_sum",
+      "status": "PASS",
+      "message": "CPS: F1+F2+F3 = 32+54+71 = 157, unique = 157",
+      "details": {}
+    },
+    {
+      "name": "arithmetic_CPS_rate",
+      "status": "PASS",
+      "message": "CPS rate: 86/157 = 54.8% (expected 54.8%)",
+      "details": {}
+    },
+    {
+      "name": "arithmetic_FoodAPS_sum",
+      "status": "PASS",
+      "message": "FoodAPS: F1+F2+F3 = 19+37+62 = 118, unique = 118",
+      "details": {}
+    },
+    {
+      "name": "arithmetic_FoodAPS_rate",
+      "status": "PASS",
+      "message": "FoodAPS rate: 56/118 = 47.5% (expected 47.5%)",
+      "details": {}
+    },
+    {
+      "name": "arithmetic_total_unique",
+      "status": "PASS",
+      "message": "Total unique: 275 (expected 275)",
+      "details": {}
+    },
+    {
+      "name": "arithmetic_total_consolidable",
+      "status": "PASS",
+      "message": "Total consolidable: 142 (expected 142)",
+      "details": {}
+    },
+    {
+      "name": "inflation_CPS_characterized",
+      "status": "PASS",
+      "message": "CPS: max duplication=25x, 10 questions duplicated, mean=1.53x",
+      "details": {
+        "max_dup": 25,
+        "n_duplicated": 10,
+        "mean_dup": 1.53
+      }
+    },
+    {
+      "name": "inflation_FoodAPS_characterized",
+      "status": "PASS",
+      "message": "FoodAPS: max duplication=4x, 20 questions duplicated, mean=1.19x",
+      "details": {
+        "max_dup": 4,
+        "n_duplicated": 20,
+        "mean_dup": 1.19
+      }
+    },
+    {
+      "name": "file_exists_best_matches",
+      "status": "PASS",
+      "message": "best_matches: found at docs/stages/03_harmonization/data/analysis/stage4_question_best_matches.csv",
+      "details": {}
+    },
+    {
+      "name": "acs_targets_cps",
+      "status": "PASS",
+      "message": "ACS targets for CPS: 36 (expected 36)",
+      "details": {}
+    },
+    {
+      "name": "acs_targets_foodaps",
+      "status": "PASS",
+      "message": "ACS targets for FoodAPS: 32 (expected 32)",
+      "details": {}
+    },
+    {
+      "name": "acs_targets_combined",
+      "status": "PASS",
+      "message": "Combined unique ACS targets: 51 (expected 51)",
+      "details": {}
+    },
+    {
+      "name": "acs_three_way",
+      "status": "PASS",
+      "message": "Three-way bridge variables: 17 (expected 17)",
+      "details": {}
+    },
+    {
+      "name": "acs_participation_rate",
+      "status": "PASS",
+      "message": "ACS participation rate: 44.3% (expected 44.3%)",
+      "details": {}
+    },
+    {
+      "name": "acs_fan_in",
+      "status": "PASS",
+      "message": "Fan-in ratio: 2.78 (expected 2.78)",
+      "details": {}
+    },
+    {
+      "name": "acs_set_arithmetic",
+      "status": "PASS",
+      "message": "Set arithmetic: 36 + 32 - 17 = 51 (expected 51)",
+      "details": {}
+    },
+    {
+      "name": "roundtrip_f1_all",
+      "status": "PASS",
+      "message": "F1 round-trip: 32/32 CPS F1 questions trace to F1 pairs",
+      "details": {}
+    },
+    {
+      "name": "roundtrip_f2_all",
+      "status": "PASS",
+      "message": "F2 round-trip: 54/54 CPS F2 questions trace to F2 pairs",
+      "details": {}
+    },
+    {
+      "name": "roundtrip_f2_no_f1",
+      "status": "PASS",
+      "message": "F2 integrity: 0 F2-classified questions also have F1 pairs (expected 0 -- if >0, dedup 'best' logic is wrong)",
+      "details": {}
+    },
+    {
+      "name": "roundtrip_f3_clean",
+      "status": "PASS",
+      "message": "F3 integrity: 0 F3-classified questions have F1/F2 pairs (expected 0)",
+      "details": {}
+    },
+    {
+      "name": "file_exists_question_counts_json",
+      "status": "PASS",
+      "message": "question_counts_json: found at docs/validation/question_counts.json",
+      "details": {}
+    },
+    {
+      "name": "json_match_CPS_unique",
+      "status": "PASS",
+      "message": "question_counts.json CPS unique: 157 vs computed 157",
+      "details": {}
+    },
+    {
+      "name": "json_match_CPS_F1",
+      "status": "PASS",
+      "message": "question_counts.json CPS F1: 32 vs computed 32",
+      "details": {}
+    },
+    {
+      "name": "json_match_CPS_F2",
+      "status": "PASS",
+      "message": "question_counts.json CPS F2: 54 vs computed 54",
+      "details": {}
+    },
+    {
+      "name": "json_match_CPS_F3",
+      "status": "PASS",
+      "message": "question_counts.json CPS F3: 71 vs computed 71",
+      "details": {}
+    },
+    {
+      "name": "json_match_FoodAPS_unique",
+      "status": "PASS",
+      "message": "question_counts.json FoodAPS unique: 118 vs computed 118",
+      "details": {}
+    },
+    {
+      "name": "json_match_FoodAPS_F1",
+      "status": "PASS",
+      "message": "question_counts.json FoodAPS F1: 19 vs computed 19",
+      "details": {}
+    },
+    {
+      "name": "json_match_FoodAPS_F2",
+      "status": "PASS",
+      "message": "question_counts.json FoodAPS F2: 37 vs computed 37",
+      "details": {}
+    },
+    {
+      "name": "json_match_FoodAPS_F3",
+      "status": "PASS",
+      "message": "question_counts.json FoodAPS F3: 62 vs computed 62",
+      "details": {}
+    },
+    {
+      "name": "file_exists_numbers_map",
+      "status": "PASS",
+      "message": "numbers_map: found at docs/NUMBERS_MAP.md",
+      "details": {}
+    },
+    {
+      "name": "nm_has_157",
+      "status": "PASS",
+      "message": "NUMBERS_MAP contains CPS=157 (bolded)",
+      "details": {}
+    },
+    {
+      "name": "nm_has_118",
+      "status": "PASS",
+      "message": "NUMBERS_MAP contains FoodAPS=118 (bolded)",
+      "details": {}
+    },
+    {
+      "name": "nm_has_275",
+      "status": "PASS",
+      "message": "NUMBERS_MAP contains total=275 (bolded)",
+      "details": {}
+    },
+    {
+      "name": "nm_has_54_8",
+      "status": "PASS",
+      "message": "NUMBERS_MAP contains CPS rate 54.8% (bolded)",
+      "details": {}
+    },
+    {
+      "name": "nm_has_47_5",
+      "status": "PASS",
+      "message": "NUMBERS_MAP contains FoodAPS rate 47.5% (bolded)",
+      "details": {}
+    },
+    {
+      "name": "nm_no_inflated_step7",
+      "status": "PASS",
+      "message": "NUMBERS_MAP Step 7 does not contain inflated values (240/140) as current data",
+      "details": {}
+    },
+    {
+      "name": "nm_audit_date",
+      "status": "PASS",
+      "message": "NUMBERS_MAP audit date includes 2026-02-28",
+      "details": {}
+    },
+    {
+      "name": "nm_has_step7b",
+      "status": "PASS",
+      "message": "NUMBERS_MAP has Step 7b (ACS-side participation)",
+      "details": {}
+    },
+    {
+      "name": "file_exists_narrative_checklist",
+      "status": "PASS",
+      "message": "narrative_checklist: found at report/NARRATIVE_CHECKLIST.md",
+      "details": {}
+    },
+    {
+      "name": "nc_has_corrected_cps_rate",
+      "status": "PASS",
+      "message": "NARRATIVE_CHECKLIST contains corrected CPS rate 54.8%",
+      "details": {}
+    },
+    {
+      "name": "nc_has_corrected_food_rate",
+      "status": "PASS",
+      "message": "NARRATIVE_CHECKLIST contains corrected FoodAPS rate 47.5%",
+      "details": {}
+    },
+    {
+      "name": "nc_has_275",
+      "status": "PASS",
+      "message": "NARRATIVE_CHECKLIST contains corrected total 275",
+      "details": {}
+    },
+    {
+      "name": "nc_has_inflation_warning",
+      "status": "PASS",
+      "message": "NARRATIVE_CHECKLIST flags inflation correction",
+      "details": {}
+    },
+    {
+      "name": "file_exists_readme",
+      "status": "PASS",
+      "message": "readme: found at README.md",
+      "details": {}
+    },
+    {
+      "name": "readme_has_142",
+      "status": "PASS",
+      "message": "README contains corrected total 142",
+      "details": {}
+    },
+    {
+      "name": "readme_no_stale_154",
+      "status": "PASS",
+      "message": "README does not contain stale '154 harmonizable'",
+      "details": {}
+    },
+    {
+      "name": "readme_no_stale_170",
+      "status": "PASS",
+      "message": "README does not contain stale '170'",
+      "details": {}
+    },
+    {
+      "name": "readme_no_stale_380",
+      "status": "PASS",
+      "message": "README does not contain stale '380'",
+      "details": {}
+    },
+    {
+      "name": "file_exists_survey_summary_json",
+      "status": "PASS",
+      "message": "survey_summary_json: found at docs/stages/03_harmonization/data/analysis/stage4_survey_summary.json",
+      "details": {}
+    },
+    {
+      "name": "inflated_ssj_cps",
+      "status": "PASS",
+      "message": "survey_summary.json CPS: 240 (expected 240 -- KNOWN INFLATED)",
+      "details": {}
+    },
+    {
+      "name": "inflated_ssj_foodaps",
+      "status": "PASS",
+      "message": "survey_summary.json FoodAPS: 140 (expected 140 -- KNOWN INFLATED)",
+      "details": {}
+    },
+    {
+      "name": "inflated_ssj_documented",
+      "status": "PASS",
+      "message": "stage4_survey_summary.json contains inflated counts. Documented and expected. Use question_counts.json.",
+      "details": {}
+    },
+    {
+      "name": "file_exists_completeness_raw_data",
+      "status": "PASS",
+      "message": "completeness_raw_data: found at data/raw/PublicSurveyQuestionsMap.csv",
+      "details": {}
+    },
+    {
+      "name": "file_exists_completeness_question_level",
+      "status": "PASS",
+      "message": "completeness_question_level: found at docs/stages/03_harmonization/data/analysis/stage4_question_level.csv",
+      "details": {}
+    },
+    {
+      "name": "file_exists_completeness_best_matches",
+      "status": "PASS",
+      "message": "completeness_best_matches: found at docs/stages/03_harmonization/data/analysis/stage4_question_best_matches.csv",
+      "details": {}
+    },
+    {
+      "name": "file_exists_completeness_final_verdicts",
+      "status": "PASS",
+      "message": "completeness_final_verdicts: found at docs/stages/03_harmonization/data/analysis/final_verdicts.csv",
+      "details": {}
+    },
+    {
+      "name": "file_exists_completeness_cps_pairs",
+      "status": "PASS",
+      "message": "completeness_cps_pairs: found at docs/stages/02_overlap/data/question_matching/cps/cps_candidate_pairs_all.csv",
+      "details": {}
+    },
+    {
+      "name": "file_exists_completeness_foodaps_pairs",
+      "status": "PASS",
+      "message": "completeness_foodaps_pairs: found at docs/stages/02_overlap/data/question_matching/foodaps/foodaps_candidate_pairs_all.csv",
+      "details": {}
+    },
+    {
+      "name": "file_exists_completeness_stage2_metrics",
+      "status": "PASS",
+      "message": "completeness_stage2_metrics: found at docs/stages/03_harmonization/data/analysis/stage2_agreement_metrics.json",
+      "details": {}
+    },
+    {
+      "name": "file_exists_completeness_stage3_metrics",
+      "status": "PASS",
+      "message": "completeness_stage3_metrics: found at docs/stages/03_harmonization/data/analysis/stage3_arbitration_metrics.json",
+      "details": {}
+    },
+    {
+      "name": "file_exists_completeness_question_counts_json",
+      "status": "PASS",
+      "message": "completeness_question_counts_json: found at docs/validation/question_counts.json",
+      "details": {}
+    },
+    {
+      "name": "file_exists_completeness_numbers_map",
+      "status": "PASS",
+      "message": "completeness_numbers_map: found at docs/NUMBERS_MAP.md",
+      "details": {}
+    },
+    {
+      "name": "file_exists_completeness_narrative_checklist",
+      "status": "PASS",
+      "message": "completeness_narrative_checklist: found at report/NARRATIVE_CHECKLIST.md",
+      "details": {}
+    },
+    {
+      "name": "file_exists_completeness_number_flow",
+      "status": "PASS",
+      "message": "completeness_number_flow: found at docs/validation/number_flow.md",
+      "details": {}
+    },
+    {
+      "name": "file_exists_completeness_validate_counts_script",
+      "status": "PASS",
+      "message": "completeness_validate_counts_script: found at src/validation/validate_question_counts.py",
+      "details": {}
+    },
+    {
+      "name": "file_exists_completeness_validate_complete_script",
+      "status": "PASS",
+      "message": "completeness_validate_complete_script: found at src/validation/validate_complete.py",
+      "details": {}
+    }
+  ]
+}
