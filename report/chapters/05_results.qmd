@@ -16,22 +16,19 @@ Each eligible question was paired with every ACS question sharing its subtopic, 
 
 Across both surveys, 142 unique questions are candidate bridge variables for expert review. These results vary by subject matter:
 
-<!--
-TODO: Topic-level breakdown table requires regeneration using the canonical L1 topic→subtopic mapping.
-The values below reflect the corrected question counts (CPS=157, FoodAPS=118) and
-corrected harmonizable counts (CPS=86, FoodAPS=56). Row-level topic assignments
-pending update from pipeline with documented subtopic→L1 classification.
--->
+<!-- Topic counts from stage4_question_level.csv joined through cps/foodaps_comparison_merged.csv;
+     topic assigned via SUBTOPIC_TO_TOPIC mapping in src/figures/fig03_paired_topic_composition.py -->
 | Survey | Topic | Questions | Harmonizable | Rate |
 |--------|-------|:-:|:-:|:-:|
-| CPS | Demographic | — | — | — |
-| CPS | Economic | — | — | — |
-| CPS | Social | — | — | — |
-| FoodAPS | Demographic | — | — | — |
-| FoodAPS | Economic | — | — | — |
-| FoodAPS | Social | — | — | — |
-| FoodAPS | Housing | — | — | — |
+| CPS | Demographic | 38 | 19 | 50.0% |
+| CPS | Economic | 99 | 56 | 56.6% |
+| CPS | Social | 19 | 11 | 57.9% |
+| CPS | Housing | 1 | 0 | 0.0% |
+| FoodAPS | Demographic | 27 | 8 | 29.6% |
+| FoodAPS | Economic | 66 | 36 | 54.5% |
+| FoodAPS | Social | 23 | 11 | 47.8% |
+| FoodAPS | Housing | 2 | 1 | 50.0% |
 
-Topic-level rates vary: demographic questions, which rely on standardized federal definitions for age, sex, race, and relationship, harmonize at higher rates than economic and social questions. The more substantive finding is in the economic categories. Among CPS questions, the largest pools of bridge variable candidates concentrate in earnings, employment status, and hours worked. Among FoodAPS questions, SNAP participation, employment status, and school enrollment contribute the most. Full subtopic breakdowns appear in Appendix C.
+Topic-level rates vary by survey and domain. Economic questions lead in both surveys (CPS 56.6%, FoodAPS 54.5%), reflecting ACS's detailed coverage of employment, earnings, and labor force participation. Social questions follow at similar rates for CPS (57.9%) but lower for FoodAPS (47.8%). Demographic questions show the widest gap between surveys: CPS at 50.0% versus FoodAPS at 29.6%, consistent with FoodAPS's specialized focus on food access behavior rather than core demographic measurement. Among CPS questions, the largest pools of bridge variable candidates concentrate in earnings, employment status, and hours worked. Among FoodAPS questions, SNAP participation, employment status, and school enrollment contribute the most. Full subtopic breakdowns appear in Appendix C.
 
 The next chapter examines what these results mean in practice — which harmonization paths are straightforward, which require methodological investment, and what the barrier patterns reveal about the feasibility of broader cross-survey integration.
