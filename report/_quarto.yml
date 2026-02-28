@@ -1,6 +1,7 @@
 project:
   type: book
   output-dir: _output
+  pre-render: python ../src/validation/validate_complete.py
 
 book:
   title: "AI-Assisted Federal Survey Harmonization"

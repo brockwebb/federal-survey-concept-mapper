@@ -108,10 +108,25 @@ Check TASK_ROADMAP.md for current status. Do NOT duplicate status here — that'
 
 **Critical distinction:** Barrier taxonomy (classification scheme for results) ≠ TEVV (evidence the methodology is trustworthy). They connect at ONE point: SME review validates classification accuracy. Do not conflate.
 
+## Build System Entry Points
+
+**`build.py`** (repo root) — validation-gated build entry point. Always use this instead of running quarto directly.
+
+```
+python build.py              # validate + render report (default)
+python build.py --validate   # validate only, no render
+python build.py --force      # render without validation (escape hatch — prints loud warning)
+python build.py --figures    # regenerate all figures, then validate + render
+```
+
+- Validation must pass (all 112 checks, exit 0) before Quarto will render.
+- `--force` bypasses validation for emergency use only.
+- `report/_quarto.yml` also has `pre-render: python ../src/validation/validate_complete.py` as a belt-and-suspenders guard (catches anyone running `quarto render` directly).
+
 ## Key Principles
 - **Source vs Generated**: `src/` has code, `docs/stages/0X_*/data/` has generated artifacts
 - **One canonical location**: Each file type lives in exactly one place
-- **report/ = the only Quarto build target**: Build: `cd report && quarto render`
+- **report/ = the only Quarto build target**: Use `python build.py` (validation-gated); direct `cd report && quarto render` also triggers pre-render validation via `_quarto.yml`
 - **Data lives with its stage**: Pipeline data under `docs/stages/01_classification/data/`, `docs/stages/02_overlap/data/`, `docs/stages/03_harmonization/data/`
 - **Figures via symlinks**: report/ references stage data figures via relative symlinks
 - **All model names from config**: `config/report_03.yaml` — NEVER hardcode
