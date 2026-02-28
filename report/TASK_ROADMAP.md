@@ -1,7 +1,7 @@
 # Master Report Project — Task Roadmap
 
 **Created:** 2026-02-18  
-**Last updated:** 2026-02-19  
+**Last updated:** 2026-02-28
 **Status:** Active  
 **Prioritization principle:** Risk-based. Things that are confusing to stakeholders or block credibility get done first.
 
@@ -11,7 +11,7 @@
 
 - [x] **T01** — ✅ Fact sheet scoping already correct: says "47 Census Bureau demographic survey instruments" which properly scopes it. No fix needed.
 - [x] **T02** — ✅ Copied `apa.csl` to `reports/master/`
-- [ ] **T03** — Git commit all current work (master report scaffold, archive moves, CLAUDE.md update, NARRATIVE_CHECKLIST, appendices B & C, TEVV companion doc, references.bib, FCSM PDFs)
+- [x] **T03** — ✅ Git commits completed 2026-02-28: inflation fix cascade (ecf9b26), figures/checklist (71e9ee5), build.py (faf9e2e), Ch05 topic table (55c7c73)
 
 ## BLOCK 2: Barrier Taxonomy & TEVV (high priority — stakeholder confusion risk)
 
