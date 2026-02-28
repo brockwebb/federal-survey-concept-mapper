@@ -1,381 +1,276 @@
 survey,survey_q_id,question_text,pair_count,has_consolidable_path,has_f1_path,best_is_f2,all_f3,best_feasibility
-CPS,CPS_0,Is respondent ready to complete the interview?,4,False,False,False,True,F3
-CPS,CPS_1,Is this a Replacement Household?,4,False,False,False,True,F3
-CPS,CPS_10,Are there any other persons 15 years old or older now living or staying there? (Who have not been listed.) How many other?,2,True,False,True,False,F2
-CPS,CPS_100,(Do / Does) (name/you) have a disability that prevents (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_101,What was the main reason (you/he/she) (was/were) absent from work (THE WEEK BEFORE LAST/LAST WEEK)?,5,True,False,True,False,F2
 CPS,CPS_102,(Are / Is) ( you/he/she) being paid by (your/his/her) employer for any of the time off (the week before last/last week)?,6,False,False,False,True,F3
-CPS,CPS_103,"(THE WEEK BEFORE LAST/LAST WEEK), did (name/you) have more than one (job/job or business), including part time, evening or weekend work?",5,False,False,False,True,F3
-CPS,CPS_104,"Altogether, how many (jobs/ jobs or businesses) did (you/he/she) have?",5,False,False,False,True,F3
-CPS,CPS_105,How many hours per week (do/does) (name/you) USUALLY work at (your/his/her) (job?/ main job?),8,True,True,False,False,F1
-CPS,CPS_106,How many hours per week (do/does) (you/he/she) USUALLY work at (your/his/her) other (job/ jobs)?,8,True,False,True,False,F2
-CPS,CPS_107,(Do / Does) (you/he/she) usually work 35 hours or more per week (at (your/his/her) job/in the family business/ at all (your/his/her) jobs combined)?,8,True,True,False,False,F1
-CPS,CPS_108,(Do / Does) (name/you) want to work a full time workweek of 35 hours or more per week?,5,False,False,False,True,F3
-CPS,CPS_109,Some people work part time because they cannot find full time work or because business is poor. Others work part time because of family obligations or other personal reasons. What is (name's/your) MAIN reason for working part time?,5,False,False,False,True,F3
-CPS,CPS_11,I have listed . . . READ NAMES Have I missed any babies or small children?,2,True,False,True,False,F2
-CPS,CPS_110,What is the main reason (you/he/she) (do/does) not want to work full time?,5,False,False,False,True,F3
-CPS,CPS_111,"Now I have some questions about the exact number of hours (name/you) worked (THE WEEK BEFORE LAST/LAST WEEK). (THE WEEK BEFORE LAST/LAST WEEK), did (you/he/she) lose or take off any hours from ((his/her) MAIN job/work), for ANY reason such as illness, slack work, vacation, or holiday?",8,True,False,True,False,F2
-CPS,CPS_112,How many hours did (name/you) take off?,8,False,False,False,True,F3
-CPS,CPS_113,"(THE WEEK BEFORE LAST/LAST WEEK), did (name/you) work any overtime or extra hours (at (his/her) MAIN job that / that)(you/he/she) (do/does) not usually work?",8,False,False,False,True,F3
-CPS,CPS_114,How many ADDITIONAL hours did (you/he/she) work?,8,False,False,False,True,F3
-CPS,CPS_115,"(LAST WEEK/THE WEEK BEFORE LAST), how many hours did ( you/he/she) ACTUALLY work at (your/his/her) (job?/MAIN job?)?",8,True,False,True,False,F2
-CPS,CPS_116,"(THE WEEK BEFORE LAST/LAST WEEK), how many hours did ( you/he/she) ACTUALLY work at (your/his/her) other (job/ jobs?)?",8,True,False,True,False,F2
-CPS,CPS_117,"At any time (THE WEEK BEFORE LAST/LAST WEEK), did (you/NAME) telework or work at home for pay?",5,True,False,True,False,F2
-CPS,CPS_118,(THE WEEK BEFORE LAST/LAST WEEK) (you/NAME) worked (# hours worked) hours ( /at all jobs). How many of these hours did (you/he/she) telework or work at home for pay?,8,True,False,True,False,F2
-CPS,CPS_119,What was the main reason ( you/he/she) (was/were) absent from work (THE WEEK BEFORE LAST/LAST WEEK)?,5,False,False,False,True,F3
-CPS,CPS_12,"Have I missed anyone who usually lives here but is away now -traveling, at school, or in a hospital?",2,False,False,False,True,F3
-CPS,CPS_120,What is the main reason (name/you) worked less than 35 hours (THE WEEK BEFORE LAST/LAST WEEK)?,8,False,False,False,True,F3
-CPS,CPS_121,"(THE WEEK BEFORE LAST/LAST WEEK), could (name/you) have worked full time IF the hours had been available?",5,False,False,False,True,F3
-CPS,CPS_122,Has (name's/your) employer given (you/he/she) a date to return to work?,5,True,False,True,False,F2
-CPS,CPS_123,(Have / Has) (you/he/she) been given any indication that ( you/he/she) will be recalled to work within the next 6 months?,5,True,False,True,False,F2
-CPS,CPS_124,Could (you/he/she) have returned to work (THE WEEK BEFORE LAST/LAST WEEK) IF (you/he/she) had been recalled? Why is that?,5,True,False,True,False,F2
-CPS,CPS_125,"Even though (you/he/she) (expect/expects) to be called back to work, (have/has) (you/he/she) been looking for work during the last 4 weeks?",2,False,False,False,True,F3
-CPS,CPS_126,"As of the end of (THE WEEK BEFORE LAST/LAST WEEK), how long had/has (you/he/she) been on layoff?",5,True,False,True,False,F2
-CPS,CPS_127,"We would like to have that in weeks, IF possible, exactly how many weeks had (name/you) been on layoff?",5,True,False,True,False,F2
-CPS,CPS_128,Is the job from which (name/you) (are / is) on layoff a full time job of 35 hours or more per week?,8,True,True,False,False,F1
-CPS,CPS_129,(Have / Has) (name/you) been doing anything to find work during the last 4 weeks?,2,False,False,False,True,F3
-CPS,CPS_13,"Have I missed any lodgers, boarders, or persons you employ who live here?",4,False,False,False,True,F3
-CPS,CPS_130,Does (your/his/her) disability prevent (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_131,Does (your/his/her) disability prevent (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_132,Does (your/his/her) disability prevent (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_133,Does (your/his/her) disability prevent (you/he/she) from accepting any kind of work during the next six months?,6,True,False,True,False,F2
-CPS,CPS_134,Does (your/his/her) disability prevent (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_135,(Do / Does) (name/you) have a disability that prevents (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_136,(Do / Does) (name/you) have a disability that prevents (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_137,(Do / Does) (name/you) have a disability that prevents (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_138,(Do / Does) (name/you) have a disability that prevents (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_139,(Do / Does) (name/you) have a disability that prevents (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_14,Have I missed anyone else staying here?,4,False,False,False,True,F3
-CPS,CPS_140,What are all the things (you/he/she) (have/has) done to find work during the last 4 weeks?,2,False,False,False,True,F3
-CPS,CPS_141,You said (name/you) (have/has) been trying to find work. How did ( you/he/she) go about looking?,2,False,False,False,True,F3
-CPS,CPS_142,Can you tell me more about what (he/she) did to search for work?,2,False,False,False,True,F3
-CPS,CPS_143,"(THE WEEK BEFORE LAST/LAST WEEK), could (you/he/she) have started a job if one had been offered?",5,False,False,False,True,F3
-CPS,CPS_144,Why is that?,1,False,False,False,True,F3
-CPS,CPS_145,Why is that?,2,False,False,False,True,F3
-CPS,CPS_146,"BEFORE (name/you) started looking for work, what (was/were) (you/he/she) doing: working, going to school, or something else?",5,False,False,False,True,F3
-CPS,CPS_147,"Did (you/he/she) lose or quit that job, or was it a temporary job that ended?",5,False,False,False,True,F3
-CPS,CPS_148,When did (you/he/she) last work at (a/that) job or business?,5,True,False,True,False,F2
-CPS,CPS_149,Earlier you told me (you/name) had a currently active professional certification or license. Is (your/his/her) certification or license required for (your/his/her) … a) job b) main job? c) job from which (you/he/she/) (are/is) on layoff? d) job at which (you/he/she) last worked?,1,False,False,False,True,F3
-CPS,CPS_15,What is the name of the person or one of the persons who owns or rents that home?,1,False,False,False,True,F3
-CPS,CPS_150,What was the month and year that (you/he/she) last worked?,5,True,True,False,False,F1
-CPS,CPS_151,"As of the end of (THE WEEK BEFORE LAST/LAST WEEK), how long had (you/he/she) been looking for work?",2,False,False,False,True,F3
-CPS,CPS_152,We would like to have that in weeks if possible. Exactly how many weeks (have/has) (name/you) been looking for work?,2,False,False,False,True,F3
-CPS,CPS_153,(Have / Has) (you/he/she) been looking for full time work of 35 hours or more per week?,8,False,False,False,True,F3
-CPS,CPS_154,"(Do / Does) (name/you) currently want a job, either full or part time?",5,False,False,False,True,F3
-CPS,CPS_155,"(Do / Does) (name/you) currently want a job, either full or part time?",1,False,False,False,True,F3
-CPS,CPS_156,"(Do / Does) (name/you) currently want a job, either full or part time?",1,False,False,False,True,F3
-CPS,CPS_157,"(Do / Does) (name/you) currently want a job, either full or part time?",1,False,False,False,True,F3
-CPS,CPS_158,Does (your/his/her) disability prevent (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_159,Does (your/his/her) disability prevent (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_16,With whom am I speaking?,4,False,False,False,True,F3
-CPS,CPS_160,Does (your/his/her) disability prevent (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_161,Does (your/his/her) disability prevent (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_162,Does (your/his/her) disability prevent (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_163,(Do / Does) (name/you) have a disability that prevents (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_164,(Do / Does) (name/you) have a disability that prevents (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_165,(Do / Does) (name/you) have a disability that prevents (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_166,(Do / Does) (name/you) have a disability that prevents (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_167,(Do / Does) (name/you) have a disability that prevents (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_168,What is the main reason (you/he/she) (was/were) not looking for work during the LAST 4 WEEKS?,2,False,False,False,True,F3
-CPS,CPS_169,Did (name/you) look for work at any time during the last 12 months?,2,False,False,False,True,F3
-CPS,CPS_17,With whom am I speaking?,4,False,False,False,True,F3
-CPS,CPS_170,Did (you/he/she) actually WORK at a job or business during the last 12 months?,5,True,True,False,False,F1
-CPS,CPS_171,Did (you/he/she) do any of this work during the last 4 weeks?,5,True,True,False,False,F1
-CPS,CPS_172,Did (you/he/she) do any of this work during the last 4 weeks?,5,True,False,True,False,F2
-CPS,CPS_173,And since (name/you) LEFT that job or business (have/has) (you/he/she) looked for work?,2,False,False,False,True,F3
-CPS,CPS_174,"(THE WEEK BEFORE LAST/LAST WEEK), could (you/he/she) have started a job IF one had been offered?",2,True,False,True,False,F2
-CPS,CPS_175,Why is that?,1,False,False,False,True,F3
-CPS,CPS_176,Why is that?,2,False,False,False,True,F3
-CPS,CPS_177,(Have / Has) (name/you) worked at a job or business at any time during the past 12 months?,5,True,True,False,False,F1
-CPS,CPS_178,Did (you/he/she) do any of this work during the last 4 weeks?,5,True,False,True,False,F2
-CPS,CPS_179,Did (you/he/she) do any of this work during the last 4 weeks?,5,True,False,True,False,F2
-CPS,CPS_18,With whom am I speaking?,4,False,False,False,True,F3
-CPS,CPS_180,What is the main reason (you/he/she) left (your/his/her) last job?,5,False,False,False,True,F3
-CPS,CPS_181,(Do / Does) (name/you) intend to look for work during the next 12 months?,1,False,False,False,True,F3
-CPS,CPS_182,"Last month, it was reported that (name/you) worked for (input.IO1NAM). (Do / Does) (you/he/she) still work for (input.IO1NAM)",5,True,False,True,False,F2
-CPS,CPS_183,Have the usual activities and duties of (your/his/her) job changed since last month?,1,False,False,False,True,F3
-CPS,CPS_184,Last month (name/you) (was/were) reported as (a/an) (input.IO1OCC) and (your/his/her) usual activities were (input.IO1DT1 8500.IO1DT2). Is this an accurate description of (your/his/her) current job?,1,True,False,True,False,F2
-CPS,CPS_19,Are all persons – 1 Under 15 years of age 2 Non-household members,4,False,False,False,True,F3
-CPS,CPS_193,(Were/Was) (name/you) working for pay?,5,True,False,True,False,F2
-CPS,CPS_194,(Were/Was) (name/you) working for pay?,5,True,False,True,False,F2
-CPS,CPS_2,Is this a Replacement Household?,4,False,False,False,True,F3
-CPS,CPS_20,How (are / is) (name/you) related to (reference person's name/you)?,1,True,True,False,False,F1
-CPS,CPS_205,"What kind of work (DO/DOES/DID) (name/you) do, that is, what (is/was) (your/his/her) occupation? F",1,False,False,False,True,F3
-CPS,CPS_21,Earlier you said that (name of person talking about) (was/were) not related to (reference person's name/you). (Are / Is) (name of person talking about) related to anyone else in this household?,3,False,False,False,True,F3
-CPS,CPS_214,(Were/Was) (name/you) working for pay?,5,True,False,True,False,F2
-CPS,CPS_215,(Were/Was) (name/you) working for pay?,5,True,False,True,False,F2
-CPS,CPS_22,Who (are / is) (name of person talking about) related to?,2,True,False,True,False,F2
-CPS,CPS_225,"What kind of work (DO/DOES/DID) (name/you) do, that is, what (is/was) (your/his/her) occupation",1,False,False,False,True,F3
-CPS,CPS_226,What (are / were) (your/his/her) usual activities or duties at this job?,1,True,True,False,False,F1
-CPS,CPS_227,What (are / were) (your/his/her) usual activities or duties at this job?,1,True,True,False,False,F1
-CPS,CPS_228,What (are / were) (your/his/her) usual activities or duties at this job?,1,True,True,False,False,F1
-CPS,CPS_23,Is (name's/your) parent a member of this household?,3,True,True,False,False,F1
-CPS,CPS_236,(Was/Were) (name/you) working for pay?,5,True,False,True,False,F2
-CPS,CPS_24,"(Are / Is) (name of person talking about) (your / mother's name) biological, step, or adopted child?",3,True,False,True,False,F2
-CPS,CPS_248,"What kind of work (DO/DOES/DID) (name/you) do, that is, what (is/was) (your/his/her) occupation?",1,False,False,False,True,F3
-CPS,CPS_249,What (are / were) (your/his/her) usual activities or duties at this job?,1,True,True,False,False,F1
-CPS,CPS_25,Is (name's/your) other parent a member of this household?,3,True,False,True,False,F2
-CPS,CPS_250,What (are / were) (your/his/her) usual activities or duties at this job?,1,True,True,False,False,F1
-CPS,CPS_251,What (are / were) (your/his/her) usual activities or duties at this job?,1,True,True,False,False,F1
-CPS,CPS_253,"For (name's/your) (job/MAIN job), what is the easiest way for you to report (your/his/her) total earnings BEFORE taxes or other deductions: hourly, weekly, annually, or on some other basis?",5,False,False,False,True,F3
-CPS,CPS_255,"(EXCLUDING overtime pay, tips and commissions) what is (your/his/her) hourly rate of pay on (this job/ (your/his/her) MAIN job)?",5,True,False,True,False,F2
-CPS,CPS_256,What is your best estimate of (your/his/her) hourly rate of pay?,6,True,True,False,False,F1
-CPS,CPS_257,How many hours (do/does) (name/you) usually work per week at this rate?,3,True,False,True,False,F2
-CPS,CPS_258,How many hours (do/does) (name/you) usually work per week at this rate?,3,True,False,True,False,F2
-CPS,CPS_259,"(How/At (your/his/her) MAIN job, how) much (do/does) (you/he/she) usually receive JUST in overtime pay, tips or commissions, before taxes or other deductions?",1,True,True,False,False,F1
 CPS,CPS_26,"(Are / Is) (name of person talking about) (your / father's name) biological, step, or adopted child?",3,True,False,True,False,F2
-CPS,CPS_260,"What is your best estimate of how much (you/he/she) usually (earn/earns) WEEKLY, JUST in overtime pay, tips, or commissions, before taxes or other deductions?",6,True,True,False,False,F1
-CPS,CPS_261,"Do not ask: Usual (weekly/hourly/monthly/annual) earnings in overtime pay, tips or commissions recorded as: (ERNOTO) Is this entry correct?",6,True,False,True,False,F2
-CPS,CPS_262,How many hours (do/does) (name/you) usually work per week at this rate?,3,True,False,True,False,F2
-CPS,CPS_263,How many hours (do/does) (name/you) usually work per week at this rate?,3,True,False,True,False,F2
-CPS,CPS_264,What is your best estimate of the number of hours per week (you/he/she) usually (work/works) at this rate?,3,True,False,True,False,F2
-CPS,CPS_265,I have estimated (your/his/her) usual WEEKLY earnings (as/for (your/his/her) main job as) (AMOUNT) before taxes or other deductions. Does that sound correct?,6,True,False,True,False,F2
-CPS,CPS_266,Which piece or pieces of information do not seem to be correct?,6,False,False,False,True,F3
-CPS,CPS_267,"What is (name's/your) hourly rate of pay on this job, excluding overtime pay, tips or commissions?",6,True,True,False,False,F1
-CPS,CPS_268,How many hours (do/does) (name/you) usually work per week at the rate of (entry in ERNH1C/ERNH1O)?,5,True,True,False,False,F1
-CPS,CPS_269,"How much (do/does) (name/you) usually earn (weekly/monthly/annually) just in overtime pay, tips or commissions?",6,True,True,False,False,F1
-CPS,CPS_27,"(REF_FNAME ^REF_LNAME’s) parent is also (name of person talking about)’s parent, is that correct?",3,True,False,True,False,F2
-CPS,CPS_270,"How much (do/does) (name/you) usually earn hourly just in overtime pay, tips or commissions?",6,True,False,True,False,F2
-CPS,CPS_271,How many hours (do/does) (name/you) usually work per week at the rate of (entry in ERNOHC/ERNOTO)?,4,True,True,False,False,F1
-CPS,CPS_272,"Then, including overtime pay, tips and commissions, what are (name/you) usual WEEKLY earnings on (this job/ (your/his/her) MAIN), before taxes or other deductions?",6,True,False,True,False,F2
-CPS,CPS_273,"I have estimated (your/his/her) total WEEKLY earnings (as/ for (your/his/her) main job, as (entry in ERNX2) WEEKLY before taxes or other deductions. Does that sound correct?",6,True,False,True,False,F2
+CPS,CPS_24,"(Are / Is) (name of person talking about) (your / mother's name) biological, step, or adopted child?",3,True,False,True,False,F2
+CPS,CPS_36,(Are / Is) (name/you) (now/still) in the Armed Forces?,4,True,False,True,False,F2
+CPS,CPS_44,"(Are / Is) (name/you) Mexican, Mexican American, or Chicano, Puerto Rican, Cuban, Cuban American, or another Hispanic, Latino, or Spanish origin; for example, Argentinean, Columbian, Dominican, Nicaraguan, Salvadoran, Spaniard, and so on?",1,True,True,False,False,F1
+CPS,CPS_32,"(Are / Is) (name/you) now married, widowed, divorced, separated or never married?",3,False,False,False,True,F3
+CPS,CPS_288,(Are / Is) (name/you) retired FROM A JOB OR BUSINESS?,5,True,False,True,False,F2
+CPS,CPS_292,(Are / Is) (you/he/she) enrolled in school as a full time or part time student?,4,False,False,False,True,F3
+CPS,CPS_5,(Are all of these persons still living here? / Person status),4,False,False,False,True,F3
+CPS,CPS_295,"(Are you/Is NAME/Is anyone/Are any of the new household members) blind or (do you/does NAME/does anyone/do they) have serious difficulty seeing, even when wearing glasses?",5,False,False,False,True,F3
+CPS,CPS_294,(Are you/Is NAME/Is anyone/Are any of the new household members) deaf or (do you/does NAME/does anyone/do they) have serious difficulty hearing?,6,True,True,False,False,F1
+CPS,CPS_57,"(Do / Does) (name/you) currently want a job, either full or part time?",32,False,False,False,True,F3
+CPS,CPS_66,(Do / Does) (name/you) have a disability that prevents (you/he/she) from accepting any kind of work during the next six months?,150,True,False,True,False,F2
+CPS,CPS_181,(Do / Does) (name/you) intend to look for work during the next 12 months?,1,False,False,False,True,F3
+CPS,CPS_108,(Do / Does) (name/you) want to work a full time workweek of 35 hours or more per week?,5,False,False,False,True,F3
+CPS,CPS_107,(Do / Does) (you/he/she) usually work 35 hours or more per week (at (your/his/her) job/in the family business/ at all (your/his/her) jobs combined)?,8,True,True,False,False,F1
+CPS,CPS_298,(Do you/Does NAME/Does anyone/Do any of the new household members) have difficulty dressing or bathing?,6,True,True,False,False,F1
+CPS,CPS_297,(Do you/Does NAME/Does anyone/Do any of the new household members) have serious difficulty walking or climbing stairs?,5,False,False,False,True,F3
+CPS,CPS_41,"(Does/do) (name/you) have a currently active professional certification or a state or industry license? Do not include business license, such as a liquor license or vending license.",1,False,False,False,True,F3
+CPS,CPS_255,"(EXCLUDING overtime pay, tips and commissions) what is (your/his/her) hourly rate of pay on (this job/ (your/his/her) MAIN job)?",5,True,False,True,False,F2
+CPS,CPS_284,"(EXCLUDING overtime pay, tips and commissions) what is (your/his/her) hourly rate of pay on (this job/ (your/his/her) MAIN) job?",5,True,False,True,False,F2
+CPS,CPS_283,(Even though you told me it is easier to report (your/his/her) earnings (you/he/she) PAID AT AN HOURLY RATE on (this job/ (your/his/her) MAIN)?,6,False,False,False,True,F3
+CPS,CPS_129,(Have / Has) (name/you) been doing anything to find work during the last 4 weeks?,2,False,False,False,True,F3
+CPS,CPS_177,(Have / Has) (name/you) worked at a job or business at any time during the past 12 months?,5,True,True,False,False,F1
+CPS,CPS_123,(Have / Has) (you/he/she) been given any indication that ( you/he/she) will be recalled to work within the next 6 months?,5,True,False,True,False,F2
+CPS,CPS_153,(Have / Has) (you/he/she) been looking for full time work of 35 hours or more per week?,8,False,False,False,True,F3
+CPS,CPS_259,"(How/At (your/his/her) MAIN job, how) much (do/does) (you/he/she) usually receive JUST in overtime pay, tips or commissions, before taxes or other deductions?",1,True,True,False,False,F1
 CPS,CPS_274,"(Including overtime pay, tips and commissions,) What are (name's/your) usual weekly earnings on (this job/ (your/his/her) MAIN), before taxes or other deductions?",6,True,False,True,False,F2
-CPS,CPS_275,"(Including overtime pay, tips and commissions,) what are (name's/your) usual twice monthly earnings on (this job/ (your/his/her) MAIN), before taxes or other deductions?",6,True,False,True,False,F2
-CPS,CPS_276,"(Including overtime pay, tips and commissions,) what are (name's/your) usual monthly earnings on (this job/ (your/his/her) MAIN), before taxes or other deductions?",6,True,False,True,False,F2
 CPS,CPS_277,"(Including overtime pay, tips and commissions,) what are (name's/your) usual annual earnings on (this job/ (your/his/her) MAIN), before taxes or other deductions?",6,True,False,True,False,F2
 CPS,CPS_278,"(Including overtime pay, tips and commissions,) what are (name's/your) usual bi weekly earnings on (this job/ (your/his/her) MAIN), before taxes or other deductions?",6,True,False,True,False,F2
-CPS,CPS_279,What is your best estimate of (your/his/her) usual (weekly/bi-weekly/monthly/annual) earnings before taxes or other deductions?,6,True,False,True,False,F2
-CPS,CPS_280,I have recorded (your/his/her) total earnings (for (your/his/her) (as/main job ) (ERNAMT) (weekly/bi-weekly/monthly/annually) before taxes or other deductions. Is that correct?,6,True,False,True,False,F2
+CPS,CPS_276,"(Including overtime pay, tips and commissions,) what are (name's/your) usual monthly earnings on (this job/ (your/his/her) MAIN), before taxes or other deductions?",6,True,False,True,False,F2
+CPS,CPS_275,"(Including overtime pay, tips and commissions,) what are (name's/your) usual twice monthly earnings on (this job/ (your/his/her) MAIN), before taxes or other deductions?",6,True,False,True,False,F2
 CPS,CPS_281,"(Including overtime pay, tips and commissions,), what are (your/his/her) usual (weekly/bi-weekly/monthly/annual) earnings on (this job/ (your/his/her) MAIN), before taxes or other deductions?",6,True,False,True,False,F2
+CPS,CPS_115,"(LAST WEEK/THE WEEK BEFORE LAST), how many hours did ( you/he/she) ACTUALLY work at (your/his/her) (job?/MAIN job?)?",8,True,False,True,False,F2
+CPS,CPS_27,"(REF_FNAME ^REF_LNAME’s) parent is also (name of person talking about)’s parent, is that correct?",3,True,False,True,False,F2
+CPS,CPS_118,(THE WEEK BEFORE LAST/LAST WEEK) (you/NAME) worked (# hours worked) hours ( /at all jobs). How many of these hours did (you/he/she) telework or work at home for pay?,8,True,False,True,False,F2
+CPS,CPS_71,"(THE WEEK BEFORE LAST/LAST WEEK), (in addition to the business) (name/you) have a job either full or part time? Include any job from which (name/you) (was/were) temporarily absent.",5,True,False,True,False,F2
+CPS,CPS_86,"(THE WEEK BEFORE LAST/LAST WEEK), (was/were) (name/you) on layoff from a job?",5,True,False,True,False,F2
+CPS,CPS_290,"(THE WEEK BEFORE LAST/LAST WEEK), (was/were) (you/he/she) enrolled in a high school, college, or university?",5,True,False,True,False,F2
+CPS,CPS_121,"(THE WEEK BEFORE LAST/LAST WEEK), could (name/you) have worked full time IF the hours had been available?",5,False,False,False,True,F3
+CPS,CPS_174,"(THE WEEK BEFORE LAST/LAST WEEK), could (you/he/she) have started a job IF one had been offered?",2,True,False,True,False,F2
+CPS,CPS_143,"(THE WEEK BEFORE LAST/LAST WEEK), could (you/he/she) have started a job if one had been offered?",5,False,False,False,True,F3
+CPS,CPS_52,"(THE WEEK BEFORE LAST/LAST WEEK), did (name/you) do ANY work for (pay/either pay or profit)?",5,True,True,False,False,F1
+CPS,CPS_103,"(THE WEEK BEFORE LAST/LAST WEEK), did (name/you) have more than one (job/job or business), including part time, evening or weekend work?",5,False,False,False,True,F3
+CPS,CPS_113,"(THE WEEK BEFORE LAST/LAST WEEK), did (name/you) work any overtime or extra hours (at (his/her) MAIN job that / that)(you/he/she) (do/does) not usually work?",8,False,False,False,True,F3
+CPS,CPS_116,"(THE WEEK BEFORE LAST/LAST WEEK), how many hours did ( you/he/she) ACTUALLY work at (your/his/her) other (job/ jobs?)?",8,True,False,True,False,F2
+CPS,CPS_236,(Was/Were) (name/you) working for pay?,5,True,False,True,False,F2
+CPS,CPS_293,"(We will recontact this household in 8 months / In the future we may need to recontact this household / We will recontact this household next month) to update this information. If we are unable to reach you and we talk to someone else instead, is it OK if we refer to some of the information you gave us?",4,False,False,False,True,F3
+CPS,CPS_193,(Were/Was) (name/you) working for pay?,20,True,False,True,False,F2
+CPS,CPS_6,(What are the names of all persons living or staying here? / What is the name of the next person,2,True,True,False,False,F1
+CPS,CPS_304,(were/was) (name/you) born a citizen of the United States?,1,False,False,False,True,F3
+CPS,CPS_104,"Altogether, how many (jobs/ jobs or businesses) did (you/he/she) have?",5,False,False,False,True,F3
+CPS,CPS_173,And since (name/you) LEFT that job or business (have/has) (you/he/she) looked for work?,2,False,False,False,True,F3
+CPS,CPS_19,Are all persons – 1 Under 15 years of age 2 Non-household members,4,False,False,False,True,F3
+CPS,CPS_10,Are there any other persons 15 years old or older now living or staying there? (Who have not been listed.) How many other?,2,True,False,True,False,F2
+CPS,CPS_29,"As of last week, that would make (name/you) (approximately (AGE)/ less than 1 / over 98 / AGE) years old. Is that correct?",3,True,True,False,False,F1
+CPS,CPS_151,"As of the end of (THE WEEK BEFORE LAST/LAST WEEK), how long had (you/he/she) been looking for work?",2,False,False,False,True,F3
+CPS,CPS_126,"As of the end of (THE WEEK BEFORE LAST/LAST WEEK), how long had/has (you/he/she) been on layoff?",5,True,False,True,False,F2
+CPS,CPS_117,"At any time (THE WEEK BEFORE LAST/LAST WEEK), did (you/NAME) telework or work at home for pay?",5,True,False,True,False,F2
+CPS,CPS_146,"BEFORE (name/you) started looking for work, what (was/were) (you/he/she) doing: working, going to school, or something else?",5,False,False,False,True,F3
+CPS,CPS_299,"Because of a physical, mental, or emotional condition, (do you/does NAME/does anyone/do any of the new household members) have difficulty doing errands alone such as visiting a doctor's office or shopping?",6,True,False,True,False,F2
+CPS,CPS_296,"Because of a physical, mental, or emotional condition, (do you/does NAME/does anyone/do any of the new household members) have serious difficulty concentrating, remembering, or making decisions?",5,False,False,False,True,F3
+CPS,CPS_142,Can you tell me more about what (he/she) did to search for work?,2,False,False,False,True,F3
+CPS,CPS_124,Could (you/he/she) have returned to work (THE WEEK BEFORE LAST/LAST WEEK) IF (you/he/she) had been recalled? Why is that?,5,True,False,True,False,F2
+CPS,CPS_305,Did (name/you) become a citizen of the United States through naturalization?,1,False,False,False,True,F3
+CPS,CPS_35,Did (name/you) ever serve on active duty in the U. S. Armed Forces? When did (you/he/she) serve?,4,True,True,False,False,F1
+CPS,CPS_169,Did (name/you) look for work at any time during the last 12 months?,2,False,False,False,True,F3
+CPS,CPS_170,Did (you/he/she) actually WORK at a job or business during the last 12 months?,5,True,True,False,False,F1
+CPS,CPS_171,Did (you/he/she) do any of this work during the last 4 weeks?,20,True,True,False,False,F1
+CPS,CPS_147,"Did (you/he/she) lose or quit that job, or was it a temporary job that ended?",5,False,False,False,True,F3
+CPS,CPS_261,"Do not ask: Usual (weekly/hourly/monthly/annual) earnings in overtime pay, tips or commissions recorded as: (ERNOTO) Is this entry correct?",6,True,False,True,False,F2
+CPS,CPS_34,"Do you have a boyfriend, girlfriend or partner in this household?",3,True,True,False,False,F1
+CPS,CPS_8,Does (name of person talking about) have a usual place of residence elsewhere?,1,False,False,False,True,F3
+CPS,CPS_56,Does (your/his/her) disability continue to prevent (you/he/she) from doing any kind of work for the next 6 months (or working in the family business)?,6,False,False,False,True,F3
+CPS,CPS_61,Does (your/his/her) disability prevent (you/he/she) from accepting any kind of work during the next six months?,150,True,False,True,False,F2
+CPS,CPS_21,Earlier you said that (name of person talking about) (was/were) not related to (reference person's name/you). (Are / Is) (name of person talking about) related to anyone else in this household?,3,False,False,False,True,F3
+CPS,CPS_149,Earlier you told me (you/name) had a currently active professional certification or license. Is (your/his/her) certification or license required for (your/his/her) … a) job b) main job? c) job from which (you/he/she/) (are/is) on layoff? d) job at which (you/he/she) last worked?,1,False,False,False,True,F3
+CPS,CPS_33,Enter line number of spouse of (name of person talking about),3,True,False,True,False,F2
+CPS,CPS_125,"Even though (you/he/she) (expect/expects) to be called back to work, (have/has) (you/he/she) been looking for work during the last 4 weeks?",2,False,False,False,True,F3
+CPS,CPS_30,"Even though you don’t know (name's/your) exact birthdate, what is your best guess as to how old (you/he/she) (was/were) on (your/his/her) last birthday?",3,True,True,False,False,F1
+CPS,CPS_253,"For (name's/your) (job/MAIN job), what is the easiest way for you to report (your/his/her) total earnings BEFORE taxes or other deductions: hourly, weekly, annually, or on some other basis?",5,False,False,False,True,F3
+CPS,CPS_122,Has (name's/your) employer given (you/he/she) a date to return to work?,5,True,False,True,False,F2
+CPS,CPS_13,"Have I missed any lodgers, boarders, or persons you employ who live here?",4,False,False,False,True,F3
+CPS,CPS_14,Have I missed anyone else staying here?,4,False,False,False,True,F3
+CPS,CPS_12,"Have I missed anyone who usually lives here but is away now -traveling, at school, or in a hospital?",2,False,False,False,True,F3
+CPS,CPS_183,Have the usual activities and duties of (your/his/her) job changed since last month?,1,False,False,False,True,F3
+CPS,CPS_20,How (are / is) (name/you) related to (reference person's name/you)?,1,True,True,False,False,F1
+CPS,CPS_114,How many ADDITIONAL hours did (you/he/she) work?,8,False,False,False,True,F3
+CPS,CPS_268,How many hours (do/does) (name/you) usually work per week at the rate of (entry in ERNH1C/ERNH1O)?,5,True,True,False,False,F1
+CPS,CPS_271,How many hours (do/does) (name/you) usually work per week at the rate of (entry in ERNOHC/ERNOTO)?,4,True,True,False,False,F1
+CPS,CPS_257,How many hours (do/does) (name/you) usually work per week at this rate?,12,True,False,True,False,F2
+CPS,CPS_112,How many hours did (name/you) take off?,8,False,False,False,True,F3
+CPS,CPS_105,How many hours per week (do/does) (name/you) USUALLY work at (your/his/her) (job?/ main job?),8,True,True,False,False,F1
+CPS,CPS_106,How many hours per week (do/does) (you/he/she) USUALLY work at (your/his/her) other (job/ jobs)?,8,True,False,True,False,F2
 CPS,CPS_282,How many weeks a year (do/does) (name/you) get paid for?,8,False,False,False,True,F3
-CPS,CPS_283,(Even though you told me it is easier to report (your/his/her) earnings (you/he/she) PAID AT AN HOURLY RATE on (this job/ (your/his/her) MAIN)?,6,False,False,False,True,F3
-CPS,CPS_284,"(EXCLUDING overtime pay, tips and commissions) what is (your/his/her) hourly rate of pay on (this job/ (your/his/her) MAIN) job?",5,True,False,True,False,F2
+CPS,CPS_269,"How much (do/does) (name/you) usually earn (weekly/monthly/annually) just in overtime pay, tips or commissions?",6,True,True,False,False,F1
+CPS,CPS_270,"How much (do/does) (name/you) usually earn hourly just in overtime pay, tips or commissions?",6,True,False,True,False,F2
+CPS,CPS_46,"I am going to read you a list of five race categories. You may choose one or more races. For this survey, Hispanic origin is not a race. (Are/Is) (NAME/you) White; Black or African American; American Indian or Alaska Native; Asian; OR Native Hawaiian or Other Pacific Islander?",3,True,True,False,False,F1
+CPS,CPS_273,"I have estimated (your/his/her) total WEEKLY earnings (as/ for (your/his/her) main job, as (entry in ERNX2) WEEKLY before taxes or other deductions. Does that sound correct?",6,True,False,True,False,F2
+CPS,CPS_265,I have estimated (your/his/her) usual WEEKLY earnings (as/for (your/his/her) main job as) (AMOUNT) before taxes or other deductions. Does that sound correct?,6,True,False,True,False,F2
+CPS,CPS_11,I have listed . . . READ NAMES Have I missed any babies or small children?,2,True,False,True,False,F2
+CPS,CPS_280,I have recorded (your/his/her) total earnings (for (your/his/her) (as/main job ) (ERNAMT) (weekly/bi-weekly/monthly/annually) before taxes or other deductions. Is that correct?,6,True,False,True,False,F2
+CPS,CPS_300,In what country (was/were) (name/you) born?,1,False,False,False,True,F3
+CPS,CPS_302,In what country was (your/his/her) father born?,2,False,False,False,True,F3
+CPS,CPS_301,In what country was (your/his/her) mother born?,2,False,False,False,True,F3
+CPS,CPS_25,Is (name's/your) other parent a member of this household?,3,True,False,True,False,F2
+CPS,CPS_23,Is (name's/your) parent a member of this household?,3,True,True,False,False,F1
+CPS,CPS_0,Is respondent ready to complete the interview?,4,False,False,False,True,F3
+CPS,CPS_128,Is the job from which (name/you) (are / is) on layoff a full time job of 35 hours or more per week?,8,True,True,False,False,F1
+CPS,CPS_7,Is this (name of person talking about)’s usual place of residence?,4,False,False,False,True,F3
+CPS,CPS_1,Is this a Replacement Household?,8,False,False,False,True,F3
+CPS,CPS_184,Last month (name/you) (was/were) reported as (a/an) (input.IO1OCC) and (your/his/her) usual activities were (input.IO1DT1 8500.IO1DT2). Is this an accurate description of (your/his/her) current job?,1,True,False,True,False,F2
+CPS,CPS_55,Last month (name/you) (was/were) reported to be retired. (Are / Is) (you/he/she) still retired?,5,False,False,False,True,F3
+CPS,CPS_182,"Last month, it was reported that (name/you) worked for (input.IO1NAM). (Do / Does) (you/he/she) still work for (input.IO1NAM)",5,True,False,True,False,F2
+CPS,CPS_3,May I please speak to Respondent name?,4,False,False,False,True,F3
+CPS,CPS_111,"Now I have some questions about the exact number of hours (name/you) worked (THE WEEK BEFORE LAST/LAST WEEK). (THE WEEK BEFORE LAST/LAST WEEK), did (you/he/she) lose or take off any hours from ((his/her) MAIN job/work), for ANY reason such as illness, slack work, vacation, or holiday?",8,True,False,True,False,F2
 CPS,CPS_285,"On this job, (are / is) (name/you) a member of a labor union or of an employee association similar to a union?",1,False,False,False,True,F3
 CPS,CPS_286,"On this job, (are / is) (name/you) covered by a union or employee association contract?",5,False,False,False,True,F3
-CPS,CPS_287,When did (name/you) last work at a job or business?,5,True,True,False,False,F1
-CPS,CPS_288,(Are / Is) (name/you) retired FROM A JOB OR BUSINESS?,5,True,False,True,False,F2
-CPS,CPS_289,"What best describes (name's/your) situation at this time? For example, (are / is) (you/he/she) disabled, ill, in school, taking care of house or family, or something ELSE?",5,True,False,True,False,F2
-CPS,CPS_29,"As of last week, that would make (name/you) (approximately (AGE)/ less than 1 / over 98 / AGE) years old. Is that correct?",3,True,True,False,False,F1
-CPS,CPS_290,"(THE WEEK BEFORE LAST/LAST WEEK), (was/were) (you/he/she) enrolled in a high school, college, or university?",5,True,False,True,False,F2
-CPS,CPS_291,"Would that be high school, college or university?",1,True,True,False,False,F1
-CPS,CPS_292,(Are / Is) (you/he/she) enrolled in school as a full time or part time student?,4,False,False,False,True,F3
-CPS,CPS_293,"(We will recontact this household in 8 months / In the future we may need to recontact this household / We will recontact this household next month) to update this information. If we are unable to reach you and we talk to someone else instead, is it OK if we refer to some of the information you gave us?",4,False,False,False,True,F3
-CPS,CPS_294,(Are you/Is NAME/Is anyone/Are any of the new household members) deaf or (do you/does NAME/does anyone/do they) have serious difficulty hearing?,6,True,True,False,False,F1
-CPS,CPS_295,"(Are you/Is NAME/Is anyone/Are any of the new household members) blind or (do you/does NAME/does anyone/do they) have serious difficulty seeing, even when wearing glasses?",5,False,False,False,True,F3
-CPS,CPS_296,"Because of a physical, mental, or emotional condition, (do you/does NAME/does anyone/do any of the new household members) have serious difficulty concentrating, remembering, or making decisions?",5,False,False,False,True,F3
-CPS,CPS_297,(Do you/Does NAME/Does anyone/Do any of the new household members) have serious difficulty walking or climbing stairs?,5,False,False,False,True,F3
-CPS,CPS_298,(Do you/Does NAME/Does anyone/Do any of the new household members) have difficulty dressing or bathing?,6,True,True,False,False,F1
-CPS,CPS_299,"Because of a physical, mental, or emotional condition, (do you/does NAME/does anyone/do any of the new household members) have difficulty doing errands alone such as visiting a doctor's office or shopping?",6,True,False,True,False,F2
-CPS,CPS_3,May I please speak to Respondent name?,4,False,False,False,True,F3
-CPS,CPS_30,"Even though you don’t know (name's/your) exact birthdate, what is your best guess as to how old (you/he/she) (was/were) on (your/his/her) last birthday?",3,True,True,False,False,F1
-CPS,CPS_300,In what country (was/were) (name/you) born?,1,False,False,False,True,F3
-CPS,CPS_301,In what country was (your/his/her) mother born?,2,False,False,False,True,F3
-CPS,CPS_302,In what country was (your/his/her) father born?,2,False,False,False,True,F3
-CPS,CPS_304,(were/was) (name/you) born a citizen of the United States?,1,False,False,False,True,F3
-CPS,CPS_305,Did (name/you) become a citizen of the United States through naturalization?,1,False,False,False,True,F3
-CPS,CPS_306,When did (name/you) come to live in the United States?,1,False,False,False,True,F3
-CPS,CPS_31,"Since our last interview, has any household member had any changes in his or her Marital Status?",4,True,False,True,False,F2
-CPS,CPS_32,"(Are / Is) (name/you) now married, widowed, divorced, separated or never married?",3,False,False,False,True,F3
-CPS,CPS_33,Enter line number of spouse of (name of person talking about),3,True,False,True,False,F2
-CPS,CPS_34,"Do you have a boyfriend, girlfriend or partner in this household?",3,True,True,False,False,F1
-CPS,CPS_35,Did (name/you) ever serve on active duty in the U. S. Armed Forces? When did (you/he/she) serve?,4,True,True,False,False,F1
-CPS,CPS_36,(Are / Is) (name/you) (now/still) in the Armed Forces?,4,True,False,True,False,F2
 CPS,CPS_38,"People can get a High School diploma in a variety of ways, such as graduating from High School or by getting a GED or other equivalent. How did (name/you) get (your/his/her) High School diploma?",1,True,False,True,False,F2
-CPS,CPS_39,What was the highest grade of regular school (name/you) completed before receiving (your/his/her) GED?,1,False,False,False,True,F3
-CPS,CPS_41,"(Does/do) (name/you) have a currently active professional certification or a state or industry license? Do not include business license, such as a liquor license or vending license.",1,False,False,False,True,F3
+CPS,CPS_31,"Since our last interview, has any household member had any changes in his or her Marital Status?",4,True,False,True,False,F2
+CPS,CPS_109,Some people work part time because they cannot find full time work or because business is poor. Others work part time because of family obligations or other personal reasons. What is (name's/your) MAIN reason for working part time?,5,False,False,False,True,F3
+CPS,CPS_272,"Then, including overtime pay, tips and commissions, what are (name/you) usual WEEKLY earnings on (this job/ (your/his/her) MAIN), before taxes or other deductions?",6,True,False,True,False,F2
+CPS,CPS_152,We would like to have that in weeks if possible. Exactly how many weeks (have/has) (name/you) been looking for work?,2,False,False,False,True,F3
+CPS,CPS_127,"We would like to have that in weeks, IF possible, exactly how many weeks had (name/you) been on layoff?",5,True,False,True,False,F2
 CPS,CPS_42,"Were any of (your/his/her) certifications or licenses issued by the federal, state, or local government?",1,False,False,False,True,F3
-CPS,CPS_44,"(Are / Is) (name/you) Mexican, Mexican American, or Chicano, Puerto Rican, Cuban, Cuban American, or another Hispanic, Latino, or Spanish origin; for example, Argentinean, Columbian, Dominican, Nicaraguan, Salvadoran, Spaniard, and so on?",1,True,True,False,False,F1
+CPS,CPS_226,What (are / were) (your/his/her) usual activities or duties at this job?,6,True,True,False,False,F1
+CPS,CPS_140,What are all the things (you/he/she) (have/has) done to find work during the last 4 weeks?,2,False,False,False,True,F3
+CPS,CPS_289,"What best describes (name's/your) situation at this time? For example, (are / is) (you/he/she) disabled, ill, in school, taking care of house or family, or something ELSE?",5,True,False,True,False,F2
+CPS,CPS_267,"What is (name's/your) hourly rate of pay on this job, excluding overtime pay, tips or commissions?",6,True,True,False,False,F1
+CPS,CPS_120,What is the main reason (name/you) worked less than 35 hours (THE WEEK BEFORE LAST/LAST WEEK)?,8,False,False,False,True,F3
+CPS,CPS_110,What is the main reason (you/he/she) (do/does) not want to work full time?,5,False,False,False,True,F3
+CPS,CPS_168,What is the main reason (you/he/she) (was/were) not looking for work during the LAST 4 WEEKS?,2,False,False,False,True,F3
+CPS,CPS_180,What is the main reason (you/he/she) left (your/his/her) last job?,5,False,False,False,True,F3
 CPS,CPS_45,"What is the name of (your/his/her) other Spanish, Hispanic, or Latino group?",3,True,True,False,False,F1
-CPS,CPS_46,"I am going to read you a list of five race categories. You may choose one or more races. For this survey, Hispanic origin is not a race. (Are/Is) (NAME/you) White; Black or African American; American Indian or Alaska Native; Asian; OR Native Hawaiian or Other Pacific Islander?",3,True,True,False,False,F1
+CPS,CPS_15,What is the name of the person or one of the persons who owns or rents that home?,1,False,False,False,True,F3
+CPS,CPS_256,What is your best estimate of (your/his/her) hourly rate of pay?,6,True,True,False,False,F1
+CPS,CPS_279,What is your best estimate of (your/his/her) usual (weekly/bi-weekly/monthly/annual) earnings before taxes or other deductions?,6,True,False,True,False,F2
+CPS,CPS_260,"What is your best estimate of how much (you/he/she) usually (earn/earns) WEEKLY, JUST in overtime pay, tips, or commissions, before taxes or other deductions?",6,True,True,False,False,F1
+CPS,CPS_264,What is your best estimate of the number of hours per week (you/he/she) usually (work/works) at this rate?,3,True,False,True,False,F2
+CPS,CPS_225,"What kind of work (DO/DOES/DID) (name/you) do, that is, what (is/was) (your/his/her) occupation",1,False,False,False,True,F3
+CPS,CPS_248,"What kind of work (DO/DOES/DID) (name/you) do, that is, what (is/was) (your/his/her) occupation?",1,False,False,False,True,F3
+CPS,CPS_205,"What kind of work (DO/DOES/DID) (name/you) do, that is, what (is/was) (your/his/her) occupation? F",1,False,False,False,True,F3
+CPS,CPS_39,What was the highest grade of regular school (name/you) completed before receiving (your/his/her) GED?,1,False,False,False,True,F3
+CPS,CPS_119,What was the main reason ( you/he/she) (was/were) absent from work (THE WEEK BEFORE LAST/LAST WEEK)?,5,False,False,False,True,F3
+CPS,CPS_101,What was the main reason (you/he/she) (was/were) absent from work (THE WEEK BEFORE LAST/LAST WEEK)?,5,True,False,True,False,F2
+CPS,CPS_150,What was the month and year that (you/he/she) last worked?,5,True,True,False,False,F1
+CPS,CPS_306,When did (name/you) come to live in the United States?,1,False,False,False,True,F3
+CPS,CPS_287,When did (name/you) last work at a job or business?,5,True,True,False,False,F1
+CPS,CPS_148,When did (you/he/she) last work at (a/that) job or business?,5,True,False,True,False,F2
 CPS,CPS_47,"Which of the following Asian groups (are/is) (you/he/she)? Asian Indian, Chinese, Filipino, Japanese, Korean, Vietnamese, or another Asian group?",3,True,True,False,False,F1
 CPS,CPS_48,Which of the following Native Hawaiian or Other Pacific Islander groups (are/is) (you/he/she)? Native Hawaiian; Guamanian or Chamorro; Samoan; or another Pacific Islander group?,3,True,True,False,False,F1
-CPS,CPS_5,(Are all of these persons still living here? / Person status),4,False,False,False,True,F3
-CPS,CPS_52,"(THE WEEK BEFORE LAST/LAST WEEK), did (name/you) do ANY work for (pay/either pay or profit)?",5,True,True,False,False,F1
-CPS,CPS_55,Last month (name/you) (was/were) reported to be retired. (Are / Is) (you/he/she) still retired?,5,False,False,False,True,F3
-CPS,CPS_56,Does (your/his/her) disability continue to prevent (you/he/she) from doing any kind of work for the next 6 months (or working in the family business)?,6,False,False,False,True,F3
-CPS,CPS_57,"(Do / Does) (name/you) currently want a job, either full or part time?",5,False,False,False,True,F3
-CPS,CPS_58,"(Do / Does) (name/you) currently want a job, either full or part time?",1,False,False,False,True,F3
-CPS,CPS_59,"(Do / Does) (name/you) currently want a job, either full or part time?",1,False,False,False,True,F3
-CPS,CPS_6,(What are the names of all persons living or staying here? / What is the name of the next person,2,True,True,False,False,F1
-CPS,CPS_60,"(Do / Does) (name/you) currently want a job, either full or part time?",1,False,False,False,True,F3
-CPS,CPS_61,Does (your/his/her) disability prevent (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_62,Does (your/his/her) disability prevent (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_63,Does (your/his/her) disability prevent (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_64,Does (your/his/her) disability prevent (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_65,Does (your/his/her) disability prevent (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_66,(Do / Does) (name/you) have a disability that prevents (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_67,(Do / Does) (name/you) have a disability that prevents (you/he/she) from accepting any kind of work during the next six months?,6,True,False,True,False,F2
-CPS,CPS_68,(Do / Does) (name/you) have a disability that prevents (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_69,(Do / Does) (name/you) have a disability that prevents (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_7,Is this (name of person talking about)’s usual place of residence?,4,False,False,False,True,F3
-CPS,CPS_70,(Do / Does) (name/you) have a disability that prevents (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_71,"(THE WEEK BEFORE LAST/LAST WEEK), (in addition to the business) (name/you) have a job either full or part time? Include any job from which (name/you) (was/were) temporarily absent.",5,True,False,True,False,F2
-CPS,CPS_72,"(Do / Does) (name/you) currently want a job, either full or part time?",5,False,False,False,True,F3
-CPS,CPS_73,"(Do / Does) (name/you) currently want a job, either full or part time?",1,False,False,False,True,F3
-CPS,CPS_74,"(Do / Does) (name/you) currently want a job, either full or part time?",1,False,False,False,True,F3
-CPS,CPS_75,"(Do / Does) (name/you) currently want a job, either full or part time?",1,False,False,False,True,F3
-CPS,CPS_76,Does (your/his/her) disability prevent (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_77,Does (your/his/her) disability prevent (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_78,Does (your/his/her) disability prevent (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_79,Does (your/his/her) disability prevent (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_8,Does (name of person talking about) have a usual place of residence elsewhere?,1,False,False,False,True,F3
-CPS,CPS_80,Does (your/his/her) disability prevent (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_81,(Do / Does) (name/you) have a disability that prevents (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_82,(Do / Does) (name/you) have a disability that prevents (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_83,(Do / Does) (name/you) have a disability that prevents (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_84,(Do / Does) (name/you) have a disability that prevents (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_85,(Do / Does) (name/you) have a disability that prevents (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_86,"(THE WEEK BEFORE LAST/LAST WEEK), (was/were) (name/you) on layoff from a job?",5,True,False,True,False,F2
-CPS,CPS_87,"(Do / Does) (name/you) currently want a job, either full or part time?",5,False,False,False,True,F3
-CPS,CPS_88,"(Do / Does) (name/you) currently want a job, either full or part time?",1,False,False,False,True,F3
-CPS,CPS_89,"(Do / Does) (name/you) currently want a job, either full or part time?",1,False,False,False,True,F3
-CPS,CPS_90,"(Do / Does) (name/you) currently want a job, either full or part time?",1,False,False,False,True,F3
-CPS,CPS_91,Does (your/his/her) disability prevent (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_92,Does (your/his/her) disability prevent (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_93,Does (your/his/her) disability prevent (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_94,Does (your/his/her) disability prevent (you/he/she) from accepting any kind of work during the next six months?,6,True,False,True,False,F2
-CPS,CPS_95,Does (your/his/her) disability prevent (you/he/she) from accepting any kind of work during the next six months?,6,True,False,True,False,F2
-CPS,CPS_96,(Do / Does) (name/you) have a disability that prevents (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_97,(Do / Does) (name/you) have a disability that prevents (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_98,(Do / Does) (name/you) have a disability that prevents (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
-CPS,CPS_99,(Do / Does) (name/you) have a disability that prevents (you/he/she) from accepting any kind of work during the next six months?,6,False,False,False,True,F3
+CPS,CPS_266,Which piece or pieces of information do not seem to be correct?,6,False,False,False,True,F3
+CPS,CPS_22,Who (are / is) (name of person talking about) related to?,2,True,False,True,False,F2
+CPS,CPS_145,Why is that?,6,False,False,False,True,F3
+CPS,CPS_16,With whom am I speaking?,12,False,False,False,True,F3
+CPS,CPS_291,"Would that be high school, college or university?",1,True,True,False,False,F1
+CPS,CPS_141,You said (name/you) (have/has) been trying to find work. How did ( you/he/she) go about looking?,2,False,False,False,True,F3
 FOODAPS,FOODAPS_0,01.  The address we have on file appears below. Is this the address where you currently live?,4,False,False,False,True,F3
-FOODAPS,FOODAPS_1,What is your name?,2,False,False,False,True,F3
-FOODAPS,FOODAPS_10,Do all people in your household share food?,4,False,False,False,True,F3
-FOODAPS,FOODAPS_100,[Have you/Has anyone at this address] ever received benefits from SNAP?,1,True,False,True,False,F2
-FOODAPS,FOODAPS_102,Select the names of the people below that received benefits from SNAP during the last 12 months.,1,True,True,False,False,F1
-FOODAPS,FOODAPS_103,On what date did [you/someone at this address] last receive benefits from SNAP?,1,True,True,False,False,F1
-FOODAPS,FOODAPS_104,How many dollars were put on the SNAP EBT card at that time?,1,True,False,True,False,F2
-FOODAPS,FOODAPS_105,Are you/Is anyone in your household now receiving benefits from WIC?,1,False,False,False,True,F3
-FOODAPS,FOODAPS_106,"Select the names of the people listed below that currently receive WIC benefits, including infants and children",1,False,False,False,True,F3
-FOODAPS,FOODAPS_108,There is a program called Medicaid that pays for health care for persons in need. Are you/Is anyone in your household covered by Medicaid?,3,True,False,True,False,F2
-FOODAPS,FOODAPS_109,Select the names of the people below that are covered by Medicaid.,3,True,True,False,False,F1
-FOODAPS,FOODAPS_11,Select the names of the people listed below that share food with each other as a group.,4,False,False,False,True,F3
-FOODAPS,FOODAPS_110,Are you/Is anyone in your household currently pregnant,1,False,False,False,True,F3
-FOODAPS,FOODAPS_111,List FEMALE HOUSEHOLD MEMBERS BETWEEN ages 14 AND <53,3,False,False,False,True,F3
-FOODAPS,FOODAPS_121,Do you use most of your benefits from [FILL IN STATE SNAP NAME] at [Fill store from C1 or at Fill store from C3]?,1,False,False,False,True,F3
-FOODAPS,FOODAPS_122,Where do you do most of your food shopping when using your benefits from [FILL IN STATE SNAP NAME]?,1,False,False,False,True,F3
-FOODAPS,FOODAPS_123,"Do you use most of your WIC benefits at [fill from c1, c3, or c3bbb]",1,False,False,False,True,F3
-FOODAPS,FOODAPS_124,Where do you go to shop for most of your WIC items?,1,False,False,False,True,F3
-FOODAPS,FOODAPS_130,"The following questions are about [FILL IN PRIMARY STORE NAME FROM C1], the store where you buy most of your groceries. How do you usually get to [FILL IN PRIMARY STORE NAME FROM C1]?",5,False,False,False,True,F3
-FOODAPS,FOODAPS_131,How long does it take to go one way from home to [FILL IN PRIMARY STORE NAME FROM C1]?,5,False,False,False,True,F3
-FOODAPS,FOODAPS_132,How much do you usually pay out of pocket for a single one-way trip to [FILL IN PRIMARY STORE NAME FROM C1],5,False,False,False,True,F3
-FOODAPS,FOODAPS_135,"When in season, do you have a fruit or vegetable garden?",4,False,False,False,True,F3
-FOODAPS,FOODAPS_136,"Do you receive free fruits or vegetables from anyone else’s garden, orchard, or trees?",4,False,False,False,True,F3
-FOODAPS,FOODAPS_139,"During the past 30 days, have you or anyone in your household gotten free groceries from a food pantry, food bank, place of worship, or other place that helps with free food?",1,False,False,False,True,F3
-FOODAPS,FOODAPS_140,"During the past 30 days, have you or anyone in your household received a free meal from a place of worship, shelter, home-delivered meal service like Meals on Wheels, or other place that helps with free meals?",1,False,False,False,True,F3
-FOODAPS,FOODAPS_16,About how much of the meal planning or meal preparation do you do for your household?,4,False,False,False,True,F3
-FOODAPS,FOODAPS_163,"Have you ever served on active duty in the U.S. Armed Forces, Reserves, or National Guard?",3,True,True,False,False,F1
-FOODAPS,FOODAPS_164,"Have you ever served on active duty in the U.S. Armed Forces, Reserves, or National Guard?",3,True,True,False,False,F1
-FOODAPS,FOODAPS_165,"Have you ever served on active duty in the U.S. Armed Forces, Reserves, or National Guard?",3,True,True,False,False,F1
-FOODAPS,FOODAPS_166,"Have you ever served on active duty in the U.S. Armed Forces, Reserves, or National Guard?",3,True,True,False,False,F1
-FOODAPS,FOODAPS_167,Were you on active duty ONLY FOR TRAINING in the Reserves or National Guard?,4,True,False,True,False,F2
-FOODAPS,FOODAPS_168,Were you on active duty ONLY FOR TRAINING in the Reserves or National Guard?,4,False,False,False,True,F3
-FOODAPS,FOODAPS_169,Do you/Does your household rent or own your home?,1,True,True,False,False,F1
 FOODAPS,FOODAPS_17,About how much of the meal planning or meal preparation do you do for your food sharing group?,4,False,False,False,True,F3
-FOODAPS,FOODAPS_170,"Is your rent/your household’s rent covered fully or in part by the Federal, State, or Local government?  ",9,False,False,False,True,F3
-FOODAPS,FOODAPS_171,Is your rent/your household’s rent covered fully by a local public housing authority or other public agency?,2,False,False,False,True,F3
-FOODAPS,FOODAPS_172,"Do you/Does anyone in your household own or lease a vehicle, like a car or truck?",1,True,False,True,False,F2
-FOODAPS,FOODAPS_173,How many vehicles do you/does your household own or lease?,1,True,False,True,False,F2
-FOODAPS,FOODAPS_177,Do you/Does your household pay [G1=2: homeowners/G1=1: renters] insurance?,9,True,False,True,False,F2
-FOODAPS,FOODAPS_178,How frequently do you/does your household pay for [G1=2: homeowners/G1=1: renters] insurance?,9,False,False,False,True,F3
-FOODAPS,FOODAPS_179,Do you/does your household pay real estate or property tax on your home?,9,True,True,False,False,F1
-FOODAPS,FOODAPS_18,What is your date of birth?,2,True,True,False,False,F1
-FOODAPS,FOODAPS_180,How frequently do you/does your household pay for real estate or property tax on your home?,9,False,False,False,True,F3
-FOODAPS,FOODAPS_181,How much do you/does your household usually pay for real estate or property tax on your home [insert fill from G8B]?,9,True,True,False,False,F1
-FOODAPS,FOODAPS_183,"Last week, did you do any work for either pay or profit? ",3,False,False,False,True,F3
-FOODAPS,FOODAPS_184,"Last week, did you do any work for either pay or profit? ",4,True,True,False,False,F1
-FOODAPS,FOODAPS_185,Did you retire before last week?,5,True,False,True,False,F2
-FOODAPS,FOODAPS_186,Did you retire before last week?,5,True,False,True,False,F2
-FOODAPS,FOODAPS_187,Did you retire early because of a disability?,6,False,False,False,True,F3
-FOODAPS,FOODAPS_188,Did you retire early because of a disability?,6,False,False,False,True,F3
-FOODAPS,FOODAPS_19,Please verify or enter correct age.,3,True,True,False,False,F1
-FOODAPS,FOODAPS_191,What is the main reason you did not work last week?,5,True,False,True,False,F2
-FOODAPS,FOODAPS_192,What is the main reason you did not work last week?,5,True,False,True,False,F2
-FOODAPS,FOODAPS_193,"Are you currently looking for a job, either full or part time?",5,False,False,False,True,F3
-FOODAPS,FOODAPS_194,"Are you currently looking for a job, either full or part time?",1,True,False,True,False,F2
-FOODAPS,FOODAPS_195,Did you work for pay or profit for more than one employer last week?,5,True,False,True,False,F2
-FOODAPS,FOODAPS_197,"How many hours do you normally work for pay, including paid sick time and paid leave time?",8,True,False,True,False,F2
-FOODAPS,FOODAPS_198,"How many hours do you normally work for pay, including paid sick time and paid leave time?",8,True,False,True,False,F2
-FOODAPS,FOODAPS_199,What shift or shifts do you work? Select all that apply,8,False,False,False,True,F3
-FOODAPS,FOODAPS_2,What is your name?,3,True,True,False,False,F1
-FOODAPS,FOODAPS_200,What shift or shifts do you work across all  jobs? Select all that apply.,8,False,False,False,True,F3
-FOODAPS,FOODAPS_201,Do you commute to work at least once a week?  ,5,True,False,True,False,F2
-FOODAPS,FOODAPS_202,How long does it usually take you to get from home to work?,5,True,False,True,False,F2
-FOODAPS,FOODAPS_203,How long does it usually take you to get from home to work?,5,True,False,True,False,F2
-FOODAPS,FOODAPS_204,"For your primary job, how long does it usually take you to get from home to work?",5,True,False,True,False,F2
-FOODAPS,FOODAPS_205,"For your primary job, how long does it usually take you to get from home to work?",5,True,False,True,False,F2
-FOODAPS,FOODAPS_210,"Did you receive any wages, salary, commissions, bonuses, or tips last month?",6,False,False,False,True,F3
-FOODAPS,FOODAPS_211,"Did you receive any wages, salary, commissions, bonuses, or tips last month?",6,False,False,False,True,F3
-FOODAPS,FOODAPS_214,What is the easiest way for you to tell us about your earnings from work before taxes and other deductions?,6,True,True,False,False,F1
-FOODAPS,FOODAPS_215,What is the easiest way for you to tell us about your earnings from work before taxes and other deductions?,6,True,False,True,False,F2
-FOODAPS,FOODAPS_216,"How much did you receive [Response from I1a] in wages, salary, commissions, bonuses, or tips from all jobs before taxes and other deductions?",6,False,False,False,True,F3
-FOODAPS,FOODAPS_217,"How much did you receive [Response from I1a] in wages, salary, commissions, bonuses, or tips from all jobs before taxes and other deductions?",6,False,False,False,True,F3
-FOODAPS,FOODAPS_218,"According to our calculations, you received [calculate TOTAL FROM I1b and I1a by month] altogether in earnings from work last month before taxes and other deductions. Is that correct?",6,False,False,False,True,F3
-FOODAPS,FOODAPS_219,"According to our calculations, you received [calculate TOTAL FROM I1b and I1a by month] altogether in earnings from work last month before taxes and other deductions. Is that correct?",6,False,False,False,True,F3
-FOODAPS,FOODAPS_22,Are you male or female?,1,True,True,False,False,F1
-FOODAPS,FOODAPS_220,What is your best estimate of the correct total amount that you received in income from earnings from work before taxes and other deductions last month?,6,True,False,True,False,F2
-FOODAPS,FOODAPS_221,What is your best estimate of the correct total amount that you received in income from earnings from work before taxes and other deductions last month?,6,True,False,True,False,F2
-FOODAPS,FOODAPS_24,Are you male or female?,1,True,True,False,False,F1
+FOODAPS,FOODAPS_16,About how much of the meal planning or meal preparation do you do for your household?,4,False,False,False,True,F3
+FOODAPS,FOODAPS_289,"According to our calculations, NAME received [calculate TOTAL FROM I1b and I1a by month] altogether in earnings from work last month before taxes and other deductions. Is that correct?",6,False,False,False,True,F3
+FOODAPS,FOODAPS_218,"According to our calculations, you received [calculate TOTAL FROM I1b and I1a by month] altogether in earnings from work last month before taxes and other deductions. Is that correct?",12,False,False,False,True,F3
 FOODAPS,FOODAPS_248,"Are the following people able and willing to answer additional questions about health, school, work and income for themselves, or will you answer for them? ",4,False,False,False,True,F3
 FOODAPS,FOODAPS_249,"Are the following people able and willing to complete daily surveys about what food they get each day over the next week, or will you answer for them?",4,False,False,False,True,F3
-FOODAPS,FOODAPS_250,Does NAME have their own email address?,3,False,False,False,True,F3
-FOODAPS,FOODAPS_251,What is NAME’s email address?,3,False,False,False,True,F3
-FOODAPS,FOODAPS_252,"We can also send updates, notifications, and survey links via text message. Would [Name] like us to contact them by text message?",3,False,False,False,True,F3
-FOODAPS,FOODAPS_253,Please enter the cell phone number where NAME wishes to receive text messages,3,False,False,False,True,F3
-FOODAPS,FOODAPS_268,"Has NAME ever served on active duty in the U.S. Armed Forces, Reserves, or National Guard?",3,False,False,False,True,F3
-FOODAPS,FOODAPS_269,Was Name on active duty ONLY FOR TRAINING in the Reserves or National Guard?,4,False,False,False,True,F3
-FOODAPS,FOODAPS_27,What is your race and/or ethnicity? Select all that apply.,3,True,False,True,False,F2
-FOODAPS,FOODAPS_270,Is Name currently on active duty?,4,False,False,False,True,F3
-FOODAPS,FOODAPS_271,"Last week, did NAME do any work for either pay or profit? ",3,True,False,True,False,F2
+FOODAPS,FOODAPS_193,"Are you currently looking for a job, either full or part time?",6,True,False,True,False,F2
+FOODAPS,FOODAPS_29,"Are you currently married, widowed, divorced, separated, or never married?",4,True,True,False,False,F1
+FOODAPS,FOODAPS_22,Are you male or female?,2,True,True,False,False,F1
+FOODAPS,FOODAPS_110,Are you/Is anyone in your household currently pregnant,1,False,False,False,True,F3
+FOODAPS,FOODAPS_105,Are you/Is anyone in your household now receiving benefits from WIC?,1,False,False,False,True,F3
+FOODAPS,FOODAPS_285,"Did NAME receive any wages, salary, commissions, bonuses, or tips last month?",6,False,False,False,True,F3
 FOODAPS,FOODAPS_272,Did NAME retire before last week?,5,True,False,True,False,F2
 FOODAPS,FOODAPS_273,Did NAME retire early because of a disability?,5,False,False,False,True,F3
-FOODAPS,FOODAPS_275,What is the main reason NAME did not work last week?,5,True,False,True,False,F2
-FOODAPS,FOODAPS_276,"Is NAME currently looking for a job, either full or part time?",2,True,False,True,False,F2
-FOODAPS,FOODAPS_278,"On average about how many hours does NAME normally work (and get paid) per week, including paid sick time and paid leave time?",8,True,False,True,False,F2
-FOODAPS,FOODAPS_279,What shift or shifts does NAME work? Please check all that apply.,8,False,False,False,True,F3
-FOODAPS,FOODAPS_280,What shift or shifts does NAME work across all  jobs?,8,False,False,False,True,F3
+FOODAPS,FOODAPS_210,"Did you receive any wages, salary, commissions, bonuses, or tips last month?",12,False,False,False,True,F3
+FOODAPS,FOODAPS_185,Did you retire before last week?,10,True,False,True,False,F2
+FOODAPS,FOODAPS_187,Did you retire early because of a disability?,12,False,False,False,True,F3
+FOODAPS,FOODAPS_195,Did you work for pay or profit for more than one employer last week?,5,True,False,True,False,F2
+FOODAPS,FOODAPS_10,Do all people in your household share food?,4,False,False,False,True,F3
+FOODAPS,FOODAPS_201,Do you commute to work at least once a week?  ,5,True,False,True,False,F2
+FOODAPS,FOODAPS_136,"Do you receive free fruits or vegetables from anyone else’s garden, orchard, or trees?",4,False,False,False,True,F3
+FOODAPS,FOODAPS_123,"Do you use most of your WIC benefits at [fill from c1, c3, or c3bbb]",1,False,False,False,True,F3
+FOODAPS,FOODAPS_121,Do you use most of your benefits from [FILL IN STATE SNAP NAME] at [Fill store from C1 or at Fill store from C3]?,1,False,False,False,True,F3
+FOODAPS,FOODAPS_172,"Do you/Does anyone in your household own or lease a vehicle, like a car or truck?",1,True,False,True,False,F2
+FOODAPS,FOODAPS_177,Do you/Does your household pay [G1=2: homeowners/G1=1: renters] insurance?,9,True,False,True,False,F2
+FOODAPS,FOODAPS_169,Do you/Does your household rent or own your home?,1,True,True,False,False,F1
+FOODAPS,FOODAPS_179,Do you/does your household pay real estate or property tax on your home?,9,True,True,False,False,F1
 FOODAPS,FOODAPS_281,Does NAME commute to work at least once a week?  ,5,False,False,False,True,F3
-FOODAPS,FOODAPS_282,How long does it usually take NAME to get from home to work?,5,True,False,True,False,F2
+FOODAPS,FOODAPS_250,Does NAME have their own email address?,3,False,False,False,True,F3
+FOODAPS,FOODAPS_139,"During the past 30 days, have you or anyone in your household gotten free groceries from a food pantry, food bank, place of worship, or other place that helps with free food?",1,False,False,False,True,F3
+FOODAPS,FOODAPS_140,"During the past 30 days, have you or anyone in your household received a free meal from a place of worship, shelter, home-delivered meal service like Meals on Wheels, or other place that helps with free meals?",1,False,False,False,True,F3
 FOODAPS,FOODAPS_283,"For your primary job, how long does it usually take NAME to get from home to work?",5,True,False,True,False,F2
-FOODAPS,FOODAPS_285,"Did NAME receive any wages, salary, commissions, bonuses, or tips last month?",6,False,False,False,True,F3
-FOODAPS,FOODAPS_287,What is the easiest way for you to tell us about NAME’s earnings from work before taxes and other deductions?,6,True,True,False,False,F1
+FOODAPS,FOODAPS_204,"For your primary job, how long does it usually take you to get from home to work?",10,True,False,True,False,F2
+FOODAPS,FOODAPS_268,"Has NAME ever served on active duty in the U.S. Armed Forces, Reserves, or National Guard?",3,False,False,False,True,F3
+FOODAPS,FOODAPS_91,Has anyone at this address received benefits from the Supplemental Nutrition Assistance Program in the past 30 days? This program is also known as [FILL IN STATE SNAP NAME] or food stamps and it puts money on an EBT card that you can use to buy food.,1,True,False,True,False,F2
+FOODAPS,FOODAPS_163,"Have you ever served on active duty in the U.S. Armed Forces, Reserves, or National Guard?",12,True,True,False,False,F1
+FOODAPS,FOODAPS_90,Have you received benefits from the Supplemental Nutrition Assistance Program in the past 30 days? This program is also known as [FILL IN STATE SNAP NAME] or food stamps and it puts money on an EBT card that you can use to buy food.,1,True,False,True,False,F2
+FOODAPS,FOODAPS_178,How frequently do you/does your household pay for [G1=2: homeowners/G1=1: renters] insurance?,9,False,False,False,True,F3
+FOODAPS,FOODAPS_180,How frequently do you/does your household pay for real estate or property tax on your home?,9,False,False,False,True,F3
+FOODAPS,FOODAPS_131,How long does it take to go one way from home to [FILL IN PRIMARY STORE NAME FROM C1]?,5,False,False,False,True,F3
+FOODAPS,FOODAPS_282,How long does it usually take NAME to get from home to work?,5,True,False,True,False,F2
+FOODAPS,FOODAPS_202,How long does it usually take you to get from home to work?,10,True,False,True,False,F2
+FOODAPS,FOODAPS_92,How many [FILL IN STATE SNAP NAME] EBT cards are issued to people at this address ?,1,True,False,True,False,F2
+FOODAPS,FOODAPS_104,How many dollars were put on the SNAP EBT card at that time?,1,True,False,True,False,F2
+FOODAPS,FOODAPS_97,How many dollars were put on your EBT card the last time you received [FILL IN STATE SNAP NAME] benefits?,1,True,False,True,False,F2
+FOODAPS,FOODAPS_197,"How many hours do you normally work for pay, including paid sick time and paid leave time?",16,True,False,True,False,F2
+FOODAPS,FOODAPS_173,How many vehicles do you/does your household own or lease?,1,True,False,True,False,F2
 FOODAPS,FOODAPS_288,"How much did NAME receive [Response from I1a] in wages, salary, commissions, bonuses, or tips from all jobs before taxes and other deductions?",6,False,False,False,True,F3
-FOODAPS,FOODAPS_289,"According to our calculations, NAME received [calculate TOTAL FROM I1b and I1a by month] altogether in earnings from work last month before taxes and other deductions. Is that correct?",6,False,False,False,True,F3
-FOODAPS,FOODAPS_29,"Are you currently married, widowed, divorced, separated, or never married?",4,True,True,False,False,F1
-FOODAPS,FOODAPS_290,What is your best estimate of the correct total amount that NAME received in income from earnings from work before taxes and other deductions last month?,6,False,False,False,True,F3
-FOODAPS,FOODAPS_3,What is your email?,4,False,False,False,True,F3
-FOODAPS,FOODAPS_30,Is your spouse a member of this household?,4,False,False,False,True,F3
-FOODAPS,FOODAPS_31,"Last week, were you enrolled in school as a full-time or part-time student, or were you not enrolled in school?",5,True,False,True,False,F2
-FOODAPS,FOODAPS_32,"Last week, were you enrolled in school as a full-time or part-time student, or were you not enrolled in school?",5,True,False,True,False,F2
-FOODAPS,FOODAPS_33,"This week and next week are you attending classes for: (1)Middle/junior  high school (2) High School (3) Homeschool (4) Other school (college, technical school, etc.) (5) no, not attending classes",5,True,False,True,False,F2
-FOODAPS,FOODAPS_34,What is the reason you will not attend school this week and next week?,5,False,False,False,True,F3
-FOODAPS,FOODAPS_35,What is the level of school that you attended before summer break?,5,True,False,True,False,F2
-FOODAPS,FOODAPS_36,What is the level of school that you attend when not on a school break?,5,True,True,False,False,F1
-FOODAPS,FOODAPS_37,What are the first and last days of the school break or summer vacation?,5,False,False,False,True,F3
-FOODAPS,FOODAPS_4,"We can also send updates, notifications, and survey links via text message. Would you like us to contact you by text message?",4,False,False,False,True,F3
-FOODAPS,FOODAPS_5,Please enter the cell phone number where you wish to receive text messages.,4,False,False,False,True,F3
-FOODAPS,FOODAPS_56,What is NAME’s relationship to you?,2,True,False,True,False,F2
-FOODAPS,FOODAPS_59,What is NAME’s race and/or ethnicity? Select all that apply.,3,True,False,True,False,F2
-FOODAPS,FOODAPS_6,"Who lives at [fill address], even if they are not related to you? Please list all the people who will be living at your address over the next week. Include any babies or young children.",4,False,False,False,True,F3
+FOODAPS,FOODAPS_216,"How much did you receive [Response from I1a] in wages, salary, commissions, bonuses, or tips from all jobs before taxes and other deductions?",12,False,False,False,True,F3
+FOODAPS,FOODAPS_132,How much do you usually pay out of pocket for a single one-way trip to [FILL IN PRIMARY STORE NAME FROM C1],5,False,False,False,True,F3
+FOODAPS,FOODAPS_181,How much do you/does your household usually pay for real estate or property tax on your home [insert fill from G8B]?,9,True,True,False,False,F1
+FOODAPS,FOODAPS_276,"Is NAME currently looking for a job, either full or part time?",2,True,False,True,False,F2
 FOODAPS,FOODAPS_61,"Is NAME currently married, widowed, divorced, separated, or never married?",3,False,False,False,True,F3
 FOODAPS,FOODAPS_62,Is NAME’s spouse a member of this household?,3,True,True,False,False,F1
-FOODAPS,FOODAPS_63,"Last week, was NAME enrolled in school as a full-time or part-time student, or was NAME not enrolled in school?",5,True,False,True,False,F2
-FOODAPS,FOODAPS_64,"This week and next week is NAME attending classes for:  (1) Kindergarten (2) Elementary/grade school (4) Middle/junior high school (6) High school (7) Homeschool (7) Other school (college, technical school, etc.) (8) No, not attending classes",5,True,True,False,False,F1
-FOODAPS,FOODAPS_65,What is the reason NAME will not attend school this week and next week?  (1) Summer vacation/summer break  (2) Other school break  (3) Home schooled (4) Disabled (5) Not old enough (6) Not enrolled (7) Graduated (8) Other,5,False,False,False,True,F3
-FOODAPS,FOODAPS_66,"What is the level of school that NAME attended before summer break? (0) Did not attend school  (1) Primary or preschool (2) Kindergarten (3) Elementary/grade school (4) Middle/junior high school (5) High school (6) Other school (college, technical school, etc.)",5,True,False,True,False,F2
-FOODAPS,FOODAPS_67,"What is the level of school that NAME attend/s when not on a school break? (1) Primary or preschool (2) Kindergarten (3) Elementary/grade school (4) Middle/junior high school (5) High school (6) Other school (college, technical school, etc.)",5,True,True,False,False,F1
-FOODAPS,FOODAPS_68,What are the first and last days of the school break or summer vacation?,5,False,False,False,True,F3
+FOODAPS,FOODAPS_270,Is Name currently on active duty?,4,False,False,False,True,F3
+FOODAPS,FOODAPS_98,"Is that the amount usually added each month, more than the usual amount, or less than the usual amount?",2,False,False,False,True,F3
 FOODAPS,FOODAPS_7,"Is there anyone else who USUALLY lives here, but is now away for reasons such as traveling for vacation or for work, in the military, or in the hospital?",4,False,False,False,True,F3
 FOODAPS,FOODAPS_8,"Is there anyone else who lives here, such as a roommate, renter, or person you employ (for example, a babysitter)?",4,False,False,False,True,F3
-FOODAPS,FOODAPS_9,"Please select whether each person listed below will be here for the next [fill] days, away for the next [fill] days or is a guest that is visiting here temporarily.",4,False,False,False,True,F3
-FOODAPS,FOODAPS_90,Have you received benefits from the Supplemental Nutrition Assistance Program in the past 30 days? This program is also known as [FILL IN STATE SNAP NAME] or food stamps and it puts money on an EBT card that you can use to buy food.,1,True,False,True,False,F2
-FOODAPS,FOODAPS_91,Has anyone at this address received benefits from the Supplemental Nutrition Assistance Program in the past 30 days? This program is also known as [FILL IN STATE SNAP NAME] or food stamps and it puts money on an EBT card that you can use to buy food.,1,True,False,True,False,F2
-FOODAPS,FOODAPS_92,How many [FILL IN STATE SNAP NAME] EBT cards are issued to people at this address ?,1,True,False,True,False,F2
-FOODAPS,FOODAPS_93,You said there is one [FILL IN STATE SNAP NAME] card in this household. Now we will ask about who in the household is assigned to the EBT card. Select the names of the people below that receive [FILL SNAP] benefits together under that EBT card,1,True,False,True,False,F2
-FOODAPS,FOODAPS_94,You said there are two [FILL IN STATE SNAP NAME] cards in this household. Now we will ask about who in the household is assigned to the two EBT cards. Select the names of the people below that receive [FILL SNAP] benefits together under those two EBT cards.,1,False,False,False,True,F3
-FOODAPS,FOODAPS_95,You said there are three or more [FILL IN STATE SNAP NAME] cards in this household. Now we will ask about who in the household is assigned to the first three EBT cards. Select the names of the people below that receive [FILL SNAP] benefits together under the first three EBT cards.,1,False,False,False,True,F3
+FOODAPS,FOODAPS_171,Is your rent/your household’s rent covered fully by a local public housing authority or other public agency?,2,False,False,False,True,F3
+FOODAPS,FOODAPS_170,"Is your rent/your household’s rent covered fully or in part by the Federal, State, or Local government?  ",9,False,False,False,True,F3
+FOODAPS,FOODAPS_30,Is your spouse a member of this household?,4,False,False,False,True,F3
+FOODAPS,FOODAPS_271,"Last week, did NAME do any work for either pay or profit? ",3,True,False,True,False,F2
+FOODAPS,FOODAPS_183,"Last week, did you do any work for either pay or profit? ",7,True,True,False,False,F1
+FOODAPS,FOODAPS_63,"Last week, was NAME enrolled in school as a full-time or part-time student, or was NAME not enrolled in school?",5,True,False,True,False,F2
+FOODAPS,FOODAPS_31,"Last week, were you enrolled in school as a full-time or part-time student, or were you not enrolled in school?",10,True,False,True,False,F2
+FOODAPS,FOODAPS_111,List FEMALE HOUSEHOLD MEMBERS BETWEEN ages 14 AND <53,3,False,False,False,True,F3
+FOODAPS,FOODAPS_278,"On average about how many hours does NAME normally work (and get paid) per week, including paid sick time and paid leave time?",8,True,False,True,False,F2
+FOODAPS,FOODAPS_103,On what date did [you/someone at this address] last receive benefits from SNAP?,1,True,True,False,False,F1
 FOODAPS,FOODAPS_96,On what date did [you/you and names of SNAP group 1 from B1ba ] last receive [FILL IN STATE SNAP NAME] benefits?,1,True,False,True,False,F2
-FOODAPS,FOODAPS_97,How many dollars were put on your EBT card the last time you received [FILL IN STATE SNAP NAME] benefits?,1,True,False,True,False,F2
-FOODAPS,FOODAPS_98,"Is that the amount usually added each month, more than the usual amount, or less than the usual amount?",1,False,False,False,True,F3
-FOODAPS,FOODAPS_99,"Is that the amount usually added each month, more than the usual amount, or less than the usual amount?",1,False,False,False,True,F3
+FOODAPS,FOODAPS_253,Please enter the cell phone number where NAME wishes to receive text messages,3,False,False,False,True,F3
+FOODAPS,FOODAPS_5,Please enter the cell phone number where you wish to receive text messages.,4,False,False,False,True,F3
+FOODAPS,FOODAPS_9,"Please select whether each person listed below will be here for the next [fill] days, away for the next [fill] days or is a guest that is visiting here temporarily.",4,False,False,False,True,F3
+FOODAPS,FOODAPS_19,Please verify or enter correct age.,3,True,True,False,False,F1
+FOODAPS,FOODAPS_109,Select the names of the people below that are covered by Medicaid.,3,True,True,False,False,F1
+FOODAPS,FOODAPS_102,Select the names of the people below that received benefits from SNAP during the last 12 months.,1,True,True,False,False,F1
+FOODAPS,FOODAPS_106,"Select the names of the people listed below that currently receive WIC benefits, including infants and children",1,False,False,False,True,F3
+FOODAPS,FOODAPS_11,Select the names of the people listed below that share food with each other as a group.,4,False,False,False,True,F3
+FOODAPS,FOODAPS_130,"The following questions are about [FILL IN PRIMARY STORE NAME FROM C1], the store where you buy most of your groceries. How do you usually get to [FILL IN PRIMARY STORE NAME FROM C1]?",5,False,False,False,True,F3
+FOODAPS,FOODAPS_108,There is a program called Medicaid that pays for health care for persons in need. Are you/Is anyone in your household covered by Medicaid?,3,True,False,True,False,F2
+FOODAPS,FOODAPS_33,"This week and next week are you attending classes for: (1)Middle/junior  high school (2) High School (3) Homeschool (4) Other school (college, technical school, etc.) (5) no, not attending classes",5,True,False,True,False,F2
+FOODAPS,FOODAPS_64,"This week and next week is NAME attending classes for:  (1) Kindergarten (2) Elementary/grade school (4) Middle/junior high school (6) High school (7) Homeschool (7) Other school (college, technical school, etc.) (8) No, not attending classes",5,True,True,False,False,F1
+FOODAPS,FOODAPS_269,Was Name on active duty ONLY FOR TRAINING in the Reserves or National Guard?,4,False,False,False,True,F3
+FOODAPS,FOODAPS_252,"We can also send updates, notifications, and survey links via text message. Would [Name] like us to contact them by text message?",3,False,False,False,True,F3
+FOODAPS,FOODAPS_4,"We can also send updates, notifications, and survey links via text message. Would you like us to contact you by text message?",4,False,False,False,True,F3
+FOODAPS,FOODAPS_167,Were you on active duty ONLY FOR TRAINING in the Reserves or National Guard?,8,True,False,True,False,F2
+FOODAPS,FOODAPS_37,What are the first and last days of the school break or summer vacation?,10,False,False,False,True,F3
+FOODAPS,FOODAPS_251,What is NAME’s email address?,3,False,False,False,True,F3
+FOODAPS,FOODAPS_59,What is NAME’s race and/or ethnicity? Select all that apply.,3,True,False,True,False,F2
+FOODAPS,FOODAPS_56,What is NAME’s relationship to you?,2,True,False,True,False,F2
+FOODAPS,FOODAPS_287,What is the easiest way for you to tell us about NAME’s earnings from work before taxes and other deductions?,6,True,True,False,False,F1
+FOODAPS,FOODAPS_214,What is the easiest way for you to tell us about your earnings from work before taxes and other deductions?,12,True,True,False,False,F1
+FOODAPS,FOODAPS_67,"What is the level of school that NAME attend/s when not on a school break? (1) Primary or preschool (2) Kindergarten (3) Elementary/grade school (4) Middle/junior high school (5) High school (6) Other school (college, technical school, etc.)",5,True,True,False,False,F1
+FOODAPS,FOODAPS_66,"What is the level of school that NAME attended before summer break? (0) Did not attend school  (1) Primary or preschool (2) Kindergarten (3) Elementary/grade school (4) Middle/junior high school (5) High school (6) Other school (college, technical school, etc.)",5,True,False,True,False,F2
+FOODAPS,FOODAPS_36,What is the level of school that you attend when not on a school break?,5,True,True,False,False,F1
+FOODAPS,FOODAPS_35,What is the level of school that you attended before summer break?,5,True,False,True,False,F2
+FOODAPS,FOODAPS_275,What is the main reason NAME did not work last week?,5,True,False,True,False,F2
+FOODAPS,FOODAPS_191,What is the main reason you did not work last week?,10,True,False,True,False,F2
+FOODAPS,FOODAPS_65,What is the reason NAME will not attend school this week and next week?  (1) Summer vacation/summer break  (2) Other school break  (3) Home schooled (4) Disabled (5) Not old enough (6) Not enrolled (7) Graduated (8) Other,5,False,False,False,True,F3
+FOODAPS,FOODAPS_34,What is the reason you will not attend school this week and next week?,5,False,False,False,True,F3
+FOODAPS,FOODAPS_290,What is your best estimate of the correct total amount that NAME received in income from earnings from work before taxes and other deductions last month?,6,False,False,False,True,F3
+FOODAPS,FOODAPS_220,What is your best estimate of the correct total amount that you received in income from earnings from work before taxes and other deductions last month?,12,True,False,True,False,F2
+FOODAPS,FOODAPS_18,What is your date of birth?,2,True,True,False,False,F1
+FOODAPS,FOODAPS_3,What is your email?,4,False,False,False,True,F3
+FOODAPS,FOODAPS_2,What is your name?,5,True,True,False,False,F1
+FOODAPS,FOODAPS_27,What is your race and/or ethnicity? Select all that apply.,3,True,False,True,False,F2
+FOODAPS,FOODAPS_200,What shift or shifts do you work across all  jobs? Select all that apply.,8,False,False,False,True,F3
+FOODAPS,FOODAPS_199,What shift or shifts do you work? Select all that apply,8,False,False,False,True,F3
+FOODAPS,FOODAPS_280,What shift or shifts does NAME work across all  jobs?,8,False,False,False,True,F3
+FOODAPS,FOODAPS_279,What shift or shifts does NAME work? Please check all that apply.,8,False,False,False,True,F3
+FOODAPS,FOODAPS_135,"When in season, do you have a fruit or vegetable garden?",4,False,False,False,True,F3
+FOODAPS,FOODAPS_122,Where do you do most of your food shopping when using your benefits from [FILL IN STATE SNAP NAME]?,1,False,False,False,True,F3
+FOODAPS,FOODAPS_124,Where do you go to shop for most of your WIC items?,1,False,False,False,True,F3
+FOODAPS,FOODAPS_6,"Who lives at [fill address], even if they are not related to you? Please list all the people who will be living at your address over the next week. Include any babies or young children.",4,False,False,False,True,F3
+FOODAPS,FOODAPS_95,You said there are three or more [FILL IN STATE SNAP NAME] cards in this household. Now we will ask about who in the household is assigned to the first three EBT cards. Select the names of the people below that receive [FILL SNAP] benefits together under the first three EBT cards.,1,False,False,False,True,F3
+FOODAPS,FOODAPS_94,You said there are two [FILL IN STATE SNAP NAME] cards in this household. Now we will ask about who in the household is assigned to the two EBT cards. Select the names of the people below that receive [FILL SNAP] benefits together under those two EBT cards.,1,False,False,False,True,F3
+FOODAPS,FOODAPS_93,You said there is one [FILL IN STATE SNAP NAME] card in this household. Now we will ask about who in the household is assigned to the EBT card. Select the names of the people below that receive [FILL SNAP] benefits together under that EBT card,1,True,False,True,False,F2
+FOODAPS,FOODAPS_100,[Have you/Has anyone at this address] ever received benefits from SNAP?,1,True,False,True,False,F2

@@ -25,7 +25,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(mess
 log = logging.getLogger(__name__)
 
 BASE_DIR = Path(__file__).parent.parent
-OUTPUT_DIR = REPO_ROOT / "output" / "report_03" / "analysis"
+OUTPUT_DIR = REPO_ROOT / "docs" / "stages" / "03_harmonization" / "data" / "analysis"
 
 
 def main():
@@ -58,7 +58,15 @@ def main():
     pairs = pairs.sort_values(['feasibility_rank', 'score_borda'], ascending=[False, False])
 
     best = pairs.groupby(['survey', 'survey_q_id']).first().reset_index()
-    log.info(f"Best matches: {len(best)} questions")
+
+    # Dedup by unique question text: same text may appear under multiple survey_q_ids
+    # (subtopic-context inflation). Strip whitespace, keep best feasibility + Borda score.
+    best['question_text_norm'] = best['survey_text'].str.strip()
+    best = (best.sort_values(['feasibility_rank', 'score_borda'], ascending=[False, False])
+                .drop_duplicates(subset=['survey', 'question_text_norm'], keep='first')
+                .drop(columns='question_text_norm'))
+
+    log.info(f"Best matches: {len(best)} questions (after question-text dedup)")
 
     # --- Triage quadrant assignment ---
     # Use median thresholds from the best-match scores (not pair-level, where
@@ -81,12 +89,12 @@ def main():
 
     best['triage_quadrant'] = best.apply(assign_quadrant, axis=1)
 
-    # --- Add has_consolidable_path from question-level ---
-    best = best.merge(
-        questions[['survey', 'survey_q_id', 'has_consolidable_path']],
-        on=['survey', 'survey_q_id'],
-        how='left'
-    )
+    # --- Derive has_consolidable_path from best pair feasibility ---
+    # The dedup above selected the best-feasibility row per unique question text,
+    # so final_feasibility in ['F1','F2'] is equivalent to "has any consolidable path."
+    # Direct join via survey_q_id would miss rows whose representative q_id differs
+    # between this dedup and the one in question_level.
+    best['has_consolidable_path'] = best['final_feasibility'].isin(['F1', 'F2'])
 
     # --- Truncate text columns ---
     max_text = 120

@@ -15,9 +15,10 @@ from pathlib import Path
 SRC_DIR = Path(__file__).resolve().parent.parent    # .../src/
 REPO_ROOT = SRC_DIR.parent                           # repo root
 sys.path.insert(0, str(SRC_DIR))                     # enables lib imports
-QUESTION_DATA = REPO_ROOT / "output/report_03/analysis/stage4_question_best_matches.csv"
-PAIR_DATA = REPO_ROOT / "output/report_03/analysis/final_verdicts.csv"
-OUTPUT_FILE = REPO_ROOT / "output/report_03/visuals/question_consolidation_distribution.png"
+ANALYSIS_DIR = REPO_ROOT / "docs" / "stages" / "03_harmonization" / "data" / "analysis"
+QUESTION_DATA = ANALYSIS_DIR / "stage4_question_best_matches.csv"
+PAIR_DATA = ANALYSIS_DIR / "final_verdicts.csv"
+OUTPUT_FILE = REPO_ROOT / "output" / "report_03" / "visuals" / "question_consolidation_distribution.png"
 
 def load_data():
     """Load question-level and pair-level data."""

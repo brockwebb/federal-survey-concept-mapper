@@ -35,7 +35,8 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(mess
 log = logging.getLogger(__name__)
 
 BASE_DIR = Path(__file__).parent.parent
-OUTPUT_DIR = REPO_ROOT / "output" / "report_03" / "analysis"
+OUTPUT_DIR = REPO_ROOT / "docs" / "stages" / "03_harmonization" / "data" / "analysis"
+QUESTION_COUNTS_JSON = REPO_ROOT / "docs" / "validation" / "question_counts.json"
 
 # Subcode definitions (from taxonomy_v1.md)
 SUBCODE_DEFS = {
@@ -332,14 +333,20 @@ def main():
     foodaps = expert[expert['survey'] == 'FOODAPS'].copy()
     cps = expert[expert['survey'] == 'CPS'].copy()
 
-    # Validate
+    # Validate — read expected counts from canonical source, not hardcoded
+    with open(QUESTION_COUNTS_JSON) as f:
+        qcj = json.load(f)
+    exp_cps = qcj["question_level_results"]["CPS"]["unique_questions"]
+    exp_food = qcj["question_level_results"]["FoodAPS"]["unique_questions"]
+    exp_total = exp_cps + exp_food
+
     errors = []
-    if len(cps) != 240:
-        errors.append(f"CPS row count: {len(cps)} (expected 240)")
-    if len(foodaps) != 140:
-        errors.append(f"FoodAPS row count: {len(foodaps)} (expected 140)")
-    if len(expert) != 380:
-        errors.append(f"Combined row count: {len(expert)} (expected 380)")
+    if len(cps) != exp_cps:
+        errors.append(f"CPS row count: {len(cps)} (expected {exp_cps})")
+    if len(foodaps) != exp_food:
+        errors.append(f"FoodAPS row count: {len(foodaps)} (expected {exp_food})")
+    if len(expert) != exp_total:
+        errors.append(f"Combined row count: {len(expert)} (expected {exp_total})")
 
     null_reasoning = expert['arbitrator_reasoning'].isna().sum() + (expert['arbitrator_reasoning'] == '').sum()
     if null_reasoning > 0:

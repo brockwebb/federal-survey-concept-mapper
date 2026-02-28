@@ -2,30 +2,36 @@
 
 The previous chapter described a method for evaluating whether survey questions measuring similar concepts can actually be harmonized: pair every source question with every ACS question sharing its subtopic, then have three independent AI models rate each pair's feasibility, with arbitration resolving disagreements. This chapter reports what that process found.
 
-The CPS contains 211 questions and FoodAPS contains 462 questions across four questionnaire instruments. Not all of these entered the analysis. Only questions whose subtopic classifications overlapped with ACS were eligible for pairing — 164 unique CPS questions (78% of the survey) and 123 unique FoodAPS questions (27% of the survey). The difference reflects each survey's conceptual distance from ACS: CPS shares broad labor force and demographic territory, while FoodAPS is predominantly a specialized food acquisition instrument whose questions on shopping frequency, food storage, and meal preparation have no ACS counterpart. These raw question counts also overstate what any single respondent encounters, since both surveys use branching logic that routes respondents through different question paths based on their circumstances.
+The CPS contains 211 questions and FoodAPS contains 462 questions across four questionnaire instruments. Not all of these entered the analysis. Only questions whose subtopic classifications overlapped with ACS were eligible for pairing — 157 unique CPS questions (74% of the survey) and 118 unique FoodAPS questions (26% of the survey). The difference reflects each survey's conceptual distance from ACS: CPS shares broad labor force and demographic territory, while FoodAPS is predominantly a specialized food acquisition instrument whose questions on shopping frequency, food storage, and meal preparation have no ACS counterpart. These raw question counts also overstate what any single respondent encounters, since both surveys use branching logic that routes respondents through different question paths based on their circumstances.
 
 Each eligible question was paired with every ACS question sharing its subtopic, producing 1,030 CPS–ACS pairs and 568 FoodAPS–ACS pairs. Most of these pairs were expected to fail — a question about weekly earnings and a question about commute mode might share an "Economic" subtopic but measure entirely different things. The purpose of the broad search was to ensure no viable match was missed. The following table summarizes the funnel from total survey questions through to harmonization results:
 
 | | CPS | FoodAPS |
 |--|:-:|:-:|
 | Total survey questions | 211 | 462 |
-| Questions with ACS concept overlap | 164 (78%) | 123 (27%) |
+| Questions with ACS concept overlap | 157 (74%) | 118 (26%) |
 | Question pairs evaluated | 1,030 | 568 |
-| **Questions with harmonization paths** | **93 (56.7% of paired)** | **61 (49.6% of paired)** |
-| **As share of total survey** | **44.1%** | **13.2%** |
+| **Questions with harmonization paths** | **86 (54.8% of paired)** | **56 (47.5% of paired)** |
+| **As share of total survey** | **40.8%** | **12.1%** |
 
-Across both surveys, 154 unique questions are candidate bridge variables for expert review. These results vary by subject matter:
+Across both surveys, 142 unique questions are candidate bridge variables for expert review. These results vary by subject matter:
 
+<!--
+TODO: Topic-level breakdown table requires regeneration using the canonical L1 topic→subtopic mapping.
+The values below reflect the corrected question counts (CPS=157, FoodAPS=118) and
+corrected harmonizable counts (CPS=86, FoodAPS=56). Row-level topic assignments
+pending update from pipeline with documented subtopic→L1 classification.
+-->
 | Survey | Topic | Questions | Harmonizable | Rate |
 |--------|-------|:-:|:-:|:-:|
-| CPS | Demographic | 29 | 23 | 79.3% |
-| CPS | Economic | 101 | 58 | 57.4% |
-| CPS | Social | 33 | 12 | 36.4% |
-| FoodAPS | Demographic | 12 | 10 | 83.3% |
-| FoodAPS | Economic | 59 | 32 | 54.2% |
-| FoodAPS | Social | 42 | 13 | 31.0% |
-| FoodAPS | Housing | 10 | 6 | 60.0% |
+| CPS | Demographic | — | — | — |
+| CPS | Economic | — | — | — |
+| CPS | Social | — | — | — |
+| FoodAPS | Demographic | — | — | — |
+| FoodAPS | Economic | — | — | — |
+| FoodAPS | Social | — | — | — |
+| FoodAPS | Housing | — | — | — |
 
-Demographic questions harmonize at the highest rates — roughly 80% across both surveys. This is expected: federal surveys use relatively standardized approaches to collecting age, sex, race, and similar basic characteristics. The more substantive finding is in the non-demographic categories. Among CPS economic questions, the largest pools of bridge variable candidates are earnings (19 of 23 questions), employment status (20 of 34), and hours worked (12 of 18). Among FoodAPS economic questions, SNAP participation (11 of 22 questions), employment status (8 of 9), and school enrollment (8 of 11) contribute the most. Full subtopic breakdowns appear in Appendix C.
+Topic-level rates vary: demographic questions, which rely on standardized federal definitions for age, sex, race, and relationship, harmonize at higher rates than economic and social questions. The more substantive finding is in the economic categories. Among CPS questions, the largest pools of bridge variable candidates concentrate in earnings, employment status, and hours worked. Among FoodAPS questions, SNAP participation, employment status, and school enrollment contribute the most. Full subtopic breakdowns appear in Appendix C.
 
 The next chapter examines what these results mean in practice — which harmonization paths are straightforward, which require methodological investment, and what the barrier patterns reveal about the feasibility of broader cross-survey integration.

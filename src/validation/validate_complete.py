@@ -405,18 +405,18 @@ if has_ql:
     ql = pd.read_csv(QUESTION_LEVEL_CSV)
     feas_rank = {"F1": 1, "F2": 2, "F3": 3}
 
-    # Verify inflated counts match known values
-    cps_inflated = len(ql[ql["survey"] == "CPS"])
-    food_inflated = len(ql[ql["survey"] == "FOODAPS"])
+    # Verify corrected row counts (pipeline fixed to dedup by question_text)
+    cps_row_count = len(ql[ql["survey"] == "CPS"])
+    food_row_count = len(ql[ql["survey"] == "FOODAPS"])
     check(
-        "ql_inflated_cps",
-        cps_inflated == 240,
-        f"stage4_question_level.csv CPS rows (inflated): {cps_inflated} (expected 240)",
+        "ql_row_count_cps",
+        cps_row_count == 157,
+        f"stage4_question_level.csv CPS rows: {cps_row_count} (expected 157)",
     )
     check(
-        "ql_inflated_foodaps",
-        food_inflated == 140,
-        f"stage4_question_level.csv FoodAPS rows (inflated): {food_inflated} (expected 140)",
+        "ql_row_count_foodaps",
+        food_row_count == 118,
+        f"stage4_question_level.csv FoodAPS rows: {food_row_count} (expected 118)",
     )
 
     # Perform dedup
@@ -532,65 +532,75 @@ if has_bm:
 
     # Expected: best_match_text column has ACS question text
     if "best_match_text" in bm.columns and "best_feasibility" in bm.columns:
-        # All unique ACS targets across F1/F2 pairs
-        consolidable_bm = bm[bm["best_feasibility"].isin(["F1", "F2"])]
-
-        # Per survey
-        cps_bm = consolidable_bm[consolidable_bm["survey"] == "CPS"]
-        food_bm = consolidable_bm[consolidable_bm["survey"] == "FOODAPS"]
-
-        cps_acs_targets = cps_bm["best_match_text"].dropna().nunique()
-        food_acs_targets = food_bm["best_match_text"].dropna().nunique()
-
-        # Combined unique ACS targets
-        all_acs_targets = consolidable_bm["best_match_text"].dropna().nunique()
-
-        # Three-way: ACS texts serving both surveys
-        cps_acs_texts = set(cps_bm["best_match_text"].dropna().unique())
-        food_acs_texts = set(food_bm["best_match_text"].dropna().unique())
-        three_way = len(cps_acs_texts & food_acs_texts)
-
         # ---------------------------------------------------------------
-        # ACS-SIDE METHOD: Join via q_id through question_level to handle
-        # text truncation in best_matches. For each consolidable unique
-        # source question, union ALL its ACS targets across subtopic contexts.
+        # ACS-SIDE METHOD: Go through raw pair data (final_verdicts +
+        # candidate pair question maps). For each unique consolidable source
+        # question text, union all its q_ids (across subtopic contexts), then
+        # for each q_id take its best F1/F2 ACS match (by feasibility rank,
+        # then Borda score). Union those ACS targets per survey.
+        #
+        # This method correctly gives 36/32/51 regardless of whether
+        # question_level has 380 or 275 rows, because it goes to the raw
+        # source of q_id→ACS-target mappings.
         # ---------------------------------------------------------------
-        if has_ql:
-            feas_rank_acs = {"F1": 1, "F2": 2, "F3": 3}
-            ql_data = pd.read_csv(QUESTION_LEVEL_CSV)
-            
+        _cps_map_path = REPO / "data" / "processed" / "cps_comparison_merged.csv"
+        _food_map_path = REPO / "data" / "processed" / "foodaps_comparison_merged.csv"
+        _scores_path = REPO / "docs" / "stages" / "03_harmonization" / "data" / "analysis" / "stage4_bakeoff_scores.csv"
+
+        if _cps_map_path.exists() and _food_map_path.exists():
+            _cps_m = pd.read_csv(_cps_map_path, usecols=["pair_id", "survey_q_id", "survey_text", "acs_text"])
+            _food_m = pd.read_csv(_food_map_path, usecols=["pair_id", "survey_q_id", "survey_text", "acs_text"])
+            _qmap = pd.concat([_cps_m, _food_m], ignore_index=True)
+            _fv = pd.read_csv(FINAL_VERDICTS_CSV)
+            _pa = _fv.merge(_qmap, on="pair_id", how="left")
+            _pa["survey_text_norm"] = _pa["survey_text"].str.strip()
+            _pa["_feas_rank"] = _pa["final_feasibility"].map({"F1": 1, "F2": 2, "F3": 3}).fillna(99)
+            if _scores_path.exists():
+                _sc = pd.read_csv(_scores_path, usecols=["pair_id", "score_borda"])
+                _pa = _pa.merge(_sc, on="pair_id", how="left")
+            else:
+                _pa["score_borda"] = 0
+            _pa["score_borda"] = _pa["score_borda"].fillna(0)
+
             cps_acs_set = set()
             food_acs_set = set()
-            
-            for survey_code, label, acs_set in [("CPS", "CPS", cps_acs_set), ("FOODAPS", "FoodAPS", food_acs_set)]:
-                ql_sub = ql_data[ql_data["survey"] == survey_code].copy()
-                ql_sub["feas_rank"] = ql_sub["best_feasibility"].map(feas_rank_acs)
-                # Dedup by full question text, take best feasibility
-                dedup = ql_sub.sort_values("feas_rank").drop_duplicates(subset="question_text", keep="first")
-                # Get consolidable question texts
-                consol_texts = set(dedup[dedup["best_feasibility"].isin(["F1", "F2"])]["question_text"])
-                # Get ALL q_ids for those texts (including duplicates across subtopics)
-                consol_qids = set(ql_sub[ql_sub["question_text"].isin(consol_texts)]["survey_q_id"])
-                # Get all F1/F2 ACS targets from best_matches for those q_ids
-                bm_sub = bm[
-                    (bm["survey"] == survey_code)
-                    & (bm["source_q_id"].isin(consol_qids))
-                    & (bm["best_feasibility"].isin(["F1", "F2"]))
-                ]
-                acs_set.update(bm_sub["best_match_text"].dropna().unique())
-            
+
+            for survey_code, acs_set in [("CPS", cps_acs_set), ("FOODAPS", food_acs_set)]:
+                _s = _pa[_pa["survey"] == survey_code].copy()
+                # Unique texts with at least one F1/F2 pair
+                _consol_texts = set(
+                    _s[_s["final_feasibility"].isin(["F1", "F2"])]["survey_text_norm"].dropna()
+                )
+                # All q_ids for consolidable texts
+                _consol_qids = set(
+                    _s[_s["survey_text_norm"].isin(_consol_texts)]["survey_q_id"]
+                )
+                # Best ACS target per q_id (best feasibility, then Borda)
+                _f12 = _s[
+                    _s["survey_q_id"].isin(_consol_qids)
+                    & _s["final_feasibility"].isin(["F1", "F2"])
+                ].copy()
+                _best_per_qid = (
+                    _f12.sort_values(["_feas_rank", "score_borda"], ascending=[True, False])
+                    .drop_duplicates(subset="survey_q_id", keep="first")
+                )
+                acs_set.update(_best_per_qid["acs_text"].dropna().unique())
+
             cps_acs_targets = len(cps_acs_set)
             food_acs_targets = len(food_acs_set)
             all_acs_targets = len(cps_acs_set | food_acs_set)
             three_way = len(cps_acs_set & food_acs_set)
         else:
-            # Fallback: use best_matches directly (less precise due to truncation)
+            # Fallback: use best_matches directly (less precise)
+            consolidable_bm = bm[bm["best_feasibility"].isin(["F1", "F2"])]
+            cps_bm = consolidable_bm[consolidable_bm["survey"] == "CPS"]
+            food_bm = consolidable_bm[consolidable_bm["survey"] == "FOODAPS"]
             cps_acs_targets = cps_bm["best_match_text"].dropna().nunique()
             food_acs_targets = food_bm["best_match_text"].dropna().nunique()
             all_acs_targets = consolidable_bm["best_match_text"].dropna().nunique()
-            cps_acs_texts_set = set(cps_bm["best_match_text"].dropna().unique())
-            food_acs_texts_set = set(food_bm["best_match_text"].dropna().unique())
-            three_way = len(cps_acs_texts_set & food_acs_texts_set)
+            cps_acs_set = set(cps_bm["best_match_text"].dropna().unique())
+            food_acs_set = set(food_bm["best_match_text"].dropna().unique())
+            three_way = len(cps_acs_set & food_acs_set)
 
         check(
             "acs_targets_cps",
@@ -652,15 +662,26 @@ if has_ql and has_verdicts and has_cps_pairs:
     fv = pd.read_csv(FINAL_VERDICTS_CSV)
     cps_pairs = pd.read_csv(CPS_PAIRS_CSV)
 
+    # Build text→all_q_ids from candidate pairs (covers all subtopic-context q_ids per text).
+    # question_level stores only ONE representative q_id per text; candidate pairs have all of them.
+    cps_pairs_txt = cps_pairs.copy()
+    cps_pairs_txt["text_norm"] = cps_pairs_txt["survey_text"].str.strip()
+    text_to_all_qids = (
+        cps_pairs_txt.groupby("text_norm")["survey_q_id"]
+        .apply(lambda x: list(x.unique()))
+        .to_dict()
+    )
+
     # For each CPS F1 question (after dedup), verify at least one F1 pair exists
     cps_ql = ql[ql["survey"] == "CPS"].copy()
     cps_ql["feas_rank"] = cps_ql["best_feasibility"].map(feas_rank)
     cps_best = (
         cps_ql.groupby("question_text")
-        .agg(best_rank=("feas_rank", "min"), q_ids=("survey_q_id", lambda x: list(x)))
+        .agg(best_rank=("feas_rank", "min"))
         .reset_index()
     )
     cps_best["best_feas"] = cps_best["best_rank"].map({1: "F1", 2: "F2", 3: "F3"})
+    cps_best["q_ids"] = cps_best["question_text"].str.strip().map(text_to_all_qids)
 
     f1_questions = cps_best[cps_best["best_feas"] == "F1"]
 
@@ -900,7 +921,7 @@ if has_readme:
 # KNOWN INFLATED SOURCE FLAGGING
 # =====================================================================
 print("\n" + "=" * 70)
-print("KNOWN INFLATED SOURCE FILES")
+print("SURVEY SUMMARY JSON CHECKS")
 print("=" * 70)
 
 has_ssj = file_exists(SURVEY_SUMMARY_JSON, "survey_summary_json")
@@ -908,22 +929,16 @@ if has_ssj:
     with open(SURVEY_SUMMARY_JSON) as f:
         ssj = json.load(f)
 
-    # This file is KNOWN inflated -- verify it still has inflated values
-    # (to confirm the source of the bug hasn't been silently fixed)
+    # Verify survey_summary.json has been regenerated with corrected counts
     check(
-        "inflated_ssj_cps",
-        ssj["CPS"]["total_questions"] == 240,
-        f"survey_summary.json CPS: {ssj['CPS']['total_questions']} (expected 240 -- KNOWN INFLATED)",
+        "ssj_cps",
+        ssj["CPS"]["total_questions"] == 157,
+        f"survey_summary.json CPS: {ssj['CPS']['total_questions']} (expected 157)",
     )
     check(
-        "inflated_ssj_foodaps",
-        ssj["FOODAPS"]["total_questions"] == 140,
-        f"survey_summary.json FoodAPS: {ssj['FOODAPS']['total_questions']} (expected 140 -- KNOWN INFLATED)",
-    )
-    warn(
-        "inflated_ssj_documented",
-        True,
-        "stage4_survey_summary.json contains inflated counts. Documented and expected. Use question_counts.json.",
+        "ssj_foodaps",
+        ssj["FOODAPS"]["total_questions"] == 118,
+        f"survey_summary.json FoodAPS: {ssj['FOODAPS']['total_questions']} (expected 118)",
     )
 
 

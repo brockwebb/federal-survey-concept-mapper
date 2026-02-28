@@ -274,7 +274,52 @@ def run_findings_stage(dry_run: bool = False) -> bool:
         return False
 
     print("[OK] Findings analysis complete.")
+
+    # Guard: validate output counts against canonical question_counts.json.
+    # If counts diverge, print a clear warning so the inflation bug is immediately visible.
+    _validate_findings_counts()
+
     return True
+
+
+def _validate_findings_counts():
+    """Compare findings pipeline output counts against canonical question_counts.json."""
+    import json
+
+    repo = Path(__file__).resolve().parents[2]
+    qcj_path = repo / "docs" / "validation" / "question_counts.json"
+    ql_path = repo / "docs" / "stages" / "03_harmonization" / "data" / "analysis" / "stage4_question_level.csv"
+
+    if not qcj_path.exists() or not ql_path.exists():
+        print("  [GUARD] Cannot validate findings counts: reference files missing.")
+        return
+
+    try:
+        import pandas as pd
+        with open(qcj_path) as f:
+            qcj = json.load(f)
+
+        ql = pd.read_csv(ql_path)
+        got_cps = int((ql["survey"] == "CPS").sum())
+        got_food = int((ql["survey"] == "FOODAPS").sum())
+
+        exp_cps = qcj["question_level_results"]["CPS"]["unique_questions"]
+        exp_food = qcj["question_level_results"]["FoodAPS"]["unique_questions"]
+
+        ok = True
+        if got_cps != exp_cps:
+            print(f"  [WARNING] Findings guard: CPS row count {got_cps} != canonical {exp_cps}. "
+                  "Check 04_findings_pipeline.py for groupby inflation (dedup by question_text, not survey_q_id).")
+            ok = False
+        if got_food != exp_food:
+            print(f"  [WARNING] Findings guard: FoodAPS row count {got_food} != canonical {exp_food}. "
+                  "Check 04_findings_pipeline.py for groupby inflation (dedup by question_text, not survey_q_id).")
+            ok = False
+
+        if ok:
+            print(f"  [GUARD OK] Counts match canonical: CPS={got_cps}, FoodAPS={got_food}")
+    except Exception as e:
+        print(f"  [GUARD] Could not validate findings counts: {e}")
 
 
 def run_deliverables_stage(dry_run: bool = False) -> bool:

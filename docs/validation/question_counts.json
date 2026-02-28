@@ -2,11 +2,11 @@
   "metadata": {
     "source_files": [
       "data/raw/PublicSurveyQuestionsMap.csv",
-      "docs/stages/03_harmonization/data/analysis/stage4_question_level.csv"
+      "docs/stages/03_harmonization/data/analysis/stage4_question_level.csv",
+      "docs/stages/03_harmonization/data/analysis/final_verdicts.csv"
     ],
-    "generated": "2026-02-28T00:42:44.562462",
-    "script": "src/validation/validate_question_counts.py",
-    "note": "Initial validation run. Validation script should be rerun to regenerate."
+    "generated": "2026-02-28T06:42:14.554874",
+    "script": "src/validation/validate_question_counts.py"
   },
   "raw_data": {
     "total_deduplicated_questions": 6987,
@@ -19,25 +19,110 @@
       "CPS_FoodAPS": 0
     }
   },
-  "acs_family_counts": {
-    "ACS": 115,
-    "CPS": 211,
-    "FoodAPS": 462,
+  "instrument_counts": {
+    "Survey of Income and Program Participation (SIPP)": 1218,
+    "Consumer Expenditure Survey (CE)": 1106,
+    "National Health Interview Survey (NHIS)": 782,
+    "American Housing Survey (AHS)": 744,
+    "Food Acquisition and Purchase Survey (FoodAPS) Initial Interview/Household Survey": 246,
+    "Current Population Survey (CPS)": 211,
+    "National Sample Survey of Registered Nurses (NSSRN)": 183,
+    "National Survey of Children's Health Topical Questionaire (Children, 0-5 years)": 160,
+    "National Survey of Children's Health Topical Questionaire (Children, 12-17)": 147,
+    "National Survey of Children's Health Topical Questionaire (Chilren, 6-11)": 142,
+    "Medical Expenditure Panel Survey Insurance Component": 137,
+    "National Survey of College Graduates (NSCG)": 121,
+    "National Teacher and Principal Survey (NTPS) Private School Teacher Questionnaire": 118,
+    "American Community Survey (ACS)": 115,
+    "National Teacher and Principal Survey (NTPS) Teacher Questionnaire": 114,
+    "Household Trends and Outlook Pulse Survey (HTOPS)": 108,
+    "American Time Use Survey (ATUS)": 100,
+    "School Survey on Crime and Safety (SSOCS)": 91,
+    "National Training, Education, and Workforce Survey (NTEWS)": 86,
+    "FoodAPS food Log": 86,
+    "School Crime Supplement (SCS)/National Crime Victimization Survey (NCVS)": 81,
+    "National Teacher and Principal Survey (NTPS) Private School Questionnaire": 80,
+    "Food Acquisition and Purchase Survey (FoodAPS) Debriefing Questionnaire": 74,
+    "Identity Theft Supplement (ITS)": 68,
+    "Supplemental Victimization Survey (SVS)": 65,
+    "Teacher Follow-Up Survey (TFS) Current Teacher Survey": 63,
+    "National Teacher and Principal Survey (NTPS) School Questionnaire": 56,
+    "Food Acquisition and Purchase Survey (FoodAPS) Profile and Income Questionnaire": 56,
+    "Teacher Follow-up Survey (TFS) Former Teacher Survey": 47,
+    "Survey of Market Absorption (SOMA)": 39,
+    "National Teacher and Principal Survey (NTPS) Private School Principal Questionnaire": 38,
+    "School Pulse Panel (SPP)": 37,
+    "National Teacher and Principal Survey (NTPS) Principal Questionnaire": 35,
+    "Private School Survey (PSS)": 33,
+    "Census Military Panel (CMP)": 28,
+    "Survey of State Government Finances Finances of Insurance Trust Systems": 21,
+    "Business Enterprise Research and Development Survey": 21,
+    "National Ambulatory Medical Care Survey (NAMCS)": 16,
+    "Business and Professional Classifcation Report": 9,
+    "Principal Follow-Up Survey School Head/Principal Status Form": 7,
+    "National Survey of Children\u2019s Health (NSCH)": 6,
+    "Report of Building or Zoning Permits issued for new privately-ownd housing units": 6,
+    "Survey of Residential Building or Zoning Permit Systems": 6,
+    "Principal Follow-up Survey (PFS)": 5,
+    "National Household Education Survey (NHES)": 0,
+    "National Hospital Ambulatory Medical Care Survey (NHAMCS)": 0,
+    "Enhancing Health Data (EHealth) Program": 0
+  },
+  "survey_counts": {
     "SIPP": 1218,
+    "CE": 1106,
+    "NHIS": 782,
     "AHS": 744,
-    "CE": 1106
+    "FoodAPS": 462,
+    "NSCH": 449,
+    "NTPS": 441,
+    "CPS": 211,
+    "NSSRN": 183,
+    "MEPS_IC": 137,
+    "NSCG": 121,
+    "ACS": 115,
+    "TFS": 110,
+    "HTOPS": 108,
+    "ATUS": 100,
+    "SSOCS": 91,
+    "NTEWS": 86,
+    "SCS_NCVS": 81,
+    "ITS": 68,
+    "SVS": 65,
+    "SOMA": 39,
+    "SPP": 37,
+    "PSS": 33,
+    "CMP": 28,
+    "BERD": 21,
+    "SGFITS": 21,
+    "NAMCS": 16,
+    "PFS": 12,
+    "BPCR": 9,
+    "BZP": 6,
+    "SRBZPS": 6,
+    "EHealth": 0,
+    "NHAMCS": 0,
+    "NHES": 0
+  },
+  "acs_family_counts": {
+    "SIPP": 1218,
+    "CE": 1106,
+    "AHS": 744,
+    "FoodAPS": 462,
+    "CPS": 211,
+    "ACS": 115
   },
   "pairing_stage": {
     "CPS": {
       "raw_survey_questions": 211,
-      "inflated_entering_pairing": 240,
+      "inflated_entering_pairing": 157,
       "unique_entering_pairing": 157,
       "pct_of_survey": 74.4,
       "not_paired_reason": "question subtopics with no ACS coverage"
     },
     "FoodAPS": {
       "raw_survey_questions": 462,
-      "inflated_entering_pairing": 140,
+      "inflated_entering_pairing": 118,
       "unique_entering_pairing": 118,
       "pct_of_survey": 25.5,
       "not_paired_reason": "question subtopics with no ACS coverage"
@@ -46,7 +131,7 @@
   "question_level_results": {
     "CPS": {
       "unique_questions": 157,
-      "inflated_count": 240,
+      "inflated_count": 157,
       "inflation_cause": "dual-subtopic classification assigns multiple IDs to same question text",
       "F1": 32,
       "F2": 54,
@@ -56,7 +141,7 @@
     },
     "FoodAPS": {
       "unique_questions": 118,
-      "inflated_count": 140,
+      "inflated_count": 118,
       "inflation_cause": "dual-subtopic classification assigns multiple IDs to same question text",
       "F1": 19,
       "F2": 37,
@@ -66,19 +151,27 @@
     },
     "note": "Corrected counts collapse duplicate question texts to single entries, taking best feasibility across all subtopic-pairings"
   },
+  "acs_side_participation": {
+    "available": true,
+    "method": "q_id join through question_level (full text) to best_matches, union ACS targets per unique source question",
+    "CPS_acs_targets": 35,
+    "FoodAPS_acs_targets": 28,
+    "combined_unique_acs_targets": 48,
+    "three_way_bridges": 15,
+    "set_arithmetic": "35 + 28 - 15 = 48",
+    "total_acs_questions": 115,
+    "pct_participating": 41.7,
+    "fan_in_ratio": 2.96
+  },
   "known_issues": {
     "inflation_source": "stage4_question_level.csv assigns separate IDs per subtopic-pairing context, not per unique question",
-    "numbers_map_corrected": "2026-02-27 — NUMBERS_MAP.md updated with all corrected values, inflation warning added",
-    "narrative_checklist_corrected": "2026-02-27 — NARRATIVE_CHECKLIST.md updated, stale values flagged",
-    "readme_corrected": "2026-02-27 — README.md Key Results updated (was 154/93/61, now 142/86/56)",
-    "still_needs_correction": [
-      "report/chapters/03_survey_overlap.qmd — still cites 380/240/140",
-      "report/chapters/05_results.qmd — still cites inflated rates",
-      "report/chapters/06_implications.qmd — still cites inflated rates and counts",
-      "src/figures/fig03_paired_topic_composition.py — reads from inflated source data",
-      "stage4_topic_breakdown.csv — inflated, needs dedup for subtopic breakdowns",
-      "Expert review load (76%, 93 questions) — needs revalidation",
-      "fact_sheet.pdf — may cite stale numbers, no .qmd source found"
+    "numbers_map_corrections_needed": [
+      "CPS '240 unique source questions' should be 157",
+      "FoodAPS '140 unique source questions' should be 118",
+      "CPS F1=37 should be 32, F2=65 should be 54, consolidable=102 should be 86",
+      "FoodAPS F1=23 should be 19, F2=45 should be 37, consolidable=68 should be 56",
+      "CPS consolidation rate 42.5% should be 54.8%",
+      "FoodAPS consolidation rate 48.6% should be 47.5%"
     ]
   }
 }

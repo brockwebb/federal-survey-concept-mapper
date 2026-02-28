@@ -1,6 +1,6 @@
 # Stage 4: Question-Level Consolidability Findings
 
-**Generated:** 2026-02-04T13:54:50.320926
+**Generated:** 2026-02-28T06:39:05.861603
 
 ## Executive Summary
 
@@ -9,16 +9,16 @@ This analysis answers the core research question: **What proportion of source su
 Consolidability is determined at the *question* level — a source question is consolidable if it has **at least one** ACS pair rated F1 (direct recode) or F2 (statistical adjustment).
 
 ### CPS
-- **102/240 (42.5%) questions have at least one consolidable path to ACS**
-  - Direct recode (F1): 37 (15.4%)
-  - Statistical adjustment (F2): 65 (27.1%)
-  - Not consolidable (F3): 138 (57.5%)
+- **86/157 (54.8%) questions have at least one consolidable path to ACS**
+  - Direct recode (F1): 32 (20.4%)
+  - Statistical adjustment (F2): 54 (34.4%)
+  - Not consolidable (F3): 71 (45.2%)
 
 ### FOODAPS
-- **68/140 (48.6%) questions have at least one consolidable path to ACS**
-  - Direct recode (F1): 23 (16.4%)
-  - Statistical adjustment (F2): 45 (32.1%)
-  - Not consolidable (F3): 72 (51.4%)
+- **56/118 (47.5%) questions have at least one consolidable path to ACS**
+  - Direct recode (F1): 19 (16.1%)
+  - Statistical adjustment (F2): 37 (31.4%)
+  - Not consolidable (F3): 62 (52.5%)
 
 ## Pair-Level vs Question-Level Rates
 
@@ -26,8 +26,8 @@ Pair-level consolidability rates understate the true consolidation potential bec
 
 | Survey | Pair-Level Rate | Question-Level Rate | Unique Questions | Total Pairs |
 |--------|----------------|--------------------|-----------------:|------------:|
-| CPS | 19.5% | 42.5% | 240 | 1030 |
-| FOODAPS | 20.6% | 48.6% | 140 | 568 |
+| CPS | 19.5% | 54.8% | 157 | 1030 |
+| FOODAPS | 20.6% | 47.5% | 118 | 568 |
 
 ## Barriers to Consolidation (F3 Pairs)
 
@@ -118,8 +118,8 @@ Barrier types requiring transformation:
 
 If consolidable questions could be replaced by ACS equivalents:
 
-- **CPS:** 102 of 240 questions could potentially be eliminated (42.5%)
-- **FOODAPS:** 68 of 140 questions could potentially be eliminated (48.6%)
+- **CPS:** 86 of 157 questions could potentially be eliminated (54.8%)
+- **FOODAPS:** 56 of 118 questions could potentially be eliminated (47.5%)
 
 *Caveat: This is an upper bound. Practical consolidation depends on use case, statistical precision requirements, and institutional constraints.*
 

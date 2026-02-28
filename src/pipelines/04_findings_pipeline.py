@@ -33,7 +33,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(mess
 log = logging.getLogger(__name__)
 
 # Path setup for post-restructure layout
-OUTPUT_DIR = REPO_ROOT / "output" / "report_03" / "analysis"
+OUTPUT_DIR = REPO_ROOT / "docs" / "stages" / "03_harmonization" / "data" / "analysis"
 
 
 # ---------------------------------------------------------------------------
@@ -83,10 +83,20 @@ def add_consolidability_flags(df):
 # ---------------------------------------------------------------------------
 
 def aggregate_to_question_level(pair_analysis):
-    """Aggregate pair-level results to one row per source question."""
-    grouped = pair_analysis.groupby(['survey', 'survey_q_id'])
+    """Aggregate pair-level results to one row per unique source question text.
+
+    Deduplicates by normalized question text (whitespace-stripped) so that
+    questions appearing in multiple subtopic contexts are counted once.
+    Representative survey_q_id (first) is retained for downstream joins.
+    """
+    # Normalize for grouping: strip whitespace only (preserve case for display)
+    pair_analysis = pair_analysis.copy()
+    pair_analysis['question_text_norm'] = pair_analysis['survey_text'].str.strip()
+
+    grouped = pair_analysis.groupby(['survey', 'question_text_norm'])
 
     question_level = grouped.agg(
+        survey_q_id=('survey_q_id', 'first'),
         pair_count=('pair_id', 'count'),
         has_any_f1=('is_f1', 'any'),
         has_any_f2=('is_f2', 'any'),
@@ -95,6 +105,9 @@ def aggregate_to_question_level(pair_analysis):
         question_text=('survey_text', 'first'),
         best_feasibility=('final_feasibility', lambda x: min(x, key=lambda v: ['F1', 'F2', 'F3'].index(v) if v in ['F1', 'F2', 'F3'] else 99)),
     ).reset_index()
+
+    # Drop the normalized grouping key (question_text retains original display case)
+    question_level = question_level.drop(columns='question_text_norm')
 
     # Derived: best_is_f2 = has F2 path but no F1 path
     question_level['best_is_f2'] = question_level['has_any_f2'] & ~question_level['has_any_f1']

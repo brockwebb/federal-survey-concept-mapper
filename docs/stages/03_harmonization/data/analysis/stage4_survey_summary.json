@@ -1,24 +1,24 @@
 {
   "CPS": {
-    "total_questions": 240,
-    "consolidable_questions": 102,
-    "consolidation_rate": 0.425,
-    "direct_f1_questions": 37,
-    "direct_f1_rate": 0.1542,
-    "conditional_f2_questions": 65,
-    "conditional_f2_rate": 0.2708,
-    "not_consolidable_f3_questions": 138,
-    "not_consolidable_f3_rate": 0.575
+    "total_questions": 157,
+    "consolidable_questions": 86,
+    "consolidation_rate": 0.5478,
+    "direct_f1_questions": 32,
+    "direct_f1_rate": 0.2038,
+    "conditional_f2_questions": 54,
+    "conditional_f2_rate": 0.3439,
+    "not_consolidable_f3_questions": 71,
+    "not_consolidable_f3_rate": 0.4522
   },
   "FOODAPS": {
-    "total_questions": 140,
-    "consolidable_questions": 68,
-    "consolidation_rate": 0.4857,
-    "direct_f1_questions": 23,
-    "direct_f1_rate": 0.1643,
-    "conditional_f2_questions": 45,
-    "conditional_f2_rate": 0.3214,
-    "not_consolidable_f3_questions": 72,
-    "not_consolidable_f3_rate": 0.5143
+    "total_questions": 118,
+    "consolidable_questions": 56,
+    "consolidation_rate": 0.4746,
+    "direct_f1_questions": 19,
+    "direct_f1_rate": 0.161,
+    "conditional_f2_questions": 37,
+    "conditional_f2_rate": 0.3136,
+    "not_consolidable_f3_questions": 62,
+    "not_consolidable_f3_rate": 0.5254
   }
 }

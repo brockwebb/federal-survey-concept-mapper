@@ -2,7 +2,7 @@
 
 The previous chapter identified five surveys in ACS's family and selected CPS and FoodAPS — the two producing the fewest question pairs — to validate the methodology at minimal cost. This chapter describes how those pairs were evaluated.
 
-Questions sharing the same subtopic classification between a source survey and ACS are paired for direct comparison. Rather than relying on assumptions about which questions should match, the analysis takes a naive combinatorial approach: every source question is paired with every ACS question in its subtopic. This produces 1,030 pairs for CPS and 568 for FoodAPS — 1,598 pairs total, drawn from 380 unique source questions. The approach is deliberately agnostic so that the method generalizes to any survey pair without requiring prior knowledge of which questions correspond.
+Questions sharing the same subtopic classification between a source survey and ACS are paired for direct comparison. Rather than relying on assumptions about which questions should match, the analysis takes a naive combinatorial approach: every source question is paired with every ACS question in its subtopic. This produces 1,030 pairs for CPS and 568 for FoodAPS — 1,598 pairs total, drawn from 275 unique source questions. The approach is deliberately agnostic so that the method generalizes to any survey pair without requiring prior knowledge of which questions correspond.
 
 Most of these pairs are expected to fail. A CPS question about employment status might be paired with an ACS question about industry simply because both fall under the same economic subtopic. Within any subtopic, typically only one or two ACS questions will be genuinely comparable to a given source question — the rest are conceptual neighbors but not measurement equivalents. The expected exceptions are standard demographic items (name, age, race, sex) that appear on virtually every survey in similar form. The goal is not to achieve a high match rate across all pairs; it is to surface the highest-probability matches as a review list for subject-matter experts.
 
@@ -45,7 +45,7 @@ The full methodology, including prompt templates, model configurations, behavior
 CHECKLIST (from NARRATIVE_CHECKLIST.md):
 - [x] Picks up from Ch 3: five surveys, CPS/FoodAPS = fewest pairs = cheapest to validate
 - [x] 1,598 total pairs (1,030 CPS + 568 FoodAPS)
-- [x] 380 unique source questions (240 + 140)
+- [x] 275 unique source questions (157 + 118)
 - [x] Naive combinatorial approach — generalizability design, works for any survey pair
 - [x] Most pairs expected to fail — only 1-2 genuine matches per subtopic typically
 - [x] Demographics (name/age/race/sex) expected exception — standard questions

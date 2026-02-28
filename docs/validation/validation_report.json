@@ -1,12 +1,12 @@
 {
   "metadata": {
-    "generated": "2026-02-28T06:01:28.176299",
+    "generated": "2026-02-28T07:08:17.593776",
     "script": "src/validation/validate_complete.py",
     "repo_root": "/Users/brock/Documents/GitHub/federal-survey-concept-mapper"
   },
   "summary": {
-    "total": 113,
-    "pass": 113,
+    "total": 112,
+    "pass": 112,
     "fail": 0,
     "warn": 0,
     "skip": 0,
@@ -249,15 +249,15 @@
       "details": {}
     },
     {
-      "name": "ql_inflated_cps",
+      "name": "ql_row_count_cps",
       "status": "PASS",
-      "message": "stage4_question_level.csv CPS rows (inflated): 240 (expected 240)",
+      "message": "stage4_question_level.csv CPS rows: 157 (expected 157)",
       "details": {}
     },
     {
-      "name": "ql_inflated_foodaps",
+      "name": "ql_row_count_foodaps",
       "status": "PASS",
-      "message": "stage4_question_level.csv FoodAPS rows (inflated): 140 (expected 140)",
+      "message": "stage4_question_level.csv FoodAPS rows: 118 (expected 118)",
       "details": {}
     },
     {
@@ -347,21 +347,21 @@
     {
       "name": "inflation_CPS_characterized",
       "status": "PASS",
-      "message": "CPS: max duplication=25x, 10 questions duplicated, mean=1.53x",
+      "message": "CPS: max duplication=1x, 0 questions duplicated, mean=1.0x",
       "details": {
-        "max_dup": 25,
-        "n_duplicated": 10,
-        "mean_dup": 1.53
+        "max_dup": 1,
+        "n_duplicated": 0,
+        "mean_dup": 1.0
       }
     },
     {
       "name": "inflation_FoodAPS_characterized",
       "status": "PASS",
-      "message": "FoodAPS: max duplication=4x, 20 questions duplicated, mean=1.19x",
+      "message": "FoodAPS: max duplication=1x, 0 questions duplicated, mean=1.0x",
       "details": {
-        "max_dup": 4,
-        "n_duplicated": 20,
-        "mean_dup": 1.19
+        "max_dup": 1,
+        "n_duplicated": 0,
+        "mean_dup": 1.0
       }
     },
     {
@@ -611,21 +611,15 @@
       "details": {}
     },
     {
-      "name": "inflated_ssj_cps",
+      "name": "ssj_cps",
       "status": "PASS",
-      "message": "survey_summary.json CPS: 240 (expected 240 -- KNOWN INFLATED)",
+      "message": "survey_summary.json CPS: 157 (expected 157)",
       "details": {}
     },
     {
-      "name": "inflated_ssj_foodaps",
+      "name": "ssj_foodaps",
       "status": "PASS",
-      "message": "survey_summary.json FoodAPS: 140 (expected 140 -- KNOWN INFLATED)",
-      "details": {}
-    },
-    {
-      "name": "inflated_ssj_documented",
-      "status": "PASS",
-      "message": "stage4_survey_summary.json contains inflated counts. Documented and expected. Use question_counts.json.",
+      "message": "survey_summary.json FoodAPS: 118 (expected 118)",
       "details": {}
     },
     {

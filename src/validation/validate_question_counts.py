@@ -100,7 +100,10 @@ INSTRUMENT_TO_SURVEY = {
 
 survey_counts = {}
 for survey_name in sorted(set(INSTRUMENT_TO_SURVEY.values())):
-    inst_cols = [col for col, s in INSTRUMENT_TO_SURVEY.items() if s == survey_name]
+    inst_cols = [col for col, s in INSTRUMENT_TO_SURVEY.items()
+                 if s == survey_name and col in raw.columns]
+    if not inst_cols:
+        continue
     mask = raw[inst_cols].apply(
         lambda row: row.dropna().astype(str).str.strip().ne("").any(), axis=1
     )
