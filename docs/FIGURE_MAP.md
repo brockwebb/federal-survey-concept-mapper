@@ -23,11 +23,11 @@ Models used: VLM `gemini-2.5-flash` (config specifies `gemini-3.1-pro` — NOT F
 | Figure ID | Title | Chapter | Method Spec | Deployed Output | Provenance Run | Status |
 |-----------|-------|---------|-------------|-----------------|----------------|--------|
 | Arch 1 | Pipeline Overview | Appendix A | `assets/diagrams/paperbanana/pipeline_overview_method.txt` | `assets/diagrams/fig_pipeline_overview.png` | `run_20260301_163619_06e37c` | generated — awaiting review |
-| Arch 2 | Stage 1: Topic and Subtopic Classification | Appendix A | `assets/diagrams/paperbanana/stage1_classification_method.txt` | `assets/diagrams/fig_stage1_classification.png` | `run_20260301_163816_85418f` | generated — awaiting review |
-| Arch 3 | Stage 2: Concept Overlap and Pair Generation | Appendix A | `assets/diagrams/paperbanana/stage2_overlap_method.txt` | `assets/diagrams/fig_stage2_overlap.png` | `run_20260301_163952_86805f` | generated — awaiting review |
+| Arch 2 | Stage 1: Topic and Subtopic Classification | Appendix A | `assets/diagrams/paperbanana/stage1_classification_method.txt` | `assets/diagrams/fig_stage1_classification.png` | `run_20260301_181053_c85e33` (regen: spec updated with judge loop + arbitrator) | generated — awaiting review |
+| Arch 3 | Stage 2: Concept Overlap and Pair Generation | Appendix A | `assets/diagrams/paperbanana/stage2_overlap_method.txt` | `assets/diagrams/fig_stage2_overlap.png` | `run_20260301_181238_fc3c47` (regen: spec updated with delta explanation, removed chart junk) | generated — awaiting review |
 | Arch 4 | Stage 3: Multi-Model Barrier Rating | Appendix A | `assets/diagrams/paperbanana/stage3_rating_method.txt` | `assets/diagrams/fig_stage3_rating.png` | `run_20260301_164116_a62010` | generated — awaiting review |
 | Arch 5 | Stage 4: Structured Arbitration Protocol | Appendix A | `assets/diagrams/paperbanana/stage4_arbitration_method.txt` | `assets/diagrams/fig_stage4_arbitration.png` | `run_20260301_164253_41e621` | generated — awaiting review |
-| Arch 6 | Stage 5: Question-Level Results | Appendix A | `assets/diagrams/paperbanana/stage5_results_method.txt` | `assets/diagrams/fig_stage5_results.png` | `run_20260301_164431_705fb6` | generated — awaiting review |
+| Arch 6 | Stage 5: Question-Level Results | Appendix A | `assets/diagrams/paperbanana/stage5_results_method.txt` | `assets/diagrams/fig_stage5_results.png` | `run_20260301_181411_72c0da` (regen: spec rewritten with explicit pair→question aggregation, dedup step, ACS-side deliverables) | generated — awaiting review |
 
 **D2 diagrams (if any):**
 
