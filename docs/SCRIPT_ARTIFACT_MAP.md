@@ -173,6 +173,20 @@ See **`docs/FIGURE_MAP.md`** — dedicated figure traceability document covering
 
 ---
 
+## Master Report Figures
+
+| Output File | Location | Producing Script | Input Data |
+|-------------|----------|-----------------|------------|
+| `fig01_topic_distribution.pdf` + `.png` | `report/figures/` | `src/figures/fig01_topic_distribution.py` | NUMBERS_MAP Step 2 (validated from `topic_distribution.csv`) |
+
+### Shared Style
+
+| File | Location | Purpose |
+|------|----------|---------|
+| `topic_colors.py` | `src/figures/` | Canonical topic→color mapping (xdgov palette). All report figure scripts import from here. |
+
+---
+
 ## Known Issues
 
 1. **Report 01 scripts use relative paths** (`../output/comparison`). They must be run from `src/` directory. Post-restructure, these paths may be broken since scripts moved to `src/core/`.

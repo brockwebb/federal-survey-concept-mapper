@@ -1,34 +1,11 @@
 project:
-  type: book
+  type: default
   output-dir: _output
   pre-render: python ../src/validation/validate_complete.py
 
-book:
-  title: "AI-Assisted Federal Survey Harmonization"
-  subtitle: "Cross-Survey Integration Analysis of 47 Census Bureau Demographic Surveys"
-  #author: "Brock Webb"
-  date: today
-  chapters:
-    - index.qmd
-    - chapters/01_introduction.qmd
-    - chapters/02_classification.qmd
-    - chapters/03_survey_overlap.qmd
-    - chapters/04_pairwise_harmonization.qmd
-    - chapters/05_results.qmd
-    - chapters/06_implications.qmd
-    - chapters/07_limitations.qmd
-    - part: "Appendices"
-      chapters:
-        - appendices/A_architecture.qmd
-        - appendices/B_taxonomy.qmd
-        - appendices/C_tevv.qmd
-
-bibliography: references.bib
-csl: apa.csl
-
 format:
   pdf:
-    documentclass: report
+    documentclass: article
     papersize: letter
     toc: true
     toc-depth: 3
@@ -39,13 +16,13 @@ format:
       - margin=1in
     fig-pos: "htbp"
     keep-tex: false
-    linestretch: 1.25
+    linestretch: 1.15
     mainfont: "Palatino"
     include-in-header:
       text: |
         \usepackage{booktabs}
-  html:
-    theme: cosmo
-    toc: true
-    toc-depth: 3
-    number-sections: true
+        \usepackage{authblk}
+    title-block-style: default
+
+bibliography: references.bib
+csl: apa.csl

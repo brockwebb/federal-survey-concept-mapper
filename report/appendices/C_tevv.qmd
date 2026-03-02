@@ -1,4 +1,4 @@
-# TEVV Framework {#sec-tevv .unnumbered}
+# TEVV Framework {#sec-tevv}
 
 This appendix presents the Test, Evaluation, Verification, and Validation (TEVV) evidence supporting the AI-assisted methodology used in this research.
 The report claims that multiple AI models can classify survey question pairs with sufficient reliability to guide expert review and inform harmonization decisions.
@@ -19,6 +19,10 @@ A complete evaluation requires both.
 
 @tbl-nist-crosswalk maps each pipeline quality measure to the NIST AI RMF characteristic it addresses, with the current evidence status.
 
+```{=latex}
+\begin{landscape}
+```
+
 | Pipeline Quality Measure | What It Demonstrates | NIST AI RMF Characteristic | Evidence Status |
 |--------------------------|---------------------|---------------------------|----------------|
 | **Multi-vendor rater agreement** (3 independent models from different vendors classify each pair) | Independent replication: classifications are not artifacts of a single model's training data or biases | Valid & Reliable | ✅ Established. Cohen's κ and Fleiss' κ computed at rater stage. |
@@ -31,6 +35,10 @@ A complete evaluation requires both.
 | **AI-specific failure mode awareness** (see @sec-ai-failure-mode) | Fabrication detection: the AI did not invent harmonization paths that do not exist | Valid & Reliable | ⚠️ Partially addressed. Multi-vendor agreement provides indirect evidence; direct validation requires SME review. |
 
 : Pipeline quality measures mapped to NIST AI RMF 1.0 trustworthiness characteristics. {#tbl-nist-crosswalk}
+
+```{=latex}
+\end{landscape}
+```
 
 ### NIST Characteristics Not Applicable
 

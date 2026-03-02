@@ -1,20 +1,31 @@
 ---
 title: "AI-Assisted Federal Survey Harmonization"
+subtitle: "Cross-Survey Integration Analysis of 47 Census Bureau Demographic Surveys"
+date: today
+abstract: |
+  The Census Bureau fields 47 demographic survey instruments containing approximately 7,000 questions, each designed for a specific analytical purpose. No comprehensive map has existed showing where these surveys overlap, where their questions are compatible, and where the differences matter. This research uses AI-assisted methods --- multiple models from competing vendors independently rating question pairs with structured arbitration for disagreements --- to build that map at scale. Across two major survey pairs (CPS and FoodAPS, each scored against ACS), approximately 45% of questions have at least one viable harmonization path: roughly 16% are directly interchangeable through simple recoding, roughly 29% are linkable with documented statistical adjustments, and roughly 55% measure fundamentally different constructs. Harmonization rates are stable across survey pairs, suggesting a general property of the data rather than a survey-specific artifact. The complete analysis was conducted in weeks at a total API cost under \$100. The full pipeline, data, and code are public and reproducible.
+
+  **DRAFT** --- These results are preliminary and have not been independently validated or peer reviewed. Full methodology, data, and code: [github.com/brockwebb/federal-survey-concept-mapper](https://github.com/brockwebb/federal-survey-concept-mapper). The views expressed are the author's own and do not necessarily represent the views of the U.S. Census Bureau or the U.S. Department of Commerce.
 ---
 
-::: {.content-visible when-format="html"}
-This report presents a systematic analysis of harmonization potential across 47 Census Bureau demographic survey instruments containing approximately 7,000 questions. Using multi-model AI-assisted methods, the research identifies cross-survey integration opportunities, characterizes harmonization barriers, and produces actionable inventories of bridge variables for data enrichment.
+{{< include chapters/01_introduction.qmd >}}
 
-For methodology details, see the companion [Methodology Document](../methodology/). For validation metrics, see the companion [TEVV Document](../tevv/).
-:::
+{{< include chapters/02_classification.qmd >}}
 
-\vspace{1em}
+{{< include chapters/03_survey_overlap.qmd >}}
 
-**DRAFT** — These results are preliminary and have not been independently validated or peer reviewed.
+{{< include chapters/04_pairwise_harmonization.qmd >}}
 
-Full methodology, data, and code: [github.com/brockwebb/federal-survey-concept-mapper](https://github.com/brockwebb/federal-survey-concept-mapper)
+{{< include chapters/05_results.qmd >}}
 
-\vspace{0.5em}
-\noindent\rule{\textwidth}{0.4pt}
-\scriptsize
-The views expressed are the author's own and do not necessarily represent the views of the U.S. Census Bureau or the U.S. Department of Commerce.
+{{< include chapters/06_implications.qmd >}}
+
+{{< include chapters/07_limitations.qmd >}}
+
+\appendix
+
+{{< include appendices/A_architecture.qmd >}}
+
+{{< include appendices/B_taxonomy.qmd >}}
+
+{{< include appendices/C_tevv.qmd >}}

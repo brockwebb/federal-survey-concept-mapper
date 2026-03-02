@@ -6,8 +6,10 @@ ACS is not the oldest federal household survey — that distinction belongs to t
 
 Using the subtopic classifications from the previous chapter, the analysis identifies which surveys share the most subtopic territory with ACS. Five surveys form ACS's closest "family" and constitute the focused scope of this research:
 
+: ACS family surveys ranked by shared subtopic coverage. Intersection counts reflect question-by-subtopic overlaps, not unique questions. {#tbl-acs-family tbl-colwidths="[12,28,20,40]"}
+
 | Survey | Shared Subtopic Intersections | Subtopics Covered | Top Overlap Areas |
-|--------|-----------------------------:|------------------:|-------------------|
+|:---|---:|---:|:---|
 | SIPP | 577 | 38 | Health Insurance, Employment Status, Household |
 | AHS | 460 | 34 | Structure, Utilities, Plumbing/Kitchen |
 | CE | 283 | 30 | Health Insurance, Housing Costs, Household |

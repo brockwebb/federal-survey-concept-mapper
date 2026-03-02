@@ -1,5 +1,6 @@
 _output/
 .quarto/
+article.qmd
 *.pdf
 *.html
 

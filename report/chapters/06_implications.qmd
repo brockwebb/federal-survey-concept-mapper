@@ -15,6 +15,8 @@ The topic-level pattern from the previous chapter showed demographic questions h
 | FoodAPS | Employment Status | 8 | 9 | 88.9% |
 | FoodAPS | School Enrollment | 8 | 11 | 72.7% |
 
+: Highest-value subtopic harmonization opportunities. {#tbl-subtopic-detail}
+
 These are core analytic variables that researchers routinely wish they could combine across surveys. CPS earnings questions bridging to ACS would enable labor market analyses that link detailed weekly earnings data with the rich demographic and geographic detail ACS provides. FoodAPS SNAP questions bridging to ACS would connect food assistance participation patterns with community-level characteristics. These are not hypothetical use cases — they are analyses that currently require either restricted-use linked data or imperfect proxy measures.
 
 Social questions harmonize at the lowest rates (36% CPS, 31% FoodAPS), reflecting genuine variation in how surveys operationalize concepts like disability assessment, veteran status verification, and educational attainment. These differences often reflect deliberate design choices tied to each survey's legislative mandate, making them harder to bridge without compromising measurement intent.
@@ -28,7 +30,9 @@ For questions that cannot be harmonized, the barrier classification explains why
 | RS — Response scale | Different answer formats | ~4% |
 | PC — Population | Different target populations | ~1% |
 | MC — Mode/context | Different collection methods | ~1% |
-| PM — Precision | Different measurement granularity | <1% |
+| PM --- Precision | Different measurement granularity | <1% |
+
+: Distribution of barriers among incompatible question pairs. {#tbl-barrier-distribution}
 
 Construct mismatch dominates because the pairing strategy was deliberately broad — every source question was matched against every ACS question sharing its subtopic. Most of these pairs are not genuine matches, and the methodology correctly identified them as such. The more actionable finding is the roughly 13% of barriers that involve potentially addressable differences. Reference period misalignment (7%) and response scale differences (4%) represent concrete design opportunities: a survey redesign that aligns reporting windows or harmonizes answer categories could convert some incompatible questions to harmonizable ones, expanding the bridge variable inventory without requiring new data collection.
 

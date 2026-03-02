@@ -10,7 +10,7 @@
 
 | Figure ID | Title | Chapter | Script | Input Data | Output |
 |-----------|-------|---------|--------|------------|--------|
-| Fig 1 | Topic Distribution | Ch 2 (Classification) | `src/figures/fig01_topic_distribution.py` | `docs/stages/01_classification/data/comparison/topic_distribution.csv` | `report/figures/fig01_topic_distribution.pdf` |
+| Fig 1 | Topic Distribution | Ch 2 (Classification) | `src/figures/fig01_topic_distribution.py` | NUMBERS_MAP Step 2 (validated from `docs/stages/01_classification/data/comparison/topic_distribution.csv`) | `report/figures/fig01_topic_distribution.pdf` + `.png` | ✅ Generated 2026-03-01. Horizontal bar chart, sorted descending. xdgov qualitative palette via `src/figures/topic_colors.py`. |
 | Fig 2 | Total Questions by Survey — ACS Family | Ch 3 (Survey Overlap) | `src/figures/fig02_acs_family_profile.py` | `docs/validation/question_counts.json` (validated from `data/raw/PublicSurveyQuestionsMap.csv`) | `report/figures/fig02_acs_family_profile.pdf` |
 | Fig 3 | Topic Composition of Evaluated Question Pairs | Ch 4 or Ch 5 (Method/Results) | `src/figures/fig03_paired_topic_composition.py` | `docs/stages/03_harmonization/data/analysis/stage4_topic_breakdown.csv` | `report/figures/fig03_paired_topic_composition.pdf` | ⚠️ **INPUT DATA HAS INFLATION** — `stage4_topic_breakdown.csv` counts question-subtopic assignments, not unique questions. Fig 3 needs regeneration with deduplicated source or dedup logic in the script. See `docs/validation/number_flow.md`. |
 
@@ -38,8 +38,9 @@ PaperBanana diagrams: method spec → `paperbanana generate` → PNG. See CLAUDE
 ## Style
 
 - **Palette:** U.S. Census Bureau xdgov Data Design Standards (Section 508 compliant)
-- **Style module:** `assets/census_plot_style.py` → `from census_plot_style import COLORS, paper_theme, save_figure`
-- **Output format:** PDF, 300 DPI, 6.5in max width
+- **Topic color mapping:** `src/figures/topic_colors.py` — canonical topic→hex color assignment for all report figures. Every figure script imports from here to ensure consistent colors across the report. Five topics: Economic (#112E51 navy), Social (#0095A8 teal), Housing (#FF7043 orange), Demographic (#2E78D2 blue), Government (#78909C grey).
+- **Pragmatics style module:** `assets/census_plot_style.py` → plotnine-based, used by pragmatics/census-mcp figures. Not used by report figures (which use matplotlib).
+- **Output format:** PDF + PNG, 300 DPI, 6.5in max width
 - **D2 diagrams:** `.d2` source in `assets/diagrams/`, rendered to PDF/SVG in `report/figures/`
 
 ## Slides
@@ -51,7 +52,7 @@ Slide figures will be derived from the same scripts with adjusted dimensions. Ma
 ## Checklist
 
 - [ ] Symlink created: `assets/census_plot_style.py`
-- [ ] Fig 1 generated and reviewed
+- [x] Fig 1 generated and reviewed (2026-03-01)
 - [ ] Fig 2 generated and reviewed
 - [ ] Fig 3 generated and reviewed — ⚠️ BLOCKED: input data inflated, needs corrected source
 - [ ] D2 installed (`brew install d2`)

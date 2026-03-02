@@ -14,6 +14,8 @@ Each pair is evaluated on two dimensions. First, feasibility: can these question
 | F2 | Statistical adjustment | Same construct, different measurement. Requires a documented transformation. |
 | F3 | Incompatible | Different constructs, or barriers no statistical method can bridge. |
 
+: Feasibility tiers adapted from DataSHaPER [@fortier2011]. {#tbl-feasibility-summary}
+
 Second, for pairs rated F3, a barrier code identifies the specific obstacle. Six codes capture the ways questions can fail to align, drawn from the survey harmonization literature (@wolf2016; @slomczynski2018):
 
 | Code | Barrier | Example |
@@ -25,6 +27,8 @@ Second, for pairs rated F3, a barrier code identifies the specific obstacle. Six
 | MC | Mode/Context | Self-administered web vs. interviewer telephone |
 | PM | Processing/Metadata | SOC 2010 codes vs. SOC 2018 without crosswalk |
 
+: Barrier codes for incompatible question pairs. Full definitions in Appendix B. {#tbl-barrier-summary}
+
 Full definitions, subtypes, and literature provenance are in Appendix B.
 
 Three independent AI models — one each from OpenAI, Anthropic, and Google — rate every pair on both dimensions. Using models from competing vendors is a deliberate trust architecture: no single vendor's training data, alignment approach, or reasoning tendencies can dominate the results. This is the methodological equivalent of requiring independent expert raters from different institutions.
@@ -35,7 +39,9 @@ At the initial rating stage, the three models achieved moderate agreement (Fleis
 |--------|:---------------:|:--------------------:|
 | Feasibility | 0.537 | **0.843** |
 | Primary barrier | 0.611 | 0.796 |
-| Binary (harmonizable/not) | — | **0.896** |
+| Binary (harmonizable/not) | --- | **0.896** |
+
+: Inter-model agreement before and after structured arbitration. {#tbl-arbitration-improvement}
 
 Post-arbitration feasibility agreement (κ = 0.843) falls in the "almost perfect" range. Both quality gates passed. The pattern — moderate initial agreement converging to near-perfect after structured arbitration — validates that the task is well-defined and that independent models can reach consensus when given a protocol for resolving ambiguity.
 

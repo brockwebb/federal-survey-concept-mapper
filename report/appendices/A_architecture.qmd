@@ -1,5 +1,31 @@
-# Architecture and Data Flow {#sec-architecture .unnumbered}
+# Architecture and Data Flow {#sec-architecture}
 
-Pipeline architecture diagrams for each analysis stage are in development. The analysis proceeds through five stages: topic classification, multi-model rating, arbitration, findings rollup, and deliverable generation.
+This appendix presents the pipeline architecture for the AI-assisted harmonization analysis. The pipeline proceeds through four stages, each with distinct inputs, models, and outputs. All code, prompts, and data are publicly available.
 
-Diagrams will be added in a subsequent revision.
+@fig-pipeline-overview shows the end-to-end flow from survey ingestion through final harmonization verdicts.
+
+![Pipeline overview: four stages from survey ingestion through post-arbitration harmonization verdicts.](figures/fig_pipeline_overview.png){#fig-pipeline-overview width=100%}
+
+## Stage 1: Classification
+
+Two independent large language models (gpt-5-mini and claude-haiku-4-5) classify each of 6,987 deduplicated questions into the Census Bureau's five-topic, 152-subtopic taxonomy. Agreement analysis routes questions through three paths: consensus (68.5%), auto dual-modal (11.8%), and arbitration by claude-sonnet-4-5 (19.7%). The output is a master dataset of 6,954 compared questions with 38 flagged for human review.
+
+![Stage 1: Dual-model classification with agreement routing and arbitration.](figures/fig_stage1_classification.png){#fig-stage1-classification width=100%}
+
+## Stage 2: Overlap and Pairing
+
+Using the subtopic classifications from Stage 1, the pipeline identifies which surveys share conceptual territory with ACS. Five family surveys are identified, and CPS and FoodAPS are selected for detailed evaluation. Every source question is paired with every ACS question sharing its subtopic, producing 1,598 question pairs from 275 unique source questions.
+
+![Stage 2: Subtopic intersection analysis and question pair generation.](figures/fig_stage2_overlap.png){#fig-stage2-overlap width=100%}
+
+## Stage 3: Barrier Rating
+
+Three independent rater models (one each from OpenAI, Anthropic, and Google) evaluate all 1,598 pairs on feasibility (F1/F2/F3) and barrier type (CC/TC/RS/PC/MC/PM). Initial three-way agreement reaches Fleiss' κ = 0.611 for barrier classification.
+
+![Stage 3: Independent multi-vendor barrier rating.](figures/fig_stage3_rating.png){#fig-stage3-rating width=100%}
+
+## Stage 4: Arbitration
+
+Three independent arbitrator models (higher-capability models from the same vendors) review all pairs with access to the three rater judgments. Blind masking and order randomization prevent anchoring and position bias. Post-arbitration agreement improves to κ = 0.843 for feasibility, with both quality gates passed.
+
+![Stage 4: Multi-vendor arbitration with blind masking and order randomization.](figures/fig_stage4_arbitration.png){#fig-stage4-arbitration width=100%}

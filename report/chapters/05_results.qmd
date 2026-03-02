@@ -14,6 +14,8 @@ Each eligible question was paired with every ACS question sharing its subtopic, 
 | **Questions with harmonization paths** | **86 (54.8% of paired)** | **56 (47.5% of paired)** |
 | **As share of total survey** | **40.8%** | **12.1%** |
 
+: Harmonization funnel from total survey questions to bridge variable candidates. {#tbl-results-funnel}
+
 Across both surveys, 142 unique questions are candidate bridge variables for expert review. These results vary by subject matter:
 
 <!-- Topic counts from stage4_question_level.csv joined through cps/foodaps_comparison_merged.csv;
@@ -28,6 +30,8 @@ Across both surveys, 142 unique questions are candidate bridge variables for exp
 | FoodAPS | Economic | 66 | 36 | 54.5% |
 | FoodAPS | Social | 23 | 11 | 47.8% |
 | FoodAPS | Housing | 2 | 1 | 50.0% |
+
+: Harmonization rates by survey and topic area. {#tbl-results-by-topic}
 
 Topic-level rates vary by survey and domain. Economic questions lead in both surveys (CPS 56.6%, FoodAPS 54.5%), reflecting ACS's detailed coverage of employment, earnings, and labor force participation. Social questions follow at similar rates for CPS (57.9%) but lower for FoodAPS (47.8%). Demographic questions show the widest gap between surveys: CPS at 50.0% versus FoodAPS at 29.6%, consistent with FoodAPS's specialized focus on food access behavior rather than core demographic measurement. Among CPS questions, the largest pools of bridge variable candidates concentrate in earnings, employment status, and hours worked. Among FoodAPS questions, SNAP participation, employment status, and school enrollment contribute the most. Full subtopic breakdowns appear in Appendix C.
 
