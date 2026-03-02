@@ -4,19 +4,11 @@ The previous chapter described a method for evaluating whether survey questions 
 
 The CPS contains 211 questions and FoodAPS contains 462 questions across four questionnaire instruments. Not all of these entered the analysis. Only questions whose subtopic classifications overlapped with ACS were eligible for pairing — 157 unique CPS questions (74% of the survey) and 118 unique FoodAPS questions (26% of the survey). The difference reflects each survey's conceptual distance from ACS: CPS shares broad labor force and demographic territory, while FoodAPS is predominantly a specialized food acquisition instrument whose questions on shopping frequency, food storage, and meal preparation have no ACS counterpart. These raw question counts also overstate what any single respondent encounters, since both surveys use branching logic that routes respondents through different question paths based on their circumstances.
 
-Each eligible question was paired with every ACS question sharing its subtopic, producing 1,030 CPS–ACS pairs and 568 FoodAPS–ACS pairs. Most of these pairs were expected to fail — a question about weekly earnings and a question about commute mode might share an "Economic" subtopic but measure entirely different things. The purpose of the broad search was to ensure no viable match was missed. The following table summarizes the funnel from total survey questions through to harmonization results:
+Each eligible question was paired with every ACS question sharing its subtopic, producing 1,030 CPS–ACS pairs and 568 FoodAPS–ACS pairs. Most of these pairs were expected to fail — a question about weekly earnings and a question about commute mode might share an "Economic" subtopic but measure entirely different things. The purpose of the broad search was to ensure no viable match was missed. @fig-harmonization-funnel summarizes the funnel from total survey questions through to harmonization results. Across both surveys, 142 unique questions are candidate bridge variables for expert review.
 
-| | CPS | FoodAPS |
-|--|:-:|:-:|
-| Total survey questions | 211 | 462 |
-| Questions with ACS concept overlap | 157 (74%) | 118 (26%) |
-| Question pairs evaluated | 1,030 | 568 |
-| **Questions with harmonization paths** | **86 (54.8% of paired)** | **56 (47.5% of paired)** |
-| **As share of total survey** | **40.8%** | **12.1%** |
+![Harmonization funnel: from total survey questions through ACS concept overlap to viable harmonization paths. Percentages show concept overlap as share of total survey and harmonization paths as share of paired questions.](figures/fig03_harmonization_funnel.pdf){#fig-harmonization-funnel width=100%}
 
-: Harmonization funnel from total survey questions to bridge variable candidates. {#tbl-results-funnel}
-
-Across both surveys, 142 unique questions are candidate bridge variables for expert review. These results vary by subject matter:
+These results vary by subject matter:
 
 <!-- Topic counts from stage4_question_level.csv joined through cps/foodaps_comparison_merged.csv;
      topic assigned via SUBTOPIC_TO_TOPIC mapping in src/figures/fig03_paired_topic_composition.py -->
