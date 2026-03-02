@@ -4,22 +4,7 @@ The previous chapter established that 86 CPS questions and 56 FoodAPS questions 
 
 Not all harmonization paths require the same effort. The 142 candidates span a range from mechanical recoding to substantive methodological work. Some questions — primarily demographic items like age, sex, race, and citizenship — were identified as high-confidence matches before the barrier assessment even began: both classification models independently agreed they were easily harmonizable. These represent the floor of what cross-survey integration can achieve with minimal investment. The remaining candidates emerged from the barrier assessment pipeline, where three independent AI models evaluated each question pair's feasibility with arbitration resolving disagreements. Questions rated F1 require only direct recoding — mapping one survey's response categories onto another's. Questions rated F2 measure the same underlying concept but differ in ways that require statistical adjustment: reference period differences (weekly versus annual earnings), response granularity (detailed occupation codes versus broad categories), or population framing (slightly different eligibility criteria). These F2 differences are real, but they are the kind of differences that established survey methodology can address through calibration, imputation, or bridging studies.
 
-The topic-level pattern from the previous chapter showed demographic questions harmonizing at higher rates than economic questions, with social questions harmonizing least. The subtopic detail reveals where the substantive opportunity concentrates:
-
-| Survey | Subtopic | Harmonizable | Total | Rate |
-|--------|----------|:-:|:-:|:-:|
-| CPS | Earnings | 19 | 23 | 82.6% |
-| CPS | Employment Status | 20 | 34 | 58.8% |
-| CPS | Hours/Week | 12 | 18 | 66.7% |
-| FoodAPS | SNAP Participation | 11 | 22 | 50.0% |
-| FoodAPS | Employment Status | 8 | 9 | 88.9% |
-| FoodAPS | School Enrollment | 8 | 11 | 72.7% |
-
-: Highest-value subtopic harmonization opportunities. {#tbl-subtopic-detail}
-
-These are core analytic variables that researchers routinely wish they could combine across surveys. CPS earnings questions bridging to ACS would enable labor market analyses that link detailed weekly earnings data with the rich demographic and geographic detail ACS provides. FoodAPS SNAP questions bridging to ACS would connect food assistance participation patterns with community-level characteristics. These are not hypothetical use cases — they are analyses that currently require either restricted-use linked data or imperfect proxy measures.
-
-Social questions harmonize at the lowest rates (36% CPS, 31% FoodAPS), reflecting genuine variation in how surveys operationalize concepts like disability assessment, veteran status verification, and educational attainment. These differences often reflect deliberate design choices tied to each survey's legislative mandate, making them harder to bridge without compromising measurement intent.
+Within the economic category, the highest-value subtopics are earnings (82.6% harmonization rate for CPS), employment status (58.8% CPS, 88.9% FoodAPS), and hours worked (66.7% CPS). For FoodAPS, SNAP participation (50.0%) and school enrollment (72.7%) round out the strongest candidates. These are core analytic variables that researchers routinely wish they could combine across surveys. CPS earnings questions bridging to ACS would enable labor market analyses that link detailed weekly earnings data with the rich demographic and geographic detail ACS provides. FoodAPS SNAP questions bridging to ACS would connect food assistance participation patterns with community-level characteristics. These are not hypothetical use cases — they are analyses that currently require either restricted-use linked data or imperfect proxy measures.
 
 For questions that cannot be harmonized, the barrier classification explains why:
 
