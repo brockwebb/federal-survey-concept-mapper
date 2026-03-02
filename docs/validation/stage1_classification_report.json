@@ -1,0 +1,637 @@
+{
+  "metadata": {
+    "generated": "2026-03-01T20:42:04.882443",
+    "script": "src/validation/validate_stage1_classification.py",
+    "purpose": "Stage 1 classification routing path verification",
+    "repo_root": "/Users/brock/Documents/GitHub/federal-survey-concept-mapper"
+  },
+  "summary": {
+    "total": 70,
+    "pass": 65,
+    "fail": 3,
+    "warn": 2,
+    "skip": 0,
+    "verdict": "FAIL"
+  },
+  "routing_ledger": {
+    "input_comparison_rows": 6954,
+    "consensus_path": 4765,
+    "to_resolution": 2189,
+    "arbitrated": 1368,
+    "auto_dual_modal": 821,
+    "master_output_rows": 6987,
+    "gap": -33
+  },
+  "checks": [
+    {
+      "name": "file_exists_raw_csv",
+      "status": "PASS",
+      "message": "raw_csv: found at data/raw/PublicSurveyQuestionsMap.csv",
+      "details": {}
+    },
+    {
+      "name": "file_exists_full_comparison",
+      "status": "PASS",
+      "message": "full_comparison: found at docs/stages/01_classification/data/comparison/full_comparison.csv",
+      "details": {}
+    },
+    {
+      "name": "file_exists_agreement_summary",
+      "status": "PASS",
+      "message": "agreement_summary: found at docs/stages/01_classification/data/comparison/agreement_summary.csv",
+      "details": {}
+    },
+    {
+      "name": "file_exists_disagreements",
+      "status": "PASS",
+      "message": "disagreements: found at docs/stages/01_classification/data/comparison/disagreements.csv",
+      "details": {}
+    },
+    {
+      "name": "file_exists_arbitration_results",
+      "status": "PASS",
+      "message": "arbitration_results: found at docs/stages/01_classification/data/arbitration_final/arbitration_results.csv",
+      "details": {}
+    },
+    {
+      "name": "file_exists_auto_dual_modal",
+      "status": "PASS",
+      "message": "auto_dual_modal: found at docs/stages/01_classification/data/arbitration_final/auto_dual_modal_results.csv",
+      "details": {}
+    },
+    {
+      "name": "file_exists_all_resolutions",
+      "status": "PASS",
+      "message": "all_resolutions: found at docs/stages/01_classification/data/arbitration_final/all_disagreement_resolutions.csv",
+      "details": {}
+    },
+    {
+      "name": "file_exists_master_dataset",
+      "status": "PASS",
+      "message": "master_dataset: found at docs/stages/01_classification/data/final/master_dataset.csv",
+      "details": {}
+    },
+    {
+      "name": "input_rows",
+      "status": "PASS",
+      "message": "Input rows (deduplicated): 6987 (expected 6987)",
+      "details": {}
+    },
+    {
+      "name": "input_surveys",
+      "status": "PASS",
+      "message": "Survey instruments: 47 (expected 47)",
+      "details": {}
+    },
+    {
+      "name": "comparison_rows",
+      "status": "PASS",
+      "message": "Full comparison rows: 6954",
+      "details": {
+        "count": 6954
+      }
+    },
+    {
+      "name": "topic_agreement_pct",
+      "status": "PASS",
+      "message": "Topic agreement: 89.24% (6206/6954) (expected ~89.2%)",
+      "details": {
+        "pct": 89.24,
+        "agree": 6206,
+        "disagree": 748
+      }
+    },
+    {
+      "name": "subtopic_agreement_pct",
+      "status": "PASS",
+      "message": "Subtopic routing agreement (compound): 68.52% (4765/6954) (expected ~68.5%)",
+      "details": {
+        "pct": 68.52,
+        "agree": 4765,
+        "disagree": 2189
+      }
+    },
+    {
+      "name": "subtopic_only_agreement_pct",
+      "status": "PASS",
+      "message": "Subtopic label agreement (subtopic-only): 69.69% (4846/6954) (expected ~69.7%)",
+      "details": {
+        "pct": 69.69,
+        "agree": 4846
+      }
+    },
+    {
+      "name": "agreement_csv_topic",
+      "status": "PASS",
+      "message": "agreement_summary.csv topic: 89.24360080529192 vs computed 89.24",
+      "details": {}
+    },
+    {
+      "name": "agreement_csv_subtopic",
+      "status": "PASS",
+      "message": "agreement_summary.csv subtopic: 69.68651136036813 vs subtopic-only computed 69.69",
+      "details": {}
+    },
+    {
+      "name": "kappa_topic",
+      "status": "PASS",
+      "message": "Cohen's \u03ba (topics): 0.8389488012076629",
+      "details": {
+        "value": 0.8389488012076629
+      }
+    },
+    {
+      "name": "kappa_subtopic",
+      "status": "PASS",
+      "message": "Cohen's \u03ba (subtopics): 0.6869395118441102",
+      "details": {
+        "value": 0.6869395118441102
+      }
+    },
+    {
+      "name": "routing_sum",
+      "status": "PASS",
+      "message": "Routing sum: 4765 consensus + 2189 to resolution = 6954 (expected 6954)",
+      "details": {}
+    },
+    {
+      "name": "disagreements_count",
+      "status": "WARN",
+      "message": "disagreements.csv rows: 748 vs computed disagreements: 2189 (STALE ARTIFACT \u2014 see all_disagreement_resolutions.csv for authoritative 2,189-row set)",
+      "details": {
+        "disagreements_csv": 748,
+        "computed": 2189
+      }
+    },
+    {
+      "name": "arbitrated_count",
+      "status": "PASS",
+      "message": "Arbitrated by claude-sonnet-4-5: 1368",
+      "details": {
+        "count": 1368
+      }
+    },
+    {
+      "name": "arb_decision_breakdown",
+      "status": "PASS",
+      "message": "Arbitrator decisions: {'pick_gpt5mini': 522, 'pick_haiku45': 487, 'new_concept': 340, 'dual_modal': 19}",
+      "details": {
+        "pick_gpt5mini": 522,
+        "pick_haiku45": 487,
+        "new_concept": 340,
+        "dual_modal": 19
+      }
+    },
+    {
+      "name": "auto_dual_modal_count",
+      "status": "PASS",
+      "message": "Auto dual-modal: 821",
+      "details": {
+        "count": 821
+      }
+    },
+    {
+      "name": "all_resolutions_count",
+      "status": "PASS",
+      "message": "All disagreement resolutions: 2189",
+      "details": {
+        "count": 2189
+      }
+    },
+    {
+      "name": "resolution_status_breakdown",
+      "status": "PASS",
+      "message": "Resolution status: {'arbitrated': 1368, 'auto_dual_modal': 821}",
+      "details": {
+        "arbitrated": 1368,
+        "auto_dual_modal": 821
+      }
+    },
+    {
+      "name": "resolution_sum",
+      "status": "PASS",
+      "message": "Resolution sum: 1368 arbitrated + 821 auto_dual = 2189 vs all_resolutions=2189",
+      "details": {}
+    },
+    {
+      "name": "resolutions_match_disagreements",
+      "status": "PASS",
+      "message": "All resolutions (2189) == computed disagreements (2189)",
+      "details": {}
+    },
+    {
+      "name": "master_rows",
+      "status": "PASS",
+      "message": "master_dataset.csv rows: 6987",
+      "details": {
+        "count": 6987
+      }
+    },
+    {
+      "name": "input_output_gap",
+      "status": "WARN",
+      "message": "Input\u2192output gap: 6954 compared - 6987 in master = -33 missing",
+      "details": {
+        "input": 6954,
+        "output": 6987,
+        "gap": -33
+      }
+    },
+    {
+      "name": "decision_method_breakdown",
+      "status": "PASS",
+      "message": "Decision methods in master: {'agreement': 4765, 'auto_dual_modal': 821, 'pick_gpt5mini': 522, 'pick_haiku45': 482, 'new_concept': 340, 'unresolved_disagreement': 31, 'dual_modal': 19, 'categorization_failed': 7}",
+      "details": {
+        "agreement": 4765,
+        "auto_dual_modal": 821,
+        "pick_gpt5mini": 522,
+        "pick_haiku45": 482,
+        "new_concept": 340,
+        "unresolved_disagreement": 31,
+        "dual_modal": 19,
+        "categorization_failed": 7
+      }
+    },
+    {
+      "name": "models_agree_breakdown",
+      "status": "PASS",
+      "message": "Models agree in master: {True: 4765, False: 2222}",
+      "details": {
+        "true": 4765,
+        "false": 2222
+      }
+    },
+    {
+      "name": "human_review_count",
+      "status": "PASS",
+      "message": "Flagged for human review: {False: 6949, True: 38}",
+      "details": {
+        "false": 6949,
+        "true": 38
+      }
+    },
+    {
+      "name": "dual_modal_in_master",
+      "status": "PASS",
+      "message": "Dual-modal in master: {False: 1344, True: 840}",
+      "details": {
+        "false": 1344,
+        "true": 840
+      }
+    },
+    {
+      "name": "final_topic_coverage",
+      "status": "PASS",
+      "message": "Questions with final_topic: 6949, missing: 38",
+      "details": {
+        "has_topic": 6949,
+        "missing_topic": 38
+      }
+    },
+    {
+      "name": "arb_decisions_in_master",
+      "status": "PASS",
+      "message": "Arbitrated in master: 2189, decisions: {'auto_dual_modal': 821, 'pick_gpt5mini': 522, 'pick_haiku45': 487, 'new_concept': 340, 'dual_modal': 19}",
+      "details": {
+        "count": 2189,
+        "decisions": {
+          "auto_dual_modal": 821,
+          "pick_gpt5mini": 522,
+          "pick_haiku45": 487,
+          "new_concept": 340,
+          "dual_modal": 19
+        }
+      }
+    },
+    {
+      "name": "final_topic_distribution",
+      "status": "PASS",
+      "message": "Topic distribution: {'Economic': 3055, 'Social': 2477, 'Housing': 949, 'Demographic': 376, 'Government': 86, 'Unknown': 6}",
+      "details": {
+        "Economic": 3055,
+        "Social": 2477,
+        "Housing": 949,
+        "Demographic": 376,
+        "Government": 86,
+        "Unknown": 6
+      }
+    },
+    {
+      "name": "nm_classified_count",
+      "status": "PASS",
+      "message": "NUMBERS_MAP claims 6,954 classified: found",
+      "details": {}
+    },
+    {
+      "name": "master_vs_nm",
+      "status": "FAIL",
+      "message": "master_dataset.csv rows (6987) vs NUMBERS_MAP claim (6,954)",
+      "details": {
+        "master": 6987,
+        "numbers_map_claim": 6954
+      }
+    },
+    {
+      "name": "nm_topic_pct",
+      "status": "PASS",
+      "message": "NUMBERS_MAP contains topic agreement ~89.2%",
+      "details": {}
+    },
+    {
+      "name": "nm_subtopic_pct",
+      "status": "PASS",
+      "message": "NUMBERS_MAP contains subtopic agreement ~69.7%",
+      "details": {}
+    },
+    {
+      "name": "routing_equation",
+      "status": "PASS",
+      "message": "Routing equation: 4765 + 1368 + 821 = 6954 (expected 6954)",
+      "details": {
+        "consensus": 4765,
+        "arbitrated": 1368,
+        "auto_dual": 821,
+        "sum": 6954,
+        "expected": 6954
+      }
+    },
+    {
+      "name": "routing_vs_master",
+      "status": "PASS",
+      "message": "Reconstructed total (6954) vs master rows (6987): diff = -33",
+      "details": {
+        "reconstructed": 6954,
+        "master": 6987,
+        "diff": -33
+      }
+    },
+    {
+      "name": "kappa_is_pre_arb_only",
+      "status": "PASS",
+      "message": "REMINDER: Stage 1 \u03ba (0.84/0.69) is pre-arbitration agreement between two classifiers. There is ONE arbitrator \u2014 no post-arbitration \u03ba is computable or meaningful.",
+      "details": {}
+    },
+    {
+      "name": "spec_has_pre_arb_kappa",
+      "status": "PASS",
+      "message": "Stage 1 spec references pre-arb \u03ba (0.84, 0.69): topic=True, subtopic=True",
+      "details": {}
+    },
+    {
+      "name": "spec_no_stage4_kappa",
+      "status": "PASS",
+      "message": "Stage 1 spec does NOT reference Stage 4 \u03ba=0.843: CLEAN",
+      "details": {}
+    },
+    {
+      "name": "arb_decision_count_pick_gpt5mini",
+      "status": "PASS",
+      "message": "Arbitrator decision 'pick_gpt5mini': 522 (expected 522)",
+      "details": {
+        "actual": 522,
+        "expected": 522
+      }
+    },
+    {
+      "name": "arb_decision_count_pick_haiku45",
+      "status": "PASS",
+      "message": "Arbitrator decision 'pick_haiku45': 482 (expected 482)",
+      "details": {
+        "actual": 482,
+        "expected": 482
+      }
+    },
+    {
+      "name": "arb_decision_count_new_concept",
+      "status": "PASS",
+      "message": "Arbitrator decision 'new_concept': 340 (expected 340)",
+      "details": {
+        "actual": 340,
+        "expected": 340
+      }
+    },
+    {
+      "name": "arb_decision_count_dual_modal",
+      "status": "PASS",
+      "message": "Arbitrator decision 'dual_modal': 19 (expected 19)",
+      "details": {
+        "actual": 19,
+        "expected": 19
+      }
+    },
+    {
+      "name": "arb_resolved_total",
+      "status": "PASS",
+      "message": "Total arbitrator-resolved: 1363 (expected 1363)",
+      "details": {
+        "sum": 1363
+      }
+    },
+    {
+      "name": "arb_override_gap",
+      "status": "PASS",
+      "message": "Arbitrator override gap: 1368 raw decisions - 1363 accepted = 5 overridden to unresolved (expected 5)",
+      "details": {
+        "raw_total": 1368,
+        "accepted": 1363,
+        "overridden": 5
+      }
+    },
+    {
+      "name": "arb_override_detail",
+      "status": "PASS",
+      "message": "Overridden arbitrator decisions: 5 rows, decisions: {'pick_haiku45': 5}",
+      "details": {
+        "count": 5,
+        "decisions": {
+          "pick_haiku45": 5
+        }
+      }
+    },
+    {
+      "name": "dual_modal_auto",
+      "status": "PASS",
+      "message": "Auto dual-modal (decision_method): 821 (expected 821)",
+      "details": {
+        "count": 821
+      }
+    },
+    {
+      "name": "dual_modal_arb",
+      "status": "PASS",
+      "message": "Arbitrator dual-modal (decision_method): 19 (expected 19)",
+      "details": {
+        "count": 19
+      }
+    },
+    {
+      "name": "dual_modal_total",
+      "status": "PASS",
+      "message": "Total dual-modal: 821 auto + 19 arb = 840 (expected 840)",
+      "details": {
+        "auto": 821,
+        "arb": 19,
+        "total": 840
+      }
+    },
+    {
+      "name": "dual_modal_flag_match",
+      "status": "PASS",
+      "message": "is_dual_modal==True (840) matches decision_method sum (840)",
+      "details": {
+        "flag_count": 840,
+        "method_sum": 840
+      }
+    },
+    {
+      "name": "dual_modal_rate",
+      "status": "PASS",
+      "message": "Dual-modal rate: 840/6987 = 12.0% of master",
+      "details": {
+        "rate_pct": 12.0
+      }
+    },
+    {
+      "name": "config_raters_loaded",
+      "status": "PASS",
+      "message": "Config rater models: {'openai': 'gpt-5-mini', 'anthropic': 'claude-haiku-4-5-20251001', 'google': 'gemini-3-flash-preview'}",
+      "details": {
+        "openai": "gpt-5-mini",
+        "anthropic": "claude-haiku-4-5-20251001",
+        "google": "gemini-3-flash-preview"
+      }
+    },
+    {
+      "name": "config_arbitrators_loaded",
+      "status": "PASS",
+      "message": "Config arbitrator models: {'anthropic': 'claude-opus-4-5-20251101', 'openai': 'gpt-5.2', 'google': 'gemini-3-pro-preview'}",
+      "details": {
+        "anthropic": "claude-opus-4-5-20251101",
+        "openai": "gpt-5.2",
+        "google": "gemini-3-pro-preview"
+      }
+    },
+    {
+      "name": "nm_arbitrator_models_accurate",
+      "status": "PASS",
+      "message": "Config shows arbitrators DIFFER from raters. Raters: ['claude-haiku-4-5-20251001', 'gemini-3-flash-preview', 'gpt-5-mini']. Arbitrators: ['claude-opus-4-5-20251101', 'gemini-3-pro-preview', 'gpt-5.2']. NUMBERS_MAP must reflect this distinction.",
+      "details": {
+        "raters": [
+          "claude-haiku-4-5-20251001",
+          "gemini-3-flash-preview",
+          "gpt-5-mini"
+        ],
+        "arbitrators": [
+          "claude-opus-4-5-20251101",
+          "gemini-3-pro-preview",
+          "gpt-5.2"
+        ],
+        "differ": true
+      }
+    },
+    {
+      "name": "stage3_spec_model_openai",
+      "status": "PASS",
+      "message": "Stage 3 spec contains openai rater model 'gpt-5-mini' (or stem 'gpt-5-mini'): found",
+      "details": {
+        "vendor": "openai",
+        "config_model": "gpt-5-mini",
+        "stem": "gpt-5-mini",
+        "found": true
+      }
+    },
+    {
+      "name": "stage3_spec_model_anthropic",
+      "status": "PASS",
+      "message": "Stage 3 spec contains anthropic rater model 'claude-haiku-4-5-20251001' (or stem 'claude-haiku-4-5'): found",
+      "details": {
+        "vendor": "anthropic",
+        "config_model": "claude-haiku-4-5-20251001",
+        "stem": "claude-haiku-4-5",
+        "found": true
+      }
+    },
+    {
+      "name": "stage3_spec_model_google",
+      "status": "FAIL",
+      "message": "Stage 3 spec contains google rater model 'gemini-3-flash-preview' (or stem 'gemini-3-flash-preview'): NOT FOUND",
+      "details": {
+        "vendor": "google",
+        "config_model": "gemini-3-flash-preview",
+        "stem": "gemini-3-flash-preview",
+        "found": false
+      }
+    },
+    {
+      "name": "stage4_spec_model_anthropic",
+      "status": "PASS",
+      "message": "Stage 4 spec contains anthropic arbitrator model 'claude-opus-4-5-20251101' (or stem 'claude-opus-4-5'): found",
+      "details": {
+        "vendor": "anthropic",
+        "config_model": "claude-opus-4-5-20251101",
+        "stem": "claude-opus-4-5",
+        "found": true
+      }
+    },
+    {
+      "name": "stage4_spec_model_openai",
+      "status": "PASS",
+      "message": "Stage 4 spec contains openai arbitrator model 'gpt-5.2' (or stem 'gpt-5.2'): found",
+      "details": {
+        "vendor": "openai",
+        "config_model": "gpt-5.2",
+        "stem": "gpt-5.2",
+        "found": true
+      }
+    },
+    {
+      "name": "stage4_spec_model_google",
+      "status": "FAIL",
+      "message": "Stage 4 spec contains google arbitrator model 'gemini-3-pro-preview' (or stem 'gemini-3-pro-preview'): NOT FOUND",
+      "details": {
+        "vendor": "google",
+        "config_model": "gemini-3-pro-preview",
+        "stem": "gemini-3-pro-preview",
+        "found": false
+      }
+    },
+    {
+      "name": "kappa_topic_recomputed",
+      "status": "PASS",
+      "message": "\u03ba topics recomputed (0.8399) vs stored (0.8389): diff=0.0009 (tol 0.005)",
+      "details": {
+        "recomputed": 0.839856,
+        "stored": 0.8389488012076629,
+        "diff": 0.000908
+      }
+    },
+    {
+      "name": "kappa_subtopic_recomputed",
+      "status": "PASS",
+      "message": "\u03ba subtopics recomputed (0.6875) vs stored (0.6869): diff=0.0005 (tol 0.005)",
+      "details": {
+        "recomputed": 0.68745,
+        "stored": 0.6869395118441102,
+        "diff": 0.000511
+      }
+    },
+    {
+      "name": "kappa_topic_vs_nm",
+      "status": "PASS",
+      "message": "\u03ba topics recomputed (0.8399) vs NUMBERS_MAP (0.839): diff=0.0009",
+      "details": {
+        "recomputed": 0.8399,
+        "nm_claim": 0.839
+      }
+    },
+    {
+      "name": "kappa_subtopic_vs_nm",
+      "status": "PASS",
+      "message": "\u03ba subtopics recomputed (0.6875) vs NUMBERS_MAP (0.687): diff=0.0005",
+      "details": {
+        "recomputed": 0.6875,
+        "nm_claim": 0.687
+      }
+    }
+  ]
+}

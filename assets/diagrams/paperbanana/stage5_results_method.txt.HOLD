@@ -1,0 +1,132 @@
+DIAGRAM: Stage 5 — Question-Level Consolidability Analysis
+ASPECT RATIO: 4:3 (1100w × 825h logical units)
+STYLE: Publication-quality academic data flow diagram. Clean serif font (Georgia or similar). White background. No drop shadows, no gradients, no 3D effects. Flat design.
+
+=== LAYOUT OVERVIEW ===
+Top-to-bottom flow in four tiers. Tier 1: Inputs (final verdicts + question maps). Tier 2: The critical pair-to-question aggregation (the novel analytical step — show clearly). Tier 3: Per-survey results with F1/F2/F3 breakdown. Tier 4: Deliverables including ACS-side analysis.
+
+=== TIER 1: INPUTS (top, two boxes side by side) ===
+
+LEFT INPUT:
+- Shape: Rounded rectangle, 240w × 55h
+- Fill: Light green #C8E6C9, border: Green #2E7D32 (2px)
+- Label: "final_verdicts.csv" (10px serif bold, dark)
+- Sublabel: "1,598 pair-level verdicts (from Stage 4)" (8px serif italic, muted #4B636E)
+
+RIGHT INPUT:
+- Shape: Rounded rectangle, 240w × 55h
+- Fill: Grey #B0BEC5, border: Dark grey #78909C (2px)
+- Label: "comparison_merged.csv" (10px serif bold, dark)
+- Sublabel: "Question text, survey_q_id, subtopic" (8px serif italic, muted #4B636E)
+
+- Gap between: ~60px
+- Both have downward arrows converging into Tier 2
+
+=== TIER 2: PAIR-TO-QUESTION AGGREGATION (center) ===
+- Shape: Rounded rectangle, 500w × 200h
+- Fill: white, border: Orange #FF7043 (3px, heavier to emphasize key step)
+- Header bar: Fill orange #FF7043, 30h
+  - Text: "Pair → Question Aggregation" (12px serif bold, white)
+- Body content, four numbered steps vertically arranged:
+  - "1. Join verdicts with question maps on pair_id" (9px serif, dark)
+  - "2. Group by (survey, question_text) — not by question ID" (9px serif, dark)
+  - "3. Best feasibility per question: F1 beats F2 beats F3" (9px serif, dark)
+  - "    A question is consolidable if ANY of its pairs rated F1 or F2" (9px serif, dark)
+  - "4. Deduplicate: one disability question appeared 25× across subtopics" (9px serif, dark)
+  - "    Without dedup: 380 rows. After dedup: 275 unique questions" (9px serif, dark)
+
+- Small box to the RIGHT of step 4 (attached by thin dashed connector):
+  - Fill: white, border: Red #D32F2F (1px)
+  - Text: "Why question-level" (8px serif bold, dark)
+  - "matters: pair-level rate" (8px serif, dark)
+  - "is ~20%. Question-level" (8px serif, dark)
+  - "is ~50%. Most pairs fail" (8px serif, dark)
+  - "because the combinatorial" (8px serif, dark)
+  - "search is deliberately broad." (8px serif, dark)
+
+=== DOWNWARD ARROW splits into two ===
+
+=== TIER 3: RESULTS BY SURVEY (two boxes side by side) ===
+
+LEFT — CPS Results:
+- Shape: Rounded rectangle, 260w × 130h
+- Fill: Light blue #DCEEFB, border: Navy #205493 (2px)
+- Header bar: Fill navy #205493, 25h
+  - Text: "CPS" (11px serif bold, white)
+- Body:
+  - "157 unique questions" (10px serif, dark)
+  - "" (blank line)
+  - "F1 direct recode:      32 (20.4%)" (9px serif, dark)
+  - "F2 stat. adjustment:   54 (34.4%)" (9px serif, dark)
+  - "F3 incompatible:       71 (45.2%)" (9px serif, dark)
+  - "" (blank line)
+  - "Consolidable: 86 (54.8%)" (10px serif bold, green #2E7D32)
+
+RIGHT — FoodAPS Results:
+- Shape: Rounded rectangle, 260w × 130h
+- Fill: Light blue #DCEEFB, border: Navy #205493 (2px)
+- Header bar: Fill navy #205493, 25h
+  - Text: "FoodAPS" (11px serif bold, white)
+- Body:
+  - "118 unique questions" (10px serif, dark)
+  - "" (blank line)
+  - "F1 direct recode:      19 (16.1%)" (9px serif, dark)
+  - "F2 stat. adjustment:   37 (31.4%)" (9px serif, dark)
+  - "F3 incompatible:       62 (52.5%)" (9px serif, dark)
+  - "" (blank line)
+  - "Consolidable: 56 (47.5%)" (10px serif bold, green #2E7D32)
+
+=== TWO ARROWS converging downward ===
+
+=== TIER 4: DELIVERABLES (bottom center) ===
+- Shape: Rounded rectangle, 520w × 120h
+- Fill: white, border: Navy #205493 (2px)
+- Header bar: Fill navy #205493, 25h
+  - Text: "Deliverables for Expert Review" (11px serif bold, white)
+- Body, THREE COLUMNS separated by thin vertical grey lines:
+  - LEFT: "142 bridge variable" (10px serif bold, dark)
+           "candidates" (10px serif bold, dark)
+           "(86 CPS + 56 FoodAPS)" (8px serif, muted)
+  - CENTER: "51 ACS bridge targets" (10px serif bold, dark)
+            "44.3% of ACS questions" (9px serif, dark)
+            "serve as targets" (9px serif, dark)
+  - RIGHT: "17 three-way bridges" (10px serif bold, dark)
+           "ACS questions serving" (9px serif, dark)
+           "both CPS and FoodAPS" (9px serif, dark)
+- Below body, centered:
+  - "→ expert_review_cps.csv, expert_review_foodaps.csv" (8px serif italic, muted #4B636E)
+
+=== BOTTOM ANNOTATION ===
+- Centered below Tier 4
+- "All candidates require subject-matter expert validation. Fan-in: 2.78 source questions per ACS bridge target." (9px serif italic, muted #4B636E)
+
+=== COLOR PALETTE (Census xdgov) ===
+Navy:        #205493
+Dark navy:   #112E51
+Orange:      #FF7043
+Dark orange: #E64A19
+Grey:        #B0BEC5
+Dark grey:   #78909C
+Light blue:  #DCEEFB
+Light green: #C8E6C9
+Green:       #2E7D32
+Red:         #D32F2F
+Muted text:  #4B636E
+Background:  white
+
+=== TYPOGRAPHY ===
+- All text: Serif font (Georgia, Palatino, or similar)
+- Box headers: 11-12px bold
+- Body text: 9-10px regular
+- Annotations: 8-9px italic
+- Key results: 10px bold in green
+
+=== DO NOT ===
+- No gradients or 3D effects
+- No drop shadows
+- No clip art, decorative icons, or emoji
+- No background patterns or textures
+- No curved or diagonal arrows
+- Labels must not overflow containers
+- Do not use colors outside the Census xdgov palette
+- Do not show model logos or vendor branding

@@ -1,25 +1,31 @@
 #!/usr/bin/env python3
 """
-Master Pipeline Runner: Dual-Model Barrier Coding with Arbitration
-Report 03: Harmonization Constraints
+*** DEPRECATED — DO NOT USE ***
 
-Executes the complete pipeline:
-1. Dual-model coding (gpt-4o-mini + claude-haiku-4-5)
-2. Agreement analysis & confusion matrices
-3. Third-model arbitration (claude-opus-4-5)
-4. Final compilation
+This is the original dual-model pipeline runner from early Report 03 development.
+It references outdated model names, old output paths, and a 2-rater design.
 
-Usage:
-    python run_full_pipeline.py [--skip-coding] [--skip-arbitration] [--force]
+The active pipeline runner is:  src/pipelines/run_pipeline.py
+  - Config-driven (reads model names from config/report_03.yaml)
+  - 3-rater + 3-arbitrator design
+  - Post-restructure paths (docs/stages/03_harmonization/data/)
+  - Validation guard via build.py
 
-Options:
-    --skip-coding      Skip Phase 1 if results already exist
-    --skip-arbitration Skip Phase 3 if arbitration results exist
-    --force            Overwrite existing outputs
+This file is kept for historical reference only.
+
+Original description:
+  Master Pipeline Runner: Dual-Model Barrier Coding with Arbitration
+  Report 03: Harmonization Constraints
 """
 
-import subprocess
 import sys
+
+print("ERROR: This script is DEPRECATED. Use src/pipelines/run_pipeline.py instead.")
+sys.exit(1)
+
+# --- Everything below is dead code kept for historical reference ---
+
+import subprocess
 import argparse
 from pathlib import Path
 from datetime import datetime

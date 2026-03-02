@@ -18,16 +18,16 @@
 
 PaperBanana diagrams: method spec → `paperbanana generate` → PNG. See CLAUDE.md "Diagrams Are Built From Source" for full workflow.
 
-Models used: VLM `gemini-2.5-flash` (config specifies `gemini-3.1-pro` — NOT FOUND in API); Image `gemini-3.1-flash-image-preview` (matches config). Generated 2026-03-01.
+**⚠️ ALL PRIOR RUNS PRODUCED UNUSABLE OUTPUT** (gibberish text, hallucinated labels). Method specs corrected 2026-03-01 with V&V-verified numbers. All architecture diagrams require regeneration. See `assets/diagrams/paperbanana/HANDOFF_next_thread.md` for root cause analysis.
 
 | Figure ID | Title | Chapter | Method Spec | Deployed Output | Provenance Run | Status |
 |-----------|-------|---------|-------------|-----------------|----------------|--------|
-| Arch 1 | Pipeline Overview | Appendix A | `assets/diagrams/paperbanana/pipeline_overview_method.txt` | `assets/diagrams/fig_pipeline_overview.png` | `run_20260301_182906_fe0aa1` | generated — awaiting review |
-| Arch 2 | Stage 1: Topic and Subtopic Classification | Appendix A | `assets/diagrams/paperbanana/stage1_classification_method.txt` | `assets/diagrams/fig_stage1_classification.png` | `run_20260301_183032_263c19` | generated — awaiting review |
-| Arch 3 | Stage 2: Concept Overlap and Pair Generation | Appendix A | `assets/diagrams/paperbanana/stage2_overlap_method.txt` | `assets/diagrams/fig_stage2_overlap.png` | `run_20260301_183156_f0d033` | generated — awaiting review |
-| Arch 4 | Stage 3: Multi-Model Barrier Rating | Appendix A | `assets/diagrams/paperbanana/stage3_rating_method.txt` | `assets/diagrams/fig_stage3_rating.png` | `run_20260301_183327_d0fdff` | generated — awaiting review |
-| Arch 5 | Stage 4: Structured Arbitration Protocol | Appendix A | `assets/diagrams/paperbanana/stage4_arbitration_method.txt` | `assets/diagrams/fig_stage4_arbitration.png` | `run_20260301_183455_fb490d` | generated — awaiting review |
-| Arch 6 | Stage 5: Question-Level Results | Appendix A | `assets/diagrams/paperbanana/stage5_results_method.txt` | `assets/diagrams/fig_stage5_results.png` | `run_20260301_181411_72c0da` | ON HOLD — pending design discussion |
+| Arch 1 | Pipeline Overview | Appendix A | `assets/diagrams/paperbanana/pipeline_overview_method.txt` | `assets/diagrams/fig_pipeline_overview.png` | — | **needs regeneration** — spec corrected 2026-03-01 (cost junk removed, routing % fixed) |
+| Arch 2 | Stage 1: Classification | Appendix A | `assets/diagrams/paperbanana/stage1_classification_method.txt` | `assets/diagrams/fig_stage1_classification.png` | — | **needs regeneration** — spec corrected 2026-03-01 (routing 68.5%, arb count 1,368, output 6,954/6,987, cost junk removed) |
+| Arch 3 | Stage 2: Overlap and Pairing | Appendix A | `assets/diagrams/paperbanana/stage2_overlap_method.txt` | `assets/diagrams/fig_stage2_overlap.png` | — | **needs regeneration** — spec verified correct, prior output was garbage |
+| Arch 4 | Stage 3: Barrier Rating | Appendix A | `assets/diagrams/paperbanana/stage3_rating_method.txt` | `assets/diagrams/fig_stage3_rating.png` | — | **needs regeneration** — spec verified correct, prior output was garbage |
+| Arch 5 | Stage 4: Arbitration | Appendix A | `assets/diagrams/paperbanana/stage4_arbitration_method.txt` | `assets/diagrams/fig_stage4_arbitration.png` | — | **needs regeneration** — spec verified correct, prior output was garbage |
+| Arch 6 | Stage 5: Results | Appendix A | `assets/diagrams/paperbanana/stage5_results_method.txt.HOLD` | — | — | ON HOLD — pending design discussion |
 
 **D2 diagrams (if any):**
 
@@ -55,6 +55,7 @@ Slide figures will be derived from the same scripts with adjusted dimensions. Ma
 - [ ] Fig 2 generated and reviewed
 - [ ] Fig 3 generated and reviewed — ⚠️ BLOCKED: input data inflated, needs corrected source
 - [ ] D2 installed (`brew install d2`)
-- [ ] Arch 1–6 generated (2026-03-01) — awaiting Brock review before wiring into report
+- [ ] Arch 1–5 specs corrected with V&V-verified numbers (2026-03-01) — need regeneration
+- [ ] Arch 6 on hold
 - [ ] All figures wired into chapter `.qmd` files
 - [ ] Slides figure variants scoped

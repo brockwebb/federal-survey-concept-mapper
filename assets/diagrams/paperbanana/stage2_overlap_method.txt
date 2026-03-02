@@ -1,0 +1,116 @@
+DIAGRAM: Stage 2 — Concept Overlap Identification and Pair Generation
+ASPECT RATIO: 4:3 (1100w × 825h logical units)
+STYLE: Publication-quality academic data flow diagram. Clean serif font (Georgia or similar). White background. No drop shadows, no gradients, no 3D effects. Flat design.
+
+=== LAYOUT OVERVIEW ===
+Top-to-bottom flow in four tiers. Tier 1: Input (master_dataset.csv from Stage 1). Tier 2: ACS anchor selection with family ranking. Tier 3: Source survey selection (CPS, FoodAPS). Tier 4: Combinatorial pair generation output.
+
+=== TIER 1: INPUT (top center) ===
+- Shape: Rounded rectangle, 400w × 50h
+- Fill: Light green #C8E6C9, border: Green #2E7D32 (2px)
+- Label: "master_dataset.csv — 6,954 classified questions across 47 instruments" (10px serif, dark #333333)
+- Sublabel: "Output of Stage 1 (6,987 total − 33 classification failures)" (8px serif italic, muted #4B636E)
+
+=== DOWNWARD ARROW ===
+- Navy #205493, 2px solid, filled arrowhead
+
+=== TIER 2: ACS ANCHOR AND FAMILY RANKING (center) ===
+- Main box: Rounded rectangle, 500w × 200h
+- Fill: white, border: Navy #205493 (2px)
+- Header bar: Fill navy #205493, 30h
+  - Text: "Subtopic Intersection Analysis — ACS as Anchor" (11px serif bold, white)
+
+- Inside body, LEFT SIDE: ACS anchor box
+  - Small rounded rectangle, 140w × 100h
+  - Fill: Orange #FF7043, border: Dark orange #E64A19 (2px)
+  - Label: "ACS" (14px serif bold, white)
+  - Sublabel: "115 questions" (9px serif, white)
+  - Sublabel: "Broadest topical" (9px serif, white)
+  - Sublabel: "coverage" (9px serif, white)
+
+- Inside body, RIGHT SIDE: Family ranking mini-table
+  - Header: "ACS Family (by shared subtopic intersections)" (9px serif bold, dark)
+  - Rows (9px serif, monospace-like alignment):
+    - "1. SIPP      577 intersections  38 subtopics"
+    - "2. AHS       460               34"
+    - "3. CE        283               30"
+    - "4. CPS       181               25" — this row highlighted with light blue #DCEEFB background
+    - "5. FoodAPS   123               23" — this row highlighted with light blue #DCEEFB background
+  - Table border: thin grey #B0BEC5 (1px)
+
+- Between ACS box and table: horizontal double-headed arrow, thin grey #78909C, label "compare subtopics" (8px serif italic, muted)
+
+=== DOWNWARD ARROW ===
+- Navy #205493, 2px solid
+
+=== TIER 3: SOURCE SURVEY SELECTION (two boxes side by side) ===
+
+LEFT BOX — CPS:
+- Shape: Rounded rectangle, 220w × 110h
+- Fill: Light blue #DCEEFB, border: Navy #205493 (2px)
+- Header bar: Fill navy #205493, 25h, text "CPS" (11px serif bold, white)
+- Body:
+  - "211 total questions" (9px serif, dark)
+  - "157 with ACS subtopic overlap" (9px serif bold, dark)
+  - "Paired against 115 ACS questions" (9px serif, muted #4B636E)
+
+RIGHT BOX — FoodAPS:
+- Shape: Rounded rectangle, 220w × 110h
+- Fill: Light blue #DCEEFB, border: Navy #205493 (2px)
+- Header bar: Fill navy #205493, 25h, text "FoodAPS" (11px serif bold, white)
+- Body:
+  - "462 total questions (4 instruments)" (9px serif, dark)
+  - "118 with ACS subtopic overlap" (9px serif bold, dark)
+  - "Paired against 115 ACS questions" (9px serif, muted #4B636E)
+
+- Gap between boxes: ~60px
+
+=== TWO DOWNWARD ARROWS converging ===
+- From each box downward, merging into single arrow entering Tier 4
+
+=== TIER 4: PAIR GENERATION OUTPUT (bottom center) ===
+- Shape: Rounded rectangle, 450w × 100h
+- Fill: white, border: Orange #FF7043 (2px)
+- Header bar: Fill orange #FF7043, 25h, text "Combinatorial Pair Generation" (11px serif bold, white)
+- Body:
+  - "Each source question × every ACS question sharing its subtopic" (9px serif, dark)
+  - "CPS–ACS: 1,030 pairs | FoodAPS–ACS: 568 pairs | Total: 1,598 pairs" (10px serif bold, dark)
+  - "→ cps_comparison_merged.csv, foodaps_comparison_merged.csv" (9px serif italic, muted #4B636E)
+
+=== RIGHT MARGIN ANNOTATION ===
+- Small callout box, positioned right of Tier 4
+- Fill: white, border: dashed grey #B0BEC5 (1px)
+- Text: "Most pairs expected to fail —" (9px serif, muted #4B636E)
+- "broad combinatorial search" (9px serif, muted)
+- "ensures no viable match" (9px serif, muted)
+- "is missed" (9px serif, muted)
+
+=== COLOR PALETTE (Census xdgov) ===
+Navy:        #205493
+Dark navy:   #112E51
+Orange:      #FF7043
+Dark orange: #E64A19
+Grey:        #B0BEC5
+Dark grey:   #78909C
+Light blue:  #DCEEFB
+Light green: #C8E6C9
+Green:       #2E7D32
+Red:         #D32F2F
+Muted text:  #4B636E
+Background:  white
+
+=== TYPOGRAPHY ===
+- All text: Serif font (Georgia, Palatino, or similar)
+- Box headers: 11px bold
+- Body text: 9-10px regular
+- Annotations: 8-9px italic
+
+=== DO NOT ===
+- No gradients or 3D effects
+- No drop shadows
+- No clip art, decorative icons, or emoji
+- No background patterns or textures
+- No curved or diagonal arrows (all straight, orthogonal)
+- Labels must not be cut off or overflow containers
+- Do not use colors outside the Census xdgov palette
+- Do not show model logos or vendor branding

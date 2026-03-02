@@ -38,9 +38,9 @@ from pathlib import Path
 SRC_DIR = Path(__file__).resolve().parent.parent    # .../src/
 REPO_ROOT = SRC_DIR.parent                           # repo root
 SCRIPTS_DIR = SRC_DIR / "scripts"
-OUTPUT_DIR = REPO_ROOT / "output" / "report_03" / "analysis"
-VISUALS_DIR = REPO_ROOT / "output" / "report_03" / "visuals"
-PRESENTATION_DIR = BASE_DIR / "presentation"
+OUTPUT_DIR = REPO_ROOT / "docs" / "stages" / "03_harmonization" / "data" / "analysis"
+VISUALS_DIR = REPO_ROOT / "docs" / "stages" / "03_harmonization" / "data" / "visuals"
+PRESENTATION_DIR = REPO_ROOT / "presentation"
 PRESENTATION_IMAGES = PRESENTATION_DIR / "images"
 
 STAGES = {
@@ -293,7 +293,7 @@ def run_stage(stage_key, dry_run=False):
     print()
     result = subprocess.run(
         [sys.executable, str(script_path)],
-        cwd=str(BASE_DIR),
+        cwd=str(REPO_ROOT),
     )
 
     if result.returncode != 0:

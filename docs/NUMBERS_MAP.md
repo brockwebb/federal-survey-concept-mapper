@@ -2,7 +2,8 @@
 
 **Purpose:** Single source of truth for every key number cited across reports and deliverables.  
 **Scope:** 47 Census Bureau demographic surveys, ~7,000 questions. NOT cross-agency.  
-**Last audited:** 2026-02-28 (ACS-side numbers corrected from 50→51 via q_id join methodology)  
+**Last audited:** 2026-03-01 (Stage 1 routing paths verified; subtopic metrics clarified; input→output gap reconciled; arbitrator decisions certified GAP-002; dual-modal certified GAP-003; arbitrator model names corrected GAP-008)  
+**Authority:** All numbers validated by V&V scripts in `src/validation/`. See `docs/SRS.md` §5 for the V&V registry. When this document disagrees with a V&V script output, this document is wrong.  
 
 ---
 
@@ -21,16 +22,52 @@
 
 ### Step 2: Topic/Subtopic Classification (Report 01)
 
-| Metric | Value | Source File | Path/Field |
-|--------|-------|-------------|------------|
-| Questions classified | 6,954 | `output/report_01/final/master_dataset.csv` row count | Rows with valid classifications |
-| Topic agreement (%) | 89.2% | `output/report_01/comparison/agreement_summary.csv` | `Topic Agreement %` = 89.24 |
-| Subtopic agreement (%) | 69.7% | `output/report_01/comparison/agreement_summary.csv` | `Subtopic Agreement %` = 69.69 |
-| Cohen's κ (topics) | 0.839 | `output/report_01/comparison/agreement_summary.csv` | `Cohen's Kappa (Topics)` = 0.8389 |
-| Cohen's κ (subtopics) | 0.687 | `output/report_01/comparison/agreement_summary.csv` | `Cohen's Kappa (Subtopics)` = 0.6869 |
-| Classification models | 2 | — | OpenAI GPT-5-mini, Anthropic Claude Haiku 4.5 |
-| API cost (approx) | ~$15 | Manual estimate | For dual-model classification of all questions |
-| Processing time | ~2 hours | Manual estimate | Wall clock for full pipeline |
+**Pipeline input/output:**
+
+| Metric | Value | Source File | Notes |
+|--------|-------|-------------|-------|
+| Input (deduplicated) | 6,987 | `data/raw/PublicSurveyQuestionsMap.csv` | Full working dataset |
+| Completed dual-model comparison | 6,954 | `docs/stages/01_classification/data/comparison/full_comparison.csv` | 33 never reached comparison |
+| Master dataset rows | 6,987 | `docs/stages/01_classification/data/final/master_dataset.csv` | All input questions, including 38 flagged |
+| Flagged for human review | 38 | `master_dataset.csv` where `needs_human_review == True` | 31 unresolved_disagreement + 7 categorization_failed |
+
+**Input→output gap (6,987 − 6,954 = 33):** 33 questions never entered the dual-model comparison pipeline: 26 unresolved preprocessing issues + 7 categorization failures. An additional 5 completed comparison but remained unresolved after arbitration. Total flagged: 38 (33 + 5).
+
+**Routing paths (of the 6,954 that completed comparison):**
+
+| Path | Count | % of 6,954 | Description |
+|------|------:|----------:|-------------|
+| Consensus | 4,765 | 68.5% | Both models agree on topic AND subtopic |
+| Arbitrated | 1,368 | 19.7% | Disagreements resolved by claude-sonnet-4-5 |
+| Auto dual-modal | 821 | 11.8% | Both models highly confident, different answers — both accepted |
+| **Total** | **6,954** | **100%** | |
+
+**V&V certified:** `src/validation/validate_stage1_classification.py` → `docs/validation/stage1_classification_report.json`
+
+**Inter-rater agreement (pre-arbitration, between the two classifiers):**
+
+| Metric | Value | Source | Notes |
+|--------|-------|--------|-------|
+| Topic agreement (%) | 89.2% | Recomputed from `full_comparison.csv` | 89.24% exact |
+| Subtopic label agreement (%) | 69.7% | `agreement_summary.csv` | 69.69% exact — raw label match on subtopic text |
+| Subtopic routing agreement (%) | **68.5%** | Recomputed from `full_comparison.csv` | 68.52% exact — the stricter compound criterion (topic AND subtopic both match). This drives the consensus/resolution routing split |
+| Cohen's κ (topics) | 0.839 | `agreement_summary.csv` | ✅ Verified 2026-03-01: sklearn recompute from raw labels = 0.8399, diff 0.0009 (SRS GAP-001 closed) |
+| Cohen's κ (subtopics) | 0.687 | `agreement_summary.csv` | ✅ Verified 2026-03-01: sklearn recompute from raw labels = 0.6875, diff 0.0005 (SRS GAP-001 closed) |
+
+**⚠️ Why two subtopic agreement numbers:** Subtopic *label* agreement (69.7%) counts questions where the subtopic text matches regardless of topic. Subtopic *routing* agreement (68.5%) is the compound criterion: BOTH topic AND subtopic must match. The 81-row gap (4,846 − 4,765 = 81) represents questions where the subtopic labels matched but the topic labels did not — those were routed to resolution. The pipeline uses the stricter routing criterion.
+
+**Arbitrator decisions (claude-sonnet-4-5, single arbitrator — no post-arbitration κ is computable):**
+
+| Decision | Count | Notes |
+|----------|------:|-------|
+| pick_gpt5mini | 522 | ✅ V&V Layer 8 certified 2026-03-01 |
+| pick_haiku45 | 482 | ✅ V&V Layer 8 certified (487 raw arb_decision − 5 overridden = 482 final) |
+| new_concept | 340 | ✅ V&V Layer 8 certified |
+| dual_modal | 19 | ✅ V&V Layer 8 certified |
+
+**Dual-modal total:** 821 (auto) + 19 (from arbitrator) = 840 (12.0% of 6,987 master rows). ✅ V&V Layer 9 certified 2026-03-01: `is_dual_modal==True` count matches.
+
+**Classification models:** OpenAI gpt-5-mini, Anthropic claude-haiku-4-5. Arbitrator: claude-sonnet-4-5.
 
 **Topic distribution (consensus):**
 
@@ -106,7 +143,7 @@ Plus feasibility codes: F1 (direct recode), F2 (statistical adjustment needed), 
 
 | Metric | Value | Source File | Path |
 |--------|-------|-------------|------|
-| Arbitrator models | 3 | — | Same models in arbitrator role |
+| Arbitrator models | 3 | `config/report_03.yaml` arbitrators section | Anthropic claude-opus-4-5, OpenAI gpt-5.2, Google gemini-3-pro-preview (higher-tier models than raters) |
 | Two-way coverage | 1,598 pairs | `output/report_03/analysis/stage3_arbitration_metrics.json` | `metadata.two_way_n` |
 | Three-way coverage | 751 pairs | same | `metadata.three_way_n` (Google: CPS only, rate-limited) |
 | Post-arbitration κ (feasibility, 2-way) | **0.843** | same | `two_way_agreement.feasibility.cohens_kappa` |
@@ -190,7 +227,10 @@ Not yet completed. This is where the harmonization candidates go to subject-matt
 | "federal surveys" (implying cross-agency) | **Census Bureau demographic surveys** | README title, fact sheet |
 | "7,400 questions" or "7,000 questions" | **~7,000 questions** (6,987 deduplicated) | Various |
 | Citing pair-level rates as consolidation rates | Must specify **question-level** rates | Report 03 findings |
-| κ = 0.843 without context | That's **post-arbitration feasibility** (2-way); rater-stage was 0.611 | Reports conflating stages |
+| κ = 0.843 without context | That's **post-arbitration feasibility** (2-way) from **Stage 4 barrier arbitration**; rater-stage was 0.611. Has nothing to do with Stage 1 | Reports conflating stages |
+| Claiming post-arbitration κ for Stage 1 | **Stage 1 has ONE arbitrator — no post-arbitration κ exists.** κ = 0.84/0.69 are pre-arbitration classifier agreement only | Diagram specs, narrative |
+| "Subtopic agreement 69.7%" without qualifier | Specify: **label agreement** (69.7%) vs **routing agreement** (68.5%). They measure different things | Report, diagram specs |
+| "6,954 classified" without context | 6,954 completed comparison. 6,987 total in master (including 38 flagged). Specify which | NUMBERS_MAP Step 2 |
 | "240 CPS questions" or "140 FoodAPS questions" | **157 CPS** / **118 FoodAPS** unique questions | Pre-correction inflation from `stage4_question_level.csv` counting question-subtopic assignments as unique questions |
 | "380 unique source questions" | **275 unique source questions** (157 + 118) | Same inflation bug |
 | "42.5% CPS consolidation rate" | **54.8%** (corrected) | Pre-correction inflated F3 duplicates dragged rate down |
@@ -200,10 +240,10 @@ Not yet completed. This is where the harmonization candidates go to subject-matt
 
 ## Methodology Summary (Plain Language)
 
-1. Two LLMs independently classified every question by Census topic and subtopic. They agreed 89% of the time (κ = 0.84).
+1. Two LLMs independently classified every question by Census topic and subtopic. They agreed on the subtopic routing criterion 68.5% of the time; at the topic level, agreement was 89% (κ = 0.84). A single arbitrator resolved disagreements.
 2. Questions sharing the same subtopic across surveys were paired. For CPS and FoodAPS vs ACS, this produced 1,598 pairs.
 3. Three LLMs independently evaluated each pair: can this pair be harmonized? What's the barrier if not?
 4. Where models disagreed, three independent arbitrators broke the tie. Agreement improved from κ = 0.61 to κ = 0.84.
 5. Results collapsed from pairs to individual questions: **47-55% of source questions** have at least one harmonization path to ACS.
-6. On the ACS side, 50 of 115 questions (43.5%) serve as bridge targets, with 17 serving both CPS and FoodAPS simultaneously.
+6. On the ACS side, 51 of 115 questions (44.3%) serve as bridge targets, with 17 serving both CPS and FoodAPS simultaneously.
 7. For the ~45-53% that can't harmonize, the dominant reason (~87%) is that the questions measure fundamentally different things.

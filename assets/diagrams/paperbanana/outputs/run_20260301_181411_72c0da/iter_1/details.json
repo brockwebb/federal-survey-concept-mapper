@@ -1,0 +1,7 @@
+{
+  "description": "**Figure Description:**\n\nThe diagram depicts a clear, top-to-bottom data flow, organized into four distinct horizontal tiers, representing the stages of the \"Question-Level Consolidability Analysis\". The overall presentation maintains a standard 4:3 aspect ratio. The style is clean, academic, and publication-quality, featuring a pristine white background. All labels and body text utilize a clean, modern sans-serif font (such as Arial or Roboto), ensuring clarity and readability. There are no drop shadows, gradients, 3D effects, clip art, decorative icons, emoji, background patterns, or textures. All connections are straight, orthogonal lines, and labels are designed to fit neatly within their containers without overflow.\n\n**Overall Layout:**\nThe diagram flows vertically downwards, structured into four major processing tiers:\n*   **Tier 1 (Top):** Inputs, presented as two horizontally aligned components.\n*   **Tier 2 (Upper-Middle):** The central \"Pair \u2192 Question Aggregation\" process, highlighted as a single, prominent module.\n*   **Tier 3 (Lower-Middle):** Per-survey results, displayed in two horizontally aligned modules.\n*   **Tier 4 (Bottom):** Deliverables for expert review, a single module positioned at the very bottom.\n\n**Styling and Aesthetics:**\n*   **Background:** Pristine white.\n*   **",
+  "critique": {
+    "critic_suggestions": [],
+    "revised_description": null
+  }
+}

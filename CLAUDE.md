@@ -153,3 +153,62 @@ python build.py --figures    # regenerate all figures, then validate + render
 - **Writing conventions**: Follow `central_library/crosswalks/fcsm_nist/WRITING_CONVENTIONS.md`
 - **No bold in prose, no em dashes, no "novel," no throat-clearing, no self-congratulation**
 - Figure scripts go in `src/figures/`, outputs go in `report/figures/`
+
+## Diagrams Are Built From Source
+
+All diagrams are reproducible from source specs. The image is disposable output.
+
+```
+Source (edit this)          →  Build tool  →  Output (disposable, regenerable)
+─────────────────────────────────────────────────────────────────────────────
+*_method.txt (PaperBanana)  →  paperbanana →  *.png
+*.d2 (D2 lang)              →  d2          →  *.pdf
+```
+
+To modify a diagram: edit the source spec, regenerate. Never edit the output image.
+
+### PaperBanana Pipeline
+
+**What it is:** CLI tool wrapping Google Gemini image generation + VLM critic. Produces publication-quality conceptual/architecture diagrams from structured text specs.
+
+**Directory layout:**
+```
+assets/diagrams/
+├── paperbanana/
+│   ├── .env → ../../.env (symlink to repo root)
+│   ├── *_method.txt          # Source specs (THE authoritative source)
+│   └── outputs/              # Generation runs (run_<TIMESTAMP>_<HASH>/)
+├── fig_*.png                 # Deployed outputs (copied from selected run)
+└── *.d2                      # D2 source files (if any)
+```
+
+**Workflow:**
+1. Write `assets/diagrams/paperbanana/<name>_method.txt` — exhaustive spec with exact hex colors, font sizes, layout
+2. `cd assets/diagrams/paperbanana && paperbanana generate --input <name>_method.txt --caption "..." --iterations 3`
+3. Human review outputs (architectural accuracy, label correctness, no chart junk)
+4. `cp outputs/run_<SELECTED>/final.png ../fig_<name>.png`
+5. Reference in report: symlink or copy to `report/figures/`
+
+**Method spec format:** Structured plain-text with DIAGRAM, ASPECT RATIO, STYLE, LAYOUT OVERVIEW, component descriptions (exact labels, fill/border/text colors as hex), arrow descriptions, COLOR PALETTE, TYPOGRAPHY, DO NOT prohibitions. See `census-mcp-server/paper/assets/diagrams/paperbanana/` for working examples.
+
+**Configuration management rules:**
+1. **Source is authoritative.** method.txt is the spec. PNG is the build artifact.
+2. **Never edit output images.** Change label/color/layout → edit method.txt → regenerate → review → deploy.
+3. **Method files are companions.** Every PaperBanana PNG has a `*_method.txt`. No method file = not reproducible.
+4. **Human review is mandatory.** PaperBanana output is a draft. VLM critic catches gross errors but not domain-specific correctness.
+5. **Provenance tracking.** Note which run directory produced each deployed PNG (in commit messages or FIGURE_MAP.md).
+
+**Color palette (Census xdgov — use in all method specs):**
+```
+Navy:        #205493    Dark navy:   #112E51
+Orange:      #FF7043    Dark orange: #E64A19
+Grey:        #B0BEC5    Dark grey:   #78909C
+Light blue:  #DCEEFB    Light green: #C8E6C9
+Green:       #2E7D32    Red:         #D32F2F
+Muted text:  #4B636E    Background:  white
+```
+
+**Environment:** Requires `.env` with Gemini API credentials. Symlink from repo root:
+```bash
+cd assets/diagrams/paperbanana && ln -s ../../../.env .env
+```

@@ -1,0 +1,108 @@
+DIAGRAM: Stage 3 — Multi-Model Barrier Rating
+ASPECT RATIO: 4:3 (1100w × 825h logical units)
+STYLE: Publication-quality academic data flow diagram. Clean serif font (Georgia or similar). White background. No drop shadows, no gradients, no 3D effects. Flat design.
+
+=== LAYOUT OVERVIEW ===
+Top-to-bottom flow in three tiers. Tier 1: Input pairs. Tier 2: Three independent rater paths (the core of this diagram — show parallel independence clearly). Tier 3: Merged ratings with agreement metrics.
+
+=== TIER 1: INPUT (top center) ===
+- Shape: Rounded rectangle, 400w × 50h
+- Fill: white, border: Navy #205493 (2px)
+- Label: "1,598 question pairs (1,030 CPS–ACS + 568 FoodAPS–ACS)" (10px serif, dark #333333)
+- Sublabel: "Each pair: source question text + ACS question text + shared subtopic" (9px serif italic, muted #4B636E)
+
+=== DOWNWARD ARROW splits into THREE paths ===
+- Single arrow from Tier 1 splits into three parallel vertical arrows
+- Each arrow: navy #205493, 2px solid
+
+=== TIER 2: THREE INDEPENDENT RATERS (three columns, equal width) ===
+
+Each rater box follows the same template:
+
+LEFT — Rater 1 (OpenAI):
+- Shape: Rounded rectangle, 260w × 250h
+- Fill: Light blue #DCEEFB, border: Navy #205493 (2px)
+- Header bar: Fill navy #205493, 30h
+  - Text: "Rater 1: OpenAI" (11px serif bold, white)
+- Body:
+  - "Model: gpt-5-mini" (8px serif italic, muted #4B636E)
+  - Blank line
+  - "For each pair, assign:" (9px serif, dark)
+  - Blank line
+  - Small box: "Feasibility" (9px serif bold), fill white, border navy 1px
+    - "F1 = direct recode" (8px serif, dark)
+    - "F2 = statistical adjustment" (8px serif, dark)
+    - "F3 = incompatible" (8px serif, dark)
+  - Blank line
+  - Small box: "Barrier code (if F3)" (9px serif bold), fill white, border navy 1px
+    - "CC TC RS PC MC PM" (8px serif, dark)
+  - Blank line
+  - Small box: "Reasoning" (9px serif bold), fill white, border navy 1px
+    - "Free-text justification" (8px serif italic, muted)
+
+CENTER — Rater 2 (Anthropic):
+- Same template as Rater 1
+- Header: "Rater 2: Anthropic"
+- Model: "claude-haiku-4-5" (8px serif italic, muted)
+
+RIGHT — Rater 3 (Google):
+- Same template as Rater 1
+- Header: "Rater 3: Google"
+- Model: "gemini-3-flash" (8px serif italic, muted)
+
+- Between columns: vertical dashed lines (grey #B0BEC5, 1px dashed) with small "X" barrier symbols
+- Below the dashed lines: "No communication between raters" (8px serif italic, muted #4B636E) — centered across all three
+
+=== THREE DOWNWARD ARROWS converging ===
+- From each rater box, arrows converge into single point entering Tier 3
+
+=== TIER 3: MERGED RATINGS AND AGREEMENT (bottom center) ===
+- Shape: Rounded rectangle, 500w × 140h
+- Fill: white, border: Grey #B0BEC5 (2px)
+- Header bar: Fill grey #78909C, 30h
+  - Text: "Rater Agreement Analysis" (11px serif bold, white)
+- Body (two columns inside):
+  - LEFT COLUMN — Metrics:
+    - "Barrier agreement (Fleiss' κ): 0.611" (10px serif, dark) — "0.611" in bold
+    - "Feasibility agreement (Fleiss' κ): 0.537" (10px serif, dark)
+    - "Interpretation: Moderate agreement" (9px serif italic, muted)
+  - RIGHT COLUMN — Output:
+    - "→ barrier_coding_merged_3rater.csv" (9px serif italic, muted #4B636E)
+    - "→ stage2_agreement_metrics.json" (9px serif italic, muted)
+    - Blank line
+    - "Disagreements proceed to arbitration →" (9px serif bold, orange #FF7043)
+
+=== BOTTOM ANNOTATION ===
+- Centered below Tier 3
+- "Each pair receives 3 independent judgments · Structured prompt includes taxonomy definitions and coding hierarchy · Response parsed via JSON schema" (9px serif, muted #4B636E)
+
+=== COLOR PALETTE (Census xdgov) ===
+Navy:        #205493
+Dark navy:   #112E51
+Orange:      #FF7043
+Dark orange: #E64A19
+Grey:        #B0BEC5
+Dark grey:   #78909C
+Light blue:  #DCEEFB
+Light green: #C8E6C9
+Green:       #2E7D32
+Red:         #D32F2F
+Muted text:  #4B636E
+Background:  white
+
+=== TYPOGRAPHY ===
+- All text: Serif font (Georgia, Palatino, or similar)
+- Box headers: 11px bold
+- Body text: 9-10px regular
+- Annotations: 8-9px italic
+- Metric values: 10px bold for key numbers
+
+=== DO NOT ===
+- No gradients or 3D effects
+- No drop shadows
+- No clip art, decorative icons, or emoji
+- No background patterns or textures
+- No curved or diagonal arrows
+- Labels must not overflow containers
+- Do not use colors outside the Census xdgov palette
+- Do not show model logos or vendor branding

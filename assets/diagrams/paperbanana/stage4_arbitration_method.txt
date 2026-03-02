@@ -1,0 +1,121 @@
+DIAGRAM: Stage 4 — Structured Arbitration Protocol
+ASPECT RATIO: 4:3 (1100w × 825h logical units)
+STYLE: Publication-quality academic data flow diagram. Clean serif font (Georgia or similar). White background. No drop shadows, no gradients, no 3D effects. Flat design.
+
+=== LAYOUT OVERVIEW ===
+Top-to-bottom flow in four tiers. Tier 1: Input (disagreeing ratings). Tier 2: Arbitration protocol detail (the novel part — blind masking, order randomization). Tier 3: Three independent arbitrators. Tier 4: Final verdicts with improved agreement.
+
+=== TIER 1: INPUT (top center) ===
+- Shape: Rounded rectangle, 450w × 60h
+- Fill: white, border: Grey #B0BEC5 (2px)
+- Label line 1: "1,598 pairs with 3-rater judgments" (10px serif, dark #333333)
+- Label line 2: "All pairs proceed to arbitration (not just disagreements)" (9px serif italic, muted #4B636E)
+
+=== DOWNWARD ARROW ===
+- Navy #205493, 2px solid
+
+=== TIER 2: ARBITRATION PROTOCOL (center-top) ===
+- Shape: Rounded rectangle, 500w × 130h
+- Fill: light orange tint (white with orange border), border: Orange #FF7043 (2px)
+- Header bar: Fill orange #FF7043, 25h
+  - Text: "Arbitration Protocol" (11px serif bold, white)
+- Body, TWO COLUMNS:
+  - LEFT COLUMN:
+    - "Blind masking:" (9px serif bold, dark)
+    - "Raters shown as A, B, C" (9px serif, dark)
+    - "No vendor identity revealed" (9px serif, dark)
+  - RIGHT COLUMN:
+    - "Order randomization:" (9px serif bold, dark)
+    - "50% fixed presentation order" (9px serif, dark)
+    - "50% randomized (position bias check)" (9px serif, dark)
+- Below body, centered:
+  - "Each arbitrator sees: all 3 rater judgments + reasoning + original question pair" (8px serif italic, muted #4B636E)
+
+=== DOWNWARD ARROW splits into THREE ===
+- Single arrow splits into three parallel paths
+
+=== TIER 3: THREE ARBITRATORS (three columns) ===
+
+LEFT — Arbitrator 1:
+- Shape: Rounded rectangle, 240w × 120h
+- Fill: Light green #C8E6C9, border: Green #2E7D32 (2px)
+- Header bar: Fill green #2E7D32, 25h
+  - Text: "Arbitrator 1: Anthropic" (10px serif bold, white)
+- Body:
+  - "claude-opus-4-5" (8px serif italic, muted)
+  - "Select rater A, B, or C — or synthesize" (9px serif, dark)
+  - "Provide final barrier + feasibility + reasoning" (9px serif, dark)
+
+CENTER — Arbitrator 2:
+- Same template
+- Header: "Arbitrator 2: OpenAI"
+- "gpt-5.2" (8px serif italic, muted)
+
+RIGHT — Arbitrator 3:
+- Same template
+- Header: "Arbitrator 3: Google"
+- "gemini-3-pro" (8px serif italic, muted)
+
+- Between columns: dashed vertical separator lines (grey, 1px dashed)
+
+=== THREE ARROWS converging ===
+- Merge into single arrow to Tier 4
+
+=== TIER 4: FINAL VERDICTS (bottom center) ===
+- Shape: Rounded rectangle, 500w × 160h
+- Fill: Light green #C8E6C9, border: Green #2E7D32 (2px)
+- Header bar: Fill green #2E7D32, 30h
+  - Text: "Post-Arbitration Results" (12px serif bold, white)
+- Body, TWO COLUMNS:
+  - LEFT COLUMN — Agreement improvement:
+    - "Feasibility κ: 0.537 → 0.843" (10px serif, dark) — "0.843" in bold green #2E7D32
+    - "Barrier κ: 0.611 → 0.796" (10px serif, dark)
+    - "Binary κ: — → 0.896" (10px serif, dark) — "0.896" in bold green
+    - "Both quality gates: PASSED" (10px serif bold, green #2E7D32)
+  - RIGHT COLUMN — Output artifacts:
+    - "→ final_verdicts.csv" (9px serif italic, muted #4B636E)
+    - "→ arbitration_merged.csv" (9px serif italic, muted)
+    - "→ stage3_arbitration_metrics.json" (9px serif italic, muted)
+    - Blank
+    - "1,598 pairs with consensus verdicts" (9px serif bold, dark)
+
+=== LEFT MARGIN ANNOTATION ===
+- Vertical bracket (orange #FF7043, 2px) spanning Tier 2 through Tier 3
+- Label: "Trust architecture" (9px serif bold, orange #FF7043)
+- Below: "Blind masking prevents" (8px serif, muted #4B636E)
+- "anchoring bias" (8px serif, muted)
+- Below: "Order randomization" (8px serif, muted)
+- "detects position effects" (8px serif, muted)
+- Below: "Vendor independence" (8px serif, muted)
+- "prevents systematic bias" (8px serif, muted)
+
+=== COLOR PALETTE (Census xdgov) ===
+Navy:        #205493
+Dark navy:   #112E51
+Orange:      #FF7043
+Dark orange: #E64A19
+Grey:        #B0BEC5
+Dark grey:   #78909C
+Light blue:  #DCEEFB
+Light green: #C8E6C9
+Green:       #2E7D32
+Red:         #D32F2F
+Muted text:  #4B636E
+Background:  white
+
+=== TYPOGRAPHY ===
+- All text: Serif font (Georgia, Palatino, or similar)
+- Box headers: 10-12px bold
+- Body text: 9-10px regular
+- Annotations: 8-9px italic
+- Key metrics: 10px bold in green for improved values
+
+=== DO NOT ===
+- No gradients or 3D effects
+- No drop shadows
+- No clip art, decorative icons, or emoji
+- No background patterns or textures
+- No curved or diagonal arrows
+- Labels must not overflow containers
+- Do not use colors outside the Census xdgov palette
+- Do not show model logos or vendor branding

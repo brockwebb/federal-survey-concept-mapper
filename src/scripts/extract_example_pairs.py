@@ -7,21 +7,22 @@ Selects high/medium/low consolidability examples with full text and reasoning.
 
 import pandas as pd
 import json
+import sys
 from pathlib import Path
 
-# Paths
 # Path setup for post-restructure layout
-SRC_DIR = Path(__file__).resolve().parent.parent
-REPO_ROOT = SRC_DIR.parent
+SRC_DIR = Path(__file__).resolve().parent.parent    # .../src/
+REPO_ROOT = SRC_DIR.parent                           # repo root
 sys.path.insert(0, str(SRC_DIR))
-BASE = REPO_ROOT  # backward compat alias
-BEST_MATCHES = BASE / "output/analysis/stage4_question_best_matches.csv"
-ARBITRATION = BASE / "output/analysis/arbitration_merged.csv"
-CPS_COMP = BASE / "data/cps_comparison_merged.csv"
-FOODAPS_COMP = BASE / "data/foodaps_comparison_merged.csv"
 
-OUTPUT_MD = BASE / "output/analysis/example_pairs_for_presentation.md"
-OUTPUT_CSV = BASE / "output/analysis/example_pairs_candidates.csv"
+ANALYSIS_DIR = REPO_ROOT / "docs" / "stages" / "03_harmonization" / "data" / "analysis"
+BEST_MATCHES = ANALYSIS_DIR / "stage4_question_best_matches.csv"
+ARBITRATION = ANALYSIS_DIR / "arbitration_merged.csv"
+CPS_COMP = REPO_ROOT / "data" / "processed" / "cps_comparison_merged.csv"
+FOODAPS_COMP = REPO_ROOT / "data" / "processed" / "foodaps_comparison_merged.csv"
+
+OUTPUT_MD = ANALYSIS_DIR / "example_pairs_for_presentation.md"
+OUTPUT_CSV = ANALYSIS_DIR / "example_pairs_candidates.csv"
 
 # Selection criteria
 HIGH_BORDA_MIN = 0.7

@@ -1,7 +1,7 @@
 # Master Report Project — Task Roadmap
 
 **Created:** 2026-02-18  
-**Last updated:** 2026-02-28
+**Last updated:** 2026-03-01
 **Status:** Active  
 **Prioritization principle:** Risk-based. Things that are confusing to stakeholders or block credibility get done first.
 
@@ -108,6 +108,10 @@ Walk through one at a time, Brock reviews before moving to next.
 
 ## Housekeeping (do anytime)
 
-- [ ] Wire `C_tevv.qmd` into `_quarto.yml`
-- [ ] Delete `reports/master/appendices/test_write.txt` (artifact from Filesystem MCP debugging)
+- [x] Wire `C_tevv.qmd` into `_quarto.yml` — already done (verified 2026-03-01)
+- [x] Delete `reports/master/appendices/test_write.txt` — already gone (verified 2026-03-01)
+- [x] Tech debt cleanup (2026-03-01): `05_deliverables_pipeline.py` BASE_DIR fix, `extract_example_pairs.py` import/path fix, `run_full_pipeline.py` deprecated with guard
+- [x] NUMBERS_MAP methodology summary: ACS-side number corrected 50/43.5% → 51/44.3%
+- [x] PaperBanana diagram pipeline: CLAUDE.md + FIGURE_MAP.md updated, `assets/diagrams/paperbanana/` directory created
+- [ ] Create .env symlink: `cd assets/diagrams/paperbanana && ln -s ../../../.env .env`
 - [ ] Git commit everything (T03)
