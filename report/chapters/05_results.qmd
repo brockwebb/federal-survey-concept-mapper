@@ -8,6 +8,17 @@ Each eligible question was paired with every ACS question sharing its subtopic, 
 
 ![Harmonization funnel: from total survey questions through ACS concept overlap to viable harmonization paths. Percentages show concept overlap as share of total survey and harmonization paths as share of paired questions.](figures/fig03_harmonization_funnel.pdf){#fig-harmonization-funnel width=100%}
 
+To ground these numbers, @tbl-example-pairs shows one real question pair from each feasibility tier, all drawn from the CPS--ACS comparison.
+
+| Tier | Source (CPS) | ACS | Barrier |
+|------|-------------|-----|---------|
+| F1 | "What is your best estimate of (your/his/her) hourly rate of pay?" | "What is your best estimate of your hourly rate of pay?" | None --- direct bridge variable |
+| F2 | "Did (name/you) ever serve on active duty in the U.S. Armed Forces? When did (you/he/she) serve?" | "Has this person ever served on active duty in the U.S. Armed Forces, Reserves, or National Guard?" | CC.4 --- CPS covers active duty only; ACS adds Reserves/Guard. CPS yes-respondents are a subset of ACS. |
+| F3 (addressable) | "How many hours did (name/you) work (LAST WEEK)?" | "How many hours do you usually work per week?" | TC.2 --- actual vs usual hours diverge substantially in volatile employment |
+| F3 (fundamental) | "Have (name/you) been doing anything to find work during the last 4 weeks?" | "Has this person been informed that he or she will be recalled to work within the next 6 months?" | CC.1 --- active job search vs employer recall expectation; same unemployment frame, different constructs |
+
+: Real question pairs illustrating each feasibility tier. F1 and F2 pairs are candidate bridge variables; F3 pairs show barriers the methodology correctly identifies. {#tbl-example-pairs}
+
 @fig-harmonizable-by-topic breaks these 142 candidates down by Census topic area.
 
 ![Harmonizable questions by topic for CPS and FoodAPS. Economic questions dominate both surveys, reflecting ACS's detailed coverage of employment, earnings, and labor force participation.](figures/fig04_harmonizable_by_topic.pdf){#fig-harmonizable-by-topic width=100%}

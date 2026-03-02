@@ -29,3 +29,5 @@ abstract: |
 {{< include appendices/B_taxonomy.qmd >}}
 
 {{< include appendices/C_tevv.qmd >}}
+
+{{< include appendices/D_example_pairs.qmd >}}

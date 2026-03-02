@@ -1,0 +1,55 @@
+# Illustrative Question Pair Examples {#sec-appendix-examples}
+
+This appendix presents the full set of question pair examples referenced in @sec-results. Each pair was drawn from the post-arbitration analysis of CPS--ACS and FoodAPS--ACS comparisons.
+
+## F1 --- Direct Harmonization
+
+Questions in this tier are structurally equivalent or nearly so. No recoding beyond label mapping is required.
+
+| ID | Survey | Source Question | ACS Question | Barrier | Note |
+|----|--------|-----------------|--------------|---------|------|
+| F1-A | CPS | "(Do you/Does NAME) have difficulty dressing or bathing?" | "Does this person have difficulty dressing or bathing?" | NHB.0 | Substantively identical; interviewer-administered vs self-administered format only |
+| F1-B | CPS | "What is your best estimate of (your/his/her) hourly rate of pay?" | "What is your best estimate of your hourly rate of pay?" | NHB.0 | Identical ask; direct bridge variable |
+| F1-C | CPS | "What (are/were) (your/his/her) usual activities or duties at this job?" | "What are your usual activities or duties at this job?" | NHB.0 | Verbatim equivalent; both feed SOC occupation coding |
+| F1-D | FoodAPS | "Are you male or female?" | "What is Person 2's sex?" | NHB.0 | Identical construct; binary response maps directly to ACS categories |
+| F1-E | CPS | "What is your best estimate of how much (you/he/she) usually earn(s) WEEKLY, JUST in overtime pay, tips, or commissions, before taxes or other deductions?" | "What is your best estimate of how much you usually earn weekly, JUST in overtime pay, tips, or commissions, before taxes or other deductions?" | NHB.0 | Virtually verbatim; demographic universe (age floor) may differ slightly |
+
+: F1 question pair examples --- direct harmonization, no recoding required. {#tbl-appendix-f1}
+
+## F2 --- Harmonizable with Documented Adjustments
+
+Questions in this tier measure the same construct but differ in reference period, response scale, or coverage scope. A statistical crosswalk or period-alignment step is required but feasible.
+
+| ID | Survey | Source Question | ACS Question | Barrier | Note |
+|----|--------|-----------------|--------------|---------|------|
+| F2-A | CPS | "Did (name/you) ever serve on active duty in the U.S. Armed Forces? When did (you/he/she) serve?" | "Has this person ever served on active duty in the U.S. Armed Forces, Reserves, or National Guard?" | CC.4 | CPS covers active duty only; ACS adds Reserves and National Guard. CPS yes-respondents are a strict subset of ACS yes-respondents. |
+| F2-B | CPS | "(THE WEEK BEFORE LAST/LAST WEEK), did (name/you) do ANY work for (pay/either pay or profit)?" | "LAST WEEK, did this person work for pay at a job (or business)?" | TC.3 | Same construct and reference period; CPS wave-specific wording varies. Alignment is mechanical. |
+| F2-C | CPS | "(THE WEEK BEFORE LAST/LAST WEEK), could (you/he/she) have started a job IF one had been offered?" | "LAST WEEK, could this person have started a job if offered one, or returned to work if recalled?" | CC.4 | CPS asks job availability only; ACS adds recall availability as an explicit second option. Adjustment factor estimable from joint distributions. |
+| F2-D | CPS | "Since our last interview, has any household member had any changes in his or her Marital Status?" | "What is this person's marital status?" | TC.2 | CPS captures change (panel design); ACS captures current status (cross-section). Linkable via CPS longitudinal integration. |
+
+: F2 question pair examples --- harmonizable with documented statistical adjustment. {#tbl-appendix-f2}
+
+## F3 (Addressable) --- Named Barrier, Not Bridgeable in This Pipeline
+
+Fundamental differences in construct or scope that cannot be resolved by period-alignment alone. The barrier is diagnosable and documented, but a bridge variable cannot be derived from the pair as currently operationalized.
+
+| ID | Survey | Source Question | ACS Question | Barrier | Note |
+|----|--------|-----------------|--------------|---------|------|
+| F3-TC-A | CPS | "(Are/Is) (name/you) (now/still) in the Armed Forces?" | "When did this person serve on active duty in the U.S. Armed Forces?" | TC.2 | Current service status (point-in-time) vs historical service period. Completely different temporal frames. |
+| F3-TC-B | CPS | "Now I have some questions about the exact number of hours (name/you) worked (LAST WEEK)." | "How many hours do you usually work per week at this rate?" | TC.2 | Actual hours in a specific week vs usual hours. Actual and usual hours diverge substantially in volatile employment. |
+| F3-RS-A | CPS | "Then, including overtime pay, tips and commissions, what are (name/you) usual WEEKLY earnings on (this job)?" | "For your [main] job, what is the easiest way for you to report your total earnings BEFORE taxes or other deductions: hourly, weekly, annually?" | RS.1 | CPS elicits the earnings amount; ACS elicits the preferred reporting unit. Not parallel questions. |
+| F3-RS-B | FoodAPS | "What is the level of school that NAME attended before summer break? (0) Did not attend ... (6) College or higher" | "Would that be high school, college, or university?" | RS.2 | FoodAPS uses a 7-level scale; ACS asks a single-branch confirmation question in an interview tree. Response structures are incompatible without the full ACS question sequence. |
+
+: F3 (addressable) question pair examples --- barrier identified but not bridgeable in this pipeline. {#tbl-appendix-f3a}
+
+## F3 (Fundamental) --- Construct Mismatch, Not Comparable
+
+Questions assigned to the same subtopic label by the classifier but measuring genuinely different constructs. No harmonization path exists.
+
+| ID | Survey | Source Question | ACS Question | Barrier | Note |
+|----|--------|-----------------|--------------|---------|------|
+| F3-CC-A | CPS | "(Have/Has) (name/you) been doing anything to find work during the last 4 weeks?" | "Has this person been informed that he or she will be recalled to work within the next 6 months OR been given a date to return to work?" | CC.1 | CPS asks about active job-search behavior; ACS asks about employer recall expectations. Same BLS unemployment subgroup frame, operationally distinct constructs. |
+| F3-CC-B | CPS | "Did (name/you) ever serve on active duty in the U.S. Armed Forces? When did (you/he/she) serve?" | "What is this person's service-connected disability rating?" | CC.1 | Service history (binary + period) vs VA disability rating (ordinal, 0--100%). Both are in the Veterans subtopic but measure entirely different constructs. |
+| F3-CC-C | CPS | "How many hours did (name/you) take off?" | "How many hours do you usually work per week at this rate?" | CC.1 | Hours absent from work (leave) vs usual hours worked. Arithmetically related only if total scheduled hours are known, which neither survey captures. |
+
+: F3 (fundamental) question pair examples --- construct mismatch, no harmonization path exists. {#tbl-appendix-f3cc}
