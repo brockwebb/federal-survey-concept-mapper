@@ -176,13 +176,27 @@ def render():
     print("Done: _output/article.pdf")
 
 
+def copy_output():
+    """Copy rendered PDF to report directory with friendly name."""
+    src = PROJECT_DIR / "_output" / "article.pdf"
+    dst = PROJECT_DIR / "FedSurveyHarmonization.pdf"
+    if src.exists():
+        import shutil
+        shutil.copy2(src, dst)
+        print(f"Copied: {dst}")
+    else:
+        print(f"WARNING: {src} not found, skipping copy", file=sys.stderr)
+
+
 def open_pdf():
     """Open the rendered PDF."""
-    pdf_path = PROJECT_DIR / "_output" / "article.pdf"
+    pdf_path = PROJECT_DIR / "FedSurveyHarmonization.pdf"
+    if not pdf_path.exists():
+        pdf_path = PROJECT_DIR / "_output" / "article.pdf"
     if pdf_path.exists():
         subprocess.run(["open", str(pdf_path)])
     else:
-        print(f"ERROR: {pdf_path} not found", file=sys.stderr)
+        print(f"ERROR: No PDF found", file=sys.stderr)
         sys.exit(1)
 
 
@@ -195,6 +209,7 @@ if __name__ == "__main__":
 
     if "--render" in sys.argv or "--open" in sys.argv:
         render()
+        copy_output()
 
     if "--open" in sys.argv:
         open_pdf()

@@ -20,6 +20,8 @@ The "shared subtopic intersections" column counts question-by-subtopic overlaps,
 
 An important distinction: concept overlap does not imply question overlap. Two surveys that both classify questions under "Employment Status" are measuring in the same neighborhood, but their questions may differ in wording, reference period, response format, or target population. Sharing a subtopic means the surveys are trying to measure or account for similar things — it narrows the search space for potential harmonization but does not guarantee it. Whether specific question pairs are actually compatible is the work of the next chapter.
 
+![ACS family surveys: five surveys with highest shared subtopic coverage. Edge width reflects number of shared subtopic intersections. Green annotations show harmonization rates for the two evaluated pairs.](figures/fig02_acs_family.pdf){#fig-acs-family width=100%}
+
 From this family, the analysis selects CPS and FoodAPS to prove out the pairwise methodology. The choice is pragmatic: these two surveys produce the fewest question pairs, making them the least expensive to run through the full multi-model evaluation pipeline. Validating the approach on the cheapest pairs first — before committing resources to SIPP (577 intersections) or AHS (460) — is straightforward cost optimization. CPS and FoodAPS also happen to represent different survey profiles: CPS is large and broadly demographic, FoodAPS is small and specialized. Together they contribute 275 unique source questions (157 from CPS, 118 from FoodAPS), a sufficient sample to validate the approach before scaling up.
 
 <!--
