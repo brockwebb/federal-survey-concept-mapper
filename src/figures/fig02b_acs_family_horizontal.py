@@ -31,9 +31,9 @@ SURVEYS = [
     {"name": "AHS",     "intersections": 460, "subtopics": 34, "evaluated": False},
     {"name": "CE",      "intersections": 283, "subtopics": 30, "evaluated": False},
     {"name": "CPS",     "intersections": 181, "subtopics": 25, "evaluated": True,
-     "consolidable": 86,  "total_paired": 157, "rate": 54.8},
+     "total_questions": 211, "consolidable": 86,  "total_paired": 157, "rate": 54.8},
     {"name": "FoodAPS", "intersections": 123, "subtopics": 23, "evaluated": True,
-     "consolidable": 56,  "total_paired": 118, "rate": 47.5},
+     "total_questions": 462, "consolidable": 56,  "total_paired": 118, "rate": 47.5},
 ]
 
 # ---------------------------------------------------------------------------
@@ -108,21 +108,11 @@ for survey, yc in zip(SURVEYS, Y_CENTERS):
     line_color = TEAL     if evaluated else MID_GRAY
     line_alpha = 0.82     if evaluated else 0.50
     node_color = NAVY     if evaluated else DARK_GRAY
-    lbl_color  = TEAL     if evaluated else DARK_GRAY
 
     # Horizontal bridge line
     ax.plot([ACS_RIGHT, SURVEY_LEFT], [yc, yc],
             color=line_color, linewidth=lw, alpha=line_alpha,
             solid_capstyle="butt", zorder=2)
-
-    # Intersection count label (midpoint, above line)
-    mid_x = (ACS_RIGHT + SURVEY_LEFT) / 2
-    ax.text(mid_x, yc + 0.28, str(n_int),
-            ha="center", va="bottom", fontsize=9, fontweight="bold",
-            color=lbl_color,
-            bbox=dict(boxstyle="round,pad=0.12", facecolor=WHITE,
-                      edgecolor="none", alpha=0.95),
-            zorder=6)
 
     # Survey node box
     node_box = FancyBboxPatch(
@@ -135,7 +125,11 @@ for survey, yc in zip(SURVEYS, Y_CENTERS):
     ax.text(node_cx, yc + 0.16, name,
             ha="center", va="center", fontsize=13, fontweight="bold",
             color=WHITE, zorder=10)
-    ax.text(node_cx, yc - 0.30, f"{n_sub} subtopics",
+    if evaluated:
+        node_sub = f"{survey['total_questions']} questions"
+    else:
+        node_sub = f"{n_sub} shared subtopics"
+    ax.text(node_cx, yc - 0.30, node_sub,
             ha="center", va="center", fontsize=8, color=WHITE,
             style="italic", zorder=10)
 
@@ -170,7 +164,7 @@ ax.legend(handles=legend_elements, loc="lower left", fontsize=9,
           bbox_to_anchor=(0.01, 0.01))
 
 ax.text(ACS_RIGHT + 0.3, 0.22,
-        "Line width proportional to shared subtopic intersections (count labeled).",
+        "Line width reflects relative concept overlap between surveys.",
         ha="left", va="center", fontsize=7.5, color="#78909C", style="italic")
 
 plt.tight_layout()

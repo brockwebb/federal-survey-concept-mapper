@@ -19,9 +19,9 @@ FAMILY = {
     "AHS":     {"intersections": 460, "subtopics": 34, "top": "Structure, Utilities,\nPlumbing/Kitchen"},
     "CE":      {"intersections": 283, "subtopics": 30, "top": "Health Insurance,\nHousing Costs, Household"},
     "CPS":     {"intersections": 181, "subtopics": 25, "top": "Employment Status,\nEarnings, Hours/Weeks",
-                "consolidable": 86, "total_paired": 157, "rate": 54.8},
+                "total_questions": 211, "consolidable": 86, "total_paired": 157, "rate": 54.8},
     "FoodAPS": {"intersections": 123, "subtopics": 23, "top": "SNAP, Household,\nSchool Enrollment",
-                "consolidable": 56, "total_paired": 118, "rate": 47.5},
+                "total_questions": 462, "consolidable": 56, "total_paired": 118, "rate": 47.5},
 }
 
 # Colors (xdgov Data Design Standards)
@@ -67,22 +67,17 @@ for i, (survey, angle) in enumerate(zip(surveys, angles)):
     ax.plot([0, x], [0, y], color=edge_color, linewidth=width, alpha=edge_alpha,
             zorder=1, solid_capstyle="round")
 
-    # Edge label (intersection count)
-    mid_x = x * 0.48
-    mid_y = y * 0.48
-    ax.text(mid_x, mid_y, str(data["intersections"]),
-            ha="center", va="center", fontsize=8, fontweight="bold",
-            color=edge_color,
-            bbox=dict(boxstyle="round,pad=0.2", facecolor="white", edgecolor="none", alpha=0.9),
-            zorder=5)
-
     # Survey node
     node_color = NAVY if has_results else "#546E7A"
     circle = plt.Circle((x, y), 0.75, color=node_color, zorder=10)
     ax.add_patch(circle)
     ax.text(x, y + 0.1, survey, ha="center", va="center", fontsize=13, fontweight="bold",
             color="white", zorder=11)
-    ax.text(x, y - 0.22, f"{data['subtopics']} subtopics", ha="center", va="center",
+    if has_results:
+        node_sub = f"{data['total_questions']} questions"
+    else:
+        node_sub = f"{data['subtopics']} shared subtopics"
+    ax.text(x, y - 0.22, node_sub, ha="center", va="center",
             fontsize=7, color="white", zorder=11, style="italic")
 
     # Consolidation annotation (only for evaluated surveys)
@@ -126,7 +121,7 @@ ax.set_title("ACS Family: Shared Subtopic Coverage and Harmonization Potential",
 
 # Subtitle
 ax.text(0, -5.2,
-        "Edge width proportional to shared subtopic intersections. Green annotations show evaluated harmonization rates.",
+        "Line width reflects relative concept overlap between surveys. Green annotations show evaluated harmonization rates.",
         ha="center", fontsize=7.5, color="#78909C", style="italic")
 
 plt.tight_layout()
