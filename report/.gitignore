@@ -7,5 +7,9 @@ article.qmd
 # Exception: track the built report PDF at report root for README linking
 !AI-Assisted-Federal-Survey-Harmonization.pdf
 
+# Exception: track all figure outputs in report/figures/
+!figures/*.pdf
+!figures/*.png
+
 /.quarto/
 **/*.quarto_ipynb
