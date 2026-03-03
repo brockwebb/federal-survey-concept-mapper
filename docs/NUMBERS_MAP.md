@@ -95,6 +95,8 @@ ACS selected as anchor survey due to its breadth and prominence.
 
 **NOTE:** "Total shared" here counts question-subtopic intersections, not unique questions.
 
+**FIGURE CONVENTION:** These intersection counts are used only to drive visual encodings (e.g., line width) in figures. They are never labeled or annotated on figures because they double-count questions and are not interpretable alongside question counts.
+
 ### Step 4: Question Pair Generation (Report 02 → Report 03 input)
 
 Questions sharing the same subtopic classification between a source survey and ACS are paired for evaluation.
@@ -235,6 +237,7 @@ Not yet completed. This is where the harmonization candidates go to subject-matt
 | "380 unique source questions" | **275 unique source questions** (157 + 118) | Same inflation bug |
 | "42.5% CPS consolidation rate" | **54.8%** (corrected) | Pre-correction inflated F3 duplicates dragged rate down |
 | Missing ACS-side analysis | **51 of 115 ACS questions** serve as bridge targets (44.3%) | Was not reported before 2026-02-27; corrected from 50 to 51 on 2026-02-28 via q_id join methodology |
+| Labeling intersection counts on figures | Intersection counts (question-subtopic pairings) are internal pipeline metrics that double-count questions. Figures display ONLY question counts and rates. Intersections may drive visual encodings (line width, node size) but are NEVER labeled. | fig02 original version, early drafts |
 
 ---
 
