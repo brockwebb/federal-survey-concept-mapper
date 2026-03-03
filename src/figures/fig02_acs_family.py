@@ -15,9 +15,9 @@ from pathlib import Path
 
 # --- Data from NUMBERS_MAP ---
 FAMILY = {
-    "SIPP":    {"intersections": 577, "subtopics": 38, "top": "Health Insurance,\nEmployment, Household"},
-    "AHS":     {"intersections": 460, "subtopics": 34, "top": "Structure, Utilities,\nPlumbing/Kitchen"},
-    "CE":      {"intersections": 283, "subtopics": 30, "top": "Health Insurance,\nHousing Costs, Household"},
+    "SIPP":    {"intersections": 577, "subtopics": 38, "total_questions": 1218, "top": "Health Insurance,\nEmployment, Household"},
+    "AHS":     {"intersections": 460, "subtopics": 34, "total_questions": 744,  "top": "Structure, Utilities,\nPlumbing/Kitchen"},
+    "CE":      {"intersections": 283, "subtopics": 30, "total_questions": 1106, "top": "Health Insurance,\nHousing Costs, Household"},
     "CPS":     {"intersections": 181, "subtopics": 25, "top": "Employment Status,\nEarnings, Hours/Weeks",
                 "total_questions": 211, "consolidable": 86, "total_paired": 157, "rate": 54.8},
     "FoodAPS": {"intersections": 123, "subtopics": 23, "top": "SNAP, Household,\nSchool Enrollment",
@@ -73,11 +73,7 @@ for i, (survey, angle) in enumerate(zip(surveys, angles)):
     ax.add_patch(circle)
     ax.text(x, y + 0.1, survey, ha="center", va="center", fontsize=13, fontweight="bold",
             color="white", zorder=11)
-    if has_results:
-        node_sub = f"{data['total_questions']} questions"
-    else:
-        node_sub = f"{data['subtopics']} shared subtopics"
-    ax.text(x, y - 0.22, node_sub, ha="center", va="center",
+    ax.text(x, y - 0.22, f"{data['total_questions']} questions", ha="center", va="center",
             fontsize=7, color="white", zorder=11, style="italic")
 
     # Consolidation annotation (only for evaluated surveys)

@@ -27,9 +27,9 @@ plt.rcParams.update({"font.family": "sans-serif"})
 # Order: top to bottom by intersection count (descending)
 # ---------------------------------------------------------------------------
 SURVEYS = [
-    {"name": "SIPP",    "intersections": 577, "subtopics": 38, "evaluated": False},
-    {"name": "AHS",     "intersections": 460, "subtopics": 34, "evaluated": False},
-    {"name": "CE",      "intersections": 283, "subtopics": 30, "evaluated": False},
+    {"name": "SIPP",    "intersections": 577, "subtopics": 38, "total_questions": 1218, "evaluated": False},
+    {"name": "AHS",     "intersections": 460, "subtopics": 34, "total_questions": 744,  "evaluated": False},
+    {"name": "CE",      "intersections": 283, "subtopics": 30, "total_questions": 1106, "evaluated": False},
     {"name": "CPS",     "intersections": 181, "subtopics": 25, "evaluated": True,
      "total_questions": 211, "consolidable": 86,  "total_paired": 157, "rate": 54.8},
     {"name": "FoodAPS", "intersections": 123, "subtopics": 23, "evaluated": True,
@@ -125,11 +125,7 @@ for survey, yc in zip(SURVEYS, Y_CENTERS):
     ax.text(node_cx, yc + 0.16, name,
             ha="center", va="center", fontsize=13, fontweight="bold",
             color=WHITE, zorder=10)
-    if evaluated:
-        node_sub = f"{survey['total_questions']} questions"
-    else:
-        node_sub = f"{n_sub} shared subtopics"
-    ax.text(node_cx, yc - 0.30, node_sub,
+    ax.text(node_cx, yc - 0.30, f"{survey['total_questions']} questions",
             ha="center", va="center", fontsize=8, color=WHITE,
             style="italic", zorder=10)
 
