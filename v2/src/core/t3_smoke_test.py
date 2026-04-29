@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""T3 smoke test: real concept-mapper Stage 1 prompt against harness 0.3.0.
+"""T3 smoke test: real concept-mapper Stage 1 prompt against harness 0.4.0+.
 
 Validates that the harness handles this project's actual prompt shape:
   - Full Census taxonomy embedded
@@ -228,12 +228,22 @@ async def main():
             f"Run `usai-harness project-init` from the v2/ directory first."
         )
 
+    # Ledger and log dir are harness client kwargs, not project-config fields.
+    # Define them here so the post-run delta counting reads from the same
+    # paths the client writes to.
+    ledger_path = V2_ROOT / "cost_ledger.jsonl"
+    log_dir = V2_ROOT / "logs"
+
     questions = load_questions_sample(n=10, seed=42)
     taxonomy_full = load_taxonomy_full()
     prompt = create_prompt(questions, taxonomy_full)
 
     rater_results = {}
-    async with USAiClient(project="concept_mapper_v2_t3") as client:
+    async with USAiClient(
+        project="concept_mapper_v2_t3",
+        ledger_path=ledger_path,
+        log_dir=log_dir,
+    ) as client:
         pool_names = [m.name for m in client.config.models]
         if len(pool_names) < 2:
             sys.exit(
@@ -241,8 +251,6 @@ async def main():
                 f"T3 needs at least 2. Edit the YAML to add a second rater."
             )
 
-        ledger_path = client.config.ledger_path
-        log_dir = client.config.log_dir
         ledger_before = ledger_path.stat().st_size if ledger_path.exists() else 0
         log_lines_before = 0
         if log_dir.exists():
