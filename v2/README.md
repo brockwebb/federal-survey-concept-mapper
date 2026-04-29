@@ -67,20 +67,21 @@ If a v2 script needs another package, the package must already be in the local P
 After running `usai-harness project-init` (see "Bootstrap Procedure" below), the generated `usai_harness.yaml` is a single-rater placeholder. Replace its contents with:
 
 ```yaml
-project: concept_mapper_v2
 provider: usai
-workers: 4
-
+default_model: gemini-2.5-flash
 models:
   - name: gemini-2.5-flash
     temperature: 0.1
   - name: claude_4_5_sonnet
-
-default_model: gemini-2.5-flash
-
-ledger_path: output/cost_ledger.jsonl
-log_dir: output/logs
+workers: 3
+batch_size: 10
 ```
+
+### Pool member name policy
+
+Pool member names track the names the live USAi catalog advertises, not the dated vendor identifiers from the model card. The USAi-side identifier `claude_4_5_sonnet` and the Anthropic-side identifier `claude-sonnet-4-5-20241022` refer to the same model; for the v2 confirmation run, the USAi-side name is canonical because that is the name the harness sees at merge time. Future major version changes (a hypothetical claude-5 line) will require a new pool entry, not a textual edit to an existing one — major versions are where parameter behavior actually changes.
+
+If the live catalog renames or removes a model, the harness will warn at config load. Run `usai-harness discover-models` to refresh, then `usai-harness list-models --provider usai --format names` to see what is currently advertised, then update this README's canonical block. Do not silently substitute a similar-looking model name; the v2 confirmation run depends on the rater pair being exactly what is documented.
 
 ### Why these models
 
@@ -92,7 +93,7 @@ log_dir: output/logs
 
 - Gemini Flash gets `temperature: 0.1`. Slight stochasticity over `0` to avoid mode-locking.
 - Sonnet has no `temperature` field. Anthropic models on the USAi-routed Anthropic-compatible interface do not accept the parameter; sending it would fail. Per harness 0.3.0 (ADR-012 amendment), parameters absent from the config are not sent on the API call.
-- `workers: 4` is the harness worker count for parallel calls.
+- `workers: 3` is the harness worker count for parallel calls. `batch_size: 10` matches the v1 Stage 1 batch size.
 
 ## Bootstrap Procedure
 
@@ -105,6 +106,8 @@ Run once per machine. Same procedure every harness consumer runs for any new pro
 - Repo pulled to the latest main.
 
 ### Steps
+
+0. `usai-harness discover-models` — refresh the user-level model catalog from the live endpoint. Required if the catalog has not been refreshed in this work session, or if any of the dropped-model warnings reference models you intend to use.
 
 1. `cd v2`
 
