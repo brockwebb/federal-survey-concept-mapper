@@ -72,6 +72,7 @@ config/api_keys.yaml
 models/roberta-large/
 output/embeddings/*.npy
 output/embeddings/*.pkl
+output/t3_smoke/
 
 # =============================================================================
 # macOS duplicate artifacts (never commit)
