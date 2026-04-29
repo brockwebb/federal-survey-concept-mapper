@@ -72,7 +72,6 @@ config/api_keys.yaml
 models/roberta-large/
 output/embeddings/*.npy
 output/embeddings/*.pkl
-output/t3_smoke/
 
 # =============================================================================
 # macOS duplicate artifacts (never commit)
@@ -100,8 +99,8 @@ cc_tasks/
 *.bak
 *.orig
 
-# =============================================================================
-# v2/ confirmation-run output (per-run data, never commit)
-# =============================================================================
+# v2/ confirmation-run output and locally-generated artifacts (every consumer runs project-init locally)
+v2/usai_harness.yaml
 v2/output/
 v2/tevv/
+v2/scripts/
