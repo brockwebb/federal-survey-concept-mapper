@@ -54,7 +54,7 @@ This matches how every harness consumer will work. Nothing about v2 is special.
 
 v2's runtime dependencies are exactly:
 
-- `usai_harness` (≥0.3.0)
+- `usai_harness` (≥0.6.0)
 - `pandas`
 - Python standard library
 
@@ -62,68 +62,43 @@ No `anthropic`, no `openai`, no `dotenv`, no `tqdm`. Anything v1 imports because
 
 If a v2 script needs another package, the package must already be in the local Python environment.
 
-## The v2 Pool Configuration
+## The v2 Pool Design
 
-After running `usai-harness project-init` (see "Bootstrap Procedure" below), the generated `usai_harness.yaml` is a single-rater placeholder. Replace its contents with:
-
-```yaml
-provider: usai
-default_model: gemini-2.5-flash
-models:
-  - name: gemini-2.5-flash
-    temperature: 0.1
-  - name: claude_4_5_sonnet
-workers: 3
-batch_size: 10
-```
-
-### Pool member name policy
-
-Pool member names track the names the live USAi catalog advertises, not the dated vendor identifiers from the model card. The USAi-side identifier `claude_4_5_sonnet` and the Anthropic-side identifier `claude-sonnet-4-5-20241022` refer to the same model; for the v2 confirmation run, the USAi-side name is canonical because that is the name the harness sees at merge time. Future major version changes (a hypothetical claude-5 line) will require a new pool entry, not a textual edit to an existing one — major versions are where parameter behavior actually changes.
-
-If the live catalog renames or removes a model, the harness will warn at config load. Run `usai-harness discover-models` to refresh, then `usai-harness list-models --provider usai --format names` to see what is currently advertised, then update this README's canonical block. Do not silently substitute a similar-looking model name; the v2 confirmation run depends on the rater pair being exactly what is documented.
+The v2 confirmation run uses two raters drawn from the live USAi catalog: `gemini-2.5-flash` (with `temperature: 0.1`) and `claude_4_5_sonnet` (no temperature; the family rejects the parameter). The default rater is `gemini-2.5-flash`. The harness writes a schema-clean project config when bootstrapped with the relevant flags; this README does not paste a YAML block because the project YAML schema is owned by the harness, not by this repo. To see the authoritative schema, run `usai-harness schema project-config --format markdown` after installation.
 
 ### Why these models
 
-- `gemini-2.5-flash` and `claude_4_5_sonnet` are the two raters used for v2 Stage 1 classification, providing inter-rater independence across model families (Google × Anthropic).
-- Available models on USAi (as of 2026-04-29): `claude_4_5_opus`, `claude_4_5_sonnet`, `gemini-2.5-flash`, `gemini-2.5-pro`, `llama_4_maverick`. Pool selection prioritizes architectural diversity at moderate cost.
-- Names are USAi-specific and do not match vendor canonical names. Verify against the local catalog with `usai-harness list-models --provider usai --format names` before pasting.
+`gemini-2.5-flash` and `claude_4_5_sonnet` are the two raters used for v2 Stage 1 classification, providing inter-rater independence across model families (Google × Anthropic). Available models on USAi (as of 2026-04-29) include `claude_4_5_opus`, `claude_4_5_sonnet`, `gemini-2.5-flash`, `gemini-2.5-pro`, and `llama_4_maverick`; pool selection prioritizes architectural diversity at moderate cost. The names are USAi-specific and do not match vendor canonical identifiers; verify against the local catalog with `usai-harness list-models --provider usai --format names` before bootstrapping.
 
 ### Why these parameters
 
-- Gemini Flash gets `temperature: 0.1`. Slight stochasticity over `0` to avoid mode-locking.
-- Sonnet has no `temperature` field. Anthropic models on the USAi-routed Anthropic-compatible interface do not accept the parameter; sending it would fail. Per harness 0.3.0 (ADR-012 amendment), parameters absent from the config are not sent on the API call.
-- `workers: 3` is the harness worker count for parallel calls. `batch_size: 10` matches the v1 Stage 1 batch size.
+Gemini Flash gets `temperature: 0.1` — slight stochasticity over `0` to avoid mode-locking. Sonnet has no `temperature` field; Anthropic models on the USAi-routed Anthropic-compatible interface do not accept the parameter, and sending it would fail. Parameters absent from the config are not sent on the API call.
 
 ## Bootstrap Procedure
 
-Run once per machine. Same procedure every harness consumer runs for any new project.
+The procedure assumes harness 0.6.0 or later is installed on the work machine; on earlier versions the bootstrap requires a hand-paste step that is no longer documented in this README. Run once per machine.
+
+```bash
+git pull
+cd v2
+usai-harness discover-models
+usai-harness project-init --models gemini-2.5-flash,claude_4_5_sonnet --default gemini-2.5-flash
+usai-harness validate-config usai_harness.yaml
+python src/core/t3_smoke_test.py
+cat output/t3_smoke/t3_smoke_report.md
+```
+
+If `validate-config` exits non-zero, the failure is upstream: either the harness template has regressed, or the user-level catalog is missing models referenced by the bootstrap. For diagnostics, run `usai-harness schema project-config` to inspect the authoritative schema and `usai-harness list-models --provider usai --format names` to confirm the live catalog has the expected models. Do not work around a validate-config failure by hand-editing the generated YAML; fix the upstream cause.
+
+### Where the schema lives
+
+The shape of `usai_harness.yaml` is defined by the harness's project-config schema, shipped at `usai_harness/data/project_config.schema.json` in the harness package. To inspect the schema, run `usai-harness schema project-config --format markdown` for a human-readable table or `usai-harness schema project-config` for the raw JSON. To validate any project YAML against the schema without running a workload, run `usai-harness validate-config <path>`. This README documents the v2 confirmation run's experimental design; it does not document the harness's configuration schema, because the schema is owned by the harness and changes on harness release boundaries, not on v2 release boundaries.
 
 ### Pre-requisites
 
-- `usai-harness` 0.3.0 or higher installed in the active Python env.
+- `usai-harness` 0.6.0 or higher installed in the active Python env.
 - USAi credentials configured at the user-level config location (set by `usai-harness init`). Verify with `usai-harness ping`.
 - Repo pulled to the latest main.
-
-### Steps
-
-0. `usai-harness discover-models` — refresh the user-level model catalog from the live endpoint. Required if the catalog has not been refreshed in this work session, or if any of the dropped-model warnings reference models you intend to use.
-
-1. `cd v2`
-
-2. `usai-harness project-init`
-
-   Generates `usai_harness.yaml`, `output/`, `tevv/`, `scripts/`, and runs a TEVV smoke test against the user-level default model. The TEVV report at `tevv/init_report_<UTC_timestamp>.md` must show `**Verdict:** PASS` before continuing.
-
-3. Replace the contents of `usai_harness.yaml` with the v2 pool YAML shown in "The v2 Pool Configuration" section above. Save.
-
-4. Run the smoke test:
-
-   ```
-   python src/core/t3_smoke_test.py
-   ```
-
-5. Read the verdict at `output/t3_smoke/t3_smoke_report.md`.
 
 ## Comparison Work
 
@@ -132,6 +107,7 @@ Comparison between v1 and v2 outputs lives at `repro/v1_vs_v2/` (top-level, not 
 ## Status
 
 - 2026-04-29: v2/ scaffolded (this README, raw data copies, smoke test source). Bootstrap and T3 smoke test pending on user's local machine.
+- 2026-04-30: README rewritten to consume harness 0.6.0 schema artifact and validation CLI; bootstrap collapsed to a four-command sequence. Pool YAML and "Pool member name policy" prose removed (schema knowledge now lives in the harness).
 - Stage 1 v2 module: not yet written.
 - Stages 2-5 v2 modules: not yet written.
 
