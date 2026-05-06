@@ -78,14 +78,21 @@ data:
 # -----------------------------------------------------------------------------
 # EXPECTED COUNTS — assertions, not just documentation
 # -----------------------------------------------------------------------------
-# Script halts if the deduped CSV doesn't match these counts. This catches:
+# Script halts if the CSV doesn't match these counts. This catches:
 #   - CSV swaps
-#   - Dedup-filter regressions
 #   - Wrong working directory
-# Update these intentionally if the dedup filter or source data legitimately changes.
+#   - Stale config after legitimate data changes
+# Update these intentionally if the source data changes.
+#
+# IMPORTANT SEMANTICS:
+#   question_count = ROWS ITERATED (= CSV row count). NOT records-written.
+#   The script sends every row to the model, including the 41 rows where
+#   Question is NaN. The model legitimately drops those in its responses.
+#   v1's results_claude.jsonl has 6,946 records for 6,987 input rows.
+#   PASS/FAIL is decoupled from records-written count; see stage1_classify.py.
 # -----------------------------------------------------------------------------
 expected:
-  question_count: 6987        # post-dedup row count
+  question_count: 6987        # rows iterated (= CSV row count, includes NaN-question rows)
   batch_count: 699            # ceil(6987 / 10)
 
 # -----------------------------------------------------------------------------
