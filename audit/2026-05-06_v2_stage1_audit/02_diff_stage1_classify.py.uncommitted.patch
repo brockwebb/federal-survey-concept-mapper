@@ -1,0 +1,61 @@
+diff --git a/v2/src/core/stage1_classify.py b/v2/src/core/stage1_classify.py
+index dd3c0b5..fe65c0b 100644
+--- a/v2/src/core/stage1_classify.py
++++ b/v2/src/core/stage1_classify.py
+@@ -38,6 +38,18 @@ import pandas as pd
+ import yaml
+ 
+ 
++# =============================================================================
++# LOGGING HELPER (always-flushed, timestamped) — see
++# cc_tasks/2026-05-06_v2_stage1_visibility_stopgap.md
++# =============================================================================
++
++def log(msg: str) -> None:
++    """Timestamped, immediately-flushed stdout. Use for ALL status output."""
++    ts = datetime.now().strftime("%H:%M:%S")
++    print(f"[{ts}] {msg}", flush=True)
++
++
++
+ # =============================================================================
+ # CONFIG LOADING
+ # =============================================================================
+@@ -46,6 +58,7 @@ CONFIG_PATH = Path("config/stage1.yaml")
+ 
+ 
+ def load_config() -> dict[str, Any]:
++    log(f"Loading config from {CONFIG_PATH}")
+     if not CONFIG_PATH.exists():
+         die(f"Config not found at {CONFIG_PATH.resolve()}. "
+             f"Run from the v2/ directory.")
+@@ -62,6 +75,10 @@ def load_config() -> dict[str, Any]:
+         die(f"Config 'raters' must define exactly rater_a and rater_b. "
+             f"Got: {set(cfg['raters'].keys())}")
+ 
++    log(f"Config OK: rater_a={cfg['raters']['rater_a']['model']!r}, "
++        f"rater_b={cfg['raters']['rater_b']['model']!r}, "
++        f"max_tokens={cfg['pipeline']['max_tokens']}, "
++        f"batch_size={cfg['pipeline']['batch_size']}")
+     return cfg
+ 
+ 
+@@ -71,6 +88,7 @@ def load_config() -> dict[str, Any]:
+ 
+ def load_taxonomy(cfg: dict[str, Any]) -> dict:
+     path = Path(cfg["data"]["taxonomy_json"])
++    log(f"Loading taxonomy from {path}")
+     if not path.exists():
+         die(f"Taxonomy file not found at {path.resolve()}")
+     with open(path) as f:
+@@ -78,7 +96,9 @@ def load_taxonomy(cfg: dict[str, Any]) -> dict:
+     root_key = cfg["data"]["taxonomy_root_key"]
+     if root_key not in data:
+         die(f"Taxonomy JSON missing top-level key {root_key!r}")
+-    return data[root_key]
++    tax = data[root_key]
++    log(f"Taxonomy OK: {len(tax)} top-level topics")
++    return tax
+ 
+ 
+ def load_questions(cfg: dict[str, Any]) -> pd.DataFrame:

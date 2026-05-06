@@ -1,0 +1,126 @@
+diff --git a/v2/config/stage1.yaml b/v2/config/stage1.yaml
+new file mode 100644
+index 0000000..ba2a63f
+--- /dev/null
++++ b/v2/config/stage1.yaml
+@@ -0,0 +1,120 @@
++# =============================================================================
++# v2 STAGE 1 CLASSIFICATION CONFIG
++# =============================================================================
++# SINGLE SOURCE OF TRUTH FOR ALL MODEL NAMES AND PARAMETERS
++#
++# Inherits philosophy from config/report_03.yaml:
++#   1. Reproducibility - like saving random seeds in statistical work
++#   2. LLM training epochs mean stale model names creep into generated code
++#   3. Human verification - see exactly what will run before execution
++#   4. Audit trail - config + outputs = complete reproducibility
++#
++# RULE: If it affects results and you'd be upset if wrong, it goes here.
++# Nothing in stage1_classify.py should hardcode anything that lives here.
++# =============================================================================
++
++version: '1.0'
++created: '2026-05-05'
++purpose: 'v2 Stage 1 confirmation run - reclassify all questions through USAi harness'
++
++# -----------------------------------------------------------------------------
++# MODEL POOL — explicit USAi pool names
++# -----------------------------------------------------------------------------
++# These are the USAi POOL identifiers, not vendor model strings. USAi maps
++# these to vendor-specific models server-side. The actual vendor model that
++# served each request is captured in the run report from the response body's
++# `model` field.
++#
++# These must match entries in v2/usai_harness.yaml. If USAi has renamed a
++# pool member, fix the name HERE and in usai_harness.yaml — never hardcode
++# in the script.
++# -----------------------------------------------------------------------------
++raters:
++  rater_a:
++    model: 'claude_4_5_sonnet'
++    temperature: 0
++    notes: 'First rater. v1 baseline used claude-haiku-4-5; v2 confirmation pair.'
++
++  rater_b:
++    model: 'gemini-2.5-flash'
++    temperature: 0
++    notes: 'Second rater. v1 baseline used gpt-5-mini; v2 confirmation pair.'
++
++# -----------------------------------------------------------------------------
++# PIPELINE PARAMETERS
++# -----------------------------------------------------------------------------
++# max_tokens, batch_size match v1 EXACTLY for artifact comparability.
++# The whole point of v2 is to compare against v1 with only model identity changing.
++# -----------------------------------------------------------------------------
++pipeline:
++  max_tokens: 4096            # MATCHES v1 (categorize_claude.py / categorize_openai.py)
++  batch_size: 10              # MATCHES v1
++  random_seed: 42             # iteration is deterministic; seed retained for any future stochastic ops
++  job_name_prefix: 'stage1'
++
++# -----------------------------------------------------------------------------
++# PRE-FLIGHT CHECK
++# -----------------------------------------------------------------------------
++# Before submitting 699 batches per rater, one cheap probe call validates
++# USAi reachability, credentials, and that the default model resolves.
++# If it fails, halt before wasting any real work.
++# -----------------------------------------------------------------------------
++preflight:
++  enabled: true
++  prompt: 'Respond with the single word OK.'
++  max_tokens: 16
++  # Uses default model from usai_harness.yaml — no per-rater probe.
++  # Per-rater model resolution failures surface on the first real batch
++  # task (HTTP 4xx with `model not found` in error_body snippet).
++
++# -----------------------------------------------------------------------------
++# DATA INPUTS
++# -----------------------------------------------------------------------------
++data:
++  questions_csv: 'data/raw/PublicSurveyQuestionsMap.csv'
++  taxonomy_json: 'data/raw/census_survey_explorer_taxonomy.json'
++  taxonomy_root_key: 'taxonomy'   # the JSON has a top-level `taxonomy` key
++
++# -----------------------------------------------------------------------------
++# EXPECTED COUNTS — assertions, not just documentation
++# -----------------------------------------------------------------------------
++# Script halts if the CSV doesn't match these counts. This catches:
++#   - CSV swaps
++#   - Wrong working directory
++#   - Stale config after legitimate data changes
++# Update these intentionally if the source data changes.
++#
++# IMPORTANT SEMANTICS:
++#   question_count = ROWS ITERATED (= CSV row count). NOT records-written.
++#   The script sends every row to the model, including the 41 rows where
++#   Question is NaN. The model legitimately drops those in its responses.
++#   v1's results_claude.jsonl has 6,946 records for 6,987 input rows.
++#   PASS/FAIL is decoupled from records-written count; see stage1_classify.py.
++# -----------------------------------------------------------------------------
++expected:
++  question_count: 6987        # rows iterated (= CSV row count, includes NaN-question rows)
++  batch_count: 699            # ceil(6987 / 10)
++
++# -----------------------------------------------------------------------------
++# OUTPUTS
++# -----------------------------------------------------------------------------
++# Paths relative to the v2/ directory (the script's runtime CWD).
++# -----------------------------------------------------------------------------
++output:
++  output_dir: 'output/stage1'
++  results_filename_pattern: 'results_{rater_label}_{model_slug}.jsonl'
++  raw_responses_subdir: 'raw_responses'
++  checkpoints_subdir: 'checkpoints'
++  run_report: 'stage1_run_report.md'
++  preflight_report: 'preflight.json'
++
++# -----------------------------------------------------------------------------
++# HARNESS WIRING
++# -----------------------------------------------------------------------------
++# These plug into USAiClient(...). Paths relative to v2/.
++# -----------------------------------------------------------------------------
++harness:
++  project: 'concept_mapper_v2_stage1'
++  config_path: 'usai_harness.yaml'        # the pool config, NOT this file
++  ledger_path: 'cost_ledger.jsonl'
++  log_dir: 'logs'
