@@ -281,78 +281,155 @@ def parse_batch_index(task_id: str) -> int | None:
 
 
 # =============================================================================
-# RESULT PROCESSING (shared between initial run and retry)
+# PER-TASK CALLBACK (writes raw response, JSONL records, and live checkpoint
+# the moment each task completes — replaces the old post-batch loop)
 # =============================================================================
 
-def process_one_result(
-    r,
+def _fmt_time(seconds: float) -> str:
+    """Format a duration as Hh:MM:SS, MM:SS, or NNs."""
+    if seconds < 60:
+        return f"{int(seconds)}s"
+    m, s = divmod(int(seconds), 60)
+    if m < 60:
+        return f"{m}:{s:02d}"
+    h, m = divmod(m, 60)
+    return f"{h}:{m:02d}:{s:02d}"
+
+
+def make_result_handler(
     *,
     rater_label: str,
     raw_subdir: Path,
     results_path: Path,
-) -> dict:
-    """Process a single harness result. Persist raw, parse, append JSONL.
+    checkpoint_path: Path,
+    tracker: dict,
+):
+    """Build a per-task progress callback for `client.batch(progress=...)`.
 
-    Returns a per-task summary dict.
+    Each completed task fires this with a `ProgressEvent` whose `.result` is
+    the task's `BatchResult`. The callback persists the raw response, parses
+    and appends records to the JSONL, prints a one-line progress update, and
+    rewrites the checkpoint file. Per-task summaries accumulate in
+    `tracker["summaries"]` for downstream report rendering.
     """
-    raw_path = raw_subdir / f"{r.task_id}.json"
-    raw_path.write_text(json.dumps({
-        "task_id": r.task_id,
-        "success": r.success,
-        "status_code": r.status_code,
-        "latency_ms": r.latency_ms,
-        "error": r.error,
-        "response": r.response,
-    }, indent=2, default=str))
+    raw_subdir.mkdir(parents=True, exist_ok=True)
 
-    summary = {
-        "task_id": r.task_id,
-        "outcome": None,           # 'success' | 'request_failed' | 'parse_failed' | 'truncated_and_unparseable'
-        "status_code": r.status_code,
-        "error": r.error,
-        "error_body": None,
-        "finish_reason": None,
-        "served_model": None,
-        "parse_error": None,
-        "response_text_snippet": None,
-        "records": 0,
-        "unknown_model": False,
-    }
+    def handler(event) -> None:
+        r = event.result
 
-    if not r.success:
-        summary["outcome"] = "request_failed"
-        if isinstance(r.response, dict):
-            summary["error_body"] = r.response.get("error_body")
-        if looks_like_unknown_model_error(r.response or {}):
-            summary["unknown_model"] = True
-        return summary
+        # 1. Persist raw response (every task, success or fail).
+        raw_path = raw_subdir / f"{r.task_id}.json"
+        raw_path.write_text(json.dumps({
+            "task_id": r.task_id,
+            "success": r.success,
+            "status_code": r.status_code,
+            "latency_ms": r.latency_ms,
+            "error": r.error,
+            "response": r.response,
+        }, indent=2, default=str))
 
-    response = r.response or {}
-    summary["served_model"] = response.get("model") if isinstance(response, dict) else None
-    summary["finish_reason"] = extract_finish_reason(response)
+        # 2. Build per-task summary (same shape downstream report consumes).
+        summary = {
+            "task_id": r.task_id,
+            "outcome": None,
+            "status_code": r.status_code,
+            "error": r.error,
+            "error_body": None,
+            "finish_reason": None,
+            "served_model": None,
+            "parse_error": None,
+            "response_text_snippet": None,
+            "records": 0,
+            "unknown_model": False,
+        }
 
-    text = extract_response_text(response) or ""
-    if text:
-        summary["response_text_snippet"] = text[:200]
-
-    records, perr = parse_response(text)
-    if records is None:
-        summary["parse_error"] = perr
-        # If finish_reason was 'length' AND we couldn't parse, treat as
-        # truncation-caused unparseability (the more useful diagnosis).
-        if summary["finish_reason"] == "length":
-            summary["outcome"] = "truncated_and_unparseable"
+        if not r.success:
+            summary["outcome"] = "request_failed"
+            if isinstance(r.response, dict):
+                summary["error_body"] = r.response.get("error_body")
+            if looks_like_unknown_model_error(r.response or {}):
+                summary["unknown_model"] = True
+                tracker["unknown_model"] = True
+            tracker["request_failed"].append(r.task_id)
         else:
-            summary["outcome"] = "parse_failed"
-        return summary
+            response = r.response or {}
+            summary["served_model"] = (
+                response.get("model") if isinstance(response, dict) else None
+            )
+            if summary["served_model"]:
+                tracker["served_models"].add(summary["served_model"])
+            summary["finish_reason"] = extract_finish_reason(response)
 
-    # Success path — append records to JSONL.
-    with open(results_path, "a") as f:
-        for rec in records:
-            f.write(json.dumps(rec) + "\n")
-    summary["records"] = len(records)
-    summary["outcome"] = "success"
-    return summary
+            text = extract_response_text(response) or ""
+            if text:
+                summary["response_text_snippet"] = text[:200]
+
+            records, perr = parse_response(text)
+            if records is None:
+                summary["parse_error"] = perr
+                if summary["finish_reason"] == "length":
+                    summary["outcome"] = "truncated_and_unparseable"
+                    tracker["truncated"].append(r.task_id)
+                else:
+                    summary["outcome"] = "parse_failed"
+                    tracker["parse_failed"].append(r.task_id)
+            else:
+                with open(results_path, "a") as f:
+                    for rec in records:
+                        f.write(json.dumps(rec) + "\n")
+                summary["records"] = len(records)
+                summary["outcome"] = "success"
+                tracker["records_written"] += len(records)
+                tracker["succeeded"].append(r.task_id)
+
+        tracker["summaries"].append(summary)
+
+        # 3. One-line progress with data-write confirmation.
+        pct = (event.completed / event.total * 100.0) if event.total else 0.0
+        eta = (
+            (event.elapsed_seconds / event.completed)
+            * (event.total - event.completed)
+            if event.completed > 0
+            else 0.0
+        )
+        status = "OK" if summary["outcome"] == "success" else "FAIL"
+        ts = datetime.now().strftime("%H:%M:%S")
+        print(
+            f"[{ts}] [{rater_label}] {event.completed}/{event.total} "
+            f"({pct:.1f}%)  elapsed {_fmt_time(event.elapsed_seconds)}  "
+            f"eta {_fmt_time(eta)}  {status}: {r.task_id}",
+            flush=True,
+        )
+
+        # 4. Rewrite live checkpoint after every task — same key names as
+        #    finalize_rater_outcome writes, so retry logic can read either.
+        checkpoint_path.write_text(json.dumps({
+            "rater_label": rater_label,
+            "completed": event.completed,
+            "total": event.total,
+            "records_written": tracker["records_written"],
+            "succeeded_task_ids": list(tracker["succeeded"]),
+            "request_failed": list(tracker["request_failed"]),
+            "parse_failed": list(tracker["parse_failed"]),
+            "truncated_and_unparseable": list(tracker["truncated"]),
+            "served_models": sorted(tracker["served_models"]),
+        }, indent=2))
+
+    return handler
+
+
+def _empty_tracker() -> dict:
+    """Mutable accumulator for the result handler. One per rater per pass."""
+    return {
+        "summaries": [],
+        "succeeded": [],
+        "request_failed": [],
+        "parse_failed": [],
+        "truncated": [],
+        "served_models": set(),
+        "unknown_model": False,
+        "records_written": 0,
+    }
 
 
 # =============================================================================
@@ -439,33 +516,39 @@ async def run_rater_initial(
         for i, batch in enumerate(batches)
     ]
 
-    print(f"\n[{rater_label}] Submitting {len(tasks)} batch tasks against {model!r}...")
-    t0 = time.monotonic()
-    results = await client.batch(tasks, job_name=job_name)
-    wall_s = time.monotonic() - t0
-    print(f"[{rater_label}] Batch returned in {wall_s:.1f}s")
-
-    # Fresh JSONL — initial run starts clean.
+    # Output paths — fresh JSONL for an initial run.
     model_slug = slugify(model)
     results_path = dirs["out_root"] / cfg["output"]["results_filename_pattern"].format(
         rater_label=rater_label, model_slug=model_slug,
     )
     if results_path.exists():
         results_path.unlink()
-
     raw_subdir = dirs["raw_dir"] / rater_label
-    raw_subdir.mkdir(parents=True, exist_ok=True)
+    checkpoint_path = dirs["ckpt_dir"] / f"{rater_label}.json"
 
-    # Process every result. Single source of truth: the per-task summary list.
-    summaries = [
-        process_one_result(r, rater_label=rater_label,
-                           raw_subdir=raw_subdir, results_path=results_path)
-        for r in sorted(results, key=lambda x: x.task_id)
-    ]
+    # Per-task callback writes raw_response/, JSONL records, and the live
+    # checkpoint as each task completes. No post-batch loop.
+    tracker = _empty_tracker()
+    handler = make_result_handler(
+        rater_label=rater_label,
+        raw_subdir=raw_subdir,
+        results_path=results_path,
+        checkpoint_path=checkpoint_path,
+        tracker=tracker,
+    )
+
+    print(f"\n[{rater_label}] Submitting {len(tasks)} batch tasks against {model!r}...")
+    t0 = time.monotonic()
+    await client.batch(tasks, job_name=job_name, progress=handler)
+    wall_s = time.monotonic() - t0
+    print(f"[{rater_label}] Batch returned in {wall_s:.1f}s")
+
+    # Sort accumulated summaries by task_id for stable downstream order.
+    tracker["summaries"].sort(key=lambda s: s["task_id"])
 
     return finalize_rater_outcome(
         rater_label=rater_label, model=model, model_slug=model_slug,
-        summaries=summaries, wall_s=wall_s, results_path=results_path,
+        summaries=tracker["summaries"], wall_s=wall_s, results_path=results_path,
         dirs=dirs, mode="initial",
     )
 
@@ -510,8 +593,18 @@ async def run_rater_retry(
         ckpt.get("truncated_and_unparseable", [])
     ))
 
-    if not failed_task_ids:
-        print(f"[{rater_label}] No failed batches to retry. Skipping.")
+    # Detect "never-ran" tasks — submitted but interrupted before returning.
+    # Any task ID in the expected set that is NOT in succeeded/failed lists
+    # gets re-submitted as a full original-shape task (not halved).
+    expected_task_ids = {
+        f"stage1_{rater_label}_b{i:04d}"
+        for i in range(cfg["expected"]["batch_count"])
+    }
+    accounted_for = set(ckpt.get("succeeded_task_ids", [])) | set(failed_task_ids)
+    never_ran_task_ids = sorted(expected_task_ids - accounted_for)
+
+    if not failed_task_ids and not never_ran_task_ids:
+        print(f"[{rater_label}] No failed or never-ran batches to retry. Skipping.")
         return {
             "rater_label": rater_label, "model_requested": model,
             "model_slug": slugify(model), "wall_seconds": 0.0,
@@ -523,11 +616,18 @@ async def run_rater_retry(
             "results_path": ckpt.get("results_path", ""),
             "unknown_model_seen": False,
             "summaries": [],
+            "originals_attempted": [],
+            "originals_recovered": [],
+            "originals_still_failing": [],
+            "never_ran_attempted": [],
+            "never_ran_succeeded": [],
+            "never_ran_still_failing": [],
         }
 
-    # Reconstruct the original batches that failed.
     original_batches = chunk(questions, base_batch_size)
-    retry_tasks = []
+
+    # Halves of previously-failed originals (doubled max_tokens, halved batch).
+    retry_tasks: list[dict] = []
     for tid in failed_task_ids:
         idx = parse_batch_index(tid)
         if idx is None or idx >= len(original_batches):
@@ -535,7 +635,6 @@ async def run_rater_retry(
                   file=sys.stderr)
             continue
         original_batch = original_batches[idx]
-        # Split into halves of retry_batch_size.
         halves = chunk(original_batch, retry_batch_size)
         for h, half in enumerate(halves):
             retry_tasks.append({
@@ -548,17 +647,32 @@ async def run_rater_retry(
                 "_original_task_id": tid,  # local bookkeeping, not sent to API
             })
 
-    print(f"\n[{rater_label}] Retrying {len(failed_task_ids)} failed batches "
-          f"as {len(retry_tasks)} smaller tasks "
-          f"(batch_size={retry_batch_size}, max_tokens={retry_max_tokens})...")
+    # Never-ran originals: re-submit as full batches with base parameters.
+    rerun_tasks: list[dict] = []
+    for tid in never_ran_task_ids:
+        idx = parse_batch_index(tid)
+        if idx is None or idx >= len(original_batches):
+            print(f"[{rater_label}] WARNING: cannot map never-ran task {tid!r} to a batch index. Skipping.",
+                  file=sys.stderr)
+            continue
+        rerun_tasks.append({
+            "task_id": tid,
+            "model": model,
+            "temperature": temperature,
+            "max_tokens": base_max_tokens,
+            "messages": [{"role": "user",
+                          "content": create_prompt(original_batches[idx], taxonomy)}],
+        })
 
-    # Strip bookkeeping fields before submitting.
-    api_tasks = [{k: v for k, v in t.items() if not k.startswith("_")} for t in retry_tasks]
-
-    t0 = time.monotonic()
-    results = await client.batch(api_tasks, job_name=job_name)
-    wall_s = time.monotonic() - t0
-    print(f"[{rater_label}] Retry returned in {wall_s:.1f}s")
+    print(f"\n[{rater_label}] Retry pass:")
+    if failed_task_ids:
+        print(f"  - {len(failed_task_ids)} previously-failed batches → "
+              f"{len(retry_tasks)} smaller tasks "
+              f"(batch_size={retry_batch_size}, max_tokens={retry_max_tokens})")
+    if never_ran_task_ids:
+        print(f"  - {len(never_ran_task_ids)} never-ran batches → "
+              f"resubmitted as full batches "
+              f"(batch_size={base_batch_size}, max_tokens={base_max_tokens})")
 
     # Append to existing JSONL — do NOT clear.
     model_slug = slugify(model)
@@ -566,43 +680,94 @@ async def run_rater_retry(
         rater_label=rater_label, model_slug=model_slug,
     )
     raw_subdir = dirs["raw_dir"] / rater_label
-    raw_subdir.mkdir(parents=True, exist_ok=True)
 
-    summaries = [
-        process_one_result(r, rater_label=rater_label,
-                           raw_subdir=raw_subdir, results_path=results_path)
-        for r in sorted(results, key=lambda x: x.task_id)
+    # Live progress for the retry pass goes to a transient file; the canonical
+    # checkpoint is written by the post-batch reconciliation below.
+    retry_progress_path = dirs["ckpt_dir"] / f"{rater_label}.retry_progress.json"
+
+    tracker = _empty_tracker()
+    handler = make_result_handler(
+        rater_label=rater_label,
+        raw_subdir=raw_subdir,
+        results_path=results_path,
+        checkpoint_path=retry_progress_path,
+        tracker=tracker,
+    )
+
+    # Strip bookkeeping fields before submitting.
+    api_tasks = [
+        {k: v for k, v in t.items() if not k.startswith("_")}
+        for t in (retry_tasks + rerun_tasks)
     ]
 
-    # Determine which ORIGINAL task IDs are now fully recovered.
-    # A failed original task is recovered iff ALL of its retry halves succeeded.
-    halves_by_original: dict[str, list[dict]] = {}
-    for t, s in zip(retry_tasks, summaries):
-        halves_by_original.setdefault(t["_original_task_id"], []).append(s)
-    recovered: list[str] = []
+    t0 = time.monotonic()
+    await client.batch(api_tasks, job_name=job_name, progress=handler)
+    wall_s = time.monotonic() - t0
+    print(f"[{rater_label}] Retry returned in {wall_s:.1f}s")
+
+    tracker["summaries"].sort(key=lambda s: s["task_id"])
+
+    # Map summaries back to original task IDs.
+    half_summaries_by_orig: dict[str, list[dict]] = {}
+    rerun_summary_by_orig: dict[str, dict] = {}
+    for s in tracker["summaries"]:
+        m = re.match(r"^(stage1_[a-z_]+_b\d{4})_r\d+$", s["task_id"])
+        if m:
+            half_summaries_by_orig.setdefault(m.group(1), []).append(s)
+        else:
+            rerun_summary_by_orig[s["task_id"]] = s
+
+    # A failed original is recovered iff ALL of its retry halves succeeded.
+    recovered_from_failed: list[str] = []
     still_failing: list[str] = []
-    for orig_tid, half_summaries in halves_by_original.items():
+    for orig_tid, half_summaries in half_summaries_by_orig.items():
         if all(s["outcome"] == "success" for s in half_summaries):
-            recovered.append(orig_tid)
+            recovered_from_failed.append(orig_tid)
         else:
             still_failing.append(orig_tid)
 
-    # Update checkpoint: remove recovered IDs from failure lists, add to recovered.
+    # Never-ran reruns: each is its own original task ID.
+    never_ran_succeeded: list[str] = []
+    never_ran_still_failing: list[str] = []
+    for orig_tid, s in rerun_summary_by_orig.items():
+        if s["outcome"] == "success":
+            never_ran_succeeded.append(orig_tid)
+        else:
+            never_ran_still_failing.append(orig_tid)
+
+    # Build canonical checkpoint update.
     new_ckpt = dict(ckpt)
     for key in ("request_failed", "parse_failed", "truncated_and_unparseable"):
-        new_ckpt[key] = sorted(set(ckpt.get(key, [])) - set(recovered))
+        new_ckpt[key] = sorted(set(ckpt.get(key, [])) - set(recovered_from_failed))
+    new_ckpt.setdefault("succeeded_task_ids", [])
+    new_ckpt["succeeded_task_ids"] = sorted(
+        set(new_ckpt["succeeded_task_ids"]) | set(never_ran_succeeded)
+    )
+    # Bucket never-ran failures into the right list per outcome.
+    for orig_tid in never_ran_still_failing:
+        s = rerun_summary_by_orig[orig_tid]
+        target_key = {
+            "request_failed": "request_failed",
+            "parse_failed": "parse_failed",
+            "truncated_and_unparseable": "truncated_and_unparseable",
+        }.get(s["outcome"], "request_failed")
+        new_ckpt[target_key] = sorted(set(new_ckpt.get(target_key, [])) | {orig_tid})
     new_ckpt.setdefault("recovered_via_retry", [])
     new_ckpt["recovered_via_retry"] = sorted(
-        set(new_ckpt["recovered_via_retry"]) | set(recovered)
+        set(new_ckpt["recovered_via_retry"])
+        | set(recovered_from_failed)
+        | set(never_ran_succeeded)
     )
     new_ckpt["last_retry_at"] = datetime.now(timezone.utc).isoformat()
     new_ckpt["last_retry_max_tokens"] = retry_max_tokens
     new_ckpt["last_retry_batch_size"] = retry_batch_size
-    # Refresh records_written from the JSONL truth on disk.
     if results_path.exists():
         with open(results_path) as f:
             new_ckpt["records_written"] = sum(1 for _ in f)
     ckpt_path.write_text(json.dumps(new_ckpt, indent=2))
+
+    if retry_progress_path.exists():
+        retry_progress_path.unlink()
 
     return {
         "rater_label": rater_label,
@@ -610,16 +775,19 @@ async def run_rater_retry(
         "model_slug": model_slug,
         "wall_seconds": wall_s,
         "mode": "retry",
-        "tasks_total": len(retry_tasks),
+        "tasks_total": len(retry_tasks) + len(rerun_tasks),
         "retry_max_tokens": retry_max_tokens,
         "retry_batch_size": retry_batch_size,
         "originals_attempted": failed_task_ids,
-        "originals_recovered": sorted(recovered),
+        "originals_recovered": sorted(recovered_from_failed),
         "originals_still_failing": sorted(still_failing),
-        "summaries": summaries,
+        "never_ran_attempted": never_ran_task_ids,
+        "never_ran_succeeded": sorted(never_ran_succeeded),
+        "never_ran_still_failing": sorted(never_ran_still_failing),
+        "summaries": tracker["summaries"],
         "records_in_jsonl": new_ckpt.get("records_written", 0),
         "results_path": str(results_path),
-        "unknown_model_seen": any(s.get("unknown_model") for s in summaries),
+        "unknown_model_seen": tracker["unknown_model"],
     }
 
 
