@@ -280,6 +280,22 @@ def parse_batch_index(task_id: str) -> int | None:
     return int(m.group(1))
 
 
+def _count_jsonl_records(path_str: str | None) -> int:
+    """Return the number of lines in a JSONL file, or 0 if it doesn't exist.
+
+    Used by the retry-mode run report. The retry-pass outcome's record count
+    reflects only what was written during THIS pass; the file on disk is the
+    cumulative truth across initial + N retry passes.
+    """
+    if not path_str:
+        return 0
+    p = Path(path_str)
+    if not p.exists():
+        return 0
+    with open(p) as f:
+        return sum(1 for _ in f)
+
+
 # =============================================================================
 # PER-TASK CALLBACK (writes raw response, JSONL records, and live checkpoint
 # the moment each task completes — replaces the old post-batch loop)
@@ -573,8 +589,6 @@ async def run_rater_retry(
     temperature = rater_cfg["temperature"]
     base_max_tokens = cfg["pipeline"]["max_tokens"]
     base_batch_size = cfg["pipeline"]["batch_size"]
-    retry_max_tokens = base_max_tokens * 2
-    retry_batch_size = max(1, base_batch_size // 2)
     job_name = f"{cfg['pipeline']['job_name_prefix']}_{rater_label}_retry"
 
     if not client.config.has_model(model):
@@ -587,11 +601,32 @@ async def run_rater_retry(
             f"Run the initial pass before --retry-failed.")
     ckpt = json.loads(ckpt_path.read_text())
 
+    # Escalate from the previous retry's params, not the base config. Repeated
+    # --retry-failed calls must keep halving batch_size and doubling max_tokens
+    # instead of replaying the same 10→5 / 4096→8192 step every time.
+    # First retry: prev=base. Subsequent retries: prev=last_retry_*.
+    prev_batch_size = ckpt.get("last_retry_batch_size", base_batch_size)
+    prev_max_tokens = ckpt.get("last_retry_max_tokens", base_max_tokens)
+    retry_batch_size = max(1, prev_batch_size // 2)
+    retry_max_tokens = prev_max_tokens * 2
+
     failed_task_ids: list[str] = sorted(set(
         ckpt.get("request_failed", []) +
         ckpt.get("parse_failed", []) +
         ckpt.get("truncated_and_unparseable", [])
     ))
+
+    # batch_size=1 already failed: a single question that won't fit at the
+    # previous max_tokens won't fit at 2x either (the response would still
+    # truncate; we'd just truncate further along). Surface and stop.
+    if prev_batch_size == 1 and failed_task_ids:
+        sample = ", ".join(failed_task_ids[:5])
+        more = "..." if len(failed_task_ids) > 5 else ""
+        die(f"Rater {rater_label}: batch_size=1 and still failing. These "
+            f"{len(failed_task_ids)} task(s) cannot be classified at any "
+            f"token budget tried (last attempt: max_tokens={prev_max_tokens}). "
+            f"Manual review required. See output/stage1/raw_responses/"
+            f"{rater_label}/ for: {sample}{more}")
 
     # Detect "never-ran" tasks — submitted but interrupted before returning.
     # Any task ID in the expected set that is NOT in succeeded/failed lists
@@ -903,13 +938,24 @@ def write_run_report(
         L.append(f"- **Results path:** `{o['results_path']}`")
 
         if o.get("mode") == "retry" or o.get("mode") == "retry_noop":
-            # Retry-mode reporting
+            # Retry-mode reporting. JSONL line count comes from disk — the
+            # outcome's own counter only knows about THIS pass's writes, so
+            # retry_noop outcomes (rater had no failures, wrote nothing this
+            # pass) would otherwise render as "0 records" even when complete.
+            jsonl_count = _count_jsonl_records(o.get("results_path"))
             L.append(f"- **Retry batch_size:** {o.get('retry_batch_size', 'n/a')}")
             L.append(f"- **Retry max_tokens:** {o.get('retry_max_tokens', 'n/a')}")
             L.append(f"- **Originals attempted:** {len(o.get('originals_attempted', []))}")
             L.append(f"- **Originals recovered:** {len(o.get('originals_recovered', []))}")
             L.append(f"- **Originals still failing:** {len(o.get('originals_still_failing', []))}")
-            L.append(f"- **Records in JSONL after retry:** {o.get('records_in_jsonl', 'n/a')}")
+            L.append(f"- **Records in JSONL (on disk):** {jsonl_count}")
+            L.append("")
+            L.append("> Note: The harness reports all API calls as successful "
+                     "(HTTP 200). Truncation (`finish_reason=length`) is "
+                     "detected by the parser, not the harness. A batch can be "
+                     "\"harness-ok\" but \"parser-failed,\" which is why this "
+                     "report can show failures while the harness summary "
+                     "shows all OK.")
 
             if o.get("originals_recovered"):
                 L.append("")
@@ -985,7 +1031,7 @@ def write_run_report(
     rows_iterated = cfg["expected"]["question_count"]
     for o in outcomes:
         if o.get("mode") in ("retry", "retry_noop"):
-            count = o.get("records_in_jsonl", o.get("records_written", 0))
+            count = _count_jsonl_records(o.get("results_path"))
         else:
             count = o.get("records_written", 0)
         gap = rows_iterated - count
