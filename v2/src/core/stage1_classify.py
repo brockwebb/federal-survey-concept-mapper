@@ -28,6 +28,7 @@ import argparse
 import asyncio
 import json
 import re
+import shutil
 import sys
 import time
 from datetime import datetime, timezone
@@ -296,6 +297,103 @@ def _count_jsonl_records(path_str: str | None) -> int:
         return sum(1 for _ in f)
 
 
+def _wipe_rater_output(rater_label: str, cfg: dict, dirs: dict[str, Path]) -> None:
+    """Delete a rater's JSONL, raw_responses subdir, and checkpoint.
+
+    Used in --rater single-rater initial mode to guarantee no stale data
+    (mismatched task_ids, half-written records, old checkpoint schema) leaks
+    into a fresh run. The both-rater path keeps its existing behavior of only
+    truncating the JSONL at the start of `run_rater_initial`.
+    """
+    pattern = cfg["output"]["results_filename_pattern"].format(
+        rater_label=rater_label, model_slug="*",
+    )
+    jsonl_paths = sorted(dirs["out_root"].glob(pattern))
+    raw_subdir = dirs["raw_dir"] / rater_label
+    ckpt_path = dirs["ckpt_dir"] / f"{rater_label}.json"
+
+    wiped: list[str] = []
+    for p in jsonl_paths:
+        p.unlink()
+        wiped.append(str(p))
+    if raw_subdir.exists():
+        shutil.rmtree(raw_subdir)
+        wiped.append(str(raw_subdir))
+    if ckpt_path.exists():
+        ckpt_path.unlink()
+        wiped.append(str(ckpt_path))
+
+    if wiped:
+        print(f"[{rater_label}] Wiped stale output before fresh run:")
+        for w in wiped:
+            print(f"  - {w}")
+    else:
+        print(f"[{rater_label}] No prior output to wipe.")
+
+
+def _build_prior_outcome(
+    rater_label: str, cfg: dict, dirs: dict[str, Path],
+) -> dict:
+    """Synthesize a run-report outcome for a rater whose state lives on disk
+    from a prior session. Used in --rater mode so the combined report still
+    reflects the rater that wasn't executed this session."""
+    rater_cfg = cfg["raters"][rater_label]
+    default_max_tokens = cfg["pipeline"]["max_tokens"]
+    default_batch_size = cfg["pipeline"]["batch_size"]
+    batch_size = rater_cfg.get("batch_size", default_batch_size)
+    max_tokens = rater_cfg.get("max_tokens", default_max_tokens)
+
+    ckpt_path = dirs["ckpt_dir"] / f"{rater_label}.json"
+    if not ckpt_path.exists():
+        return {
+            "rater_label": rater_label,
+            "mode": "not_run",
+            "model_requested": rater_cfg["model"],
+            "model_slug": slugify(rater_cfg["model"]),
+            "served_models": [],
+            "wall_seconds": 0.0,
+            "tasks_total": 0,
+            "request_failed": [],
+            "parse_failed": [],
+            "truncated_and_unparseable": [],
+            "succeeded_task_ids": [],
+            "records_written": 0,
+            "results_path": "",
+            "unknown_model_seen": False,
+            "summaries": [],
+            "batch_size": batch_size,
+            "max_tokens": max_tokens,
+        }
+
+    ckpt = json.loads(ckpt_path.read_text())
+    results_path = ckpt.get("results_path", "")
+    jsonl_count = _count_jsonl_records(results_path)
+    return {
+        "rater_label": rater_label,
+        "mode": "prior_run",
+        "model_requested": ckpt.get("model_requested", rater_cfg["model"]),
+        "model_slug": slugify(ckpt.get("model_requested", rater_cfg["model"])),
+        "served_models": ckpt.get("served_models", []),
+        "wall_seconds": ckpt.get("wall_seconds_initial", 0.0),
+        "tasks_total": (
+            len(ckpt.get("succeeded_task_ids", []))
+            + len(ckpt.get("request_failed", []))
+            + len(ckpt.get("parse_failed", []))
+            + len(ckpt.get("truncated_and_unparseable", []))
+        ),
+        "request_failed": ckpt.get("request_failed", []),
+        "parse_failed": ckpt.get("parse_failed", []),
+        "truncated_and_unparseable": ckpt.get("truncated_and_unparseable", []),
+        "succeeded_task_ids": ckpt.get("succeeded_task_ids", []),
+        "records_written": jsonl_count,
+        "results_path": results_path,
+        "unknown_model_seen": False,
+        "summaries": [],
+        "batch_size": batch_size,
+        "max_tokens": max_tokens,
+    }
+
+
 # =============================================================================
 # PER-TASK CALLBACK (writes raw response, JSONL records, and live checkpoint
 # the moment each task completes — replaces the old post-batch loop)
@@ -507,8 +605,13 @@ async def run_rater_initial(
 ) -> dict:
     model = rater_cfg["model"]
     temperature = rater_cfg["temperature"]
-    max_tokens = cfg["pipeline"]["max_tokens"]
-    batch_size = cfg["pipeline"]["batch_size"]
+    # Per-rater overrides win over pipeline defaults. Lets one verbose model
+    # (e.g., gemini) run with larger max_tokens / smaller batches without
+    # forcing the entire pipeline to those values.
+    default_max_tokens = cfg["pipeline"]["max_tokens"]
+    default_batch_size = cfg["pipeline"]["batch_size"]
+    max_tokens = rater_cfg.get("max_tokens", default_max_tokens)
+    batch_size = rater_cfg.get("batch_size", default_batch_size)
     job_name = f"{cfg['pipeline']['job_name_prefix']}_{rater_label}"
 
     if not client.config.has_model(model):
@@ -517,9 +620,15 @@ async def run_rater_initial(
             f"Fix v2/config/stage1.yaml or v2/usai_harness.yaml — do not hardcode in script.")
 
     batches = chunk(questions, batch_size)
-    expected_batches = cfg["expected"]["batch_count"]
-    if len(batches) != expected_batches:
-        die(f"Rater {rater_label}: built {len(batches)} batches, config expects {expected_batches}.")
+    # Batch count assertion only applies when the rater uses the default
+    # batch_size. With a per-rater override, batch count is derived and the
+    # config.expected.batch_count value reflects the default-config layout
+    # only. The question_count assertion in load_questions() still catches
+    # data drift.
+    if batch_size == default_batch_size:
+        expected_batches = cfg["expected"]["batch_count"]
+        if len(batches) != expected_batches:
+            die(f"Rater {rater_label}: built {len(batches)} batches, config expects {expected_batches}.")
 
     tasks = [
         {
@@ -562,11 +671,14 @@ async def run_rater_initial(
     # Sort accumulated summaries by task_id for stable downstream order.
     tracker["summaries"].sort(key=lambda s: s["task_id"])
 
-    return finalize_rater_outcome(
+    outcome = finalize_rater_outcome(
         rater_label=rater_label, model=model, model_slug=model_slug,
         summaries=tracker["summaries"], wall_s=wall_s, results_path=results_path,
         dirs=dirs, mode="initial",
     )
+    outcome["batch_size"] = batch_size
+    outcome["max_tokens"] = max_tokens
+    return outcome
 
 
 # =============================================================================
@@ -911,9 +1023,10 @@ def write_run_report(
     L.append(f"- **Generated:** {datetime.now(timezone.utc).isoformat()}")
     L.append(f"- **Config:** `{CONFIG_PATH}`")
     L.append(f"- **Questions loaded:** {n_questions} (expected {cfg['expected']['question_count']})")
-    L.append(f"- **Batches per rater (initial):** {n_batches} (expected {cfg['expected']['batch_count']})")
-    L.append(f"- **batch_size (initial):** {cfg['pipeline']['batch_size']}")
-    L.append(f"- **max_tokens (initial):** {cfg['pipeline']['max_tokens']}")
+    L.append(f"- **Batches per rater (at default batch_size):** {n_batches} (expected {cfg['expected']['batch_count']})")
+    L.append(f"- **Pipeline default batch_size:** {cfg['pipeline']['batch_size']}")
+    L.append(f"- **Pipeline default max_tokens:** {cfg['pipeline']['max_tokens']}")
+    L.append("  (Per-rater overrides, if any, are listed in each rater's section.)")
     L.append("")
     L.append("## Pre-flight")
     if preflight_record.get("skipped"):
@@ -933,6 +1046,10 @@ def write_run_report(
         served = o.get("served_models") or []
         if served:
             L.append(f"- **Served by:** {', '.join(f'`{s}`' for s in served)}")
+        if "batch_size" in o:
+            L.append(f"- **batch_size:** {o['batch_size']}")
+        if "max_tokens" in o:
+            L.append(f"- **max_tokens:** {o['max_tokens']}")
         L.append(f"- **Wall time:** {o['wall_seconds']:.1f} s")
         L.append(f"- **Tasks total:** {o['tasks_total']}")
         L.append(f"- **Results path:** `{o['results_path']}`")
@@ -1030,6 +1147,12 @@ def write_run_report(
     L.append("")
     rows_iterated = cfg["expected"]["question_count"]
     for o in outcomes:
+        if o.get("mode") == "not_run":
+            overall_pass = False
+            L.append(f"- `{o['rater_label']}`: NOT RUN this session and no "
+                     f"prior checkpoint on disk — run this rater before "
+                     f"treating Stage 1 as complete.")
+            continue
         if o.get("mode") in ("retry", "retry_noop"):
             count = _count_jsonl_records(o.get("results_path"))
         else:
@@ -1040,8 +1163,9 @@ def write_run_report(
               not o.get("unknown_model_seen"))
         if not ok:
             overall_pass = False
+        source_note = " (from prior checkpoint)" if o.get("mode") == "prior_run" else ""
         L.append(f"- `{o['rater_label']}`: {count} records written "
-                 f"(rows iterated: {rows_iterated}, implicit drop: {gap}) — "
+                 f"(rows iterated: {rows_iterated}, implicit drop: {gap}){source_note} — "
                  f"{'PASS' if ok else 'FAIL'}")
     L.append("")
     L.append(f"**Overall: {'PASS' if overall_pass else 'FAIL — see failures above'}**")
@@ -1081,8 +1205,17 @@ async def amain(args) -> int:
     n_questions = len(questions)
     n_batches = (n_questions + cfg["pipeline"]["batch_size"] - 1) // cfg["pipeline"]["batch_size"]
 
-    print(f"Loaded {n_questions} questions, {n_batches} batches.")
+    print(f"Loaded {n_questions} questions, {n_batches} batches (at default batch_size).")
     print(f"Mode: {'retry-failed' if args.retry_failed else 'initial'}")
+    if args.rater:
+        print(f"Single-rater mode: {args.rater} only.")
+
+    # Decide which raters execute this session. --rater filters to one;
+    # otherwise both run in order. Single-rater initial mode does a clean
+    # wipe of that rater's prior outputs before the run.
+    run_labels: list[str] = [args.rater] if args.rater else ["rater_a", "rater_b"]
+    if args.rater and not args.retry_failed:
+        _wipe_rater_output(args.rater, cfg, dirs)
 
     h = cfg["harness"]
     async with USAiClient(
@@ -1102,8 +1235,8 @@ async def amain(args) -> int:
         else:
             preflight_record = {"skipped": True}
 
-        outcomes = []
-        for label in ("rater_a", "rater_b"):
+        ran_outcomes: dict[str, dict] = {}
+        for label in run_labels:
             rcfg = cfg["raters"][label]
             if args.retry_failed:
                 outcome = await run_rater_retry(
@@ -1115,7 +1248,17 @@ async def amain(args) -> int:
                     client=client, rater_label=label, rater_cfg=rcfg,
                     questions=questions, taxonomy=taxonomy, cfg=cfg, dirs=dirs,
                 )
-            outcomes.append(outcome)
+            ran_outcomes[label] = outcome
+
+    # Assemble report-ordered outcomes. For raters that didn't run this
+    # session (--rater mode), reconstruct an outcome from disk so the
+    # combined report still shows the whole picture.
+    outcomes: list[dict] = []
+    for label in ("rater_a", "rater_b"):
+        if label in ran_outcomes:
+            outcomes.append(ran_outcomes[label])
+        else:
+            outcomes.append(_build_prior_outcome(label, cfg, dirs))
 
     mode = "retry" if args.retry_failed else "initial"
     report_path = write_run_report(
@@ -1123,11 +1266,13 @@ async def amain(args) -> int:
     )
     print(f"\nRun report: {report_path}")
 
-    # Exit non-zero if any batch failed at any stage.
+    # Exit non-zero if Stage 1 isn't complete and clean for both raters.
     # records_written < rows_iterated is NOT a failure — the model legitimately
     # drops NaN-question rows. v1 had this behavior too.
     bad = False
     for o in outcomes:
+        if o.get("mode") == "not_run":
+            bad = True
         if o.get("unknown_model_seen"):
             bad = True
         if o.get("originals_still_failing"):
@@ -1143,6 +1288,14 @@ def main() -> int:
         "--retry-failed", action="store_true",
         help="Re-run only previously-failed batches (per-rater checkpoint), "
              "with batch_size halved and max_tokens doubled. Appends to existing JSONL.",
+    )
+    parser.add_argument(
+        "--rater", choices=["rater_a", "rater_b"], default=None,
+        help="Run only this rater. Default: both. In single-rater initial "
+             "mode, that rater's JSONL, raw_responses, and checkpoint are "
+             "wiped before the run to avoid stale-data contamination. The "
+             "skipped rater's state is read from disk for the combined "
+             "run report.",
     )
     args = parser.parse_args()
     return asyncio.run(amain(args))
