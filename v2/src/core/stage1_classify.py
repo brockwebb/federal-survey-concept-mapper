@@ -417,6 +417,7 @@ def make_result_handler(
     results_path: Path,
     checkpoint_path: Path,
     tracker: dict,
+    expected_ids_by_task: dict[str, list[int]] | None = None,
 ):
     """Build a per-task progress callback for `client.batch(progress=...)`.
 
@@ -425,6 +426,14 @@ def make_result_handler(
     and appends records to the JSONL, prints a one-line progress update, and
     rewrites the checkpoint file. Per-task summaries accumulate in
     `tracker["summaries"]` for downstream report rendering.
+
+    `expected_ids_by_task` maps task_id → ordered list of question IDs sent
+    in that task's prompt. When provided, returned records' `id` fields are
+    validated against the expected IDs. Same-count-but-wrong-IDs is treated
+    as a positional ordering error and remapped (the prompt requires same
+    order, so the i-th returned record corresponds to the i-th sent question
+    regardless of what `id` the model wrote). Count mismatches are treated
+    as parse failures — the data can't be safely recovered.
     """
     raw_subdir.mkdir(parents=True, exist_ok=True)
 
@@ -488,13 +497,41 @@ def make_result_handler(
                     summary["outcome"] = "parse_failed"
                     tracker["parse_failed"].append(r.task_id)
             else:
-                with open(results_path, "a") as f:
-                    for rec in records:
-                        f.write(json.dumps(rec) + "\n")
-                summary["records"] = len(records)
-                summary["outcome"] = "success"
-                tracker["records_written"] += len(records)
-                tracker["succeeded"].append(r.task_id)
+                # ID validation. The prompt sends each question with its CSV
+                # row index as `id` and demands "Return a JSON array with one
+                # object per question, in the same order." Some models (seen
+                # with Gemini) ignore the sent IDs and emit their own internal
+                # numbering. With same count + same order, the records are
+                # still valid — overwrite the model's IDs positionally. Count
+                # mismatches mean we can't recover the mapping; fail the task.
+                expected = (
+                    expected_ids_by_task.get(r.task_id)
+                    if expected_ids_by_task else None
+                )
+                returned_ids = [rec.get("id") for rec in records]
+                if expected is not None and returned_ids != expected:
+                    if len(records) == len(expected):
+                        for rec, eid in zip(records, expected):
+                            rec["id"] = eid
+                        summary["id_remapped"] = True
+                        summary["original_ids"] = returned_ids
+                    else:
+                        summary["outcome"] = "parse_failed"
+                        summary["parse_error"] = (
+                            f"ID count mismatch: sent {len(expected)} "
+                            f"questions, got {len(records)} records back. "
+                            f"Expected IDs: {expected}, got: {returned_ids}"
+                        )
+                        tracker["parse_failed"].append(r.task_id)
+
+                if summary["outcome"] is None:
+                    with open(results_path, "a") as f:
+                        for rec in records:
+                            f.write(json.dumps(rec) + "\n")
+                    summary["records"] = len(records)
+                    summary["outcome"] = "success"
+                    tracker["records_written"] += len(records)
+                    tracker["succeeded"].append(r.task_id)
 
         tracker["summaries"].append(summary)
 
@@ -637,9 +674,11 @@ async def run_rater_initial(
             "temperature": temperature,
             "max_tokens": max_tokens,
             "messages": [{"role": "user", "content": create_prompt(batch, taxonomy)}],
+            "_expected_ids": [int(q["id"]) for q in batch],
         }
         for i, batch in enumerate(batches)
     ]
+    expected_ids_by_task = {t["task_id"]: t["_expected_ids"] for t in tasks}
 
     # Output paths — fresh JSONL for an initial run.
     model_slug = slugify(model)
@@ -660,11 +699,18 @@ async def run_rater_initial(
         results_path=results_path,
         checkpoint_path=checkpoint_path,
         tracker=tracker,
+        expected_ids_by_task=expected_ids_by_task,
     )
+
+    # Strip bookkeeping fields (anything `_`-prefixed) before submitting.
+    api_tasks = [
+        {k: v for k, v in t.items() if not k.startswith("_")}
+        for t in tasks
+    ]
 
     print(f"\n[{rater_label}] Submitting {len(tasks)} batch tasks against {model!r}...")
     t0 = time.monotonic()
-    await client.batch(tasks, job_name=job_name, progress=handler)
+    await client.batch(api_tasks, job_name=job_name, progress=handler)
     wall_s = time.monotonic() - t0
     print(f"[{rater_label}] Batch returned in {wall_s:.1f}s")
 
@@ -792,6 +838,7 @@ async def run_rater_retry(
                 "messages": [{"role": "user",
                               "content": create_prompt(half, taxonomy)}],
                 "_original_task_id": tid,  # local bookkeeping, not sent to API
+                "_expected_ids": [int(q["id"]) for q in half],
             })
 
     # Never-ran originals: re-submit as full batches with base parameters.
@@ -809,6 +856,7 @@ async def run_rater_retry(
             "max_tokens": base_max_tokens,
             "messages": [{"role": "user",
                           "content": create_prompt(original_batches[idx], taxonomy)}],
+            "_expected_ids": [int(q["id"]) for q in original_batches[idx]],
         })
 
     print(f"\n[{rater_label}] Retry pass:")
@@ -832,6 +880,11 @@ async def run_rater_retry(
     # checkpoint is written by the post-batch reconciliation below.
     retry_progress_path = dirs["ckpt_dir"] / f"{rater_label}.retry_progress.json"
 
+    expected_ids_by_task = {
+        t["task_id"]: t["_expected_ids"]
+        for t in (retry_tasks + rerun_tasks)
+    }
+
     tracker = _empty_tracker()
     handler = make_result_handler(
         rater_label=rater_label,
@@ -839,6 +892,7 @@ async def run_rater_retry(
         results_path=results_path,
         checkpoint_path=retry_progress_path,
         tracker=tracker,
+        expected_ids_by_task=expected_ids_by_task,
     )
 
     # Strip bookkeeping fields before submitting.
@@ -1074,6 +1128,15 @@ def write_run_report(
                      "report can show failures while the harness summary "
                      "shows all OK.")
 
+            remap_summaries = [s for s in o.get("summaries", [])
+                               if s.get("id_remapped")]
+            if remap_summaries:
+                L.append("")
+                L.append("### ID remaps (model returned wrong IDs, positionally corrected)")
+                for s in remap_summaries:
+                    L.append(f"  - `{s['task_id']}`: model returned "
+                             f"{s.get('original_ids')}")
+
             if o.get("originals_recovered"):
                 L.append("")
                 L.append("### Recovered on retry")
@@ -1110,6 +1173,15 @@ def write_run_report(
             L.append(f"- **Truncated and unparseable:** {len(o['truncated_and_unparseable'])}")
             L.append(f"- **Records written:** {o['records_written']}")
 
+            remap_summaries = [s for s in o["summaries"]
+                               if s.get("id_remapped")]
+            if remap_summaries:
+                L.append("")
+                L.append("### ID remaps (model returned wrong IDs, positionally corrected)")
+                for s in remap_summaries:
+                    L.append(f"  - `{s['task_id']}`: model returned "
+                             f"{s.get('original_ids')}")
+
             failed_summaries = [s for s in o["summaries"]
                                 if s["outcome"] != "success"]
             if failed_summaries:
@@ -1141,9 +1213,10 @@ def write_run_report(
     L.append("## Verdict")
     L.append("")
     L.append("PASS criterion: every batch returned without request failure, "
-             "every response parsed, no truncation, no unknown-model errors. "
-             "Records-written count is reported as a diagnostic but NOT used "
-             "for PASS/FAIL — the model legitimately drops NaN-question rows.")
+             "every response parsed, no truncation, no unknown-model errors, "
+             "AND records-written equals rows-iterated for each rater. "
+             "A gap in either direction (missing records or duplicate "
+             "inflation) is a FAIL.")
     L.append("")
     rows_iterated = cfg["expected"]["question_count"]
     for o in outcomes:
@@ -1160,12 +1233,13 @@ def write_run_report(
         gap = rows_iterated - count
         ok = (not o.get("originals_still_failing") and
               not (o.get("request_failed") or o.get("parse_failed") or o.get("truncated_and_unparseable")) and
-              not o.get("unknown_model_seen"))
+              not o.get("unknown_model_seen") and
+              count == rows_iterated)
         if not ok:
             overall_pass = False
         source_note = " (from prior checkpoint)" if o.get("mode") == "prior_run" else ""
         L.append(f"- `{o['rater_label']}`: {count} records written "
-                 f"(rows iterated: {rows_iterated}, implicit drop: {gap}){source_note} — "
+                 f"(rows iterated: {rows_iterated}, gap: {gap}){source_note} — "
                  f"{'PASS' if ok else 'FAIL'}")
     L.append("")
     L.append(f"**Overall: {'PASS' if overall_pass else 'FAIL — see failures above'}**")
@@ -1267,17 +1341,27 @@ async def amain(args) -> int:
     print(f"\nRun report: {report_path}")
 
     # Exit non-zero if Stage 1 isn't complete and clean for both raters.
-    # records_written < rows_iterated is NOT a failure — the model legitimately
-    # drops NaN-question rows. v1 had this behavior too.
+    # The record-count assertion (records_written == rows_iterated) is part
+    # of PASS now: a gap in either direction is a FAIL. See cc_tasks/
+    # 2026-05-15_stage1_id_validation_fix.md for why this changed from
+    # diagnostic-only.
+    rows_iterated = cfg["expected"]["question_count"]
     bad = False
     for o in outcomes:
         if o.get("mode") == "not_run":
             bad = True
+            continue
         if o.get("unknown_model_seen"):
             bad = True
         if o.get("originals_still_failing"):
             bad = True
         if o.get("request_failed") or o.get("parse_failed") or o.get("truncated_and_unparseable"):
+            bad = True
+        if o.get("mode") in ("retry", "retry_noop"):
+            count = _count_jsonl_records(o.get("results_path"))
+        else:
+            count = o.get("records_written", 0)
+        if count != rows_iterated:
             bad = True
     return 1 if bad else 0
 
