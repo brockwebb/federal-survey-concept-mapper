@@ -434,7 +434,7 @@ def write_comparison_report(
     L.append("- `comparison_summary.json` — machine-readable summary of all metrics")
     L.append("")
 
-    report_path.write_text("\n".join(L))
+    report_path.write_text("\n".join(L), encoding="utf-8")
     return report_path
 
 
