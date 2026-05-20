@@ -40,10 +40,10 @@ raters:
     temperature: 0
     # Per-rater overrides: gemini's responses are more verbose than claude's
     # and truncate at the pipeline defaults (batch_size=10 / max_tokens=4096).
-    # The initial run confirmed 8192/5 has a clean success rate on retried
-    # batches at these params, so apply them from the start.
-    max_tokens: 8192
-    batch_size: 5
+    # 24000 eliminates truncation entirely; batch_size=10 matches pipeline
+    # default for artifact comparability.
+    max_tokens: 24000
+    batch_size: 10
     notes: 'Second rater. v1 baseline used gpt-5-mini; v2 confirmation pair.'
 
 # -----------------------------------------------------------------------------
