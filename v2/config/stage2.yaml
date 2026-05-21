@@ -1,0 +1,81 @@
+# =============================================================================
+# v2 STAGE 2 ADJUDICATION CONFIG
+# =============================================================================
+# Single source of truth for the Stage 2 (disagreement resolution) pipeline.
+#
+# Stage 2 takes the per-rater JSONL results from Stage 1 and:
+#   1. Auto-resolves high-confidence disagreements as dual-modal
+#      (min_confidence >= confidence_threshold).
+#   2. Sends the remaining disagreements to an LLM arbitrator that picks
+#      rater_a, rater_b, dual_modal, or new_concept.
+#
+# RULE: If it affects results and you'd be upset if wrong, it goes here.
+# Nothing in stage2_adjudicate.py should hardcode anything that lives here.
+# =============================================================================
+
+version: '1.0'
+created: '2026-05-20'
+purpose: 'v2 Stage 2 adjudication - resolve classification disagreements'
+
+# -----------------------------------------------------------------------------
+# ARBITRATOR MODEL
+# -----------------------------------------------------------------------------
+# Direct vendor API call (Anthropic), not USAi harness. The harness is for
+# batch classification across thousands of items; arbitration is a single
+# call per disagreement, parallelism handled by ThreadPoolExecutor.
+# -----------------------------------------------------------------------------
+arbitrator:
+  model: 'claude-sonnet-4-5'
+  provider: 'anthropic'
+  api_key_env: 'ANTHROPIC_API_KEY'
+  temperature: 0
+  max_tokens: 2048
+
+# -----------------------------------------------------------------------------
+# PIPELINE PARAMETERS
+# -----------------------------------------------------------------------------
+# confidence_threshold matches v1 (0.90). Disagreements where both raters
+# scored their picks >= 0.90 are auto-marked dual-modal; the rest go to the
+# arbitrator.
+# -----------------------------------------------------------------------------
+pipeline:
+  confidence_threshold: 0.90
+  max_retries: 5
+  max_workers: 3
+  batch_checkpoint_interval: 10
+  rate_limit_delay: 0.2
+
+# -----------------------------------------------------------------------------
+# DATA INPUTS
+# -----------------------------------------------------------------------------
+# Paths relative to the v2/ directory (the script's runtime CWD).
+# -----------------------------------------------------------------------------
+data:
+  questions_csv: 'data/raw/PublicSurveyQuestionsMap.csv'
+  taxonomy_json: 'data/raw/census_survey_explorer_taxonomy.json'
+  taxonomy_root_key: 'taxonomy'
+
+# -----------------------------------------------------------------------------
+# STAGE 1 RESULTS (inputs to this stage)
+# -----------------------------------------------------------------------------
+# Paths to the per-rater JSONL files produced by stage1_classify.py. These
+# filenames are derived in Stage 1 from `output.results_filename_pattern`
+# in stage1.yaml — keep them in sync if Stage 1's pattern changes.
+# -----------------------------------------------------------------------------
+stage1:
+  rater_a_results: 'output/stage1/results_rater_a_claude_4_5_sonnet.jsonl'
+  rater_b_results: 'output/stage1/results_rater_b_gemini-2_5-flash.jsonl'
+
+# -----------------------------------------------------------------------------
+# OUTPUTS
+# -----------------------------------------------------------------------------
+# Schema mirrors v1 (docs/stages/01_classification/data/arbitration_final/)
+# so v1 and v2 outputs can be diffed directly. Field names use rater_a /
+# rater_b instead of v1's gpt5mini / haiku45.
+# -----------------------------------------------------------------------------
+output:
+  output_dir: 'output/stage2'
+  arbitration_csv: 'arbitration_results.csv'
+  auto_dual_modal_csv: 'auto_dual_modal_results.csv'
+  all_resolutions_csv: 'all_disagreement_resolutions.csv'
+  run_report: 'stage2_run_report.md'
