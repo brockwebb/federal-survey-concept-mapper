@@ -2,10 +2,13 @@
 """v2 Stage 2: Adjudicate Stage 1 classification disagreements.
 
 Confirmation run. Mirrors v1's arbitration artifact
-(src/core/arbitrate_final.py) in logic; the model identity is blinded
-(rater_a / rater_b) and all LLM traffic now goes through the USAi harness
--- the same auth path Stage 1 uses. No direct vendor SDK calls, no
-dotenv, no env-var credential loading.
+(src/core/arbitrate_final.py) in logic, with two architectural changes:
+
+  * All LLM traffic goes through the USAi harness (same auth path as
+    Stage 1). No direct vendor SDK calls. No dotenv.
+  * Operational parity with stage1_classify.py: live checkpoint file,
+    per-task summaries, retry-failed mode, run report, served-model
+    confirmation, records-written validation.
 
 Strategy:
   * Merge the two per-rater JSONL files from Stage 1 on `id`.
@@ -13,34 +16,46 @@ Strategy:
     differs between rater_a and rater_b.
   * For each disagreement, compute min(confidence_a, confidence_b).
   * Auto-mark min_confidence >= confidence_threshold as dual_modal.
-  * Submit the rest as a single `client.batch(...)` job (the harness owns
-    concurrency, rate-limiting, retries). Each task is the arbitration
-    prompt for one disagreement. The arbitrator picks pick_rater_a /
+  * Submit the rest as a single `client.batch(...)` job. Each task is
+    one arbitration prompt. The arbitrator picks pick_rater_a /
     pick_rater_b / dual_modal / new_concept.
-  * Output CSV schema mirrors v1 so v1 and v2 outputs can be diffed.
 
 Run from v2/ directory:
-    python src/core/stage2_adjudicate.py            # full run
-    python src/core/stage2_adjudicate.py --dry-run  # load + split only
+    python src/core/stage2_adjudicate.py                  # initial run
+    python src/core/stage2_adjudicate.py --retry-failed   # retry only failed task_ids
+    python src/core/stage2_adjudicate.py --dry-run        # load + split only
 
-Dry-run mode prints the merge counts, disagreement counts, and tier
-breakdown and exits WITHOUT instantiating the harness client or calling
-any API. Use it to verify data loading before committing to a full run.
+Dry-run mode prints counts and exits WITHOUT instantiating the harness
+or calling any API. Use it to verify data loading before committing.
+
+Retry-failed mode reads the checkpoint at
+`output/stage2/checkpoints/stage2_arbitration.json`, identifies tasks
+in `request_failed ∪ parse_failed`, re-submits ONLY those, merges
+recovered results into the existing CSV (by `id`), and updates the
+checkpoint. Successes are never re-run.
+
+Output schema mirrors v1 so v1 and v2 outputs can be diffed.
 
 What this script does NOT do:
-  * Hardcode any model name, threshold, or path -- all in config/stage2.yaml.
+  * Hardcode any model, threshold, or path -- all in config/stage2.yaml.
   * Touch v1 artifacts. v1 is frozen.
-  * Call vendor SDKs directly. The harness owns auth, retries, concurrency.
-  * Tolerate an arbitrator model that isn't in the harness pool -- it halts
-    at startup via client.config.has_model().
+  * Call vendor SDKs directly. The harness owns auth + retries.
+  * Tolerate an arbitrator model that isn't in the harness pool --
+    halts at startup via client.config.has_model().
+  * Swallow harness response details on failure. status_code,
+    finish_reason, served_model, error_body snippet are captured for
+    every task and surfaced in the run report.
 """
 from __future__ import annotations
 
 import argparse
 import asyncio
 import json
+import re
 import sys
 import threading
+import time
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -68,7 +83,7 @@ def load_config() -> dict[str, Any]:
         cfg = yaml.safe_load(f)
 
     required_top = {"arbitrator", "pipeline", "data", "stage1", "output",
-                    "harness"}
+                    "harness", "job"}
     missing = required_top - set(cfg.keys())
     if missing:
         die(f"Config missing required top-level keys: {missing}")
@@ -111,7 +126,6 @@ def load_questions(cfg: dict[str, Any]) -> pd.DataFrame:
 
 
 def load_jsonl(path: Path, label: str) -> pd.DataFrame:
-    """Load a Stage 1 JSONL result file into a DataFrame."""
     if not path.exists():
         die(f"{label}: file not found at {path.resolve()}")
     records = []
@@ -167,7 +181,6 @@ def build_disagreements(
         suffixes=("_a", "_b"),
         how="inner",
     )
-
     merged = merged.merge(
         questions_df[["id", "question", "primary_survey"]],
         on="id",
@@ -179,14 +192,12 @@ def build_disagreements(
         | (merged["primary_subtopic_a"] != merged["primary_subtopic_b"])
     )
     disagreements = merged[disagree_mask].copy()
-
     disagreements["min_confidence"] = disagreements[
         ["confidence_a", "confidence_b"]
     ].min(axis=1)
     disagreements["confidence_tier"] = disagreements["min_confidence"].apply(
         assign_tier
     )
-
     return disagreements
 
 
@@ -213,6 +224,18 @@ def extract_finish_reason(harness_response: Any) -> str | None:
     if not isinstance(choices, list) or not choices:
         return None
     return choices[0].get("finish_reason")
+
+
+def looks_like_unknown_model_error(harness_response: Any) -> bool:
+    if not isinstance(harness_response, dict):
+        return False
+    body = harness_response.get("error_body")
+    if not isinstance(body, str):
+        return False
+    lower = body.lower()
+    needles = ("model not found", "model_not_found", "unknown model",
+               "invalid model", "does not exist")
+    return any(n in lower for n in needles)
 
 
 def extract_json_robust(content: str) -> dict:
@@ -332,7 +355,7 @@ CRITICAL:
 
 
 # =============================================================================
-# AUTO DUAL-MODAL (high-confidence disagreements -- no API call needed)
+# AUTO DUAL-MODAL
 # =============================================================================
 
 def build_auto_dual_modal_rows(
@@ -391,6 +414,18 @@ def build_auto_dual_modal_rows(
 # HARNESS BATCH PLUMBING
 # =============================================================================
 
+TASK_ID_RE = re.compile(r"^stage2_arb_(\d{6,})$")
+
+
+def task_id_for(row_id: int) -> str:
+    return f"stage2_arb_{int(row_id):06d}"
+
+
+def id_from_task_id(task_id: str) -> int | None:
+    m = TASK_ID_RE.match(task_id)
+    return int(m.group(1)) if m else None
+
+
 def _arb_baseline(row: pd.Series) -> dict[str, Any]:
     """Bookkeeping fields kept regardless of arbitration outcome."""
     return {
@@ -411,46 +446,90 @@ def build_api_tasks(
     taxonomy: dict[str, list[str]],
     cfg: dict[str, Any],
 ) -> tuple[list[dict[str, Any]], dict[str, dict[str, Any]]]:
-    """Build harness task dicts + a side table mapping task_id -> baseline.
-
-    The baseline is everything we already know about the row before the
-    arbitrator answers (id, question, original picks, tier, ...). The
-    progress callback merges arbitration output on top.
-    """
+    """Build harness task dicts + a side table mapping task_id -> baseline."""
     arb = cfg["arbitrator"]
     tasks: list[dict[str, Any]] = []
     baselines: dict[str, dict[str, Any]] = {}
 
     for _, row in needs_arb.iterrows():
-        task_id = f"stage2_arb_{int(row['id']):06d}"
-        prompt = create_arbitration_prompt(row, taxonomy)
+        tid = task_id_for(row["id"])
         tasks.append({
-            "task_id": task_id,
+            "task_id": tid,
             "model": arb["model"],
             "temperature": arb["temperature"],
             "max_tokens": arb["max_tokens"],
-            "messages": [{"role": "user", "content": prompt}],
+            "messages": [{"role": "user",
+                          "content": create_arbitration_prompt(row, taxonomy)}],
         })
-        baselines[task_id] = _arb_baseline(row)
+        baselines[tid] = _arb_baseline(row)
 
     return tasks, baselines
 
 
+def _empty_tracker() -> dict[str, Any]:
+    """Mutable accumulator. Mirrors stage1_classify._empty_tracker."""
+    return {
+        "summaries": [],
+        "succeeded": [],
+        "request_failed": [],
+        "parse_failed": [],
+        "served_models": set(),
+        "unknown_model": False,
+        "records_written": 0,
+    }
+
+
+def _write_checkpoint(
+    path: Path,
+    *,
+    job_name: str,
+    mode: str,
+    model_requested: str,
+    completed: int,
+    total: int,
+    tracker: dict[str, Any],
+    extra: dict[str, Any] | None = None,
+) -> None:
+    """Live checkpoint write. Same key names retry-mode reads back."""
+    payload: dict[str, Any] = {
+        "job_name": job_name,
+        "mode": mode,
+        "model_requested": model_requested,
+        "completed": int(completed),
+        "total": int(total),
+        "records_written": int(tracker["records_written"]),
+        "succeeded_task_ids": sorted(set(tracker["succeeded"])),
+        "request_failed": sorted(set(tracker["request_failed"])),
+        "parse_failed": sorted(set(tracker["parse_failed"])),
+        "served_models": sorted(tracker["served_models"]),
+        "unknown_model": bool(tracker["unknown_model"]),
+        "last_update_at": datetime.now(timezone.utc).isoformat(),
+    }
+    if extra:
+        payload.update(extra)
+    path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+
+
 def make_progress_handler(
+    *,
     baselines: dict[str, dict[str, Any]],
     results: list[dict[str, Any]],
     results_lock: threading.Lock,
+    tracker: dict[str, Any],
     arb_csv: Path,
     raw_subdir: Path,
+    checkpoint_path: Path,
+    job_name: str,
+    mode: str,
+    model_requested: str,
     checkpoint_every: int,
 ):
-    """Build the per-task progress callback for client.batch(progress=...).
+    """Per-task progress callback for client.batch(progress=...).
 
-    Each completed task fires this with a ProgressEvent whose .result is a
-    BatchResult (task_id, success, status_code, latency_ms, error, response).
-    The callback parses the arbitrator's JSON, merges it on top of the
-    baseline, appends the row to `results`, and periodically writes the
-    CSV checkpoint.
+    Records the full per-call status (status_code, finish_reason,
+    served_model, error_body, parse outcome, response_text_snippet) on
+    `tracker` and writes the checkpoint after every task. CSV is
+    rewritten every `checkpoint_every` completions.
     """
     raw_subdir.mkdir(parents=True, exist_ok=True)
 
@@ -459,6 +538,7 @@ def make_progress_handler(
         task_id = r.task_id
         baseline = baselines.get(task_id, {})
 
+        # Persist the raw response for every task (success or fail).
         raw_path = raw_subdir / f"{task_id}.json"
         raw_path.write_text(json.dumps({
             "task_id": task_id,
@@ -467,19 +547,62 @@ def make_progress_handler(
             "latency_ms": r.latency_ms,
             "error": r.error,
             "response": r.response,
-        }, indent=2, default=str))
+        }, indent=2, default=str), encoding="utf-8")
 
+        summary: dict[str, Any] = {
+            "task_id": task_id,
+            "id": id_from_task_id(task_id),
+            "outcome": None,
+            "status_code": r.status_code,
+            "error": r.error,
+            "error_body": None,
+            "finish_reason": None,
+            "served_model": None,
+            "parse_error": None,
+            "response_text_snippet": None,
+            "unknown_model": False,
+            "latency_ms": r.latency_ms,
+        }
         result_row: dict[str, Any] = dict(baseline)
 
         if not r.success:
-            result_row["status"] = "failed"
+            summary["outcome"] = "request_failed"
+            if isinstance(r.response, dict):
+                summary["error_body"] = r.response.get("error_body")
+            if looks_like_unknown_model_error(r.response or {}):
+                summary["unknown_model"] = True
+                tracker["unknown_model"] = True
+            tracker["request_failed"].append(task_id)
+            result_row["status"] = "request_failed"
             result_row["decision"] = "failed"
             result_row["error"] = r.error or "request_failed"
+            result_row["finish_reason"] = None
+            result_row["served_model"] = None
         else:
-            text = extract_response_text(r.response) or ""
-            finish = extract_finish_reason(r.response)
+            response = r.response or {}
+            served = response.get("model") if isinstance(response, dict) else None
+            if served:
+                tracker["served_models"].add(served)
+            summary["served_model"] = served
+            summary["finish_reason"] = extract_finish_reason(response)
+
+            text = extract_response_text(response) or ""
+            if text:
+                summary["response_text_snippet"] = text[:200]
+
             try:
                 arb_result = extract_json_robust(text)
+            except Exception as e:
+                summary["outcome"] = "parse_failed"
+                summary["parse_error"] = str(e)
+                tracker["parse_failed"].append(task_id)
+                result_row["status"] = "parse_failed"
+                result_row["decision"] = "failed"
+                result_row["error"] = f"parse: {e}"
+                result_row["finish_reason"] = summary["finish_reason"]
+                result_row["served_model"] = served
+                result_row["response_text_snippet"] = summary["response_text_snippet"]
+            else:
                 result_row["decision"] = arb_result["decision"]
                 result_row["primary_topic"] = arb_result["primary_topic"]
                 result_row["primary_subtopic"] = arb_result["primary_subtopic"]
@@ -498,17 +621,25 @@ def make_progress_handler(
                 )
                 result_row["reasoning"] = arb_result["reasoning"]
                 result_row["is_dual_modal"] = arb_result.get("is_dual_modal", False)
-                result_row["finish_reason"] = finish
+                result_row["finish_reason"] = summary["finish_reason"]
+                result_row["served_model"] = served
                 result_row["status"] = "arbitrated"
-            except Exception as e:
-                result_row["status"] = "parse_failed"
-                result_row["decision"] = "failed"
-                result_row["error"] = f"parse: {e}"
-                result_row["finish_reason"] = finish
-                result_row["response_text_snippet"] = text[:200]
+                tracker["records_written"] += 1
+                tracker["succeeded"].append(task_id)
+                summary["outcome"] = "success"
 
         with results_lock:
+            tracker["summaries"].append(summary)
             results.append(result_row)
+            _write_checkpoint(
+                checkpoint_path,
+                job_name=job_name,
+                mode=mode,
+                model_requested=model_requested,
+                completed=event.completed,
+                total=event.total,
+                tracker=tracker,
+            )
             if len(results) % checkpoint_every == 0:
                 pd.DataFrame(results).to_csv(
                     arb_csv, index=False, encoding="utf-8",
@@ -543,19 +674,228 @@ def print_split_summary(
 
 
 # =============================================================================
+# RETRY-FAILED SUPPORT
+# =============================================================================
+
+def read_checkpoint(path: Path) -> dict[str, Any]:
+    if not path.exists():
+        die(f"No checkpoint at {path}. Run the initial pass before "
+            f"--retry-failed.")
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def failed_ids_from_checkpoint(ckpt: dict[str, Any]) -> list[int]:
+    failed_task_ids = sorted(set(
+        ckpt.get("request_failed", []) + ckpt.get("parse_failed", [])
+    ))
+    ids = [id_from_task_id(t) for t in failed_task_ids]
+    return [i for i in ids if i is not None]
+
+
+def merge_retry_results_into_csv(
+    arb_csv: Path,
+    new_results: list[dict[str, Any]],
+) -> pd.DataFrame:
+    """Replace any existing rows whose id is in new_results['id']."""
+    new_df = pd.DataFrame(new_results)
+    if not arb_csv.exists():
+        new_df.to_csv(arb_csv, index=False, encoding="utf-8")
+        return new_df
+
+    existing = pd.read_csv(arb_csv)
+    if "id" not in existing.columns:
+        die(f"Existing arbitration CSV has no 'id' column: {arb_csv}")
+
+    retry_ids = set(new_df["id"].astype(int).tolist())
+    keep = existing[~existing["id"].astype(int).isin(retry_ids)]
+    combined = pd.concat([keep, new_df], ignore_index=True)
+    combined = combined.sort_values("id").reset_index(drop=True)
+    combined.to_csv(arb_csv, index=False, encoding="utf-8")
+    return combined
+
+
+def update_checkpoint_after_retry(
+    ckpt: dict[str, Any],
+    tracker: dict[str, Any],
+) -> dict[str, Any]:
+    """Move recovered task_ids out of failed lists into succeeded."""
+    recovered = set(tracker["succeeded"])
+    new_request_failed = sorted(
+        set(ckpt.get("request_failed", [])) - recovered
+    )
+    new_parse_failed = sorted(set(ckpt.get("parse_failed", [])) - recovered)
+    # Anything still failing after retry remains in whichever list this
+    # pass placed it. Union with the still-failing lists we just produced.
+    new_request_failed = sorted(
+        set(new_request_failed) | set(tracker["request_failed"])
+    )
+    new_parse_failed = sorted(
+        set(new_parse_failed) | set(tracker["parse_failed"])
+    )
+    succeeded = sorted(
+        set(ckpt.get("succeeded_task_ids", [])) | recovered
+    )
+    served = sorted(
+        set(ckpt.get("served_models", [])) | tracker["served_models"]
+    )
+
+    new_ckpt = dict(ckpt)
+    new_ckpt["succeeded_task_ids"] = succeeded
+    new_ckpt["request_failed"] = new_request_failed
+    new_ckpt["parse_failed"] = new_parse_failed
+    new_ckpt["served_models"] = served
+    new_ckpt["recovered_via_retry"] = sorted(
+        set(ckpt.get("recovered_via_retry", [])) | recovered
+    )
+    new_ckpt["last_retry_at"] = datetime.now(timezone.utc).isoformat()
+    return new_ckpt
+
+
+# =============================================================================
+# RUN REPORT
+# =============================================================================
+
+def write_run_report(
+    cfg: dict[str, Any],
+    *,
+    out_dir: Path,
+    mode: str,
+    disagreements_total: int,
+    needs_arb_total: int,
+    auto_dual_total: int,
+    tier_counts: dict[str, int],
+    arb_df: pd.DataFrame,
+    auto_df: pd.DataFrame,
+    all_df: pd.DataFrame,
+    tracker: dict[str, Any],
+    model_requested: str,
+    wall_seconds: float,
+) -> tuple[Path, bool]:
+    """Write stage2_run_report.md. Returns (path, overall_pass)."""
+    report_path = out_dir / cfg["output"]["run_report"]
+    L: list[str] = []
+    L.append("# v2 Stage 2 Adjudication — Run Report")
+    L.append("")
+    L.append(f"- **Mode:** {mode}")
+    L.append(f"- **Generated:** {datetime.now(timezone.utc).isoformat()}")
+    L.append(f"- **Config:** `{CONFIG_PATH}`")
+    L.append(f"- **Wall time:** {wall_seconds:.1f} s")
+    L.append("")
+
+    # PASS/FAIL
+    arb_failed = 0
+    if len(arb_df) and "status" in arb_df.columns:
+        arb_failed = int(
+            arb_df["status"].isin(["request_failed", "parse_failed", "failed"]).sum()
+        )
+    resolved_total = len(all_df)
+    coverage_gap = disagreements_total - resolved_total
+    overall_pass = (arb_failed == 0) and (coverage_gap == 0)
+    verdict = "PASS" if overall_pass else "FAIL"
+    L.append(f"## Verdict: **{verdict}**")
+    L.append("")
+    L.append(f"- Disagreements (total): {disagreements_total}")
+    L.append(f"- Resolutions written (arbitrated + auto): {resolved_total}")
+    L.append(f"- Coverage gap (must be 0): {coverage_gap}")
+    L.append(f"- Failed arbitrations (request_failed + parse_failed): "
+             f"{arb_failed}")
+    L.append("")
+
+    # Split
+    L.append("## Split")
+    L.append("")
+    L.append(f"- Needs arbitration "
+             f"(min_conf < {cfg['pipeline']['confidence_threshold']}): "
+             f"{needs_arb_total}")
+    L.append(f"- Auto dual-modal "
+             f"(min_conf >= {cfg['pipeline']['confidence_threshold']}): "
+             f"{auto_dual_total}")
+    L.append("")
+
+    L.append("### Arbitration tier breakdown")
+    L.append("")
+    tier_order = [t[0] for t in CONFIDENCE_TIERS]
+    for tier in tier_order:
+        if tier in tier_counts and tier_counts[tier] > 0:
+            L.append(f"- {tier}: {tier_counts[tier]}")
+    L.append("")
+
+    # Decisions
+    if "decision" in all_df.columns and len(all_df):
+        L.append("## Decision breakdown (all resolutions)")
+        L.append("")
+        for decision, count in all_df["decision"].value_counts().items():
+            pct = count / len(all_df) * 100
+            L.append(f"- `{decision}`: {count} ({pct:.1f}%)")
+        L.append("")
+
+    # Arbitrator served-model confirmation
+    L.append("## Arbitrator routing")
+    L.append("")
+    L.append(f"- Model requested (pool name): `{model_requested}`")
+    if tracker["served_models"]:
+        L.append(f"- Served by: {', '.join(f'`{s}`' for s in sorted(tracker['served_models']))}")
+    else:
+        L.append("- Served by: (no successes recorded — nothing to confirm)")
+    if tracker["unknown_model"]:
+        L.append("- **WARNING:** harness reported unknown-model error for at "
+                 "least one task. Verify pool entry in `v2/usai_harness.yaml`.")
+    L.append("")
+
+    # Failure detail
+    failed_summaries = [s for s in tracker["summaries"]
+                        if s.get("outcome") in ("request_failed", "parse_failed")]
+    if failed_summaries:
+        L.append("## Failed arbitrations (per-task detail)")
+        L.append("")
+        for s in failed_summaries:
+            L.append(f"### `{s['task_id']}`  (id={s.get('id')})")
+            L.append(f"- outcome: `{s['outcome']}`")
+            L.append(f"- status_code: {s.get('status_code')}")
+            L.append(f"- finish_reason: `{s.get('finish_reason')}`")
+            L.append(f"- served_model: `{s.get('served_model')}`")
+            if s.get("error"):
+                L.append(f"- error: `{s['error']}`")
+            if s.get("error_body"):
+                eb = str(s["error_body"])
+                L.append(f"- error_body: `{eb[:300]}{'...' if len(eb) > 300 else ''}`")
+            if s.get("parse_error"):
+                L.append(f"- parse_error: `{s['parse_error']}`")
+            if s.get("response_text_snippet"):
+                L.append(f"- response_text_snippet: `{s['response_text_snippet']}`")
+            L.append("")
+
+    L.append("## Files")
+    L.append("")
+    L.append(f"- Arbitration CSV: `{cfg['output']['arbitration_csv']}`")
+    L.append(f"- Auto dual-modal CSV: `{cfg['output']['auto_dual_modal_csv']}`")
+    L.append(f"- All resolutions CSV: `{cfg['output']['all_resolutions_csv']}`")
+    L.append(f"- Checkpoint: "
+             f"`{cfg['output']['checkpoints_subdir']}/{cfg['output']['checkpoint_filename']}`")
+    L.append(f"- Raw responses: `{cfg['output']['raw_responses_subdir']}/`")
+    L.append("")
+
+    report_path.write_text("\n".join(L), encoding="utf-8")
+    return report_path, overall_pass
+
+
+# =============================================================================
 # MAIN (async, harness-driven)
 # =============================================================================
 
 async def amain(args: argparse.Namespace) -> int:
     cfg = load_config()
 
+    mode = "retry" if args.retry_failed else "initial"
+    if args.dry_run:
+        mode = "dry_run"
+
     print("=" * 70)
     print("v2 STAGE 2 ADJUDICATION")
-    if args.dry_run:
-        print("MODE: dry-run (no harness, no API calls)")
+    print(f"MODE: {mode}")
     print("=" * 70)
 
-    # --- Load inputs (no harness needed for any of this) ---
+    # --- Load inputs ---
     print("\n1. Loading data...")
     taxonomy = load_taxonomy(cfg)
     questions_df = load_questions(cfg)
@@ -583,15 +923,41 @@ async def amain(args: argparse.Namespace) -> int:
 
     # --- Output paths ---
     out_dir = Path(cfg["output"]["output_dir"])
-    raw_subdir = out_dir / cfg["output"].get("raw_responses_subdir", "raw_responses")
+    raw_subdir = out_dir / cfg["output"]["raw_responses_subdir"]
+    ckpt_dir = out_dir / cfg["output"]["checkpoints_subdir"]
     out_dir.mkdir(parents=True, exist_ok=True)
     raw_subdir.mkdir(parents=True, exist_ok=True)
+    ckpt_dir.mkdir(parents=True, exist_ok=True)
 
     arb_csv = out_dir / cfg["output"]["arbitration_csv"]
     auto_csv = out_dir / cfg["output"]["auto_dual_modal_csv"]
     all_csv = out_dir / cfg["output"]["all_resolutions_csv"]
+    ckpt_path = ckpt_dir / cfg["output"]["checkpoint_filename"]
 
-    # --- Import harness lazily so --dry-run works without it installed ---
+    # --- Retry-failed: load checkpoint, narrow needs_arb to failed ids ---
+    prior_ckpt: dict[str, Any] = {}
+    if args.retry_failed:
+        prior_ckpt = read_checkpoint(ckpt_path)
+        failed_ids = failed_ids_from_checkpoint(prior_ckpt)
+        if not failed_ids:
+            print("\nRETRY: no failed task_ids in checkpoint — nothing to do.")
+            # Still rewrite "all" CSV to reflect current state.
+            arb_df = pd.read_csv(arb_csv) if arb_csv.exists() else pd.DataFrame()
+            auto_df = pd.read_csv(auto_csv) if auto_csv.exists() else pd.DataFrame()
+            all_df = pd.concat(
+                [d for d in [arb_df, auto_df] if len(d)],
+                ignore_index=True,
+            )
+            if len(all_df):
+                all_df.to_csv(all_csv, index=False, encoding="utf-8")
+            print("DONE")
+            return 0
+        before = len(needs_arb)
+        needs_arb = needs_arb[needs_arb["id"].astype(int).isin(failed_ids)].copy()
+        print(f"\nRETRY: {len(needs_arb)} of {before} arbitration tasks "
+              f"to re-run (from {len(failed_ids)} failed task_ids in checkpoint).")
+
+    # --- Harness lazy import (so --dry-run never needs it) ---
     try:
         from usai_harness import USAiClient
     except ImportError as e:
@@ -601,8 +967,10 @@ async def amain(args: argparse.Namespace) -> int:
     h = cfg["harness"]
     arb_cfg = cfg["arbitrator"]
     arb_model = arb_cfg["model"]
+    job_name = cfg["job"]["name"] + ("_retry" if args.retry_failed else "")
 
     print(f"\n3. Connecting to harness ({h['project']})...")
+    t0 = time.monotonic()
     async with USAiClient(
         project=h["project"],
         config_path=Path(h["config_path"]),
@@ -612,84 +980,130 @@ async def amain(args: argparse.Namespace) -> int:
         if not client.config.has_model(arb_model):
             die(f"Arbitrator model {arb_model!r} not in "
                 f"v2/usai_harness.yaml pool. "
-                f"Pool: {[m.name for m in client.config.models]}. "
-                f"Fix v2/config/stage2.yaml or v2/usai_harness.yaml — "
-                f"do not hardcode in script.")
+                f"Pool: {[m.name for m in client.config.models]}.")
         print(f"  arbitrator model {arb_model!r} resolved in pool")
 
-        # Build per-disagreement tasks + baseline rows.
         tasks, baselines = build_api_tasks(needs_arb, taxonomy, cfg)
         print(f"  built {len(tasks)} arbitration tasks "
               f"(max_tokens={arb_cfg['max_tokens']}, "
               f"temperature={arb_cfg['temperature']})")
 
-        # Submit as a single batch. The harness handles concurrency,
-        # rate-limiting, and retries; the progress callback persists
-        # each completion as it lands.
         results: list[dict[str, Any]] = []
         results_lock = threading.Lock()
+        tracker = _empty_tracker()
         checkpoint_every = int(cfg["pipeline"]["batch_checkpoint_interval"])
+
         handler = make_progress_handler(
             baselines=baselines,
             results=results,
             results_lock=results_lock,
+            tracker=tracker,
             arb_csv=arb_csv,
             raw_subdir=raw_subdir,
+            checkpoint_path=ckpt_path,
+            job_name=job_name,
+            mode=mode,
+            model_requested=arb_model,
             checkpoint_every=checkpoint_every,
         )
 
-        job_name = "stage2_adjudicate"
         if tasks:
-            print(f"\n4. Submitting batch '{job_name}' to harness...")
+            print(f"\n4. Submitting batch '{job_name}' to harness "
+                  f"({len(tasks)} tasks)...")
             await client.batch(tasks, job_name=job_name, progress=handler)
             print(f"   batch complete; {len(results)} arbitration results")
         else:
-            print("\n4. No disagreements need arbitration -- skipping batch.")
+            print("\n4. No tasks to submit.")
+    wall_s = time.monotonic() - t0
 
-    # --- Persist final CSVs ---
-    arb_df = pd.DataFrame(results)
-    if len(arb_df):
-        arb_df.to_csv(arb_csv, index=False, encoding="utf-8")
-        print(f"   wrote {arb_csv}")
+    # --- Persist arbitration CSV (initial or retry-merged) ---
+    if args.retry_failed and results:
+        arb_df = merge_retry_results_into_csv(arb_csv, results)
+        print(f"   merged retry results into {arb_csv} "
+              f"({len(arb_df)} total rows)")
+    else:
+        arb_df = pd.DataFrame(results)
+        if len(arb_df):
+            arb_df.to_csv(arb_csv, index=False, encoding="utf-8")
+            print(f"   wrote {arb_csv}")
+        elif arb_csv.exists():
+            arb_df = pd.read_csv(arb_csv)
 
+    # --- Auto dual-modal (always written from disagreement state) ---
     print(f"\n5. Auto-classifying {len(auto_dual)} dual-modal cases...")
     auto_rows = build_auto_dual_modal_rows(auto_dual)
     auto_df = pd.DataFrame(auto_rows)
     auto_df.to_csv(auto_csv, index=False, encoding="utf-8")
     print(f"   wrote {auto_csv}")
 
-    all_df = pd.concat([arb_df, auto_df], ignore_index=True)
+    # --- Combined ---
+    all_df = pd.concat(
+        [d for d in [arb_df, auto_df] if len(d)],
+        ignore_index=True,
+    )
     all_df.to_csv(all_csv, index=False, encoding="utf-8")
     print(f"   wrote {all_csv}")
 
-    # --- Summary ---
+    # --- Update checkpoint for retry mode ---
+    if args.retry_failed:
+        new_ckpt = update_checkpoint_after_retry(prior_ckpt, tracker)
+        # records_written reflects on-disk arbitration row count
+        new_ckpt["records_written"] = len(arb_df)
+        ckpt_path.write_text(json.dumps(new_ckpt, indent=2), encoding="utf-8")
+        print(f"   updated checkpoint {ckpt_path}")
+    else:
+        # Final initial-pass checkpoint write (handler already wrote live;
+        # this final flush carries total=tasks_count and records_written
+        # for downstream consumers).
+        _write_checkpoint(
+            ckpt_path,
+            job_name=job_name,
+            mode=mode,
+            model_requested=arb_model,
+            completed=len(results),
+            total=len(needs_arb),
+            tracker=tracker,
+        )
+
+    # --- Run report + PASS/FAIL ---
+    tier_counts = {
+        t: int((needs_arb["confidence_tier"] == t).sum())
+        for t in [name for name, _, _ in CONFIDENCE_TIERS]
+    }
+    report_path, overall_pass = write_run_report(
+        cfg,
+        out_dir=out_dir,
+        mode=mode,
+        disagreements_total=len(disagreements),
+        needs_arb_total=len(needs_arb) if not args.retry_failed
+        else int(prior_ckpt.get("total", len(needs_arb))),
+        auto_dual_total=len(auto_dual),
+        tier_counts=tier_counts,
+        arb_df=arb_df,
+        auto_df=auto_df,
+        all_df=all_df,
+        tracker=tracker,
+        model_requested=arb_model,
+        wall_seconds=wall_s,
+    )
+    print(f"\n   wrote {report_path}")
+
+    # --- Console summary ---
     print("\n" + "=" * 70)
     print("SUMMARY")
     print("=" * 70)
-    print(f"\nTotal resolutions: {len(all_df):,}")
-    if "decision" in all_df.columns:
-        print("\nDecision breakdown:")
-        for decision, count in all_df["decision"].value_counts().items():
-            pct = count / len(all_df) * 100
-            print(f"  {decision}: {count} ({pct:.1f}%)")
-    if "is_dual_modal" in all_df.columns and len(all_df):
-        dual_total = int(all_df["is_dual_modal"].fillna(False).astype(bool).sum())
-        print(f"\nDual-modal total: {dual_total} "
-              f"({dual_total / len(all_df) * 100:.1f}%)")
-        if len(arb_df):
-            arb_dual = int(
-                arb_df["is_dual_modal"].fillna(False).astype(bool).sum()
-            )
-            print(f"  arbitrated dual_modal: {arb_dual}")
-        print(f"  auto dual_modal:       {len(auto_df)}")
+    print(f"Disagreements (total):    {len(disagreements):,}")
+    print(f"Resolutions written:      {len(all_df):,}")
+    print(f"Coverage gap (must be 0): {len(disagreements) - len(all_df)}")
     if len(arb_df) and "status" in arb_df.columns:
-        failed = arb_df[arb_df["status"].isin(["failed", "parse_failed"])]
-        print(f"\nFailed arbitrations: {len(failed)}")
-
-    print("\n" + "=" * 70)
-    print("DONE")
+        failed = int(
+            arb_df["status"].isin(["request_failed", "parse_failed", "failed"]).sum()
+        )
+        print(f"Failed arbitrations:      {failed}")
+    print(f"Verdict: {'PASS' if overall_pass else 'FAIL'}")
     print("=" * 70)
-    return 0
+
+    return 0 if overall_pass else 2
 
 
 def main() -> int:
@@ -701,7 +1115,15 @@ def main() -> int:
         action="store_true",
         help="Load + merge + split only. No harness, no API calls.",
     )
+    parser.add_argument(
+        "--retry-failed",
+        action="store_true",
+        help="Read checkpoint; re-run only tasks in request_failed ∪ "
+             "parse_failed.",
+    )
     args = parser.parse_args()
+    if args.dry_run and args.retry_failed:
+        die("--dry-run and --retry-failed are mutually exclusive.")
     return asyncio.run(amain(args))
 
 

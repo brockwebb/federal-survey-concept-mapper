@@ -79,7 +79,15 @@ output:
   auto_dual_modal_csv: 'auto_dual_modal_results.csv'
   all_resolutions_csv: 'all_disagreement_resolutions.csv'
   raw_responses_subdir: 'raw_responses'
+  checkpoints_subdir: 'checkpoints'
+  checkpoint_filename: 'stage2_arbitration.json'
   run_report: 'stage2_run_report.md'
+
+# -----------------------------------------------------------------------------
+# JOB NAMING (used for harness ledger and progress display)
+# -----------------------------------------------------------------------------
+job:
+  name: 'stage2_adjudicate'
 
 # -----------------------------------------------------------------------------
 # HARNESS WIRING
