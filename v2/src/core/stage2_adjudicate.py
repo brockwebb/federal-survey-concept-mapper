@@ -2,9 +2,10 @@
 """v2 Stage 2: Adjudicate Stage 1 classification disagreements.
 
 Confirmation run. Mirrors v1's arbitration artifact
-(src/core/arbitrate_final.py) byte-for-byte in logic; only the model identity
-of the raters changed (claude-haiku-4-5 / gpt-5-mini -> claude_4_5_sonnet /
-gemini-2.5-flash) and the field labels are blinded (rater_a / rater_b).
+(src/core/arbitrate_final.py) in logic; the model identity is blinded
+(rater_a / rater_b) and all LLM traffic now goes through the USAi harness
+-- the same auth path Stage 1 uses. No direct vendor SDK calls, no
+dotenv, no env-var credential loading.
 
 Strategy:
   * Merge the two per-rater JSONL files from Stage 1 on `id`.
@@ -12,8 +13,10 @@ Strategy:
     differs between rater_a and rater_b.
   * For each disagreement, compute min(confidence_a, confidence_b).
   * Auto-mark min_confidence >= confidence_threshold as dual_modal.
-  * Send the rest to the LLM arbitrator with options:
-      pick_rater_a / pick_rater_b / dual_modal / new_concept.
+  * Submit the rest as a single `client.batch(...)` job (the harness owns
+    concurrency, rate-limiting, retries). Each task is the arbitration
+    prompt for one disagreement. The arbitrator picks pick_rater_a /
+    pick_rater_b / dual_modal / new_concept.
   * Output CSV schema mirrors v1 so v1 and v2 outputs can be diffed.
 
 Run from v2/ directory:
@@ -21,33 +24,28 @@ Run from v2/ directory:
     python src/core/stage2_adjudicate.py --dry-run  # load + split only
 
 Dry-run mode prints the merge counts, disagreement counts, and tier
-breakdown and exits WITHOUT calling the arbitrator API. Use it to verify
-data loading before committing to a full arbitration pass.
+breakdown and exits WITHOUT instantiating the harness client or calling
+any API. Use it to verify data loading before committing to a full run.
 
 What this script does NOT do:
   * Hardcode any model name, threshold, or path -- all in config/stage2.yaml.
   * Touch v1 artifacts. v1 is frozen.
-  * Implement its own retry inside the API call beyond exponential backoff;
-    higher-level retries belong to the operator (re-run on the residuals).
+  * Call vendor SDKs directly. The harness owns auth, retries, concurrency.
+  * Tolerate an arbitrator model that isn't in the harness pool -- it halts
+    at startup via client.config.has_model().
 """
 from __future__ import annotations
 
 import argparse
+import asyncio
 import json
-import os
 import sys
 import threading
-import time
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Any
 
 import pandas as pd
 import yaml
-from dotenv import load_dotenv
-from tqdm import tqdm
-
-load_dotenv()
 
 
 # =============================================================================
@@ -69,7 +67,8 @@ def load_config() -> dict[str, Any]:
     with open(CONFIG_PATH) as f:
         cfg = yaml.safe_load(f)
 
-    required_top = {"arbitrator", "pipeline", "data", "stage1", "output"}
+    required_top = {"arbitrator", "pipeline", "data", "stage1", "output",
+                    "harness"}
     missing = required_top - set(cfg.keys())
     if missing:
         die(f"Config missing required top-level keys: {missing}")
@@ -155,18 +154,15 @@ def build_disagreements(
     questions_df: pd.DataFrame,
 ) -> pd.DataFrame:
     """Merge raters on `id`, attach question text, return disagreements only."""
-    rater_a_cols = ["id", "primary_topic", "primary_subtopic", "confidence"]
-    rater_b_cols = ["id", "primary_topic", "primary_subtopic", "confidence"]
-
-    for col in rater_a_cols:
+    cols = ["id", "primary_topic", "primary_subtopic", "confidence"]
+    for col in cols:
         if col not in rater_a_df.columns:
             die(f"rater_a JSONL missing column {col!r}")
-    for col in rater_b_cols:
         if col not in rater_b_df.columns:
             die(f"rater_b JSONL missing column {col!r}")
 
-    merged = rater_a_df[rater_a_cols].merge(
-        rater_b_df[rater_b_cols],
+    merged = rater_a_df[cols].merge(
+        rater_b_df[cols],
         on="id",
         suffixes=("_a", "_b"),
         how="inner",
@@ -195,8 +191,29 @@ def build_disagreements(
 
 
 # =============================================================================
-# JSON EXTRACTION (lifted verbatim from v1 arbitrate_final.py)
+# HARNESS-RESPONSE EXTRACTORS (mirrors stage1_classify helpers)
 # =============================================================================
+
+def extract_response_text(harness_response: Any) -> str | None:
+    if not isinstance(harness_response, dict):
+        return None
+    choices = harness_response.get("choices")
+    if not isinstance(choices, list) or not choices:
+        return None
+    message = choices[0].get("message")
+    if not isinstance(message, dict):
+        return None
+    return message.get("content")
+
+
+def extract_finish_reason(harness_response: Any) -> str | None:
+    if not isinstance(harness_response, dict):
+        return None
+    choices = harness_response.get("choices")
+    if not isinstance(choices, list) or not choices:
+        return None
+    return choices[0].get("finish_reason")
+
 
 def extract_json_robust(content: str) -> dict:
     """Robustly extract JSON from LLM response."""
@@ -228,8 +245,7 @@ def extract_json_robust(content: str) -> dict:
             elif char == "}":
                 brace_count -= 1
                 if brace_count == 0:
-                    json_str = content[start:i + 1]
-                    return json.loads(json_str)
+                    return json.loads(content[start:i + 1])
 
         raise ValueError("No complete JSON object found")
     except (ValueError, json.JSONDecodeError) as e:
@@ -244,7 +260,6 @@ def create_arbitration_prompt(
     row: pd.Series,
     taxonomy: dict[str, list[str]],
 ) -> str:
-    """Arbitration prompt. Raters are blinded -- model identity withheld."""
     return f"""You are arbitrating between two AI categorizations using the official Census Bureau taxonomy.
 
 IMPORTANT RULES:
@@ -317,106 +332,12 @@ CRITICAL:
 
 
 # =============================================================================
-# ARBITRATOR API CALL
-# =============================================================================
-
-def call_arbitrator(prompt: str, cfg: dict[str, Any]) -> dict[str, Any]:
-    """Call the configured arbitrator model with retry/backoff."""
-    arb = cfg["arbitrator"]
-    provider = arb["provider"].lower()
-    api_key = os.getenv(arb["api_key_env"])
-    if not api_key:
-        die(f"Environment variable {arb['api_key_env']} is not set. "
-            f"Cannot reach arbitrator.")
-
-    max_retries = cfg["pipeline"]["max_retries"]
-
-    if provider != "anthropic":
-        die(f"Unsupported arbitrator provider: {provider!r}. "
-            f"Currently only 'anthropic' is wired.")
-
-    import anthropic
-    client = anthropic.Anthropic(api_key=api_key)
-
-    last_err: Exception | None = None
-    for attempt in range(max_retries):
-        try:
-            response = client.messages.create(
-                model=arb["model"],
-                max_tokens=arb["max_tokens"],
-                temperature=arb["temperature"],
-                messages=[{"role": "user", "content": prompt}],
-            )
-            content = response.content[0].text
-            return extract_json_robust(content)
-        except Exception as e:
-            last_err = e
-            if attempt < max_retries - 1:
-                time.sleep(2 ** attempt)
-    raise RuntimeError(f"Arbitrator failed after {max_retries} attempts: "
-                       f"{last_err}")
-
-
-# =============================================================================
-# PER-QUESTION ARBITRATION
-# =============================================================================
-
-def arbitrate_question(
-    row: pd.Series,
-    taxonomy: dict[str, list[str]],
-    cfg: dict[str, Any],
-) -> dict[str, Any]:
-    """Arbitrate a single disagreement row."""
-    result: dict[str, Any] = {
-        "id": int(row["id"]),
-        "question": row["question"],
-        "primary_survey": row["primary_survey"],
-        "original_rater_a": f"{row['primary_topic_a']}.{row['primary_subtopic_a']}",
-        "original_rater_b": f"{row['primary_topic_b']}.{row['primary_subtopic_b']}",
-        "original_rater_a_confidence": float(row["confidence_a"]),
-        "original_rater_b_confidence": float(row["confidence_b"]),
-        "min_confidence": float(row["min_confidence"]),
-        "confidence_tier": row["confidence_tier"],
-    }
-
-    try:
-        prompt = create_arbitration_prompt(row, taxonomy)
-        arb_result = call_arbitrator(prompt, cfg)
-
-        result["decision"] = arb_result["decision"]
-        result["primary_topic"] = arb_result["primary_topic"]
-        result["primary_subtopic"] = arb_result["primary_subtopic"]
-        result["primary_confidence"] = arb_result["primary_confidence"]
-        result["secondary_primary_topic"] = arb_result.get("secondary_primary_topic")
-        result["secondary_primary_subtopic"] = arb_result.get("secondary_primary_subtopic")
-        result["secondary_primary_confidence"] = arb_result.get(
-            "secondary_primary_confidence"
-        )
-        result["all_relevant_subtopics"] = json.dumps(
-            arb_result.get("all_relevant_subtopics", [])
-        )
-        result["reasoning"] = arb_result["reasoning"]
-        result["is_dual_modal"] = arb_result.get("is_dual_modal", False)
-        result["status"] = "arbitrated"
-    except Exception as e:
-        result["status"] = "failed"
-        result["error"] = str(e)
-        result["decision"] = "failed"
-
-    return result
-
-
-# =============================================================================
-# AUTO DUAL-MODAL (high-confidence disagreements)
+# AUTO DUAL-MODAL (high-confidence disagreements -- no API call needed)
 # =============================================================================
 
 def build_auto_dual_modal_rows(
     auto_df: pd.DataFrame,
 ) -> list[dict[str, Any]]:
-    """Auto-classify high-confidence disagreements as dual_modal.
-
-    The higher-confidence rater wins primary; the other becomes secondary.
-    """
     rows: list[dict[str, Any]] = []
     for _, row in auto_df.iterrows():
         if row["confidence_a"] >= row["confidence_b"]:
@@ -467,7 +388,137 @@ def build_auto_dual_modal_rows(
 
 
 # =============================================================================
-# MAIN
+# HARNESS BATCH PLUMBING
+# =============================================================================
+
+def _arb_baseline(row: pd.Series) -> dict[str, Any]:
+    """Bookkeeping fields kept regardless of arbitration outcome."""
+    return {
+        "id": int(row["id"]),
+        "question": row["question"],
+        "primary_survey": row["primary_survey"],
+        "original_rater_a": f"{row['primary_topic_a']}.{row['primary_subtopic_a']}",
+        "original_rater_b": f"{row['primary_topic_b']}.{row['primary_subtopic_b']}",
+        "original_rater_a_confidence": float(row["confidence_a"]),
+        "original_rater_b_confidence": float(row["confidence_b"]),
+        "min_confidence": float(row["min_confidence"]),
+        "confidence_tier": row["confidence_tier"],
+    }
+
+
+def build_api_tasks(
+    needs_arb: pd.DataFrame,
+    taxonomy: dict[str, list[str]],
+    cfg: dict[str, Any],
+) -> tuple[list[dict[str, Any]], dict[str, dict[str, Any]]]:
+    """Build harness task dicts + a side table mapping task_id -> baseline.
+
+    The baseline is everything we already know about the row before the
+    arbitrator answers (id, question, original picks, tier, ...). The
+    progress callback merges arbitration output on top.
+    """
+    arb = cfg["arbitrator"]
+    tasks: list[dict[str, Any]] = []
+    baselines: dict[str, dict[str, Any]] = {}
+
+    for _, row in needs_arb.iterrows():
+        task_id = f"stage2_arb_{int(row['id']):06d}"
+        prompt = create_arbitration_prompt(row, taxonomy)
+        tasks.append({
+            "task_id": task_id,
+            "model": arb["model"],
+            "temperature": arb["temperature"],
+            "max_tokens": arb["max_tokens"],
+            "messages": [{"role": "user", "content": prompt}],
+        })
+        baselines[task_id] = _arb_baseline(row)
+
+    return tasks, baselines
+
+
+def make_progress_handler(
+    baselines: dict[str, dict[str, Any]],
+    results: list[dict[str, Any]],
+    results_lock: threading.Lock,
+    arb_csv: Path,
+    raw_subdir: Path,
+    checkpoint_every: int,
+):
+    """Build the per-task progress callback for client.batch(progress=...).
+
+    Each completed task fires this with a ProgressEvent whose .result is a
+    BatchResult (task_id, success, status_code, latency_ms, error, response).
+    The callback parses the arbitrator's JSON, merges it on top of the
+    baseline, appends the row to `results`, and periodically writes the
+    CSV checkpoint.
+    """
+    raw_subdir.mkdir(parents=True, exist_ok=True)
+
+    def handler(event) -> None:
+        r = event.result
+        task_id = r.task_id
+        baseline = baselines.get(task_id, {})
+
+        raw_path = raw_subdir / f"{task_id}.json"
+        raw_path.write_text(json.dumps({
+            "task_id": task_id,
+            "success": r.success,
+            "status_code": r.status_code,
+            "latency_ms": r.latency_ms,
+            "error": r.error,
+            "response": r.response,
+        }, indent=2, default=str))
+
+        result_row: dict[str, Any] = dict(baseline)
+
+        if not r.success:
+            result_row["status"] = "failed"
+            result_row["decision"] = "failed"
+            result_row["error"] = r.error or "request_failed"
+        else:
+            text = extract_response_text(r.response) or ""
+            finish = extract_finish_reason(r.response)
+            try:
+                arb_result = extract_json_robust(text)
+                result_row["decision"] = arb_result["decision"]
+                result_row["primary_topic"] = arb_result["primary_topic"]
+                result_row["primary_subtopic"] = arb_result["primary_subtopic"]
+                result_row["primary_confidence"] = arb_result["primary_confidence"]
+                result_row["secondary_primary_topic"] = arb_result.get(
+                    "secondary_primary_topic"
+                )
+                result_row["secondary_primary_subtopic"] = arb_result.get(
+                    "secondary_primary_subtopic"
+                )
+                result_row["secondary_primary_confidence"] = arb_result.get(
+                    "secondary_primary_confidence"
+                )
+                result_row["all_relevant_subtopics"] = json.dumps(
+                    arb_result.get("all_relevant_subtopics", [])
+                )
+                result_row["reasoning"] = arb_result["reasoning"]
+                result_row["is_dual_modal"] = arb_result.get("is_dual_modal", False)
+                result_row["finish_reason"] = finish
+                result_row["status"] = "arbitrated"
+            except Exception as e:
+                result_row["status"] = "parse_failed"
+                result_row["decision"] = "failed"
+                result_row["error"] = f"parse: {e}"
+                result_row["finish_reason"] = finish
+                result_row["response_text_snippet"] = text[:200]
+
+        with results_lock:
+            results.append(result_row)
+            if len(results) % checkpoint_every == 0:
+                pd.DataFrame(results).to_csv(
+                    arb_csv, index=False, encoding="utf-8",
+                )
+
+    return handler
+
+
+# =============================================================================
+# DRY-RUN / SUMMARY HELPERS
 # =============================================================================
 
 def print_split_summary(
@@ -491,41 +542,31 @@ def print_split_summary(
             print(f"     {tier}: {count}")
 
 
-def main() -> int:
-    parser = argparse.ArgumentParser(
-        description="v2 Stage 2 adjudication: resolve Stage 1 disagreements",
-    )
-    parser.add_argument(
-        "--dry-run",
-        action="store_true",
-        help="Load + merge + split only. No arbitrator API calls.",
-    )
-    args = parser.parse_args()
+# =============================================================================
+# MAIN (async, harness-driven)
+# =============================================================================
 
+async def amain(args: argparse.Namespace) -> int:
     cfg = load_config()
 
     print("=" * 70)
     print("v2 STAGE 2 ADJUDICATION")
     if args.dry_run:
-        print("MODE: dry-run (no API calls)")
+        print("MODE: dry-run (no harness, no API calls)")
     print("=" * 70)
 
-    # --- Load inputs ---
+    # --- Load inputs (no harness needed for any of this) ---
     print("\n1. Loading data...")
     taxonomy = load_taxonomy(cfg)
     questions_df = load_questions(cfg)
     print(f"  taxonomy: {len(taxonomy)} top-level topics")
     print(f"  questions: {len(questions_df)} rows from source CSV")
 
-    rater_a_path = Path(cfg["stage1"]["rater_a_results"])
-    rater_b_path = Path(cfg["stage1"]["rater_b_results"])
-    rater_a_df = load_jsonl(rater_a_path, "rater_a")
-    rater_b_df = load_jsonl(rater_b_path, "rater_b")
+    rater_a_df = load_jsonl(Path(cfg["stage1"]["rater_a_results"]), "rater_a")
+    rater_b_df = load_jsonl(Path(cfg["stage1"]["rater_b_results"]), "rater_b")
 
-    # --- Merge and identify disagreements ---
     print("\n2. Merging raters and identifying disagreements...")
     disagreements = build_disagreements(rater_a_df, rater_b_df, questions_df)
-
     threshold = float(cfg["pipeline"]["confidence_threshold"])
     needs_arb = disagreements[
         disagreements["min_confidence"] < threshold
@@ -537,58 +578,86 @@ def main() -> int:
     print_split_summary(disagreements, needs_arb, auto_dual, threshold)
 
     if args.dry_run:
-        print("\nDRY RUN complete. Exiting before API calls.")
+        print("\nDRY RUN complete. Exiting before harness/API.")
         return 0
 
-    # --- Output dir ---
+    # --- Output paths ---
     out_dir = Path(cfg["output"]["output_dir"])
+    raw_subdir = out_dir / cfg["output"].get("raw_responses_subdir", "raw_responses")
     out_dir.mkdir(parents=True, exist_ok=True)
+    raw_subdir.mkdir(parents=True, exist_ok=True)
 
     arb_csv = out_dir / cfg["output"]["arbitration_csv"]
     auto_csv = out_dir / cfg["output"]["auto_dual_modal_csv"]
     all_csv = out_dir / cfg["output"]["all_resolutions_csv"]
 
-    # --- Arbitrate ---
-    print(f"\n3. Arbitrating {len(needs_arb)} questions "
-          f"(model={cfg['arbitrator']['model']}, "
-          f"workers={cfg['pipeline']['max_workers']})...")
+    # --- Import harness lazily so --dry-run works without it installed ---
+    try:
+        from usai_harness import USAiClient
+    except ImportError as e:
+        die(f"usai_harness not installed: {e}. "
+            f"Stage 2 requires the same harness Stage 1 uses.")
 
-    results: list[dict[str, Any]] = []
-    results_lock = threading.Lock()
-    checkpoint_every = int(cfg["pipeline"]["batch_checkpoint_interval"])
-    rate_delay = float(cfg["pipeline"]["rate_limit_delay"])
-    max_workers = int(cfg["pipeline"]["max_workers"])
+    h = cfg["harness"]
+    arb_cfg = cfg["arbitrator"]
+    arb_model = arb_cfg["model"]
 
-    with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        future_to_id = {
-            executor.submit(arbitrate_question, row, taxonomy, cfg): int(row["id"])
-            for _, row in needs_arb.iterrows()
-        }
+    print(f"\n3. Connecting to harness ({h['project']})...")
+    async with USAiClient(
+        project=h["project"],
+        config_path=Path(h["config_path"]),
+        ledger_path=Path(h["ledger_path"]),
+        log_dir=Path(h["log_dir"]),
+    ) as client:
+        if not client.config.has_model(arb_model):
+            die(f"Arbitrator model {arb_model!r} not in "
+                f"v2/usai_harness.yaml pool. "
+                f"Pool: {[m.name for m in client.config.models]}. "
+                f"Fix v2/config/stage2.yaml or v2/usai_harness.yaml — "
+                f"do not hardcode in script.")
+        print(f"  arbitrator model {arb_model!r} resolved in pool")
 
-        with tqdm(total=len(needs_arb), desc="  Arbitrating") as pbar:
-            for future in as_completed(future_to_id):
-                result = future.result()
-                with results_lock:
-                    results.append(result)
-                    if len(results) % checkpoint_every == 0:
-                        pd.DataFrame(results).to_csv(
-                            arb_csv, index=False, encoding="utf-8",
-                        )
-                pbar.update(1)
-                time.sleep(rate_delay)
+        # Build per-disagreement tasks + baseline rows.
+        tasks, baselines = build_api_tasks(needs_arb, taxonomy, cfg)
+        print(f"  built {len(tasks)} arbitration tasks "
+              f"(max_tokens={arb_cfg['max_tokens']}, "
+              f"temperature={arb_cfg['temperature']})")
 
+        # Submit as a single batch. The harness handles concurrency,
+        # rate-limiting, and retries; the progress callback persists
+        # each completion as it lands.
+        results: list[dict[str, Any]] = []
+        results_lock = threading.Lock()
+        checkpoint_every = int(cfg["pipeline"]["batch_checkpoint_interval"])
+        handler = make_progress_handler(
+            baselines=baselines,
+            results=results,
+            results_lock=results_lock,
+            arb_csv=arb_csv,
+            raw_subdir=raw_subdir,
+            checkpoint_every=checkpoint_every,
+        )
+
+        job_name = "stage2_adjudicate"
+        if tasks:
+            print(f"\n4. Submitting batch '{job_name}' to harness...")
+            await client.batch(tasks, job_name=job_name, progress=handler)
+            print(f"   batch complete; {len(results)} arbitration results")
+        else:
+            print("\n4. No disagreements need arbitration -- skipping batch.")
+
+    # --- Persist final CSVs ---
     arb_df = pd.DataFrame(results)
-    arb_df.to_csv(arb_csv, index=False, encoding="utf-8")
-    print(f"   wrote {arb_csv}")
+    if len(arb_df):
+        arb_df.to_csv(arb_csv, index=False, encoding="utf-8")
+        print(f"   wrote {arb_csv}")
 
-    # --- Auto dual-modal ---
-    print(f"\n4. Auto-classifying {len(auto_dual)} dual-modal cases...")
+    print(f"\n5. Auto-classifying {len(auto_dual)} dual-modal cases...")
     auto_rows = build_auto_dual_modal_rows(auto_dual)
     auto_df = pd.DataFrame(auto_rows)
     auto_df.to_csv(auto_csv, index=False, encoding="utf-8")
     print(f"   wrote {auto_csv}")
 
-    # --- Combined ---
     all_df = pd.concat([arb_df, auto_df], ignore_index=True)
     all_df.to_csv(all_csv, index=False, encoding="utf-8")
     print(f"   wrote {all_csv}")
@@ -598,28 +667,42 @@ def main() -> int:
     print("SUMMARY")
     print("=" * 70)
     print(f"\nTotal resolutions: {len(all_df):,}")
-
     if "decision" in all_df.columns:
         print("\nDecision breakdown:")
         for decision, count in all_df["decision"].value_counts().items():
             pct = count / len(all_df) * 100
             print(f"  {decision}: {count} ({pct:.1f}%)")
-
-    if "is_dual_modal" in all_df.columns:
-        dual_total = int(all_df["is_dual_modal"].sum())
+    if "is_dual_modal" in all_df.columns and len(all_df):
+        dual_total = int(all_df["is_dual_modal"].fillna(False).astype(bool).sum())
         print(f"\nDual-modal total: {dual_total} "
               f"({dual_total / len(all_df) * 100:.1f}%)")
-        print(f"  arbitrated dual_modal: {int(arb_df['is_dual_modal'].sum())}")
+        if len(arb_df):
+            arb_dual = int(
+                arb_df["is_dual_modal"].fillna(False).astype(bool).sum()
+            )
+            print(f"  arbitrated dual_modal: {arb_dual}")
         print(f"  auto dual_modal:       {len(auto_df)}")
-
-    if "status" in arb_df.columns:
-        failed = arb_df[arb_df["status"] == "failed"]
+    if len(arb_df) and "status" in arb_df.columns:
+        failed = arb_df[arb_df["status"].isin(["failed", "parse_failed"])]
         print(f"\nFailed arbitrations: {len(failed)}")
 
     print("\n" + "=" * 70)
     print("DONE")
     print("=" * 70)
     return 0
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(
+        description="v2 Stage 2 adjudication: resolve Stage 1 disagreements",
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Load + merge + split only. No harness, no API calls.",
+    )
+    args = parser.parse_args()
+    return asyncio.run(amain(args))
 
 
 if __name__ == "__main__":

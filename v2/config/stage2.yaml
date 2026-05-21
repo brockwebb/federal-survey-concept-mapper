@@ -20,14 +20,14 @@ purpose: 'v2 Stage 2 adjudication - resolve classification disagreements'
 # -----------------------------------------------------------------------------
 # ARBITRATOR MODEL
 # -----------------------------------------------------------------------------
-# Direct vendor API call (Anthropic), not USAi harness. The harness is for
-# batch classification across thousands of items; arbitration is a single
-# call per disagreement, parallelism handled by ThreadPoolExecutor.
+# Routed through the USAi harness (same auth path as Stage 1 raters). The
+# model name MUST be a pool entry in v2/usai_harness.yaml — if it isn't,
+# the script halts at startup via client.config.has_model() before any
+# API calls. Auth/credentials live in the harness; nothing in this block
+# or in the script reads vendor env vars directly.
 # -----------------------------------------------------------------------------
 arbitrator:
   model: 'claude-opus-4-5-20250415'
-  provider: 'anthropic'
-  api_key_env: 'ANTHROPIC_API_KEY'
   temperature: 0
   max_tokens: 64000
 
@@ -78,4 +78,18 @@ output:
   arbitration_csv: 'arbitration_results.csv'
   auto_dual_modal_csv: 'auto_dual_modal_results.csv'
   all_resolutions_csv: 'all_disagreement_resolutions.csv'
+  raw_responses_subdir: 'raw_responses'
   run_report: 'stage2_run_report.md'
+
+# -----------------------------------------------------------------------------
+# HARNESS WIRING
+# -----------------------------------------------------------------------------
+# Mirrors stage1.yaml's harness block. Paths relative to v2/.
+# usai_harness.yaml is the pool config (NOT this file). Auth and rate-limit
+# behavior live there.
+# -----------------------------------------------------------------------------
+harness:
+  project: 'concept_mapper_v2_stage2'
+  config_path: 'usai_harness.yaml'
+  ledger_path: 'cost_ledger.jsonl'
+  log_dir: 'logs'
