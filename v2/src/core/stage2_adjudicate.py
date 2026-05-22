@@ -645,6 +645,24 @@ def make_progress_handler(
                     arb_csv, index=False, encoding="utf-8",
                 )
 
+            # Stdout progress line. The harness's built-in text_progress
+            # formatter is replaced when we pass progress=handler, so the
+            # terminal goes silent during an hours-long run unless this
+            # callback prints something itself.
+            succeeded_n = len(tracker["succeeded"])
+            failed_n = (len(tracker["request_failed"])
+                        + len(tracker["parse_failed"]))
+            pct = (event.completed / event.total * 100.0) if event.total else 0.0
+            ts = datetime.now().strftime("%H:%M:%S")
+            status_tag = (summary["outcome"]
+                          if summary["outcome"] != "success" else "OK")
+            print(
+                f"[{ts}] {event.completed}/{event.total} ({pct:.1f}%)  "
+                f"succeeded={succeeded_n} failed={failed_n}  "
+                f"[{task_id} -> {status_tag}]",
+                flush=True,
+            )
+
     return handler
 
 
