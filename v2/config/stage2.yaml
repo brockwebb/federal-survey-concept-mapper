@@ -102,6 +102,63 @@ finalize:
   expected_row_count: 6987
 
 # -----------------------------------------------------------------------------
+# STAGE 1 COMPARISON OUTPUT (consumed by the dashboard, produced by
+# stage1_compare.py). Path is relative to v2/.
+# -----------------------------------------------------------------------------
+stage1_comparison:
+  summary_json: 'output/stage1/comparison/comparison_summary.json'
+
+# -----------------------------------------------------------------------------
+# PHASE 3 HARMONIZATION SUBSET
+# -----------------------------------------------------------------------------
+# The list of source surveys carried into Phase 3 pairwise harmonization.
+# The dashboard filters master datasets on `primary_survey` against this
+# exact list -- if you change the subset, update here and rerun the
+# dashboard. Names must match the column headers in PublicSurveyQuestionsMap.csv.
+# -----------------------------------------------------------------------------
+phase3_surveys:
+  - 'American Community Survey (ACS)'
+  - 'Current Population Survey (CPS)'
+  - 'American Housing Survey (AHS)'
+  - 'Food Acquisition and Purchase Survey (FoodAPS) Initial Interview/Household Survey'
+  - 'Food Acquisition and Purchase Survey (FoodAPS) Profile and Income Questionnaire'
+  - 'Food Acquisition and Purchase Survey (FoodAPS) Debriefing Questionnaire'
+  - 'FoodAPS food Log'
+
+# -----------------------------------------------------------------------------
+# DASHBOARD (stage2_dashboard.py)
+# -----------------------------------------------------------------------------
+# Reliability thresholds drive the per-survey assessment table. Each
+# metric (topic, subtopic) has a "reliable" floor and a "marginal" floor
+# below which it is "unreliable". All percentages are 0-100.
+# -----------------------------------------------------------------------------
+dashboard:
+  output_subdir: 'dashboard'
+  html_filename: 'stage2_dashboard.html'
+  data_files:
+    interrater_matrix: 'interrater_matrix.json'
+    change_decomposition: 'change_decomposition.json'
+    topic_migration_full: 'topic_migration_full.csv'
+    topic_migration_subset: 'topic_migration_subset.csv'
+    subtopic_migrations_full: 'subtopic_migrations_full.csv'
+    subtopic_migrations_subset: 'subtopic_migrations_subset.csv'
+    per_survey_stability: 'per_survey_stability.csv'
+    combined_json: 'dashboard_data.json'
+  figures:
+    change_decomposition: 'fig_change_decomposition.png'
+    topic_migration_heatmap: 'fig_topic_migration_heatmap.png'
+    per_survey_stability: 'fig_per_survey_stability.png'
+    subtopic_top20: 'fig_subtopic_top20.png'
+  subtopic_top_n_full: 20
+  subtopic_top_n_subset: 15
+  topic_migration_highlight_threshold: 20
+  reliability:
+    topic_reliable_pct: 92.0
+    topic_marginal_pct: 85.0
+    subtopic_reliable_pct: 80.0
+    subtopic_marginal_pct: 65.0
+
+# -----------------------------------------------------------------------------
 # JOB NAMING (used for harness ledger and progress display)
 # -----------------------------------------------------------------------------
 job:
