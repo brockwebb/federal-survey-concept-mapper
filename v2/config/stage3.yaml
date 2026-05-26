@@ -1,0 +1,138 @@
+# =============================================================================
+# v2 STAGE 3 HARMONIZATION CONFIG
+# =============================================================================
+# Single source of truth for Stage 3 (harmonization barrier coding).
+#
+# Stage 3 is two scripts:
+#   1. stage3_pair_builder.py  -- pure data, no API. Builds candidate
+#      question pairs by joining the v2 master classification against the
+#      raw survey-question map, keyed on shared final_subtopic with ACS.
+#   2. stage3_barrier_classify.py -- routes every candidate pair through
+#      USAi harness as a dual-rater + arbitrator pipeline. Mirrors the
+#      v1 barrier-coding taxonomy (TC/CC/PC/RS/MC/PM + F1/F2/F3) without
+#      reinventing categories or prompt structure.
+#
+# RULE: every tunable lives here. The scripts read this file and pass
+# values through; they do not carry their own defaults.
+# =============================================================================
+
+version: '1.0'
+created: '2026-05-26'
+purpose: 'v2 Stage 3 harmonization - pair building and barrier classification'
+
+# -----------------------------------------------------------------------------
+# SURVEYS
+# -----------------------------------------------------------------------------
+# `column` is a single PublicSurveyQuestionsMap.csv column name. `columns`
+# (plural, FoodAPS only) is a list -- a question is treated as belonging
+# to the survey if any of those columns is non-empty.
+# -----------------------------------------------------------------------------
+source_surveys:
+  cps:
+    name: 'CPS'
+    column: 'Current Population Survey (CPS)'
+  foodaps:
+    name: 'FoodAPS'
+    columns:
+      - 'Food Acquisition and Purchase Survey (FoodAPS) Initial Interview/Household Survey'
+      - 'Food Acquisition and Purchase Survey (FoodAPS) Profile and Income Questionnaire'
+      - 'Food Acquisition and Purchase Survey (FoodAPS) Debriefing Questionnaire'
+      - 'FoodAPS food Log'
+  ahs:
+    name: 'AHS'
+    column: 'American Housing Survey (AHS)'
+
+target_survey:
+  name: 'ACS'
+  column: 'American Community Survey (ACS)'
+
+# Which classification field to use for pairing. 'final_subtopic' is
+# the v1 default; 'final_topic' is coarser and would explode pair counts.
+match_on: 'final_subtopic'
+
+# -----------------------------------------------------------------------------
+# DATA INPUTS
+# -----------------------------------------------------------------------------
+data:
+  master_dataset: 'output/stage2/master_dataset.csv'
+  questions_csv: 'data/raw/PublicSurveyQuestionsMap.csv'
+  taxonomy_json: 'data/raw/census_survey_explorer_taxonomy.json'
+
+# -----------------------------------------------------------------------------
+# OUTPUTS
+# -----------------------------------------------------------------------------
+output:
+  output_dir: 'output/stage3'
+  pairs_subdir: 'candidate_pairs'
+  pair_summary_json: 'pair_summary.json'
+  results_subdir: 'results'
+  rater_a_results_filename: 'rater_a_results.jsonl'
+  rater_b_results_filename: 'rater_b_results.jsonl'
+  comparison_summary_json: 'comparison_summary.json'
+  arbitration_csv: 'arbitration_results.csv'
+  final_csv: 'final_barrier_classifications.csv'
+  run_report: 'run_report.md'
+  raw_responses_subdir: 'raw_responses'
+  checkpoints_subdir: 'checkpoints'
+
+# -----------------------------------------------------------------------------
+# HARNESS WIRING (mirrors stage1/stage2)
+# -----------------------------------------------------------------------------
+harness:
+  project: 'concept_mapper_v2_stage3'
+  config_path: 'usai_harness.yaml'
+  ledger_path: 'cost_ledger.jsonl'
+  log_dir: 'logs'
+
+# -----------------------------------------------------------------------------
+# BARRIER CODING MODELS
+# -----------------------------------------------------------------------------
+# All three roles route through the USAi harness; the names below MUST be
+# pool entries in v2/usai_harness.yaml. max_tokens is intentionally high --
+# v1's low caps caused silent truncation and days of debugging.
+# -----------------------------------------------------------------------------
+barrier_coding:
+  rater_a:
+    model: 'claude_4_5_sonnet'
+  rater_b:
+    model: 'gemini-2_5-flash'
+  arbitrator:
+    model: 'claude_4_5_opus'
+  temperature: 0
+  max_tokens: 64000
+
+  # Level 1 barrier categories (information only -- the script doesn't
+  # parse against this list, the prompt contains the full taxonomy).
+  categories:
+    - TC   # Temporal/Collection mode
+    - CC   # Conceptual/Construct
+    - PC   # Population/Coverage
+    - RS   # Response Scale
+    - MC   # Mode/Context
+    - PM   # Processing/Metadata
+    - NHB  # No Harmonization Barrier
+  feasibility:
+    - F1   # Direct recode
+    - F2   # Statistical adjustment / derivable
+    - F3   # Incompatible / not feasible
+
+# -----------------------------------------------------------------------------
+# PIPELINE PARAMETERS
+# -----------------------------------------------------------------------------
+pipeline:
+  max_retries: 5
+  max_workers: 3
+  batch_checkpoint_interval: 10
+  rate_limit_delay: 0.2
+  # Disagreements with min_confidence >= this go straight to arbitration
+  # (no auto-resolution). Stage 3 has no "auto dual-modal" path -- every
+  # disagreement is arbitrated.
+  confidence_threshold: 0.90
+
+# -----------------------------------------------------------------------------
+# JOB NAMING (harness ledger + progress display)
+# -----------------------------------------------------------------------------
+job:
+  rater_a_name: 'stage3_rater_a'
+  rater_b_name: 'stage3_rater_b'
+  arbitrator_name: 'stage3_arbitrator'
