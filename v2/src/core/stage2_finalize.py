@@ -157,7 +157,7 @@ def load_v1_master(path: Path) -> pd.DataFrame:
 MASTER_COLS = [
     "id", "question", "primary_survey",
     "final_topic", "final_subtopic", "final_confidence",
-    "decision_method", "is_dual_modal",
+    "decision_method", "is_dual_modal", "needs_human_review",
     "secondary_primary_topic", "secondary_primary_subtopic",
     "all_relevant_subtopics",
     "original_rater_a_topic", "original_rater_a_subtopic",
@@ -165,6 +165,11 @@ MASTER_COLS = [
     "original_rater_b_topic", "original_rater_b_subtopic",
     "original_rater_b_confidence",
 ]
+
+# Label used when the arbitrator returned a null topic/subtopic for a row
+# (small residual: questions with no real text, or model emitted null).
+# Marked needs_human_review=True. Not fatal -- v1 had 47 such cases.
+UNRESOLVABLE_LABEL = "Unresolvable"
 
 
 def build_master_dataset(
@@ -202,6 +207,7 @@ def build_master_dataset(
     ].max(axis=1)
     agreements["decision_method"] = "agreement"
     agreements["is_dual_modal"] = False
+    agreements["needs_human_review"] = False
     agreements["secondary_primary_topic"] = pd.NA
     agreements["secondary_primary_subtopic"] = pd.NA
     agreements["all_relevant_subtopics"] = agreements.apply(
@@ -238,6 +244,7 @@ def build_master_dataset(
     disagreements["final_subtopic"] = disagreements["primary_subtopic"]
     disagreements["final_confidence"] = disagreements["primary_confidence"]
     disagreements["decision_method"] = disagreements["decision"]
+    disagreements["needs_human_review"] = False
 
     # Coerce is_dual_modal to bool; resolutions CSV round-trips it as a
     # string under some pandas/csv combinations.
@@ -253,7 +260,7 @@ def build_master_dataset(
     keep = [
         "id",
         "final_topic", "final_subtopic", "final_confidence",
-        "decision_method", "is_dual_modal",
+        "decision_method", "is_dual_modal", "needs_human_review",
         "secondary_primary_topic", "secondary_primary_subtopic",
         "all_relevant_subtopics",
         "primary_topic_a", "primary_subtopic_a", "confidence_a",
@@ -270,15 +277,32 @@ def build_master_dataset(
         on="id", how="left", validate="one_to_one",
     )
 
+    # --- Fixup: arbitrator-null classifications -----------------------------
+    # The arbitrator occasionally returns null primary_topic / primary_subtopic
+    # (e.g., questions with no actual text, or model edge cases). Flag those
+    # for human review instead of dying -- v1 had 47 such residuals; a small
+    # count here is expected.
+    null_mask = (master["final_topic"].isna() | master["final_subtopic"].isna())
+    if null_mask.any():
+        bad_ids = master.loc[null_mask, "id"].astype(int).tolist()
+        print(
+            f"WARNING: {int(null_mask.sum())} questions with null "
+            f"classifications marked as unresolvable: {bad_ids}",
+            flush=True,
+        )
+        master.loc[null_mask, "final_topic"] = UNRESOLVABLE_LABEL
+        master.loc[null_mask, "final_subtopic"] = UNRESOLVABLE_LABEL
+        master.loc[null_mask, "decision_method"] = "unresolvable"
+        master.loc[null_mask, "needs_human_review"] = True
+
     # --- Validate ------------------------------------------------------------
+    # Only row count is fatal. Anything else is logged and the run continues.
     if len(master) != expected_rows:
         die(f"Master has {len(master)} rows, expected {expected_rows}.")
-    if master["final_topic"].isna().any():
-        die("Master has rows with null final_topic.")
-    if master["final_subtopic"].isna().any():
-        die("Master has rows with null final_subtopic.")
     if master["question"].isna().any():
-        die("Master has rows whose question text didn't merge from source.")
+        n = int(master["question"].isna().sum())
+        print(f"WARNING: {n} master rows have null question text (source "
+              f"CSV merge gap).", flush=True)
 
     master = master.rename(columns={
         "primary_topic_a": "original_rater_a_topic",
@@ -321,6 +345,9 @@ def compare_v1_v2(
     full_match = topic_match & sub_match
     n = len(joined)
 
+    v1_unresolvable = int((joined["v1_decision_method"] == "unresolvable").sum())
+    v2_unresolvable = int((joined["v2_decision_method"] == "unresolvable").sum())
+
     summary: dict[str, Any] = {
         "n_compared": n,
         "topic_agreement_pct": round(100.0 * float(topic_match.mean()), 3),
@@ -332,6 +359,9 @@ def compare_v1_v2(
         "subtopic_kappa": round(float(cohen_kappa_score(
             joined["v1_final_subtopic"], joined["v2_final_subtopic"],
         )), 4),
+        "v1_unresolvable": v1_unresolvable,
+        "v2_unresolvable": v2_unresolvable,
+        "unresolvable_delta": v2_unresolvable - v1_unresolvable,
     }
 
     # Agreement broken down by v1 decision_method
@@ -403,6 +433,9 @@ def render_report(summary: dict[str, Any]) -> str:
     L.append(f"- full agreement:       **{summary['full_agreement_pct']}%**")
     L.append(f"- topic Cohen κ:        **{summary['topic_kappa']}**")
     L.append(f"- subtopic Cohen κ:     **{summary['subtopic_kappa']}**")
+    L.append(f"- unresolvable (v1 → v2): "
+             f"**{summary['v1_unresolvable']} → {summary['v2_unresolvable']}**  "
+             f"(Δ={summary['unresolvable_delta']:+d})")
     L.append("")
 
     L.append("## Agreement by v1 decision_method")
@@ -533,6 +566,9 @@ def main() -> int:
     print(f"  full agreement:       {summary['full_agreement_pct']}%")
     print(f"  topic Cohen κ:        {summary['topic_kappa']}")
     print(f"  subtopic Cohen κ:     {summary['subtopic_kappa']}")
+    print(f"  unresolvable v1→v2:   {summary['v1_unresolvable']} → "
+          f"{summary['v2_unresolvable']}  "
+          f"(Δ={summary['unresolvable_delta']:+d})")
     print(f"  changed questions:    {len(changed):,}")
     print("=" * 70)
     return 0
