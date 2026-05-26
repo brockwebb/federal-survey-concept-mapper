@@ -84,6 +84,24 @@ output:
   run_report: 'stage2_run_report.md'
 
 # -----------------------------------------------------------------------------
+# FINALIZE (stage2_finalize.py)
+# -----------------------------------------------------------------------------
+# Pure-data step that runs after adjudication: assembles the v2 master
+# dataset (one row per question, with the final topic/subtopic) and produces
+# a v1-vs-v2 comparison report. No API calls.
+#
+# v1_master is relative to v2/. The other paths are output filenames
+# relative to output.output_dir.
+# -----------------------------------------------------------------------------
+finalize:
+  v1_master: '../docs/stages/01_classification/data/final/master_dataset.csv'
+  v2_master: 'master_dataset.csv'
+  comparison_report: 'v1_v2_comparison_report.md'
+  changed_questions_csv: 'v1_v2_changed_questions.csv'
+  comparison_summary_json: 'v1_v2_comparison_summary.json'
+  expected_row_count: 6987
+
+# -----------------------------------------------------------------------------
 # JOB NAMING (used for harness ledger and progress display)
 # -----------------------------------------------------------------------------
 job:
