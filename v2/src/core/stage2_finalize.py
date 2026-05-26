@@ -340,6 +340,13 @@ def compare_v1_v2(
               f"{len(joined)} ids "
               f"(v2={len(v2_master)}, v1={len(v1)}).", flush=True)
 
+    # Normalize nulls before metric calls. sklearn's cohen_kappa_score
+    # can't sort a mixed str/NaN label array, and the agreement masks
+    # below treat NaN != NaN, which would hide real matches.
+    for col in ["v1_final_topic", "v2_final_topic",
+                "v1_final_subtopic", "v2_final_subtopic"]:
+        joined[col] = joined[col].fillna(UNRESOLVABLE_LABEL)
+
     topic_match = (joined["v1_final_topic"] == joined["v2_final_topic"])
     sub_match = (joined["v1_final_subtopic"] == joined["v2_final_subtopic"])
     full_match = topic_match & sub_match
