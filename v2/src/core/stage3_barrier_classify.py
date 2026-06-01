@@ -355,7 +355,7 @@ TASK_ID_RE = re.compile(r"^stage3_(rater_a|rater_b|arb)_(.+)$")
 
 
 def rater_task_id(rater_label: str, pair_id: str) -> str:
-    return f"stage3_{rater_label}_{pair_id}"
+    return f"stage3_rater_{rater_label}_{pair_id}"
 
 
 def arb_task_id(pair_id: str) -> str:
