@@ -21,6 +21,7 @@ finalize.expected_row_count rows.
 """
 from __future__ import annotations
 
+import argparse
 import json
 import sys
 from pathlib import Path
@@ -29,6 +30,11 @@ from typing import Any
 import pandas as pd
 import yaml
 from sklearn.metrics import cohen_kappa_score
+
+# _smoke is a sibling module in src/core/. Guarantee it is importable no
+# matter the cwd the script is launched from.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import _smoke  # noqa: E402
 
 
 CONFIG_PATH = Path("config/stage2.yaml")
@@ -495,12 +501,29 @@ def render_report(summary: dict[str, Any]) -> str:
 # =============================================================================
 
 def main() -> int:
+    parser = argparse.ArgumentParser(
+        description="v2 Stage 2 finalize: assemble master dataset + compare vs v1",
+    )
+    parser.add_argument(
+        "--smoke", action="store_true",
+        help=(
+            f"Round-trip smoke test: assemble the real master on the first "
+            f"{_smoke.SMOKE_N} ids common to questions/rater_a/rater_b/"
+            f"resolutions, write into a smoke/ subdir, then assert the master "
+            f"CSV round-trips. Exits {_smoke.SMOKE_EXIT_CODE} on failure."
+        ),
+    )
+    args = parser.parse_args()
+    smoke = bool(args.smoke)
+
     cfg = load_config()
     fin = cfg["finalize"]
-    expected = int(fin["expected_row_count"])
+    # In smoke mode the assembly runs on a SMOKE_N subset, so the expected
+    # row count is SMOKE_N, NOT the configured full-corpus count.
+    expected = _smoke.SMOKE_N if smoke else int(fin["expected_row_count"])
 
     print("=" * 70)
-    print("v2 STAGE 2 FINALIZE")
+    print("v2 STAGE 2 FINALIZE" + ("  [SMOKE]" if smoke else ""))
     print("=" * 70)
 
     print("\n1. Loading inputs...")
@@ -517,10 +540,42 @@ def main() -> int:
     print(f"   rater_b:   {len(rater_b)} rows")
 
     out_dir = Path(cfg["output"]["output_dir"])
+    if smoke:
+        out_dir = out_dir / "smoke"
     out_dir.mkdir(parents=True, exist_ok=True)
-    res_path = out_dir / cfg["output"]["all_resolutions_csv"]
+    # Resolutions always come from the real output dir (the smoke run reads
+    # real inputs; only its outputs are redirected).
+    res_path = Path(cfg["output"]["output_dir"]) / cfg["output"]["all_resolutions_csv"]
     resolutions = load_resolutions(res_path)
     print(f"   resolutions: {len(resolutions)} rows from {res_path}")
+
+    # ----- SMOKE: subset inputs to the first SMOKE_N common ids --------------
+    if smoke:
+        common = (
+            set(questions["id"]) & set(rater_a["id"])
+            & set(rater_b["id"]) & set(resolutions["id"])
+        )
+        smoke_ids = sorted(common)[:_smoke.SMOKE_N]
+        if len(smoke_ids) < _smoke.SMOKE_N:
+            # Disagreement ids (those needing a resolution row) are the only
+            # ids present in `resolutions`; agreements are not. Fall back to
+            # ids common to questions+both raters so a master can still build.
+            common = (
+                set(questions["id"]) & set(rater_a["id"]) & set(rater_b["id"])
+            )
+            smoke_ids = sorted(common)[:_smoke.SMOKE_N]
+        if len(smoke_ids) < _smoke.SMOKE_N:
+            print(
+                f"SMOKE FAILED: only {len(smoke_ids)} ids common to "
+                f"questions/rater_a/rater_b; need {_smoke.SMOKE_N}",
+                file=sys.stderr,
+            )
+            sys.exit(_smoke.SMOKE_EXIT_CODE)
+        questions = questions[questions["id"].isin(smoke_ids)].copy()
+        rater_a = rater_a[rater_a["id"].isin(smoke_ids)].copy()
+        rater_b = rater_b[rater_b["id"].isin(smoke_ids)].copy()
+        resolutions = resolutions[resolutions["id"].isin(smoke_ids)].copy()
+        print(f"   [SMOKE] subset to {len(smoke_ids)} common ids: {smoke_ids}")
 
     # ----- Part 1: master dataset -------------------------------------------
     print("\n2. Building v2 master dataset...")
@@ -530,6 +585,43 @@ def main() -> int:
     master_path = out_dir / fin["v2_master"]
     master.to_csv(master_path, index=False, encoding="utf-8")
     print(f"   wrote {master_path}  ({len(master)} rows)")
+
+    # ----- Part 4: read the master back and confirm no rows were dropped on
+    # round-trip and the key column is fully populated. -----------------------
+    master_back = pd.read_csv(master_path)
+    problems = _smoke.check_roundtrip(
+        requested=len(master),
+        written=len(master),
+        loaded=len(master_back),
+        model_requested=None,
+        key_field="id",
+        key_values=master_back["id"].tolist() if "id" in master_back.columns else [],
+    )
+    if "id" not in master_back.columns:
+        problems.append("master CSV read back without an 'id' column")
+    if problems:
+        die("; ".join(problems))
+
+    if smoke:
+        try:
+            _smoke.assert_roundtrip(
+                "stage2_finalize",
+                requested=_smoke.SMOKE_N,
+                written=len(master),
+                loaded=len(master_back),
+                model_requested=None,
+                key_field="id",
+                key_values=master_back["id"].tolist(),
+            )
+        except _smoke.SmokeFailure as e:
+            print(f"SMOKE FAILED: {e}", file=sys.stderr)
+            sys.exit(_smoke.SMOKE_EXIT_CODE)
+        print("\n" + "=" * 70)
+        print(f"SMOKE PASSED  (requested={_smoke.SMOKE_N}, written={len(master)}, "
+              f"loaded={len(master_back)})")
+        print(f"  smoke outputs: {out_dir}")
+        print("=" * 70)
+        sys.exit(0)
 
     print("\n   v2 decision_method breakdown:")
     dm_counts = master["decision_method"].value_counts()

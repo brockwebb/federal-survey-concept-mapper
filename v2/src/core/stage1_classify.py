@@ -38,12 +38,18 @@ from typing import Any
 import pandas as pd
 import yaml
 
+# _smoke is a sibling module in src/core/. Guarantee it is importable no
+# matter how this script is launched.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import _smoke  # noqa: E402
+
 
 # =============================================================================
 # CONFIG LOADING
 # =============================================================================
 
 CONFIG_PATH = Path("config/stage1.yaml")
+THIS_SCRIPT = Path(__file__).resolve()
 
 
 def load_config() -> dict[str, Any]:
@@ -250,8 +256,12 @@ def chunk(items: list, size: int) -> list[list]:
     return [items[i:i + size] for i in range(0, len(items), size)]
 
 
-def ensure_dirs(cfg: dict[str, Any]) -> dict[str, Path]:
-    out_root = Path(cfg["output"]["output_dir"])
+def ensure_dirs(cfg: dict[str, Any], smoke: bool = False) -> dict[str, Path]:
+    # A --smoke run redirects the whole output tree under output_dir/smoke/ so
+    # it never clobbers real results, checkpoints, or raw responses. The root
+    # is derived from cfg; nothing is hardcoded.
+    out_root = (smoke_output_dir(cfg) if smoke
+                else Path(cfg["output"]["output_dir"]))
     raw_dir = out_root / cfg["output"]["raw_responses_subdir"]
     ckpt_dir = out_root / cfg["output"]["checkpoints_subdir"]
     out_root.mkdir(parents=True, exist_ok=True)
@@ -295,6 +305,70 @@ def _count_jsonl_records(path_str: str | None) -> int:
         return 0
     with open(p) as f:
         return sum(1 for _ in f)
+
+
+def _read_jsonl_keys(path_str: str | Path | None) -> tuple[int, list[Any]]:
+    """Return (line_count, [id per line]) for the round-trip check.
+
+    Counts every written line. `written` is the raw line count; the silent-drop
+    bug writes lines whose `id` is null/missing, which then vanish when the
+    downstream merge keys on `id`. `key_values` carries those ids so
+    check_roundtrip can flag null/empty keys.
+    """
+    p = Path(path_str) if path_str else None
+    n = 0
+    keys: list[Any] = []
+    if not p or not p.exists():
+        return n, keys
+    with open(p, encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            n += 1
+            try:
+                keys.append(json.loads(line).get("id"))
+            except json.JSONDecodeError:
+                keys.append(None)
+    return n, keys
+
+
+def _load_jsonl_ids(path_str: str | Path | None) -> set:
+    """Return the set of non-null `id` values readable from a JSONL file.
+
+    Mirrors how a downstream consumer keys records on `id`; its size is the
+    `loaded` count for the round-trip invariant (loaded == written means no
+    record was dropped on read-back due to a missing/duplicate key)."""
+    p = Path(path_str) if path_str else None
+    out: set = set()
+    if not p or not p.exists():
+        return out
+    with open(p, encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                rec = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            rid = rec.get("id")
+            if rid is not None:
+                out.add(rid)
+    return out
+
+
+def smoke_output_dir(cfg: dict[str, Any]) -> Path:
+    """Where a --smoke run writes its working files. Kept under a dedicated
+    smoke/ subdir of the stage1 output_dir so it never clobbers real results."""
+    return Path(cfg["output"]["output_dir"]) / "smoke"
+
+
+def smoke_stamp_path(cfg: dict[str, Any]) -> Path:
+    """Stage-level smoke-pass stamp. The gate is keyed on the script source
+    hash (current code), not on any single rater, so the stamp lives once
+    under the smoke/ subdir."""
+    return smoke_output_dir(cfg) / "smoke_pass.json"
 
 
 def _wipe_rater_output(rater_label: str, cfg: dict, dirs: dict[str, Path]) -> None:
@@ -639,6 +713,7 @@ async def run_rater_initial(
     taxonomy: dict,
     cfg: dict[str, Any],
     dirs: dict[str, Path],
+    smoke: bool = False,
 ) -> dict:
     model = rater_cfg["model"]
     temperature = rater_cfg["temperature"]
@@ -662,7 +737,10 @@ async def run_rater_initial(
     # config.expected.batch_count value reflects the default-config layout
     # only. The question_count assertion in load_questions() still catches
     # data drift.
-    if batch_size == default_batch_size:
+    # The expected-batch-count assertion only makes sense for a full run over
+    # all questions. A smoke run deliberately submits SMOKE_N questions, so the
+    # batch count is tiny by design; skip the assertion there.
+    if batch_size == default_batch_size and not smoke:
         expected_batches = cfg["expected"]["batch_count"]
         if len(batches) != expected_batches:
             die(f"Rater {rater_label}: built {len(batches)} batches, config expects {expected_batches}.")
@@ -724,6 +802,10 @@ async def run_rater_initial(
     )
     outcome["batch_size"] = batch_size
     outcome["max_tokens"] = max_tokens
+    # `requested` is the number of questions submitted for this rater (one
+    # record expected back per question). The round-trip gate compares this
+    # against JSONL lines written and ids read back.
+    outcome["requested"] = len(questions)
     return outcome
 
 
@@ -1091,7 +1173,6 @@ def write_run_report(
         L.append(f"- Latency: {preflight_record.get('latency_ms', 0):.0f} ms")
     L.append("")
 
-    overall_pass = True
     for o in outcomes:
         L.append(f"## Rater: `{o['rater_label']}`")
         L.append("")
@@ -1144,7 +1225,6 @@ def write_run_report(
                     L.append(f"  - `{tid}`")
 
             if o.get("originals_still_failing"):
-                overall_pass = False
                 L.append("")
                 L.append("### STILL FAILING after retry — needs manual investigation")
                 # For each still-failing original, show its retry-half summaries.
@@ -1185,7 +1265,6 @@ def write_run_report(
             failed_summaries = [s for s in o["summaries"]
                                 if s["outcome"] != "success"]
             if failed_summaries:
-                overall_pass = False
                 L.append("")
                 L.append("### Failures (full list — these need investigation)")
                 for s in failed_summaries:
@@ -1204,7 +1283,6 @@ def write_run_report(
                         L.append(f"    - response_snippet (first 200 chars): {s['response_text_snippet']!r}")
 
         if o.get("unknown_model_seen"):
-            overall_pass = False
             L.append("")
             L.append(f"**Possible unknown-model error detected for `{o['model_requested']}`.** "
                      f"Verify pool name in `v2/usai_harness.yaml`.")
@@ -1212,40 +1290,50 @@ def write_run_report(
 
     L.append("## Verdict")
     L.append("")
-    L.append("PASS criterion: every batch returned without request failure, "
-             "every response parsed, no truncation, no unknown-model errors, "
-             "AND records-written equals rows-iterated for each rater. "
-             "A gap in either direction (missing records or duplicate "
-             "inflation) is a FAIL.")
+    L.append("Three states (same semantics across stage1/2/3): **PASS** — every "
+             "question classified and read back. **PASS_WITH_RESIDUAL** — all "
+             "written records read back, but a small fraction "
+             f"(<= {int(_smoke.RESIDUAL_THRESHOLD * 100)}%) failed loudly and "
+             "is retryable via `--retry-failed`; exit 0. **FAIL** — records "
+             "silently dropped (read-back != written, a code bug), loud "
+             "failures above threshold, an unknown-model error, or a rater "
+             "that did not run.")
     L.append("")
     rows_iterated = cfg["expected"]["question_count"]
+    agg = "PASS"
+
+    def _downgrade(current: str, new: str) -> str:
+        order = {"PASS": 0, "PASS_WITH_RESIDUAL": 1, "FAIL": 2}
+        return new if order[new] > order[current] else current
+
     for o in outcomes:
         if o.get("mode") == "not_run":
-            overall_pass = False
-            L.append(f"- `{o['rater_label']}`: NOT RUN this session and no "
-                     f"prior checkpoint on disk — run this rater before "
+            agg = _downgrade(agg, "FAIL")
+            L.append(f"- `{o['rater_label']}`: **FAIL** — NOT RUN this session "
+                     f"and no prior checkpoint on disk; run this rater before "
                      f"treating Stage 1 as complete.")
+            continue
+        if o.get("unknown_model_seen"):
+            agg = _downgrade(agg, "FAIL")
+            L.append(f"- `{o['rater_label']}`: **FAIL** — unknown-model error "
+                     f"for `{o['model_requested']}` (not in harness pool).")
             continue
         if o.get("mode") in ("retry", "retry_noop"):
             count = _count_jsonl_records(o.get("results_path"))
         else:
             count = o.get("records_written", 0)
-        gap = rows_iterated - count
-        ok = (not o.get("originals_still_failing") and
-              not (o.get("request_failed") or o.get("parse_failed") or o.get("truncated_and_unparseable")) and
-              not o.get("unknown_model_seen") and
-              count == rows_iterated)
-        if not ok:
-            overall_pass = False
+        v = _smoke.classify_run(
+            requested=rows_iterated, written=count, loaded=count,
+        )
+        agg = _downgrade(agg, v["state"])
         source_note = " (from prior checkpoint)" if o.get("mode") == "prior_run" else ""
-        L.append(f"- `{o['rater_label']}`: {count} records written "
-                 f"(rows iterated: {rows_iterated}, gap: {gap}){source_note} — "
-                 f"{'PASS' if ok else 'FAIL'}")
+        L.append(f"- `{o['rater_label']}`: **{v['state']}** — {count}/{rows_iterated} "
+                 f"records ({v['residual']} residual){source_note}: {v['reason']}")
     L.append("")
-    L.append(f"**Overall: {'PASS' if overall_pass else 'FAIL — see failures above'}**")
+    L.append(f"**Overall: {agg}**")
     L.append("")
 
-    if not overall_pass:
+    if agg != "PASS":
         L.append("## Next step")
         L.append("")
         L.append("Investigate failures above. To retry failed batches with halved "
@@ -1266,7 +1354,29 @@ def write_run_report(
 
 async def amain(args) -> int:
     cfg = load_config()
-    dirs = ensure_dirs(cfg)
+    smoke = bool(getattr(args, "smoke", False))
+    if smoke and args.retry_failed:
+        die("--smoke and --retry-failed are mutually exclusive.")
+    dirs = ensure_dirs(cfg, smoke=smoke)
+
+    # ---- SMOKE GATE -----------------------------------------------------
+    # A full/initial run refuses to start unless a smoke pass exists for the
+    # current code. Retry and smoke itself are exempt. The gate runs before any
+    # batch is submitted; it loads no harness or input data of its own.
+    if not args.retry_failed and not smoke:
+        ok, reason = _smoke.smoke_gate_ok(
+            smoke_stamp_path(cfg), script_path=THIS_SCRIPT,
+        )
+        if not ok:
+            if args.skip_smoke_gate:
+                print("!" * 70)
+                print(f"WARNING: --skip-smoke-gate set; bypassing smoke gate "
+                      f"({reason})")
+                print("!" * 70)
+            else:
+                die(f"No valid smoke pass for current code ({reason}). "
+                    f"Run with --smoke first, or pass --skip-smoke-gate to "
+                    f"override (not recommended).")
 
     try:
         from usai_harness import USAiClient
@@ -1275,12 +1385,29 @@ async def amain(args) -> int:
 
     taxonomy = load_taxonomy(cfg)
     questions_df = load_questions(cfg)
+
+    if smoke:
+        # Bias the smoke sample toward an edge case: flag rows whose question
+        # text is empty/NaN/whitespace as tricky, then let pick_smoke_indices
+        # include one if present. Real run code path, tiny N. This exercises
+        # the NaN-question edge that v1/v2 must round-trip, not just the happy
+        # path.
+        q_text = questions_df["question"]
+        flags = [
+            (q is None)
+            or (isinstance(q, float) and pd.isna(q))
+            or (pd.isna(q) if not isinstance(q, str) else not str(q).strip())
+            for q in q_text
+        ]
+        idx = _smoke.pick_smoke_indices(flags, n=_smoke.SMOKE_N)
+        questions_df = questions_df.iloc[idx].reset_index(drop=True)
+
     questions = questions_df.to_dict("records")
     n_questions = len(questions)
     n_batches = (n_questions + cfg["pipeline"]["batch_size"] - 1) // cfg["pipeline"]["batch_size"]
 
     print(f"Loaded {n_questions} questions, {n_batches} batches (at default batch_size).")
-    print(f"Mode: {'retry-failed' if args.retry_failed else 'initial'}")
+    print(f"Mode: {'smoke' if smoke else 'retry-failed' if args.retry_failed else 'initial'}")
     if args.rater:
         print(f"Single-rater mode: {args.rater} only.")
 
@@ -1292,78 +1419,151 @@ async def amain(args) -> int:
         _wipe_rater_output(args.rater, cfg, dirs)
 
     h = cfg["harness"]
-    async with USAiClient(
-        project=h["project"],
-        config_path=Path(h["config_path"]),
-        ledger_path=Path(h["ledger_path"]),
-        log_dir=Path(h["log_dir"]),
-    ) as client:
-        for label, rcfg in cfg["raters"].items():
-            if not client.config.has_model(rcfg["model"]):
-                die(f"Rater {label}: configured model {rcfg['model']!r} is not in "
-                    f"v2/usai_harness.yaml pool. "
-                    f"Pool: {[m.name for m in client.config.models]}.")
+    try:
+        async with USAiClient(
+            project=h["project"],
+            config_path=Path(h["config_path"]),
+            ledger_path=Path(h["ledger_path"]),
+            log_dir=Path(h["log_dir"]),
+        ) as client:
+            for label, rcfg in cfg["raters"].items():
+                if not client.config.has_model(rcfg["model"]):
+                    die(f"Rater {label}: configured model {rcfg['model']!r} is not in "
+                        f"v2/usai_harness.yaml pool. "
+                        f"Pool: {[m.name for m in client.config.models]}.")
 
-        if not args.retry_failed:
-            preflight_record = await preflight(client, cfg, dirs)
-        else:
-            preflight_record = {"skipped": True}
-
-        ran_outcomes: dict[str, dict] = {}
-        for label in run_labels:
-            rcfg = cfg["raters"][label]
-            if args.retry_failed:
-                outcome = await run_rater_retry(
-                    client=client, rater_label=label, rater_cfg=rcfg,
-                    questions=questions, taxonomy=taxonomy, cfg=cfg, dirs=dirs,
-                )
+            if not args.retry_failed:
+                preflight_record = await preflight(client, cfg, dirs)
             else:
-                outcome = await run_rater_initial(
-                    client=client, rater_label=label, rater_cfg=rcfg,
-                    questions=questions, taxonomy=taxonomy, cfg=cfg, dirs=dirs,
-                )
-            ran_outcomes[label] = outcome
+                preflight_record = {"skipped": True}
 
-    # Assemble report-ordered outcomes. For raters that didn't run this
-    # session (--rater mode), reconstruct an outcome from disk so the
-    # combined report still shows the whole picture.
-    outcomes: list[dict] = []
-    for label in ("rater_a", "rater_b"):
-        if label in ran_outcomes:
-            outcomes.append(ran_outcomes[label])
-        else:
-            outcomes.append(_build_prior_outcome(label, cfg, dirs))
+            ran_outcomes: dict[str, dict] = {}
+            for label in run_labels:
+                rcfg = cfg["raters"][label]
+                if args.retry_failed:
+                    outcome = await run_rater_retry(
+                        client=client, rater_label=label, rater_cfg=rcfg,
+                        questions=questions, taxonomy=taxonomy, cfg=cfg, dirs=dirs,
+                    )
+                else:
+                    outcome = await run_rater_initial(
+                        client=client, rater_label=label, rater_cfg=rcfg,
+                        questions=questions, taxonomy=taxonomy, cfg=cfg, dirs=dirs,
+                        smoke=smoke,
+                    )
+                ran_outcomes[label] = outcome
 
-    mode = "retry" if args.retry_failed else "initial"
-    report_path = write_run_report(
-        cfg, dirs, n_questions, n_batches, preflight_record, outcomes, mode,
-    )
-    print(f"\nRun report: {report_path}")
+                # ---- ROUND-TRIP GATE (initial OR smoke) -----------------
+                # After a rater's JSONL is written, confirm the read-back
+                # contract. SMOKE: strict -- every invariant (written==
+                # requested, loaded==written, a model served, no null ids)
+                # must hold or SmokeFailure (exit 3). INITIAL: fatal-only -- a
+                # broken read-back contract (loaded!=written, e.g. duplicate or
+                # null ids), total failure (written==0), or a null id dies
+                # loudly. A written<requested shortfall here is the normal
+                # loud residual (a few failed batches write no lines) and is
+                # graded by the final three-state verdict, not fatal. Retry
+                # mode appends/dedups, so the identities do not hold; skipped.
+                if not args.retry_failed:
+                    requested = outcome.get("requested", n_questions)
+                    results_path = outcome.get("results_path")
+                    written, key_values = _read_jsonl_keys(results_path)
+                    loaded = len(_load_jsonl_ids(results_path))
+                    if smoke:
+                        problems = _smoke.check_roundtrip(
+                            requested=requested,
+                            written=written,
+                            loaded=loaded,
+                            served_models=set(outcome.get("served_models") or []),
+                            model_requested=(rcfg["model"] if requested > 0 else None),
+                            unknown_model=bool(outcome.get("unknown_model_seen")),
+                            key_field="id",
+                            key_values=key_values,
+                        )
+                        if problems:
+                            raise _smoke.SmokeFailure(
+                                f"[stage1_{label}] " + "; ".join(problems))
+                    else:
+                        problems = _smoke.fatal_roundtrip_problems(
+                            requested=requested,
+                            written=written,
+                            loaded=loaded,
+                            key_field="id",
+                            key_values=key_values,
+                        )
+                        if problems:
+                            die(f"FATAL [stage1_{label}]: " + "; ".join(problems))
+                    print(f"   [roundtrip ok] stage1_{label}: "
+                          f"requested={requested} written={written} "
+                          f"loaded={loaded}")
 
-    # Exit non-zero if Stage 1 isn't complete and clean for both raters.
-    # The record-count assertion (records_written == rows_iterated) is part
-    # of PASS now: a gap in either direction is a FAIL. See cc_tasks/
-    # 2026-05-15_stage1_id_validation_fix.md for why this changed from
-    # diagnostic-only.
+        # Assemble report-ordered outcomes. For raters that didn't run this
+        # session (--rater mode), reconstruct an outcome from disk so the
+        # combined report still shows the whole picture.
+        outcomes: list[dict] = []
+        for label in ("rater_a", "rater_b"):
+            if label in ran_outcomes:
+                outcomes.append(ran_outcomes[label])
+            else:
+                outcomes.append(_build_prior_outcome(label, cfg, dirs))
+
+        mode = "smoke" if smoke else "retry" if args.retry_failed else "initial"
+        report_path = write_run_report(
+            cfg, dirs, n_questions, n_batches, preflight_record, outcomes, mode,
+        )
+        print(f"\nRun report: {report_path}")
+
+    except _smoke.SmokeFailure as e:
+        print("\n" + "=" * 70)
+        print(f"SMOKE FAILED: {e}")
+        print("=" * 70)
+        return _smoke.SMOKE_EXIT_CODE
+
+    # A smoke run validates the round-trip contract, not full coverage.
+    # Reaching here means every per-rater round-trip assert passed. Stamp the
+    # current code so a later full run may start, then exit 0.
+    if smoke:
+        payload = _smoke.write_smoke_stamp(
+            smoke_stamp_path(cfg), script_path=THIS_SCRIPT,
+            extra={"raters": run_labels, "smoke_n": _smoke.SMOKE_N},
+        )
+        print("\n" + "=" * 70)
+        print("SMOKE PASSED")
+        print(f"  stamp: {smoke_stamp_path(cfg)}")
+        print(f"  source_sha256: {payload['source_sha256'][:16]}...")
+        print("=" * 70)
+        return 0
+
+    # Three-state verdict per rater (PASS / PASS_WITH_RESIDUAL / FAIL),
+    # consistent with stage2/stage3. `count` is the usable records written;
+    # the gap to question_count is the loud, retryable residual (failed batches
+    # write no lines). A small residual passes with a --retry-failed note; a
+    # systemic one FAILs. Silent drops (duplicate/null ids: count back != lines
+    # written) were already fatal in the per-phase gate. `not_run` and an
+    # unknown-model error are systemic and FAIL regardless of count.
     rows_iterated = cfg["expected"]["question_count"]
-    bad = False
+    worst_exit = 0
     for o in outcomes:
+        label = o.get("rater_label") or o.get("label") or "rater"
         if o.get("mode") == "not_run":
-            bad = True
+            print(f"Verdict [{label}]: FAIL -- rater did not run")
+            worst_exit = max(worst_exit, 2)
             continue
         if o.get("unknown_model_seen"):
-            bad = True
-        if o.get("originals_still_failing"):
-            bad = True
-        if o.get("request_failed") or o.get("parse_failed") or o.get("truncated_and_unparseable"):
-            bad = True
+            print(f"Verdict [{label}]: FAIL -- unknown-model error "
+                  f"(model not in harness pool)")
+            worst_exit = max(worst_exit, 2)
+            continue
         if o.get("mode") in ("retry", "retry_noop"):
             count = _count_jsonl_records(o.get("results_path"))
         else:
             count = o.get("records_written", 0)
-        if count != rows_iterated:
-            bad = True
-    return 1 if bad else 0
+        v = _smoke.classify_run(
+            requested=rows_iterated, written=count, loaded=count,
+        )
+        print(f"Verdict [{label}]: {v['state']} -- {v['reason']}")
+        worst_exit = max(worst_exit, v["exit_code"])
+    return worst_exit
 
 
 def main() -> int:
@@ -1380,6 +1580,17 @@ def main() -> int:
              "wiped before the run to avoid stale-data contamination. The "
              "skipped rater's state is read from disk for the combined "
              "run report.",
+    )
+    parser.add_argument(
+        "--smoke", action="store_true",
+        help=f"Smoke test: run the full path on {_smoke.SMOKE_N} questions "
+             f"into a smoke/ subdir, assert round-trip invariants, stamp on "
+             f"pass. Mutually exclusive with --retry-failed.",
+    )
+    parser.add_argument(
+        "--skip-smoke-gate", action="store_true",
+        help="Bypass the mandatory smoke gate on an initial run (prints a "
+             "loud warning). Rare intentional use only.",
     )
     args = parser.parse_args()
     return asyncio.run(amain(args))

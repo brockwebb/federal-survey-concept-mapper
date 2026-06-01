@@ -47,8 +47,14 @@ from typing import Any
 import pandas as pd
 import yaml
 
+# _smoke is a sibling module in src/core/. Guarantee it is importable no
+# matter how this script is launched.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import _smoke  # noqa: E402
+
 
 CONFIG_PATH = Path("config/stage3.yaml")
+THIS_SCRIPT = Path(__file__).resolve()
 
 
 def die(msg: str) -> None:
@@ -345,6 +351,19 @@ def load_pairs(cfg: dict[str, Any], survey_key: str) -> pd.DataFrame:
 def survey_output_dir(cfg: dict[str, Any], survey_key: str) -> Path:
     return (Path(cfg["output"]["output_dir"])
             / cfg["output"]["results_subdir"] / survey_key)
+
+
+def smoke_output_dir(cfg: dict[str, Any], survey_key: str) -> Path:
+    """Where a --smoke run writes its working files. Kept under a dedicated
+    smoke/ tree so it never clobbers real results."""
+    return Path(cfg["output"]["output_dir"]) / "smoke" / survey_key
+
+
+def smoke_stamp_path(cfg: dict[str, Any]) -> Path:
+    """Stage-level smoke-pass stamp. The gate is keyed on the script source
+    hash (current code), not on any single survey, so the stamp lives once
+    at the stage root."""
+    return Path(cfg["output"]["output_dir"]) / "smoke" / "smoke_pass.json"
 
 
 # =============================================================================
@@ -705,7 +724,7 @@ async def run_rater_phase(
     job_name: str,
     mode: str,
     only_pair_ids: set[str] | None = None,
-) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+) -> tuple[list[dict[str, Any]], dict[str, Any], int]:
     role_key = f"rater_{rater_label}"
     bc = cfg["barrier_coding"]
     rater_cfg = bc[role_key]
@@ -731,9 +750,9 @@ async def run_rater_phase(
                           "content": create_rater_prompt(p)}],
         })
 
-    # For initial pass we truncate the JSONL. For retry, we append and
-    # later rewrite the JSONL deduped-by-pair_id.
-    if mode == "initial":
+    # For initial/smoke passes we truncate the JSONL. For retry, we append
+    # and later rewrite the JSONL deduped-by-pair_id.
+    if mode in ("initial", "smoke"):
         results_path.parent.mkdir(parents=True, exist_ok=True)
         results_path.write_text("", encoding="utf-8")
 
@@ -756,7 +775,7 @@ async def run_rater_phase(
         await client.batch(tasks, job_name=job_name, progress=handler)
     else:
         print(f"   no tasks for {role_key}")
-    return records, tracker
+    return records, tracker, len(tasks)
 
 
 def derive_disagreements(
@@ -799,7 +818,7 @@ async def run_arb_phase(
     job_name: str,
     mode: str,
     only_pair_ids: set[str] | None = None,
-) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+) -> tuple[list[dict[str, Any]], dict[str, Any], int]:
     bc = cfg["barrier_coding"]
     arb_cfg = bc["arbitrator"]
     model = arb_cfg["model"]
@@ -849,7 +868,7 @@ async def run_arb_phase(
         await client.batch(tasks, job_name=job_name, progress=handler)
     else:
         print("   no disagreements to arbitrate")
-    return rows, tracker
+    return rows, tracker, len(tasks)
 
 
 # =============================================================================
@@ -945,7 +964,7 @@ def write_run_report(
     trackers: dict[str, dict[str, Any]],
     wall_seconds: float,
     mode: str,
-) -> tuple[Path, bool]:
+) -> tuple[Path, dict[str, Any]]:
     path = out_dir / cfg["output"]["run_report"]
     bc = cfg["barrier_coding"]
     L: list[str] = []
@@ -973,13 +992,19 @@ def write_run_report(
     arb_failed = (arb_counts.get("request_failed", 0)
                   + arb_counts.get("parse_failed", 0))
 
-    coverage = (final_df["final_primary_barrier"].notna().sum()
-                if "final_primary_barrier" in final_df.columns else 0)
-    overall_pass = (a_failed == 0 and b_failed == 0 and arb_failed == 0
-                    and coverage == len(pairs))
+    # Three-state verdict. `coverage` (pairs with a final barrier) is the
+    # usable-record count; the gap to len(pairs) is the loud, retryable
+    # residual (rater_failed / arbitration_failed). Silent drops were already
+    # fatal in the per-phase gate, so loaded == written == coverage here.
+    coverage = int(final_df["final_primary_barrier"].notna().sum()
+                   if "final_primary_barrier" in final_df.columns else 0)
+    verdict = _smoke.classify_run(
+        requested=len(pairs), written=coverage, loaded=coverage,
+    )
 
-    L.append(f"## Verdict: **{'PASS' if overall_pass else 'FAIL'}**")
+    L.append(f"## Verdict: **{verdict['state']}**")
     L.append("")
+    L.append(f"- {verdict['reason']}")
     L.append(f"- rater_a (model `{bc['rater_a']['model']}`): "
              f"{a_counts.get('ok', 0)} ok, {a_failed} failed")
     L.append(f"- rater_b (model `{bc['rater_b']['model']}`): "
@@ -987,7 +1012,8 @@ def write_run_report(
     L.append(f"- disagreements arbitrated: {len(arb_rows)} "
              f"(of {len(disagreements)} identified; "
              f"{arb_failed} failed)")
-    L.append(f"- final classifications written: {coverage} / {len(pairs)}")
+    L.append(f"- final classifications written: {coverage} / {len(pairs)} "
+             f"({verdict['residual']} residual)")
     L.append("")
 
     if rater_a_records and rater_b_records:
@@ -1041,7 +1067,7 @@ def write_run_report(
              f"for per-phase checkpoints._")
 
     path.write_text("\n".join(L), encoding="utf-8")
-    return path, overall_pass
+    return path, verdict
 
 
 # =============================================================================
@@ -1059,6 +1085,27 @@ def write_jsonl_dedup(path: Path, records: list[dict[str, Any]]) -> None:
     with open(path, "w", encoding="utf-8") as f:
         for rec in keyed.values():
             f.write(json.dumps(rec, default=str) + "\n")
+
+
+def read_jsonl_keys(path: Path) -> tuple[int, list[Any]]:
+    """Return (line_count, [pair_id per line]) for the round-trip check.
+    Counts every written line (the silent-drop bug writes lines whose
+    pair_id is null, which then vanish from load_jsonl_as_map)."""
+    n = 0
+    keys: list[Any] = []
+    if not path.exists():
+        return n, keys
+    with open(path, encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            n += 1
+            try:
+                keys.append(json.loads(line).get("pair_id"))
+            except json.JSONDecodeError:
+                keys.append(None)
+    return n, keys
 
 
 def load_jsonl_as_map(path: Path) -> dict[str, dict[str, Any]]:
@@ -1086,12 +1133,26 @@ async def run_survey(
     survey_key: str,
     args: argparse.Namespace,
 ) -> int:
+    smoke = bool(getattr(args, "smoke", False))
+
     pairs = load_pairs(cfg, survey_key)
     if pairs.empty:
         print(f"[{survey_key}] no pairs to classify; skipping.")
         return 0
 
-    out_dir = survey_output_dir(cfg, survey_key)
+    if smoke:
+        # Bias the smoke sample toward an edge case: include the pair whose
+        # combined text is shortest (most likely to stress the classifier),
+        # then fill to SMOKE_N. Real run code path, tiny N.
+        combined_len = (pairs["survey_text"].astype(str).str.len()
+                        + pairs["acs_text"].astype(str).str.len())
+        shortest = int(combined_len.values.argmin()) if len(pairs) else 0
+        flags = [i == shortest for i in range(len(pairs))]
+        idx = _smoke.pick_smoke_indices(flags, n=_smoke.SMOKE_N)
+        pairs = pairs.iloc[idx].reset_index(drop=True)
+
+    out_dir = (smoke_output_dir(cfg, survey_key) if smoke
+               else survey_output_dir(cfg, survey_key))
     raw_root = out_dir / cfg["output"]["raw_responses_subdir"]
     ckpt_dir = out_dir / cfg["output"]["checkpoints_subdir"]
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -1115,6 +1176,8 @@ async def run_survey(
     mode = "retry" if args.retry_failed else "initial"
     if args.dry_run:
         mode = "dry_run"
+    if smoke:
+        mode = "smoke"
 
     print(f"\n{'='*70}\nSURVEY: {survey_key}  ({len(pairs)} pairs, mode={mode})"
           f"\n{'='*70}")
@@ -1170,23 +1233,65 @@ async def run_survey(
                     only_arb = pair_ids
                 print(f"   {label}: {len(pair_ids)} failed task_ids to retry.")
 
+        # Round-trip gate for a record-producing phase. SMOKE: strict --
+        # every invariant (written==requested, loaded==written, a model
+        # served, no null keys) must hold or it raises SmokeFailure (exit 3).
+        # INITIAL: fatal-only -- a broken read-back contract (loaded!=written),
+        # total failure (written==0), or null keys die loudly. A written<
+        # requested shortfall from LOUD recorded failures is NOT fatal here;
+        # it is a retryable residual graded by the final three-state verdict.
+        # Retry mode appends/dedups, so the identities do not hold; skipped.
+        def gate_jsonl_phase(stage, *, requested, jsonl_path, tracker, model):
+            if mode not in ("initial", "smoke"):
+                return
+            written, keys = read_jsonl_keys(jsonl_path)
+            loaded = len(load_jsonl_as_map(jsonl_path))
+            if smoke:
+                problems = _smoke.check_roundtrip(
+                    requested=requested, written=written, loaded=loaded,
+                    served_models=tracker["served_models"],
+                    model_requested=model,
+                    unknown_model=tracker["unknown_model"],
+                    key_field="pair_id", key_values=keys,
+                )
+                if problems:
+                    raise _smoke.SmokeFailure(
+                        f"[{stage}] " + "; ".join(problems))
+            else:
+                problems = _smoke.fatal_roundtrip_problems(
+                    requested=requested, written=written, loaded=loaded,
+                    key_field="pair_id", key_values=keys,
+                )
+                if problems:
+                    die(f"FATAL [{stage}]: " + "; ".join(problems))
+            print(f"   [roundtrip ok] {stage}: requested={requested} "
+                  f"written={written} loaded={loaded}")
+
         # ---- Phase 1: rater_a ------------------------------------------
         print(f"\n[{survey_key}] Phase 1: rater_a")
-        a_records, a_tracker = await run_rater_phase(
+        a_records, a_tracker, a_requested = await run_rater_phase(
             client=client, cfg=cfg, pairs=pairs, rater_label="a",
             survey_out=out_dir, results_path=rater_a_path,
             checkpoint_path=rater_a_ckpt,
             raw_subdir=raw_root / "rater_a",
             job_name=job_a, mode=mode, only_pair_ids=only_a,
         )
+        gate_jsonl_phase(
+            "stage3_rater_a", requested=a_requested, jsonl_path=rater_a_path,
+            tracker=a_tracker, model=cfg["barrier_coding"]["rater_a"]["model"],
+        )
         # ---- Phase 2: rater_b ------------------------------------------
         print(f"\n[{survey_key}] Phase 2: rater_b")
-        b_records, b_tracker = await run_rater_phase(
+        b_records, b_tracker, b_requested = await run_rater_phase(
             client=client, cfg=cfg, pairs=pairs, rater_label="b",
             survey_out=out_dir, results_path=rater_b_path,
             checkpoint_path=rater_b_ckpt,
             raw_subdir=raw_root / "rater_b",
             job_name=job_b, mode=mode, only_pair_ids=only_b,
+        )
+        gate_jsonl_phase(
+            "stage3_rater_b", requested=b_requested, jsonl_path=rater_b_path,
+            tracker=b_tracker, model=cfg["barrier_coding"]["rater_b"]["model"],
         )
 
         # For retry, dedup the JSONL on disk so the latest record wins.
@@ -1264,7 +1369,7 @@ async def run_survey(
         pairs_by_id = {p["pair_id"]: p for p in pairs.to_dict("records")}
         print(f"\n[{survey_key}] Phase 3: arbitration "
               f"({len(disagreement_ids)} tasks)")
-        arb_rows, arb_tracker = await run_arb_phase(
+        arb_rows, arb_tracker, arb_requested = await run_arb_phase(
             client=client, cfg=cfg,
             pairs_by_id=pairs_by_id,
             rater_a_by_id=rater_a_by_id, rater_b_by_id=rater_b_by_id,
@@ -1287,6 +1392,39 @@ async def run_survey(
     print(f"[{survey_key}] wrote {arb_csv}  "
           f"({len(arb_df)} arbitration rows)")
 
+    # Round-trip gate for the arbitration phase (persisted as CSV). SMOKE is
+    # strict; INITIAL is fatal-only (silent drop / total failure / null keys),
+    # leaving loud arbitration_failed residuals to the three-state verdict.
+    # Skipped in retry mode (append/merge breaks the identities). When no pair
+    # disagreed there are zero tasks, so the served-model invariant is moot.
+    if mode in ("initial", "smoke"):
+        arb_written = len(arb_rows)
+        arb_loaded = len(pd.read_csv(arb_csv)) if arb_csv.exists() else 0
+        arb_keys = (arb_df["pair_id"].tolist()
+                    if "pair_id" in arb_df.columns else [])
+        if smoke:
+            arb_problems = _smoke.check_roundtrip(
+                requested=arb_requested, written=arb_written, loaded=arb_loaded,
+                served_models=arb_tracker["served_models"],
+                model_requested=(cfg["barrier_coding"]["arbitrator"]["model"]
+                                 if arb_requested > 0 else None),
+                unknown_model=arb_tracker["unknown_model"],
+                key_field="pair_id", key_values=arb_keys,
+            )
+            if arb_problems:
+                raise _smoke.SmokeFailure(
+                    "[stage3_arbitrator] " + "; ".join(arb_problems))
+        else:
+            arb_problems = _smoke.fatal_roundtrip_problems(
+                requested=arb_requested, written=arb_written, loaded=arb_loaded,
+                key_field="pair_id", key_values=arb_keys,
+            )
+            if arb_problems:
+                die(f"FATAL [stage3_arbitrator]: " + "; ".join(arb_problems))
+        print(f"   [roundtrip ok] stage3_arbitrator: "
+              f"requested={arb_requested} written={arb_written} "
+              f"loaded={arb_loaded}")
+
     final_df = merge_final(
         pairs, rater_a_by_id, rater_b_by_id, final_arb_rows,
     )
@@ -1294,7 +1432,7 @@ async def run_survey(
     print(f"[{survey_key}] wrote {final_csv}  ({len(final_df)} rows)")
 
     wall = time.monotonic() - t0
-    report_path, overall_pass = write_run_report(
+    report_path, verdict = write_run_report(
         cfg, out_dir=out_dir, survey_key=survey_key,
         pairs=pairs,
         rater_a_records=list(rater_a_by_id.values()),
@@ -1309,8 +1447,13 @@ async def run_survey(
         wall_seconds=wall, mode=mode,
     )
     print(f"[{survey_key}] wrote {report_path}")
-    print(f"[{survey_key}] verdict: {'PASS' if overall_pass else 'FAIL'}")
-    return 0 if overall_pass else 2
+    print(f"[{survey_key}] verdict: {verdict['state']} -- {verdict['reason']}")
+    if smoke:
+        # Smoke validates the round-trip contract, not classification
+        # coverage. Reaching here means every per-phase assert passed.
+        print(f"[{survey_key}] smoke round-trips OK")
+        return 0
+    return verdict["exit_code"]
 
 
 # =============================================================================
@@ -1319,21 +1462,60 @@ async def run_survey(
 
 async def amain(args: argparse.Namespace) -> int:
     cfg = load_config()
-    if args.dry_run and args.retry_failed:
-        die("--dry-run and --retry-failed are mutually exclusive.")
+    if sum(bool(x) for x in (args.dry_run, args.retry_failed, args.smoke)) > 1:
+        die("--dry-run, --retry-failed, and --smoke are mutually exclusive.")
 
     keys = survey_keys_from_arg(cfg, args.survey)
+    mode_label = ("smoke" if args.smoke else
+                  "dry_run" if args.dry_run else
+                  "retry" if args.retry_failed else "initial")
     print("=" * 70)
     print("v2 STAGE 3 BARRIER CLASSIFICATION")
     print(f"surveys: {keys}")
-    print(f"mode:    {'dry_run' if args.dry_run else ('retry' if args.retry_failed else 'initial')}")
+    print(f"mode:    {mode_label}")
     print("=" * 70)
 
+    # ---- SMOKE GATE -----------------------------------------------------
+    # A full/initial run refuses to start unless a smoke pass exists for the
+    # current code. Retry, dry-run, and smoke itself are exempt.
+    if mode_label == "initial":
+        stamp = smoke_stamp_path(cfg)
+        ok, reason = _smoke.smoke_gate_ok(stamp, script_path=THIS_SCRIPT)
+        if not ok:
+            if args.skip_smoke_gate:
+                print("!" * 70)
+                print(f"WARNING: --skip-smoke-gate set; bypassing smoke gate "
+                      f"({reason})")
+                print("!" * 70)
+            else:
+                die(f"No valid smoke pass for current code ({reason}). "
+                    f"Run with --smoke first, or pass --skip-smoke-gate to "
+                    f"override (not recommended).")
+
     exit_code = 0
-    for k in keys:
-        rc = await run_survey(cfg, k, args)
-        if rc != 0:
-            exit_code = rc
+    try:
+        for k in keys:
+            rc = await run_survey(cfg, k, args)
+            if rc != 0:
+                exit_code = rc
+    except _smoke.SmokeFailure as e:
+        print("\n" + "=" * 70)
+        print(f"SMOKE FAILED: {e}")
+        print("=" * 70)
+        return _smoke.SMOKE_EXIT_CODE
+
+    # A clean smoke run stamps the current code so a later full run may start.
+    if args.smoke and exit_code == 0:
+        payload = _smoke.write_smoke_stamp(
+            smoke_stamp_path(cfg), script_path=THIS_SCRIPT,
+            extra={"surveys": keys, "smoke_n": _smoke.SMOKE_N},
+        )
+        print("\n" + "=" * 70)
+        print("SMOKE PASSED")
+        print(f"  stamp: {smoke_stamp_path(cfg)}")
+        print(f"  source_sha256: {payload['source_sha256'][:16]}...")
+        print("=" * 70)
+
     return exit_code
 
 
@@ -1349,6 +1531,14 @@ def main() -> int:
                         help="Load pairs + report intended jobs; no API calls.")
     parser.add_argument("--retry-failed", action="store_true",
                         help="Re-run failed tasks across all phases.")
+    parser.add_argument("--smoke", action="store_true",
+                        help=f"Smoke test: run the full path on "
+                             f"{_smoke.SMOKE_N} pairs into a smoke/ subdir, "
+                             f"assert round-trip invariants, stamp on pass.")
+    parser.add_argument("--skip-smoke-gate", action="store_true",
+                        help="Bypass the mandatory smoke gate on an initial "
+                             "run (prints a loud warning). Rare intentional "
+                             "use only.")
     args = parser.parse_args()
     return asyncio.run(amain(args))
 

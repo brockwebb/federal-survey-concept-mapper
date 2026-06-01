@@ -62,12 +62,18 @@ from typing import Any
 import pandas as pd
 import yaml
 
+# _smoke is a sibling module in src/core/. Guarantee it is importable no
+# matter how this script is launched.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import _smoke  # noqa: E402
+
 
 # =============================================================================
 # CONFIG LOADING
 # =============================================================================
 
 CONFIG_PATH = Path("config/stage2.yaml")
+THIS_SCRIPT = Path(__file__).resolve()
 
 
 def die(msg: str) -> None:
@@ -89,6 +95,18 @@ def load_config() -> dict[str, Any]:
         die(f"Config missing required top-level keys: {missing}")
 
     return cfg
+
+
+def smoke_output_dir(cfg: dict[str, Any]) -> Path:
+    """Where a --smoke run writes its working files. Kept under a dedicated
+    smoke/ tree so it never clobbers real results."""
+    return Path(cfg["output"]["output_dir"]) / "smoke"
+
+
+def smoke_stamp_path(cfg: dict[str, Any]) -> Path:
+    """Stage-level smoke-pass stamp. The gate is keyed on the script source
+    hash (current code), so the stamp lives once at the smoke root."""
+    return Path(cfg["output"]["output_dir"]) / "smoke" / "smoke_pass.json"
 
 
 # =============================================================================
@@ -788,8 +806,9 @@ def write_run_report(
     tracker: dict[str, Any],
     model_requested: str,
     wall_seconds: float,
-) -> tuple[Path, bool]:
-    """Write stage2_run_report.md. Returns (path, overall_pass)."""
+) -> tuple[Path, dict[str, Any]]:
+    """Write stage2_run_report.md. Returns (path, verdict) where verdict is
+    the three-state dict from _smoke.classify_run."""
     report_path = out_dir / cfg["output"]["run_report"]
     L: list[str] = []
     L.append("# v2 Stage 2 Adjudication — Run Report")
@@ -800,7 +819,11 @@ def write_run_report(
     L.append(f"- **Wall time:** {wall_seconds:.1f} s")
     L.append("")
 
-    # PASS/FAIL
+    # Three-state verdict. `usable` resolutions are those actually resolved
+    # (rows present, minus loud arbitration failures); the gap to
+    # disagreements_total is the retryable residual (loud failures + any
+    # uncovered disagreement). Silent drops were already fatal in the
+    # per-phase arb gate, so this grades only the loud residual.
     arb_failed = 0
     if len(arb_df) and "status" in arb_df.columns:
         arb_failed = int(
@@ -808,12 +831,17 @@ def write_run_report(
         )
     resolved_total = len(all_df)
     coverage_gap = disagreements_total - resolved_total
-    overall_pass = (arb_failed == 0) and (coverage_gap == 0)
-    verdict = "PASS" if overall_pass else "FAIL"
-    L.append(f"## Verdict: **{verdict}**")
+    usable = resolved_total - arb_failed
+    verdict = _smoke.classify_run(
+        requested=disagreements_total, written=usable, loaded=usable,
+    )
+    L.append(f"## Verdict: **{verdict['state']}**")
     L.append("")
+    L.append(f"- {verdict['reason']}")
     L.append(f"- Disagreements (total): {disagreements_total}")
     L.append(f"- Resolutions written (arbitrated + auto): {resolved_total}")
+    L.append(f"- Usable resolutions: {usable} "
+             f"({verdict['residual']} residual)")
     L.append(f"- Coverage gap (must be 0): {coverage_gap}")
     L.append(f"- Failed arbitrations (request_failed + parse_failed): "
              f"{arb_failed}")
@@ -894,7 +922,7 @@ def write_run_report(
     L.append("")
 
     report_path.write_text("\n".join(L), encoding="utf-8")
-    return report_path, overall_pass
+    return report_path, verdict
 
 
 # =============================================================================
@@ -903,15 +931,52 @@ def write_run_report(
 
 async def amain(args: argparse.Namespace) -> int:
     cfg = load_config()
+    smoke = bool(getattr(args, "smoke", False))
 
     mode = "retry" if args.retry_failed else "initial"
     if args.dry_run:
         mode = "dry_run"
+    if smoke:
+        mode = "smoke"
 
     print("=" * 70)
     print("v2 STAGE 2 ADJUDICATION")
     print(f"MODE: {mode}")
     print("=" * 70)
+
+    # ---- SMOKE GATE -----------------------------------------------------
+    # A full/initial run refuses to start unless a smoke pass exists for the
+    # current code. Retry, dry-run, and smoke itself are exempt. The gate
+    # sits here, before any data is loaded or any batch is submitted.
+    if mode == "initial":
+        stamp = smoke_stamp_path(cfg)
+        ok, reason = _smoke.smoke_gate_ok(stamp, script_path=THIS_SCRIPT)
+        if not ok:
+            if args.skip_smoke_gate:
+                print("!" * 70)
+                print(f"WARNING: --skip-smoke-gate set; bypassing smoke gate "
+                      f"({reason})")
+                print("!" * 70)
+            else:
+                die(f"No valid smoke pass for current code ({reason}). "
+                    f"Run with --smoke first, or pass --skip-smoke-gate to "
+                    f"override (not recommended).")
+
+    try:
+        return await _run(args, cfg, smoke, mode)
+    except _smoke.SmokeFailure as e:
+        print("\n" + "=" * 70)
+        print(f"SMOKE FAILED: {e}")
+        print("=" * 70)
+        return _smoke.SMOKE_EXIT_CODE
+
+
+async def _run(
+    args: argparse.Namespace,
+    cfg: dict[str, Any],
+    smoke: bool,
+    mode: str,
+) -> int:
 
     # --- Load inputs ---
     print("\n1. Loading data...")
@@ -939,8 +1004,26 @@ async def amain(args: argparse.Namespace) -> int:
         print("\nDRY RUN complete. Exiting before harness/API.")
         return 0
 
+    # --- Smoke: limit arbitration to SMOKE_N pairs, biased to a tricky row ---
+    # "Tricky" = a row whose question text is empty/NaN (the load_questions
+    # path substitutes "[NaN]"), which stresses the arbitration prompt. We run
+    # the full real path on these SMOKE_N pairs only. auto_dual is dropped so
+    # the smoke run touches only the record-producing arbitration phase.
+    if smoke:
+        q = needs_arb["question"].astype(str)
+        flags = [
+            (not s.strip()) or s.strip() in ("[NaN]", "nan", "NaN", "None")
+            for s in q
+        ]
+        idx = _smoke.pick_smoke_indices(flags, n=_smoke.SMOKE_N)
+        needs_arb = needs_arb.iloc[idx].reset_index(drop=True)
+        auto_dual = auto_dual.iloc[0:0].copy()
+        print(f"\nSMOKE: limited to {len(needs_arb)} arbitration pairs "
+              f"(of {len(disagreements)} disagreements).")
+
     # --- Output paths ---
-    out_dir = Path(cfg["output"]["output_dir"])
+    out_dir = (smoke_output_dir(cfg) if smoke
+               else Path(cfg["output"]["output_dir"]))
     raw_subdir = out_dir / cfg["output"]["raw_responses_subdir"]
     ckpt_dir = out_dir / cfg["output"]["checkpoints_subdir"]
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -1002,6 +1085,7 @@ async def amain(args: argparse.Namespace) -> int:
         print(f"  arbitrator model {arb_model!r} resolved in pool")
 
         tasks, baselines = build_api_tasks(needs_arb, taxonomy, cfg)
+        arb_requested = len(tasks)
         print(f"  built {len(tasks)} arbitration tasks "
               f"(max_tokens={arb_cfg['max_tokens']}, "
               f"temperature={arb_cfg['temperature']})")
@@ -1047,6 +1131,52 @@ async def amain(args: argparse.Namespace) -> int:
         elif arb_csv.exists():
             arb_df = pd.read_csv(arb_csv)
 
+    # --- Round-trip gate for the arbitration phase (the record-producing
+    # phase). SMOKE: strict -- every invariant must hold or SmokeFailure
+    # (exit 3). INITIAL: fatal-only -- a broken read-back contract
+    # (loaded!=written), total failure (written==0), or null keys die loudly;
+    # a written<requested shortfall from LOUD arbitration failures is a
+    # retryable residual graded by the three-state verdict, not fatal here.
+    # Retry mode appends/merges, so the identities do not hold; skipped.
+    if mode in ("initial", "smoke"):
+        arb_written = len(results)
+        if arb_csv.exists():
+            arb_disk = pd.read_csv(arb_csv)
+            arb_loaded = int(arb_disk["id"].notna().sum()) \
+                if "id" in arb_disk.columns else len(arb_disk)
+            arb_keys = (arb_disk["id"].tolist()
+                        if "id" in arb_disk.columns else [])
+        else:
+            arb_loaded = 0
+            arb_keys = []
+        if smoke:
+            arb_problems = _smoke.check_roundtrip(
+                requested=arb_requested,
+                written=arb_written,
+                loaded=arb_loaded,
+                served_models=tracker["served_models"],
+                model_requested=(arb_model if arb_requested > 0 else None),
+                unknown_model=tracker["unknown_model"],
+                key_field="id",
+                key_values=arb_keys,
+            )
+            if arb_problems:
+                raise _smoke.SmokeFailure(
+                    "[stage2_arbitration] " + "; ".join(arb_problems))
+        else:
+            arb_problems = _smoke.fatal_roundtrip_problems(
+                requested=arb_requested,
+                written=arb_written,
+                loaded=arb_loaded,
+                key_field="id",
+                key_values=arb_keys,
+            )
+            if arb_problems:
+                die(f"FATAL [stage2_arbitration]: " + "; ".join(arb_problems))
+        print(f"   [roundtrip ok] stage2_arbitration: "
+              f"requested={arb_requested} written={arb_written} "
+              f"loaded={arb_loaded}")
+
     # --- Auto dual-modal (always written from disagreement state) ---
     print(f"\n5. Auto-classifying {len(auto_dual)} dual-modal cases...")
     auto_rows = build_auto_dual_modal_rows(auto_dual)
@@ -1088,7 +1218,7 @@ async def amain(args: argparse.Namespace) -> int:
         t: int((needs_arb["confidence_tier"] == t).sum())
         for t in [name for name, _, _ in CONFIDENCE_TIERS]
     }
-    report_path, overall_pass = write_run_report(
+    report_path, verdict = write_run_report(
         cfg,
         out_dir=out_dir,
         mode=mode,
@@ -1118,10 +1248,25 @@ async def amain(args: argparse.Namespace) -> int:
             arb_df["status"].isin(["request_failed", "parse_failed", "failed"]).sum()
         )
         print(f"Failed arbitrations:      {failed}")
-    print(f"Verdict: {'PASS' if overall_pass else 'FAIL'}")
+    print(f"Verdict: {verdict['state']} -- {verdict['reason']}")
     print("=" * 70)
 
-    return 0 if overall_pass else 2
+    if smoke:
+        # Smoke validates the round-trip contract, not full coverage. Reaching
+        # here means the arbitration round-trip assert passed; stamp the
+        # current code so a later full run may start.
+        payload = _smoke.write_smoke_stamp(
+            smoke_stamp_path(cfg), script_path=THIS_SCRIPT,
+            extra={"smoke_n": _smoke.SMOKE_N},
+        )
+        print("\n" + "=" * 70)
+        print("SMOKE PASSED")
+        print(f"  stamp: {smoke_stamp_path(cfg)}")
+        print(f"  source_sha256: {payload['source_sha256'][:16]}...")
+        print("=" * 70)
+        return 0
+
+    return verdict["exit_code"]
 
 
 def main() -> int:
@@ -1139,9 +1284,22 @@ def main() -> int:
         help="Read checkpoint; re-run only tasks in request_failed ∪ "
              "parse_failed.",
     )
+    parser.add_argument(
+        "--smoke",
+        action="store_true",
+        help=f"Smoke test: run the full path on {_smoke.SMOKE_N} "
+             f"arbitration pairs into a smoke/ subdir, assert round-trip "
+             f"invariants, stamp on pass.",
+    )
+    parser.add_argument(
+        "--skip-smoke-gate",
+        action="store_true",
+        help="Bypass the mandatory smoke gate on an initial run (prints a "
+             "loud warning). Rare intentional use only.",
+    )
     args = parser.parse_args()
-    if args.dry_run and args.retry_failed:
-        die("--dry-run and --retry-failed are mutually exclusive.")
+    if sum(bool(x) for x in (args.dry_run, args.retry_failed, args.smoke)) > 1:
+        die("--dry-run, --retry-failed, and --smoke are mutually exclusive.")
     return asyncio.run(amain(args))
 
 

@@ -34,6 +34,11 @@ import numpy as np
 import pandas as pd
 import yaml
 
+# _smoke is a sibling module in src/core/. Guarantee it is importable no
+# matter the cwd the script is launched from.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import _smoke  # noqa: E402
+
 try:
     from sklearn.metrics import cohen_kappa_score
     HAS_SKLEARN = True
@@ -450,17 +455,29 @@ def main() -> int:
         "--v2-only", action="store_true",
         help="Compare only v2 rater_a vs rater_b (skip v1 cross-version comparisons).",
     )
+    parser.add_argument(
+        "--smoke", action="store_true",
+        help=(
+            f"Round-trip smoke test: run the real v2 rater_a vs rater_b "
+            f"comparison on only {_smoke.SMOKE_N} ids common to both raters, "
+            f"writing into a smoke/ subdir, then assert the join round-trips. "
+            f"Exits {_smoke.SMOKE_EXIT_CODE} on failure."
+        ),
+    )
     args = parser.parse_args()
 
     cfg = load_config()
 
-    # Output directory
+    # Output directory. In smoke mode everything goes under comparison/smoke/
+    # so a smoke run never clobbers real comparison outputs.
     out_root = Path(cfg["output"]["output_dir"])
     comp_dir = out_root / "comparison"
+    if args.smoke:
+        comp_dir = comp_dir / "smoke"
     comp_dir.mkdir(parents=True, exist_ok=True)
 
     print("=" * 70)
-    print("v2 STAGE 1 COMPARISON")
+    print("v2 STAGE 1 COMPARISON" + ("  [SMOKE]" if args.smoke else ""))
     print("=" * 70)
 
     # --- Load v2 results ---
@@ -482,6 +499,13 @@ def main() -> int:
     v2a = load_jsonl(v2a_path, f"v2_rater_a ({rater_a_cfg['model']})")
     v2b = load_jsonl(v2b_path, f"v2_rater_b ({rater_b_cfg['model']})")
 
+    # --- Part 4: loaded frames must be non-empty (the "exit 0 on 0 records"
+    # hazard). load_jsonl already dies on a missing file; guard the empty case.
+    if len(v2a) == 0:
+        die(f"v2_rater_a loaded 0 records from {v2a_path} -- nothing to compare.")
+    if len(v2b) == 0:
+        die(f"v2_rater_b loaded 0 records from {v2b_path} -- nothing to compare.")
+
     # --- Load v1 results ---
     v1_claude = None
     v1_openai = None
@@ -501,6 +525,51 @@ def main() -> int:
     questions_df = load_questions(cfg)
     print(f"  {len(questions_df)} questions loaded")
 
+    # --- SMOKE: run the real comparison on SMOKE_N ids present in BOTH raters,
+    # write into comparison/smoke/, then assert the join round-trips. -----------
+    if args.smoke:
+        common_ids = sorted(set(v2a["id"]) & set(v2b["id"]))[:_smoke.SMOKE_N]
+        requested = len(common_ids)
+        if requested == 0:
+            print("SMOKE FAILED: no ids common to rater_a and rater_b",
+                  file=sys.stderr)
+            sys.exit(_smoke.SMOKE_EXIT_CODE)
+        v2a_s = v2a[v2a["id"].isin(common_ids)].copy()
+        v2b_s = v2b[v2b["id"].isin(common_ids)].copy()
+        print(f"\n4. [SMOKE] comparing {requested} common ids...")
+        comp = compare_pair(v2a_s, v2b_s, "v2a", "v2b", questions_df, comp_dir)
+        written = int(comp["joined_records"])
+
+        # The comparison's own CSVs (disagreements, matrix) hold only a subset
+        # of the join (e.g. disagreements can be < written), so they can't
+        # verify "loaded == written" directly. Write the full inner join to a
+        # dedicated smoke CSV and read that back -- this is the faithful
+        # round-trip of the joined record set.
+        join_csv = comp_dir / "smoke_join.csv"
+        merged_s = v2a_s.merge(
+            v2b_s, on="id", suffixes=("_v2a", "_v2b"), how="inner",
+        )
+        merged_s.to_csv(join_csv, index=False, encoding="utf-8")
+        readback = pd.read_csv(join_csv)
+        loaded = len(readback)
+        try:
+            _smoke.assert_roundtrip(
+                "stage1_compare",
+                requested=requested, written=written, loaded=loaded,
+                model_requested=None,
+                key_field="id",
+                key_values=readback["id"].tolist(),
+            )
+        except _smoke.SmokeFailure as e:
+            print(f"SMOKE FAILED: {e}", file=sys.stderr)
+            sys.exit(_smoke.SMOKE_EXIT_CODE)
+        print("\n" + "=" * 70)
+        print(f"SMOKE PASSED  (requested={requested}, written={written}, "
+              f"loaded={loaded})")
+        print(f"  smoke outputs: {comp_dir}")
+        print("=" * 70)
+        sys.exit(0)
+
     # --- Run comparisons ---
     print("\n4. Computing comparisons...")
     comparisons: list[dict] = []
@@ -513,9 +582,31 @@ def main() -> int:
 
     # v2 internal: rater_a vs rater_b
     print("\n  v2 rater_a vs v2 rater_b...")
-    comparisons.append(compare_pair(
+    v2_internal = compare_pair(
         v2a, v2b, "v2a", "v2b", questions_df, comp_dir,
-    ))
+    )
+    comparisons.append(v2_internal)
+
+    # --- Part 4: the v2 internal join is the spine of this analysis. An
+    # inner join that produced 0 rows means the rater id spaces don't overlap
+    # -- a silent "exit 0 with nothing" failure. Read back a written CSV to
+    # confirm the analysis actually produced rows.
+    join_check_csv = comp_dir / "topic_matrix_v2a_vs_v2b.csv"
+    loaded_back = len(pd.read_csv(join_check_csv)) if join_check_csv.exists() else 0
+    problems: list[str] = []
+    if v2_internal["joined_records"] == 0:
+        problems.append(
+            "v2 rater_a/rater_b inner join produced 0 rows (no overlapping ids)"
+        )
+    # The confusion matrix CSV (with margins) must be non-empty when the join
+    # produced rows; an empty file would be a write/read-back drop.
+    elif loaded_back == 0:
+        problems.append(
+            "v2 internal join reported rows but topic_matrix CSV read back empty "
+            "(write/read-back drop)"
+        )
+    if problems:
+        die("; ".join(problems))
 
     # Confidence summaries for v2
     confidences.append(confidence_summary(v2a, f"v2_rater_a ({rater_a_cfg['model']})"))

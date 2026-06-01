@@ -28,6 +28,7 @@ Outputs (relative to v2/output/stage3/candidate_pairs/):
 """
 from __future__ import annotations
 
+import argparse
 import json
 import sys
 from datetime import datetime, timezone
@@ -36,6 +37,11 @@ from typing import Any
 
 import pandas as pd
 import yaml
+
+# _smoke is a sibling module in src/core/. Guarantee it is importable no
+# matter the cwd the script is launched from.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import _smoke  # noqa: E402
 
 
 CONFIG_PATH = Path("config/stage3.yaml")
@@ -238,13 +244,30 @@ def build_pairs_for_survey(
 # =============================================================================
 
 def main() -> int:
+    parser = argparse.ArgumentParser(
+        description="v2 Stage 3 pair builder: candidate question pairs",
+    )
+    parser.add_argument(
+        "--smoke", action="store_true",
+        help=(
+            f"Round-trip smoke test: build pairs normally then cap each "
+            f"survey to {_smoke.SMOKE_N} pairs, write into a smoke/ subdir, "
+            f"and assert each pairs_<survey>.csv round-trips. Exits "
+            f"{_smoke.SMOKE_EXIT_CODE} on failure."
+        ),
+    )
+    args = parser.parse_args()
+    smoke = bool(args.smoke)
+
     cfg = load_config()
     out_root = Path(cfg["output"]["output_dir"])
     pairs_dir = out_root / cfg["output"]["pairs_subdir"]
+    if smoke:
+        pairs_dir = pairs_dir / "smoke"
     pairs_dir.mkdir(parents=True, exist_ok=True)
 
     print("=" * 70)
-    print("v2 STAGE 3 PAIR BUILDER")
+    print("v2 STAGE 3 PAIR BUILDER" + ("  [SMOKE]" if smoke else ""))
     print("=" * 70)
 
     print("\n1. Loading inputs...")
@@ -271,6 +294,11 @@ def main() -> int:
         pairs, diag = build_pairs_for_survey(
             survey_key, survey_cfg, target_cfg, qmap, master, match_on,
         )
+        # SMOKE: cap to the first SMOKE_N built pairs so the real code path
+        # runs but only a tiny atomic unit is written/read back.
+        if smoke and len(pairs):
+            pairs = pairs.head(_smoke.SMOKE_N).reset_index(drop=True)
+            diag["pairs_total"] = int(len(pairs))
         out_path = pairs_dir / f"pairs_{survey_key}.csv"
         pairs.to_csv(out_path, index=False, encoding="utf-8")
         print(f"     source qs (map / after join): "
@@ -284,6 +312,34 @@ def main() -> int:
               f"-> {out_path}")
         if diag["duplicates_dropped"]:
             print(f"     duplicates dropped: {diag['duplicates_dropped']}")
+
+        # --- Part 4 (+ smoke): read the CSV back. A survey that reported
+        # pairs but reads back fewer rows, or has any null/empty pair_id, is a
+        # silent write/read-back drop -- fail loudly. A legitimately-empty
+        # survey (0 pairs built) is allowed.
+        n_built = int(len(pairs))
+        if n_built > 0:
+            back = pd.read_csv(out_path)
+            problems = _smoke.check_roundtrip(
+                requested=n_built,
+                written=n_built,
+                loaded=len(back),
+                model_requested=None,
+                key_field="pair_id",
+                key_values=back["pair_id"].tolist()
+                if "pair_id" in back.columns else [],
+            )
+            if "pair_id" not in back.columns:
+                problems.append(
+                    f"{survey_key}: pairs CSV read back without a 'pair_id' column"
+                )
+            if problems:
+                if smoke:
+                    print(f"SMOKE FAILED: [{survey_key}] " + "; ".join(problems),
+                          file=sys.stderr)
+                    sys.exit(_smoke.SMOKE_EXIT_CODE)
+                die(f"[{survey_key}] " + "; ".join(problems))
+
         summary["surveys"][survey_key] = diag
         total_pairs += diag["pairs_total"]
 
@@ -293,6 +349,14 @@ def main() -> int:
         json.dumps(summary, indent=2, default=str), encoding="utf-8",
     )
     print(f"\n3. Wrote summary: {summary_path}")
+
+    if smoke:
+        print("\n" + "=" * 70)
+        print(f"SMOKE PASSED  (each survey capped to {_smoke.SMOKE_N} pairs, "
+              f"all CSVs round-tripped)")
+        print(f"  smoke outputs: {pairs_dir}")
+        print("=" * 70)
+        sys.exit(0)
 
     print("\n" + "=" * 70)
     print("HEADLINE")
