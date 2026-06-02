@@ -178,38 +178,30 @@ def load_v1(survey_key: str) -> pd.DataFrame:
 
 
 def load_v2(survey_key: str) -> pd.DataFrame:
-    """Return v2 frame: [pair_key, v2_pair_id, v2_L1, v2_feas]."""
-    pairs_path = V2_PAIRS_DIR / f"pairs_{survey_key}.csv"
+    """Return v2 frame: [pair_key, v2_pair_id, v2_L1, v2_feas].
+
+    The v2 final_barrier_classifications.csv already carries survey_text and
+    acs_text, so no merge with the pairs file is needed. The final L1 column
+    is 'final_classification' and feasibility is 'final_feasibility'.
+    """
     final_path = V2_RESULTS_DIR / survey_key / "final_barrier_classifications.csv"
-    if not pairs_path.exists():
-        die(f"v2 pairs not found: {pairs_path.resolve()}")
     if not final_path.exists():
         die(f"v2 final not found: {final_path.resolve()}")
 
-    pairs = pd.read_csv(pairs_path, encoding="utf-8")
-    for c in ("pair_id", "survey_text", "acs_text"):
-        if c not in pairs.columns:
-            die(f"v2 pairs missing column {c!r}")
-
     final = pd.read_csv(final_path, encoding="utf-8")
-    if "pair_id" not in final.columns:
-        die("v2 final missing 'pair_id'")
-    # Final L1 column is 'classification'; feasibility is 'feasibility'.
-    l1_col = "classification" if "classification" in final.columns else None
-    feas_col = "feasibility" if "feasibility" in final.columns else None
-    if l1_col is None or feas_col is None:
-        die(f"v2 final missing classification/feasibility columns; "
-            f"have {list(final.columns)}")
+    needed = ["pair_id", "survey_text", "acs_text",
+              "final_classification", "final_feasibility"]
+    missing = [c for c in needed if c not in final.columns]
+    if missing:
+        die(f"v2 final missing columns {missing}; have {list(final.columns)}")
 
-    df = pairs.merge(
-        final[["pair_id", l1_col, feas_col]],
-        on="pair_id", how="inner",
-    )
-    df["pair_key"] = [pair_key(s, a) for s, a in zip(df["survey_text"], df["acs_text"])]
+    df = final[needed].copy()
+    df["pair_key"] = [pair_key(s, a)
+                      for s, a in zip(df["survey_text"], df["acs_text"])]
     df = df.rename(columns={
         "pair_id": "v2_pair_id",
-        l1_col: "v2_L1",
-        feas_col: "v2_feas",
+        "final_classification": "v2_L1",
+        "final_feasibility": "v2_feas",
     })
     return df[["pair_key", "v2_pair_id", "v2_L1", "v2_feas"]]
 
