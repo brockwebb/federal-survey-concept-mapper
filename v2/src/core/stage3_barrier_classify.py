@@ -52,6 +52,12 @@ import yaml
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import _smoke  # noqa: E402
 
+# prompt_equivalence is the TEVV prompt-fidelity gate in the sibling tevv/
+# package. Imported in-process (NOT shelled out) so it runs on the WORK machine
+# with stdlib + pyyaml only, exactly like the rest of this script.
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "tevv"))
+import prompt_equivalence as _prompt_gate  # noqa: E402
+
 
 CONFIG_PATH = Path("config/stage3.yaml")
 THIS_SCRIPT = Path(__file__).resolve()
@@ -1492,6 +1498,33 @@ async def amain(args: argparse.Namespace) -> int:
                     f"Run with --smoke first, or pass --skip-smoke-gate to "
                     f"override (not recommended).")
 
+    # ---- PROMPT-EQUIVALENCE GATE ----------------------------------------
+    # Second precondition on the initial-run path. The smoke gate proves
+    # round-trip integrity; THIS proves prompt fidelity -- that v2's barrier
+    # prompt asks the same (or an acknowledged-divergent) question as v1's. In a
+    # reproducibility study that fidelity is the thing under test, so a v2 run
+    # must not start while an UNacknowledged prompt divergence exists. In-process
+    # call (no subprocess); evaluate() has no side effects and writes nothing.
+    if mode_label == "initial":
+        try:
+            pe_exit, _pe_results, _pe_unver = _prompt_gate.evaluate("stage3")
+        except SystemExit as e:  # evaluate() -> die() on a config/IO FATAL
+            die(f"Prompt-equivalence gate could not run (exit {e.code}). The "
+                f"gate itself is broken; fix it before running Stage 3.")
+        if pe_exit != 0:
+            if args.skip_prompt_gate:
+                print("!" * 70)
+                print("WARNING: --skip-prompt-gate set; bypassing prompt-"
+                      "equivalence gate. The v1-vs-v2 comparison this run feeds "
+                      "is CONFOUNDED by an unacknowledged prompt divergence.")
+                print("!" * 70)
+            else:
+                die("v2 Stage 3 prompt diverges from v1 in an UNACKNOWLEDGED "
+                    f"way (prompt-equivalence gate exit {pe_exit}). Acknowledge "
+                    "it in v2/config/prompt_divergences.yaml with a written "
+                    "justification, or pass --skip-prompt-gate to override "
+                    "(runs a confounded comparison; not recommended).")
+
     exit_code = 0
     try:
         for k in keys:
@@ -1539,6 +1572,11 @@ def main() -> int:
                         help="Bypass the mandatory smoke gate on an initial "
                              "run (prints a loud warning). Rare intentional "
                              "use only.")
+    parser.add_argument("--skip-prompt-gate", action="store_true",
+                        help="Bypass the mandatory prompt-equivalence gate on "
+                             "an initial run (prints a loud warning). Means "
+                             "knowingly running a CONFOUNDED v1-vs-v2 "
+                             "comparison. Rare intentional use only.")
     args = parser.parse_args()
     return asyncio.run(amain(args))
 

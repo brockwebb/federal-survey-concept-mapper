@@ -187,6 +187,35 @@ See **`docs/FIGURE_MAP.md`** — dedicated figure traceability document covering
 
 ---
 
+## v2 TEVV Artifacts
+
+### Prompt-Equivalence Gate (v1-vs-v2 prompt fidelity)
+
+| Output File | Location | Producing Script | Input Data |
+|-------------|----------|-----------------|------------|
+| `prompt_equivalence_report.md` | `docs/stages/tevv/` | `v2/src/tevv/prompt_equivalence.py` | rendered v1/v2 stage3 builders + `v2/config/prompt_divergences.yaml` (allowlist) |
+| `prompt_equivalence_evidence.json` | `docs/stages/tevv/` | `v2/src/tevv/prompt_equivalence.py` | same |
+
+**What it is:** A static-text gate (no model calls) that mechanically diffs the
+rendered v1 vs v2 prompts across four dimensions (taxonomy block, available
+codes, output schema, task framing) and fails unless every divergence is
+acknowledged with a written justification in the allowlist. Run from `v2/`:
+`python src/tevv/prompt_equivalence.py --stage stage3 --report`. Exit 0 =
+equivalent or all-acknowledged; 2 = unacknowledged divergence; 1 = config/IO
+fatal; 4 = nothing verified. The allowlist `v2/config/prompt_divergences.yaml`
+is its config input; both ship to WORK via git.
+
+**Coverage:** stage3 is VERIFIED (21 acknowledged divergences). stage1 and
+stage2 are UNVERIFIED with documented reasons (stage1 v1 module is
+import-unsafe; stage2 needs classification-aware extractors). See the report.
+
+**Wired into:** `v2/src/core/stage3_barrier_classify.py` calls
+`evaluate("stage3")` in-process on the initial-run path (second precondition
+after the smoke gate); blocks unless acknowledged, `--skip-prompt-gate` to
+override.
+
+---
+
 ## Known Issues
 
 1. **Report 01 scripts use relative paths** (`../output/comparison`). They must be run from `src/` directory. Post-restructure, these paths may be broken since scripts moved to `src/core/`.
