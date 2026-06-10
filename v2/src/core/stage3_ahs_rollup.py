@@ -25,9 +25,23 @@ F1 candidate rule automatically. The script buckets purely by final_feasibility
 and ASSERTS that candidate + discard == total: any other value (NHB-as-feas,
 null from a failed row) is a finding reported loudly, never silently dropped.
 
+UNIT DISCIPLINE (the 2026-06-03 revision)
+-----------------------------------------
+The tier counts (F1/F2/F3) are counts of PAIRS, an intermediate unit: one AHS
+question pairs against several ACS questions sharing a subtopic, so the pair
+total is pair-instances, not questions. The deliverable statement must be in
+QUESTIONS: of the N AHS questions that entered harmonization pairing, X have at
+least one candidate (F1/F2) match into ACS. The question-level denominators come
+from the pair builder's own pair_summary.json (Definition B: AHS column non-empty
+in PublicSurveyQuestionsMap), never recomputed here, so numerator and denominator
+describe the same population. The numerator collapses the F1/F2 pair set onto
+survey_q_id (the AHS-side question id). Pair-level counts are kept and reported,
+but labeled explicitly as pairs so the two units are never conflated again.
+
 Run from v2/ (the AHS data lives on WORK only; authored on DEV, run on WORK):
     python src/core/stage3_ahs_rollup.py
-    python src/core/stage3_ahs_rollup.py --ahs-dir output/stage3/results/ahs
+    python src/core/stage3_ahs_rollup.py --ahs-dir output/stage3/results/ahs \
+        --pairs-dir output/stage3/candidate_pairs
 """
 from __future__ import annotations
 
@@ -46,6 +60,16 @@ import pandas as pd
 
 DEFAULT_AHS_DIR = Path("output/stage3/results/ahs")
 INPUT_NAME = "final_barrier_classifications.csv"
+
+# Pair builder outputs (mirrors config/stage3.yaml output.output_dir +
+# output.pairs_subdir + output.pair_summary_json). The question-level
+# denominators are read from these, NOT recomputed: pair_summary.json carries
+# the exact Definition-B population the pairing used, and the pairs file carries
+# the entered-pairing question set keyed on survey_q_id.
+DEFAULT_PAIRS_DIR = Path("output/stage3/candidate_pairs")
+PAIR_SUMMARY_NAME = "pair_summary.json"
+PAIRS_AHS_NAME = "pairs_ahs.csv"
+AHS_SURVEY_KEY = "ahs"   # key under pair_summary.json -> surveys
 
 CANDIDATE_FEAS = {"F1", "F2"}   # F3 = discard
 DISCARD_FEAS = {"F3"}
@@ -70,9 +94,13 @@ REQUIRED_COLUMNS = [
 ]
 
 # Columns carried into the candidate CSV / strongest-leads listing.
+# survey_q_id and shared_topic are carried so the question-level rollup
+# (collapse on survey_q_id, reach by topic/subtopic) is auditable straight
+# from ahs_candidates.csv, not only from the in-memory frame.
 CANDIDATE_COLS = [
-    "pair_id", "final_feasibility", "shared_subtopic", "survey_text",
-    "acs_text", "final_primary_barrier", "final_confidence", "decision_method",
+    "pair_id", "survey_q_id", "final_feasibility", "shared_topic",
+    "shared_subtopic", "survey_text", "acs_text", "final_primary_barrier",
+    "final_confidence", "decision_method",
 ]
 
 
@@ -205,9 +233,18 @@ def build_summary(df: pd.DataFrame, b: dict[str, Any],
     return {
         "input_path": str(input_path),
         "encoding": "utf-8",
+        # UNIT: every count in this block is over PAIRS, an intermediate unit.
+        # The deliverable question-level numbers live under `question_level`,
+        # added in main(). These keys are named so they cannot be misread as
+        # question counts.
+        "unit_note": "feasibility_tiers and *_pairs counts are PAIR counts, not "
+                     "questions; see question_level for the deliverable unit.",
         "total_pairs": n_total,
+        "pairs_total": n_total,
+        "candidates_pairs": b["n_cand"],
         "candidate_definition": "final_feasibility in {F1, F2}; discard = F3",
         "feasibility_tiers": {
+            "unit": "pairs",
             "F1": b["f1"], "F2": b["f2"], "F3": b["f3"],
             "candidate_count": b["n_cand"], "discard_count": b["n_disc"],
             "candidate_pct": pct(b["n_cand"]), "discard_pct": pct(b["n_disc"]),
@@ -224,6 +261,229 @@ def build_summary(df: pd.DataFrame, b: dict[str, Any],
         "candidate_decision_method": _counts(cand["decision_method"]),
         "check_pair": check,
     }
+
+
+# =============================================================================
+# QUESTION-LEVEL ROLLUP (the deliverable unit) + TOPIC/SUBTOPIC REACH
+# =============================================================================
+
+# Keys that MUST exist in pair_summary.json -> surveys.ahs. A missing key means
+# the summary was written by a pair builder that predates the diagnostics block,
+# so we fail rather than guess a denominator.
+PAIR_SUMMARY_AHS_KEYS = [
+    "source_questions_in_map", "source_after_master_join", "shared_subtopics",
+]
+
+
+def load_pair_summary_ahs(pairs_dir: Path) -> dict[str, Any]:
+    """Read surveys.ahs from pair_summary.json. This is the Definition-B
+    population the pairing used; the question-level denominators come from here
+    and are never recomputed in this script."""
+    path = pairs_dir / PAIR_SUMMARY_NAME
+    if not path.exists():
+        die(f"pair_summary.json not found: {path.resolve()}. The question-level "
+            f"denominators are read from the pair builder's summary; run "
+            f"stage3_pair_builder.py first, or pass --pairs-dir.")
+    try:
+        summary = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as e:
+        die(f"pair_summary.json is not valid JSON ({path}): {e}")
+    surveys = summary.get("surveys")
+    if not isinstance(surveys, dict) or AHS_SURVEY_KEY not in surveys:
+        die(f"pair_summary.json has no surveys.{AHS_SURVEY_KEY} block: {path}")
+    block = surveys[AHS_SURVEY_KEY]
+    missing = [k for k in PAIR_SUMMARY_AHS_KEYS if k not in block]
+    if missing:
+        die(f"pair_summary.json surveys.{AHS_SURVEY_KEY} missing key(s) "
+            f"{missing}; have {list(block.keys())}")
+    return block
+
+
+def load_pairs_ahs(pairs_dir: Path) -> pd.DataFrame:
+    """Read pairs_ahs.csv -- the entered-pairing question set. Used only for the
+    set of survey_q_ids that produced >=1 pair and their topic/subtopic; the
+    DENOMINATOR counts come from pair_summary.json, not from this file's row
+    count (the pairs file structurally excludes any AHS question that produced
+    zero pairs)."""
+    path = pairs_dir / PAIRS_AHS_NAME
+    if not path.exists():
+        die(f"pairs_ahs.csv not found: {path.resolve()}. Pass --pairs-dir if it "
+            f"lives elsewhere; this script never guesses alternative paths.")
+    df = pd.read_csv(path, encoding="utf-8")
+    needed = ["survey_q_id", "shared_topic", "shared_subtopic"]
+    missing = [c for c in needed if c not in df.columns]
+    if missing:
+        die(f"pairs_ahs.csv missing column(s) {missing}; have {list(df.columns)}")
+    df["survey_q_id"] = df["survey_q_id"].astype(int)
+    return df
+
+
+def _assert_single_subtopic(df: pd.DataFrame, label: str) -> None:
+    """Each AHS question carries a single final_subtopic (and therefore a single
+    topic), so a survey_q_id must map to exactly one (shared_topic,
+    shared_subtopic). If that invariant breaks, the reach numerators would
+    double-count and the per-cell sums would no longer reconcile to the
+    question total, so we fail loudly with the offenders rather than silently
+    over-count."""
+    g = df.groupby("survey_q_id")
+    multi_sub = g["shared_subtopic"].nunique()
+    multi_top = g["shared_topic"].nunique()
+    bad = sorted(set(multi_sub[multi_sub > 1].index)
+                 | set(multi_top[multi_top > 1].index))
+    if bad:
+        die(f"{label}: {len(bad)} survey_q_id(s) span >1 topic/subtopic "
+            f"(e.g. {bad[:10]}); the single-subtopic-per-question invariant is "
+            f"broken and the reach partition would over-count.")
+
+
+def _reach_by(group_col: str, pairs_ahs: pd.DataFrame,
+              cand: pd.DataFrame, sub_to_topic: dict[str, str] | None
+              ) -> list[dict[str, Any]]:
+    """Three-column reach cut on the UNIQUE-QUESTION unit:
+        entered        = distinct survey_q_id in pairs_ahs within the cell
+        with_candidate = distinct survey_q_id in the F1/F2 set within the cell
+        reach_pct      = with_candidate / entered * 100
+    Denominator from pairs_ahs, numerator from the candidate set: same
+    population both sides (candidates are a subset of entered-pairing pairs).
+    Sorted by `entered` descending."""
+    den = pairs_ahs.groupby(group_col)["survey_q_id"].nunique()
+    num = cand.groupby(group_col)["survey_q_id"].nunique()
+    rows: list[dict[str, Any]] = []
+    for key, a in den.items():
+        a = int(a)
+        b = int(num.get(key, 0))
+        row: dict[str, Any] = {group_col: str(key)}
+        if sub_to_topic is not None:
+            row["shared_topic"] = sub_to_topic.get(str(key), "")
+        row["entered"] = a
+        row["with_candidate"] = b
+        row["reach_pct"] = round(b / a * 100, 2) if a else 0.0
+        rows.append(row)
+    rows.sort(key=lambda r: r["entered"], reverse=True)
+    return rows
+
+
+def build_question_level(df: pd.DataFrame, b: dict[str, Any],
+                         pairs_ahs: pd.DataFrame,
+                         ahs_block: dict[str, Any]) -> dict[str, Any]:
+    """Collapse the F1/F2 pair set to unique AHS questions and reconcile against
+    the Definition-B population from pair_summary.json. All denominators come
+    from pair_summary.json; the numerator collapses the candidate pairs onto
+    survey_q_id. The two no-candidate buckets are reported separately and the
+    three-way partition of the entered-pairing population is asserted."""
+    cand = df[b["cand_mask"]].copy()
+    cand["survey_q_id"] = cand["survey_q_id"].astype(int)
+
+    # Denominators -- read straight from the pair builder's summary.
+    in_map = int(ahs_block["source_questions_in_map"])
+    entered = int(ahs_block["source_after_master_join"])
+    shared_subtopics = int(ahs_block["shared_subtopics"])
+
+    # Entered-pairing questions that actually produced >=1 pair (shared a
+    # subtopic with ACS). The rest of `entered` shared no subtopic -> 0 pairs.
+    producing_ids = set(pairs_ahs["survey_q_id"].tolist())
+    producing = len(producing_ids)
+
+    # Numerator: unique AHS questions with >=1 F1/F2 candidate pair.
+    cand_ids = set(cand["survey_q_id"].tolist())
+    with_candidate = len(cand_ids)
+
+    # Integrity: candidates come from classified pairs, so every candidate
+    # survey_q_id must be among the questions that produced pairs.
+    stray = sorted(cand_ids - producing_ids)
+    if stray:
+        die(f"{len(stray)} candidate survey_q_id(s) are absent from pairs_ahs.csv "
+            f"(e.g. {stray[:10]}); candidate and pair populations disagree.")
+    if producing > entered:
+        die(f"questions producing pairs ({producing}) exceeds entered-pairing "
+            f"population ({entered}) from pair_summary.json; populations "
+            f"disagree -- pairs_dir and ahs_dir may be from different runs.")
+    if with_candidate > producing:
+        die(f"unique questions with candidate ({with_candidate}) exceeds "
+            f"questions producing pairs ({producing}); impossible.")
+    # Verification check 3: the question count cannot exceed the pair count.
+    if with_candidate > b["n_cand"]:
+        die(f"unique questions with candidate ({with_candidate}) exceeds the "
+            f"candidate PAIR count ({b['n_cand']}); a question collapses to one, "
+            f"so this must be <=.")
+
+    # Two distinct no-candidate buckets (do not lump):
+    #   bucket 1 -- entered pairing AND produced pairs, but none are F1/F2.
+    #   bucket 2 -- entered pairing but produced zero pairs (no shared subtopic
+    #               with ACS): the genuinely AHS-unique territory.
+    no_candidate_entered_all_f3 = producing - with_candidate
+    no_pair_no_shared_subtopic = entered - producing
+    dropped_at_master_join = in_map - entered
+
+    # Partition assertions -- fail loud if the population does not reconcile.
+    part = with_candidate + no_candidate_entered_all_f3 + no_pair_no_shared_subtopic
+    if part != entered:
+        die(f"question buckets do not partition entered-pairing population: "
+            f"with_candidate({with_candidate}) + all_f3({no_candidate_entered_all_f3}) "
+            f"+ no_pair({no_pair_no_shared_subtopic}) = {part} != {entered}.")
+    if entered + dropped_at_master_join != in_map:
+        die(f"in-map accounting does not reconcile: entered({entered}) + "
+            f"dropped_at_master_join({dropped_at_master_join}) != in_map({in_map}).")
+
+    # Reach cuts on the unique-question unit. Both sides obey the
+    # one-subtopic-per-question invariant, so each question lands in exactly one
+    # topic row and one subtopic row, and the numerators sum to with_candidate.
+    _assert_single_subtopic(pairs_ahs, "pairs_ahs.csv")
+    _assert_single_subtopic(cand, "candidate set")
+    sub_to_topic = (
+        pairs_ahs.drop_duplicates("shared_subtopic")
+        .set_index(pairs_ahs.drop_duplicates("shared_subtopic")["shared_subtopic"]
+                   .astype(str))["shared_topic"].astype(str).to_dict()
+    )
+    topic_reach = _reach_by("shared_topic", pairs_ahs, cand, None)
+    subtopic_reach = _reach_by("shared_subtopic", pairs_ahs, cand, sub_to_topic)
+
+    # Verification check 4: numerators sum to the unique-question total.
+    tsum = sum(r["with_candidate"] for r in topic_reach)
+    ssum = sum(r["with_candidate"] for r in subtopic_reach)
+    if tsum != with_candidate:
+        die(f"topic_reach numerators sum to {tsum}, expected {with_candidate}.")
+    if ssum != with_candidate:
+        die(f"subtopic_reach numerators sum to {ssum}, expected {with_candidate}.")
+    # Denominators sum to the producing-pairs total (each producing question in
+    # exactly one topic/subtopic).
+    if sum(r["entered"] for r in topic_reach) != producing:
+        die("topic_reach denominators do not sum to questions-producing-pairs.")
+    if sum(r["entered"] for r in subtopic_reach) != producing:
+        die("subtopic_reach denominators do not sum to questions-producing-pairs.")
+
+    reach_pct = round(with_candidate / entered * 100, 2) if entered else 0.0
+    return {
+        "population_definition":
+            "Definition B: AHS column non-empty in PublicSurveyQuestionsMap, "
+            "sourced from pair_summary.json (the population the pairing used).",
+        "denominator_source": str(pairs_dir_for_msg()),
+        "ahs_questions_in_map": in_map,
+        "ahs_questions_entered_pairing": entered,
+        "dropped_at_master_join": dropped_at_master_join,
+        "ahs_questions_producing_pairs": producing,
+        "unique_ahs_questions_with_candidate": with_candidate,
+        "reach_pct": reach_pct,
+        "no_candidate_entered_all_f3": no_candidate_entered_all_f3,
+        "no_pair_no_shared_subtopic": no_pair_no_shared_subtopic,
+        "shared_subtopics": shared_subtopics,
+        "partition_ok": True,
+        "subtopic_reach_convention":
+            "Each AHS question carries a single final_subtopic, so it is counted "
+            "in exactly one topic row and one subtopic row; numerators sum to "
+            "unique_ahs_questions_with_candidate.",
+        "topic_reach": topic_reach,
+        "subtopic_reach": subtopic_reach,
+    }
+
+
+# Set by main() so build_question_level can record which pairs dir the
+# denominators came from without threading the path through every call.
+_PAIRS_DIR_FOR_MSG: Path | None = None
+
+
+def pairs_dir_for_msg() -> Path:
+    return _PAIRS_DIR_FOR_MSG if _PAIRS_DIR_FOR_MSG is not None else DEFAULT_PAIRS_DIR
 
 
 # =============================================================================
@@ -270,6 +530,7 @@ def write_md(summary: dict[str, Any], cand: pd.DataFrame, out_md: Path,
     s = summary
     tiers = s["feasibility_tiers"]
     chk = s["check_pair"]
+    q = s["question_level"]
     L: list[str] = []
 
     L.append("# AHS Harmonization Candidate Rollup")
@@ -277,6 +538,84 @@ def write_md(summary: dict[str, Any], cand: pd.DataFrame, out_md: Path,
     L.append(f"Source: `{s['input_path']}` (read {s['encoding']}); the numbers "
              f"in this document are read from `ahs_candidate_summary.json` and "
              f"none are hardcoded here.")
+    L.append("")
+
+    # (0) HEADLINE -- question-level, the deliverable unit, stated first.
+    L.append("## Harmonization reach")
+    L.append("")
+    L.append(f"Of the {q['ahs_questions_entered_pairing']} AHS questions that "
+             f"entered harmonization pairing, "
+             f"*{q['unique_ahs_questions_with_candidate']}* have at least one "
+             f"candidate match into ACS, a feasibility F1 or F2 pair, which is a "
+             f"reach of *{q['reach_pct']} percent*. The population that entered "
+             f"pairing is the AHS questions present in the survey-question map "
+             f"that survived the master-classification join, read from the pair "
+             f"builder's `pair_summary.json` so the numerator and denominator "
+             f"describe the same Definition-B population.")
+    L.append("")
+    L.append(f"That reach is the question-level result and is the unit to cite, "
+             f"while the pair-level view is secondary, with "
+             f"{s['candidates_pairs']} candidate pairs out of {s['pairs_total']} "
+             f"total pairs ({tiers['candidate_pct']} percent of pairs), an "
+             f"intermediate unit because one AHS question pairs against several "
+             f"ACS questions, so the pair percentage and the question percentage "
+             f"measure different things and only the question figure is a "
+             f"deliverable statement.")
+    L.append("")
+
+    # (0b) The two no-candidate buckets, kept separate.
+    L.append("## Questions with no candidate, split by reason")
+    L.append("")
+    L.append("An AHS question with no candidate falls into one of two distinct "
+             "buckets, and lumping them would hide the finding.")
+    L.append("")
+    L.append("| bucket | questions | meaning |")
+    L.append("|---|---|---|")
+    L.append(f"| entered pairing, all pairs F3 | {q['no_candidate_entered_all_f3']} "
+             f"| ACS covers this territory, but in a form judged not harmonizable |")
+    L.append(f"| no pair, no shared subtopic | {q['no_pair_no_shared_subtopic']} "
+             f"| genuinely AHS-specific: no ACS counterpart territory at all |")
+    L.append(f"| has a candidate | {q['unique_ahs_questions_with_candidate']} "
+             f"| at least one F1 or F2 match into ACS |")
+    L.append(f"| entered pairing (total) | {q['ahs_questions_entered_pairing']} "
+             f"| the three rows above partition this population |")
+    L.append("")
+    L.append(f"The no-pair bucket is the actionable finding, since those "
+             f"{q['no_pair_no_shared_subtopic']} questions sit in subtopics ACS "
+             f"does not enter and are therefore AHS-unique content rather than a "
+             f"harmonization failure, while a further "
+             f"{q['dropped_at_master_join']} AHS questions present in the map were "
+             f"dropped before pairing at the master-classification join "
+             f"(Unresolvable or empty text), leaving "
+             f"{q['ahs_questions_entered_pairing']} of "
+             f"{q['ahs_questions_in_map']} in-map questions in the analysis.")
+    L.append("")
+
+    # (0c) Reach by topic and subtopic, on the unique-question unit.
+    L.append("## Reach by topic")
+    L.append("")
+    L.append("Each row counts unique AHS questions, not pairs. The "
+             "denominator is questions that entered pairing in that topic and "
+             "produced at least one pair; the numerator is those with at least "
+             "one candidate. " + q["subtopic_reach_convention"])
+    L.append("")
+    L.append("| topic | entered | with candidate | reach % |")
+    L.append("|---|---|---|---|")
+    for r in q["topic_reach"]:
+        L.append(f"| {r['shared_topic']} | {r['entered']} "
+                 f"| {r['with_candidate']} | {r['reach_pct']}% |")
+    L.append("")
+    L.append("## Reach by subtopic")
+    L.append("")
+    L.append("The actionable view: which AHS subtopics map into ACS and which "
+             "are AHS-specific. Unique questions, not pairs.")
+    L.append("")
+    L.append("| subtopic | topic | entered | with candidate | reach % |")
+    L.append("|---|---|---|---|---|")
+    for r in q["subtopic_reach"]:
+        L.append(f"| {r['shared_subtopic']} | {r.get('shared_topic', '')} "
+                 f"| {r['entered']} | {r['with_candidate']} "
+                 f"| {r['reach_pct']}% |")
     L.append("")
 
     # (a) what AHS is
@@ -290,9 +629,13 @@ def write_md(summary: dict[str, Any], cand: pd.DataFrame, out_md: Path,
     L.append("")
 
     # (b) tier table
-    L.append("## Feasibility tiers")
+    L.append("## Feasibility tiers (pair counts)")
     L.append("")
-    L.append("| tier | count | share |")
+    L.append("Every count in this table is a count of pairs, the intermediate "
+             "unit, not of questions. The question-level reach is in the "
+             "headline above.")
+    L.append("")
+    L.append("| tier | pairs | share of pairs |")
     L.append("|---|---|---|")
     L.append(f"| F1 direct recode | {tiers['F1']} | "
              f"{round(tiers['F1'] / s['total_pairs'] * 100, 2)}% |")
@@ -431,11 +774,19 @@ def main() -> int:
                     help="directory holding final_barrier_classifications.csv "
                          "and receiving the rollup outputs "
                          f"(default: {DEFAULT_AHS_DIR})")
+    ap.add_argument("--pairs-dir", default=str(DEFAULT_PAIRS_DIR),
+                    help="directory holding pair_summary.json and pairs_ahs.csv "
+                         "(the question-level denominators; mirrors "
+                         "stage3.yaml output.output_dir + output.pairs_subdir; "
+                         f"default: {DEFAULT_PAIRS_DIR})")
     ap.add_argument("--f2-cap", type=int, default=F2_LIST_CAP,
                     help="cap the F2 listing in the MD (CSV is never capped)")
     args = ap.parse_args()
 
+    global _PAIRS_DIR_FOR_MSG
     ahs_dir = Path(args.ahs_dir)
+    pairs_dir = Path(args.pairs_dir)
+    _PAIRS_DIR_FOR_MSG = pairs_dir
     input_path = ahs_dir / INPUT_NAME
     out_json = ahs_dir / "ahs_candidate_summary.json"
     out_csv = ahs_dir / "ahs_candidates.csv"
@@ -448,6 +799,12 @@ def main() -> int:
     df = load_ahs(input_path)
     b = bucket(df)
     summary = build_summary(df, b, input_path)
+
+    # Question-level rollup: denominators from the pair builder's summary, the
+    # numerator collapsed onto survey_q_id. This is the deliverable unit.
+    ahs_block = load_pair_summary_ahs(pairs_dir)
+    pairs_ahs = load_pairs_ahs(pairs_dir)
+    summary["question_level"] = build_question_level(df, b, pairs_ahs, ahs_block)
 
     # write the source-of-truth JSON first, then read it back so the CSV and MD
     # are generated from the serialized numbers, never from a parallel path.
@@ -465,17 +822,27 @@ def main() -> int:
 
     tiers = summary["feasibility_tiers"]
     chk = summary["check_pair"]
+    q = summary["question_level"]
     print(f"  wrote: {out_json}")
-    print(f"  wrote: {out_csv}  ({len(cand)} candidates)")
+    print(f"  wrote: {out_csv}  ({len(cand)} candidate pairs)")
     print(f"  wrote: {out_md}")
     print("\n" + "=" * 70)
     print("HEADLINE")
     print("=" * 70)
-    print(f"  total pairs:      {summary['total_pairs']}")
-    print(f"  candidates (F1+F2): {tiers['candidate_count']} "
-          f"({tiers['candidate_pct']}%)")
-    print(f"  F1 / F2 / F3:     {tiers['F1']} / {tiers['F2']} / {tiers['F3']}")
-    print(f"  discard (F3):     {tiers['discard_count']} ({tiers['discard_pct']}%)")
+    # Question-level statement FIRST -- the deliverable unit.
+    print(f"  QUESTIONS: of {q['ahs_questions_entered_pairing']} AHS questions "
+          f"that entered pairing, {q['unique_ahs_questions_with_candidate']} have "
+          f">=1 candidate (F1/F2) match into ACS ({q['reach_pct']}%).")
+    print(f"  no candidate, entered + all F3 (bucket 1): "
+          f"{q['no_candidate_entered_all_f3']}")
+    print(f"  no pair, no shared subtopic (bucket 2, AHS-unique): "
+          f"{q['no_pair_no_shared_subtopic']}")
+    print(f"  PAIRS (intermediate unit): {tiers['candidate_count']} candidate "
+          f"pairs of {summary['pairs_total']} total ({tiers['candidate_pct']}% "
+          f"of pairs)")
+    print(f"  F1 / F2 / F3 pairs: {tiers['F1']} / {tiers['F2']} / {tiers['F3']}")
+    print(f"  discard (F3) pairs: {tiers['discard_count']} "
+          f"({tiers['discard_pct']}%)")
     print(f"  {CHECK_PAIR_ID} present: {chk['present']} "
           f"(feasibility non-null: {chk['feasibility_non_null']})")
     print("=" * 70)
