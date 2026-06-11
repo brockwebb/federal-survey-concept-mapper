@@ -1,0 +1,179 @@
+{
+  "_provenance": {
+    "created": "2026-06-11",
+    "method": "WORK-to-DEV paste-back via chat (web client on WORK, 2026-06-11). Each block below is the verbatim content of the named WORK output file, or values transcribed from it. The WORK files remain the authority; this file exists so the v2 results report on DEV cites a committed, reviewable source.",
+    "work_source_files": [
+      "v2/output/stage1/comparison/comparison_summary.json",
+      "v2/output/stage2/v1_v2_comparison_summary.json",
+      "v2/output/stage3/v1_v2_comparison/v1_v2_pairset_overlap.json",
+      "v2/output/stage3/v1_v2_comparison/v1_v2_classification_agreement.json",
+      "v2/output/stage3/v1_v2_comparison/v1_v2_signal_stratified_summary.json",
+      "v2/output/stage3/results/ahs/ahs_candidate_summary.json (via ahs_rollup.md)"
+    ],
+    "notes": [
+      "stage1 block: topic_top_disagreements and subtopic_top_disagreements lists were pasted in full but only the top entries are retained here; the WORK file carries the complete lists.",
+      "ahs block: values transcribed from ahs_rollup.md, which reads them from ahs_candidate_summary.json. Full subtopic reach table and candidate listings live in those WORK files.",
+      "derived block: values computed on DEV from the pasted inputs, with the formula recorded. Nothing else in this file is computed; everything else is transcription."
+    ]
+  },
+
+  "stage1": {
+    "source": "output/stage1/comparison/comparison_summary.json",
+    "generated": "2026-05-20T18:10:14.753549+00:00",
+    "n_questions": 6987,
+    "comparisons": {
+      "v2a_vs_v2b": {
+        "topic": {"n": 6954, "raw_agreement_pct": 90.64, "kappa": 0.8591},
+        "subtopic": {"n": 6954, "raw_agreement_pct": 71.38, "kappa": 0.7039}
+      },
+      "v1claude_vs_v2a": {
+        "topic": {"n": 6951, "raw_agreement_pct": 91.25, "kappa": 0.8679},
+        "subtopic": {"n": 6951, "raw_agreement_pct": 76.23, "kappa": 0.7534}
+      },
+      "v1claude_vs_v2b": {
+        "topic": {"n": 6947, "raw_agreement_pct": 89.55, "kappa": 0.8441},
+        "subtopic": {"n": 6947, "raw_agreement_pct": 67.74, "kappa": 0.6667}
+      },
+      "v1openai_vs_v2a": {
+        "topic": {"n": 6964, "raw_agreement_pct": 89.72, "kappa": 0.8447},
+        "subtopic": {"n": 6964, "raw_agreement_pct": 71.52, "kappa": 0.7056}
+      },
+      "v1openai_vs_v2b": {
+        "topic": {"n": 6961, "raw_agreement_pct": 89.83, "kappa": 0.8484},
+        "subtopic": {"n": 6961, "raw_agreement_pct": 71.18, "kappa": 0.7029}
+      },
+      "v1claude_vs_v1openai": {
+        "topic": {"n": 6954, "raw_agreement_pct": 89.24, "kappa": 0.8389},
+        "subtopic": {"n": 6954, "raw_agreement_pct": 69.69, "kappa": 0.6869}
+      }
+    },
+    "top_topic_confusions_v2a_vs_v2b": [
+      {"from": "Social", "to": "Economic", "count": 166},
+      {"from": "Economic", "to": "Social", "count": 107},
+      {"from": "Social", "to": "Demographic", "count": 82}
+    ],
+    "top_subtopic_confusions_v2a_vs_v2b": [
+      {"from": "Expenditures", "to": "Expenses", "count": 119},
+      {"from": "Expenditures", "to": "Purchases", "count": 83},
+      {"from": "Schools", "to": "Education", "count": 40}
+    ],
+    "rater_confidence": {
+      "v2_rater_a_claude_4_5_sonnet": {"mean": 0.9101, "median": 0.95, "above_0.9": 5516},
+      "v2_rater_b_gemini_2_5_flash": {"mean": 0.928, "median": 0.95, "above_0.9": 6295},
+      "v1_claude": {"mean": 0.8893, "median": 0.92, "above_0.9": 4712},
+      "v1_openai": {"mean": 0.8905, "median": 0.9, "above_0.9": 5183}
+    }
+  },
+
+  "stage2": {
+    "source": "output/stage2/v1_v2_comparison_summary.json",
+    "n_compared": 6987,
+    "topic_agreement_pct": 92.028,
+    "subtopic_agreement_pct": 76.9,
+    "full_agreement_pct": 75.998,
+    "topic_kappa": 0.8799,
+    "subtopic_kappa": 0.7609,
+    "v1_unresolvable": 0,
+    "v2_unresolvable": 10,
+    "agreement_by_v1_decision_method": [
+      {"v1_decision_method": "agreement", "n": 4765, "topic_agreement_pct": 97.482, "full_agreement_pct": 88.646},
+      {"v1_decision_method": "auto_dual_modal", "n": 821, "topic_agreement_pct": 85.14, "full_agreement_pct": 47.259},
+      {"v1_decision_method": "pick_gpt5mini", "n": 522, "topic_agreement_pct": 84.674, "full_agreement_pct": 60.536},
+      {"v1_decision_method": "pick_haiku45", "n": 482, "topic_agreement_pct": 83.402, "full_agreement_pct": 50.83},
+      {"v1_decision_method": "new_concept", "n": 340, "topic_agreement_pct": 66.471, "full_agreement_pct": 36.471},
+      {"v1_decision_method": "unresolved_disagreement", "n": 31, "topic_agreement_pct": 16.129, "full_agreement_pct": 16.129},
+      {"v1_decision_method": "dual_modal", "n": 19, "topic_agreement_pct": 52.632, "full_agreement_pct": 36.842},
+      {"v1_decision_method": "categorization_failed", "n": 7, "topic_agreement_pct": 14.286, "full_agreement_pct": 14.286}
+    ],
+    "top_topic_confusions": [
+      {"v1": "Social", "v2": "Economic", "n": 151},
+      {"v1": "Economic", "v2": "Social", "n": 101},
+      {"v1": "Economic", "v2": "Housing", "n": 40}
+    ]
+  },
+
+  "stage3_pairset": {
+    "source": "output/stage3/v1_v2_comparison/v1_v2_pairset_overlap.json",
+    "cps": {"v1_pairs": 603, "v2_pairs": 659, "common_pairs": 480, "v1_only": 123, "v2_only": 179, "jaccard": 0.6138, "v1_dups_dropped": 427, "v2_dups_dropped": 129},
+    "foodaps": {"v1_pairs": 459, "v2_pairs": 667, "common_pairs": 390, "v1_only": 69, "v2_only": 277, "jaccard": 0.5299, "v1_dups_dropped": 109, "v2_dups_dropped": 82}
+  },
+
+  "stage3_classification_agreement": {
+    "source": "output/stage3/v1_v2_comparison/v1_v2_classification_agreement.json",
+    "scope": "common pairs only",
+    "cps": {"n_compared": 480, "l1_agreement_pct": 84.79, "feasibility_agreement_pct": 83.54, "both_agreement_pct": 74.58, "l1_kappa": 0.5181, "feasibility_kappa": 0.604},
+    "foodaps": {"n_compared": 390, "l1_agreement_pct": 92.56, "feasibility_agreement_pct": 88.46, "both_agreement_pct": 83.59, "l1_kappa": 0.6738, "feasibility_kappa": 0.6524},
+    "combined": {"n_compared": 870, "l1_agreement_pct": 88.28, "feasibility_agreement_pct": 85.75, "both_agreement_pct": 78.62, "l1_kappa": 0.5763, "feasibility_kappa": 0.625}
+  },
+
+  "stage3_signal_stratified": {
+    "source": "output/stage3/v1_v2_comparison/v1_v2_signal_stratified_summary.json",
+    "scope": "common pairs only",
+    "cps": {"n_common_pairs": 480, "v1_candidates": 144, "v2_candidates": 109, "intersection_candidates": 98, "candidate_jaccard": 0.6323, "v1_retained_pct": 68.06, "v2_new_pct": 10.09, "demoted_count": 46, "added_count": 11, "both_discard": 325, "binary_candidate_agreement_pct": 88.12, "binary_candidate_kappa": 0.6962, "tier_agreement_on_intersection_pct": 77.55, "l1_agreement_on_intersection_pct": 67.35, "gold_count": 40},
+    "foodaps": {"n_common_pairs": 390, "v1_candidates": 86, "v2_candidates": 67, "intersection_candidates": 59, "candidate_jaccard": 0.6277, "v1_retained_pct": 68.6, "v2_new_pct": 11.94, "demoted_count": 27, "added_count": 8, "both_discard": 296, "binary_candidate_agreement_pct": 91.03, "binary_candidate_kappa": 0.7165, "tier_agreement_on_intersection_pct": 83.05, "l1_agreement_on_intersection_pct": 74.58, "gold_count": 22},
+    "combined": {"intersection_candidates": 157, "gold_count": 62, "v1_retained_pct": 68.26, "binary_candidate_agreement_pct": 89.42, "binary_candidate_kappa": null}
+  },
+
+  "ahs": {
+    "source": "output/stage3/results/ahs/ahs_candidate_summary.json via ahs_rollup.md",
+    "scope": "net-new in v2; no v1 baseline; v2-only single-generation provenance",
+    "questions_entered_pairing": 744,
+    "questions_in_map": 744,
+    "dropped_at_master_join": 0,
+    "unique_questions_with_candidate": 92,
+    "question_reach_pct": 12.37,
+    "no_candidate_entered_all_f3": 389,
+    "no_pair_no_shared_subtopic": 263,
+    "pairs_total": 1626,
+    "candidate_pairs": 130,
+    "candidate_pairs_pct": 8.0,
+    "f1_pairs": 71,
+    "f2_pairs": 59,
+    "f3_pairs": 1496,
+    "f3_share_pct": 92.0,
+    "topic_reach": [
+      {"topic": "Housing", "entered": 362, "with_candidate": 41, "reach_pct": 11.33},
+      {"topic": "Social", "entered": 61, "with_candidate": 16, "reach_pct": 26.23},
+      {"topic": "Demographic", "entered": 44, "with_candidate": 29, "reach_pct": 65.91},
+      {"topic": "Economic", "entered": 14, "with_candidate": 6, "reach_pct": 42.86}
+    ],
+    "candidate_barrier_top": [
+      {"barrier": "NHB", "count": 46},
+      {"barrier": "CC.4", "count": 24},
+      {"barrier": "CC.2", "count": 19},
+      {"barrier": "TC.1", "count": 8}
+    ],
+    "candidate_decision_method": [
+      {"decision_method": "pick_rater_b", "count": 43},
+      {"decision_method": "pick_rater_a", "count": 32},
+      {"decision_method": "agreement", "count": 30},
+      {"decision_method": "new_classification", "count": 25}
+    ]
+  },
+
+  "tevv": {
+    "source": "docs/stages/tevv/prompt_equivalence_report.json + handoffs/2026-06-03_tevv_prompt_equivalence_gate.md",
+    "stage3_verdict": "ACKNOWLEDGED_DIVERGENCE",
+    "stage3_divergence_count": 21,
+    "gate_exit_code": 0,
+    "directional_bias_status": "PROVISIONAL, pending SME review. Hypotheses must not be reported as fact. Note: reference_period field additions plausibly pull toward TC, opposite the CC-attractor direction most other divergences predict; net effect unmeasured."
+  },
+
+  "derived": {
+    "_note": "Computed on DEV from the pasted inputs above. Formulas recorded; nothing here adds information not present in the sources.",
+    "f3_floor_reproduction": {
+      "formula": "both_discard / (n_common_pairs - v1_candidates)",
+      "cps": {"v1_discards_on_common": 336, "reproduced_as_discard": 325, "pct": 96.73},
+      "foodaps": {"v1_discards_on_common": 304, "reproduced_as_discard": 296, "pct": 97.37}
+    },
+    "candidate_partition_check": {
+      "formula": "v1_candidates == intersection + demoted; v2_candidates == intersection + added",
+      "cps": "144 == 98 + 46 and 109 == 98 + 11: PASS",
+      "foodaps": "86 == 59 + 27 and 67 == 59 + 8: PASS"
+    },
+    "ahs_bucket_partition_check": {
+      "formula": "with_candidate + all_f3 + no_shared_subtopic == entered_pairing",
+      "value": "92 + 389 + 263 == 744: PASS"
+    }
+  }
+}

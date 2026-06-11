@@ -1,0 +1,233 @@
+---
+title: "v2 Confirmation Run: Results"
+subtitle: "Reproducibility of survey question classification and harmonization findings across model generations"
+date: 2026-06-11
+format:
+  pdf:
+    documentclass: article
+    geometry: margin=1in
+    fontsize: 11pt
+    colorlinks: true
+    linkcolor: blue
+    toc: false
+    include-in-header:
+      text: |
+        \usepackage{xcolor}
+        \definecolor{xdnavy}{HTML}{112E51}
+        \usepackage{sectsty}
+        \allsectionsfont{\color{xdnavy}}
+        \usepackage{booktabs}
+---
+
+*Numbers source:* every value in this document is transcribed from
+`v2/report/v2_report_numbers_collected.json`, which records the WORK output
+file each number came from. Nothing here is computed in prose; the three
+derived percentages are computed in that JSON with their formulas recorded.
+
+## What this run is and why it exists
+
+The v1 concept mapper classified roughly 7,000 questions from 47 Census
+Bureau demographic surveys into a shared topic and subtopic taxonomy, then
+coded harmonization barriers for candidate question pairs between source
+surveys (CPS, FoodAPS) and the ACS. Those findings were produced by one
+generation of models. If they cannot be reproduced by a different
+generation, they are an artifact of a particular model rather than a
+property of the surveys.
+
+The v2 confirmation run reruns the pipeline over the same 6,987 questions
+with a new ensemble: `claude_4_5_sonnet` and `gemini-2.5-flash` as
+independent raters, arbitrated by `claude_4_5_opus`, all routed through the
+USAi harness. AHS was added as a net-new survey with no v1 baseline. Prompt
+equivalence between generations is gated by the TEVV prompt-equivalence
+check: 21 divergences between v1 and v2 prompts, every one acknowledged and
+justified, gate exit 0. Directional-bias hypotheses attached to those
+divergences are *provisional* pending SME review and are not findings of
+this report.
+
+## Headline findings
+
+1. Topic-level classification reproduces across model generations. Final
+   adjudicated agreement is 92.0 percent (kappa 0.880). Cross-generation
+   raw-rater agreement (91.25 percent, best pair) exceeds v1's own
+   within-generation rater agreement (89.24 percent), so the v1-to-v2 gap is
+   no wider than the noise floor inside v1 itself.
+2. Subtopic-level agreement is materially lower (76.9 percent final, kappa
+   0.761) and the confusion structure is the same in both generations:
+   Social versus Economic at topic level, the Expenditures, Expenses, and
+   Purchases cluster at subtopic level. The taxonomy boundary, not the model
+   generation, is the binding constraint.
+3. Disagreement concentrates where v1 was already uncertain. Questions v1
+   resolved by rater agreement reproduce at 97.5 percent topic agreement;
+   questions from v1's arbitrated, new-concept, and unresolved strata fall
+   to 85, 66, and 16 percent respectively.
+4. The Stage 3 discard floor reproduces. Of v1's F3 discards on the common
+   pair set, 96.7 percent (CPS) and 97.4 percent (FoodAPS) are discarded
+   again by v2.
+5. The candidate set partially turns over, in the strict direction. v2
+   retains 68 percent of v1 candidates; demotions to F3 outnumber promotions
+   roughly four to one (46 versus 11 CPS, 27 versus 8 FoodAPS). The
+   direction is consistent with the documented F3-attractor, which remains
+   prompt-confounded and unresolved.
+6. The dual-generation gold set is 62 candidate pairs (40 CPS, 22 FoodAPS):
+   pairs both generations independently rated harmonizable at high
+   confidence. This is the defensible bridge-variable lead list.
+7. AHS, net-new in v2: of 744 AHS questions that entered pairing against
+   ACS, 92 (12.4 percent) have at least one candidate match. 263 of the 744
+   share no subtopic with ACS at all and are genuinely AHS-specific
+   territory. The AHS candidates carry single-generation provenance and are
+   unvalidated leads, not results.
+
+## Stage 1: independent rater agreement (n = 6,987 questions)
+
+The first question is whether individual raters from different generations
+even see the questions the same way, before any adjudication smooths the
+answer. The table compares every rater pairing: within v2, within v1, and
+across generations.
+
+| comparison | topic % | topic kappa | subtopic % | subtopic kappa |
+|---|---|---|---|---|
+| v2a vs v2b (within v2) | 90.64 | 0.859 | 71.38 | 0.704 |
+| v1claude vs v1openai (within v1) | 89.24 | 0.839 | 69.69 | 0.687 |
+| v1claude vs v2a (cross) | 91.25 | 0.868 | 76.23 | 0.753 |
+| v1claude vs v2b (cross) | 89.55 | 0.844 | 67.74 | 0.667 |
+| v1openai vs v2a (cross) | 89.72 | 0.845 | 71.52 | 0.706 |
+| v1openai vs v2b (cross) | 89.83 | 0.848 | 71.18 | 0.703 |
+
+The cross-generation rows sit inside the same band as the within-generation
+rows. A v2 rater agrees with a v1 rater about as often as two v1 raters
+agree with each other, which is the operational definition of
+interchangeable raters. The subtopic ceiling near 70 to 76 percent appears
+in every pairing regardless of generation, which locates the limit in the
+taxonomy's subtopic boundaries rather than in any model.
+
+## Stage 2: final adjudicated classification, v1 vs v2 (n = 6,987)
+
+After arbitration resolves rater disagreements, each generation produces
+one final classification per question. This compares those finals head to
+head.
+
+| metric | value |
+|---|---|
+| topic agreement | 92.03% (kappa 0.880) |
+| subtopic agreement | 76.90% (kappa 0.761) |
+| full (topic + subtopic) agreement | 76.00% |
+| v1 unresolvable | 0 |
+| v2 unresolvable | 10 |
+
+Reproduction stratified by how v1 reached its answer:
+
+| v1 decision method | n | topic agreement % |
+|---|---|---|
+| agreement | 4,765 | 97.5 |
+| auto_dual_modal | 821 | 85.1 |
+| pick_gpt5mini | 522 | 84.7 |
+| pick_haiku45 | 482 | 83.4 |
+| new_concept | 340 | 66.5 |
+| dual_modal | 19 | 52.6 |
+| unresolved_disagreement | 31 | 16.1 |
+| categorization_failed | 7 | 14.3 |
+
+The gradient is monotone in v1's own certainty: the easier a question was
+for v1's raters, the more faithfully v2 reproduces it. Classification
+instability is not random noise added by the new generation; it maps the
+questions the taxonomy never cleanly held. For the 68 percent of the
+corpus that v1 resolved by simple rater agreement, the v1 classifications
+can be treated as generation-stable.
+
+## Stage 3: harmonization barrier reproduction (CPS, FoodAPS vs ACS)
+
+### Pair universe intersection
+
+Stage 3 operates on question pairs, and which pairs exist depends on the
+upstream subtopic assignments. Because subtopics shifted on roughly a
+quarter of questions, the v1 and v2 pair sets themselves only partially
+intersect. Every agreement number below is conditioned on the common pairs
+and is silent about the rest.
+
+| survey | v1 pairs | v2 pairs | common | Jaccard |
+|---|---|---|---|---|
+| CPS | 603 | 659 | 480 | 0.614 |
+| FoodAPS | 459 | 667 | 390 | 0.530 |
+
+### Agreement on common pairs
+
+| survey | n | L1 barrier % (kappa) | feasibility % (kappa) | both % |
+|---|---|---|---|---|
+| CPS | 480 | 84.8 (0.518) | 83.5 (0.604) | 74.6 |
+| FoodAPS | 390 | 92.6 (0.674) | 88.5 (0.652) | 83.6 |
+| combined | 870 | 88.3 (0.576) | 85.8 (0.625) | 78.6 |
+
+Raw agreement and kappa diverge because the class distribution is dominated
+by the CC barrier and the F3 tier, which inflates agreement-by-chance. Both
+numbers are reported and neither alone is the result.
+
+### Candidate dynamics on common pairs
+
+The deliverable unit of Stage 3 is the candidate set: pairs rated F1
+(direct recode) or F2 (statistical adjustment). This table tracks what
+happened to v1's candidates under v2.
+
+| metric | CPS | FoodAPS |
+|---|---|---|
+| v1 candidates (F1/F2) | 144 | 86 |
+| v2 candidates | 109 | 67 |
+| intersection | 98 | 59 |
+| demoted (v1 candidate, v2 F3) | 46 | 27 |
+| added (v2 candidate, v1 F3) | 11 | 8 |
+| binary candidate agreement | 88.1% (kappa 0.696) | 91.0% (kappa 0.717) |
+| both-discard reproduction | 96.7% | 97.4% |
+| gold set (dual-generation, high confidence) | 40 | 22 |
+
+Two asymmetries matter. First, discards are far more stable than
+candidates: when v1 said a pair was not harmonizable, v2 almost always
+agreed, so the negative finding is the most reproducible result in the
+study. Second, v2 is systematically the stricter rater, removing about a
+third of v1's candidates while adding few of its own. Whether that
+strictness reflects better judgment or an artifact of the acknowledged
+prompt divergences is exactly the question the TEVV directional-bias review
+(open, SME pending) exists to answer; this report does not prejudge it.
+The practical consequence either way: the 62-pair gold set, which requires
+agreement from both generations, is robust to the question.
+
+## AHS: net-new coverage (no v1 baseline)
+
+| metric | value |
+|---|---|
+| AHS questions entering pairing vs ACS | 744 |
+| questions with at least one candidate (F1/F2) | 92 (12.4%) |
+| entered pairing, all pairs F3 | 389 |
+| no shared subtopic with ACS | 263 |
+| candidate pairs / total pairs | 130 / 1,626 (8.0%) |
+| F3 pair share | 92.0% |
+
+Reach is heavily structured by topic. Demographic questions reach 65.9
+percent because AHS asks the same age, race, sex, and relationship
+questions ACS does; Housing, the bulk of the survey at 362 questions
+entering pairing, reaches 11.3 percent because AHS's housing content goes
+far deeper than ACS's. The 263 no-shared-subtopic questions are the
+cleanest finding: genuinely AHS-specific content with no ACS counterpart
+territory, which is the enrichment case for AHS in one number. Full
+subtopic tables, candidate listings, and the unvalidated-floor caveat are
+in `output/stage3/results/ahs/ahs_rollup.md` (WORK).
+
+## Limitations
+
+The Stage 3 agreement numbers are conditioned on the common-pair
+intersection; roughly 40 percent of each generation's pair universe has no
+counterpart in the other and is not assessed. AHS candidates are
+single-generation and unvalidated. The kappa values for Stage 3 reflect
+heavy class imbalance and should be read alongside raw agreement, not
+instead of it. The v2-stricter pattern is confounded with acknowledged
+prompt divergences until the TEVV directional-bias review closes. Ten
+questions v2 marked unresolvable had v1 classifications; they are counted
+as disagreements, not dropped.
+
+## Bottom line
+
+The v1 findings survive the generation change where it matters. Topic
+classifications are generation-stable, discards reproduce at 97 percent,
+and the candidate signal concentrates into a 62-pair dual-generation gold
+set that no single model produced alone. The instability that does exist
+is informative rather than damaging: it sits on taxonomy boundaries and on
+questions v1 itself could not resolve, and v2's stricter candidate
+judgment narrows the lead list rather than contradicting it.
