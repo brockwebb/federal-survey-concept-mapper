@@ -1,0 +1,10 @@
+code,type,name,description
+F1,feasibility_tier,Direct Recode,"Questions measure the same construct with compatible response formats. High-quality bridge variable; harmonization requires only deterministic recoding, category collapsing, or unit conversion."
+F2,feasibility_tier,Statistical Adjustment,"Questions measure the same underlying construct but differ in measurement (reference period, response scale, or level of detail). Usable bridge variable with known limitations; requires a documented statistical transformation with stated assumptions."
+F3,feasibility_tier,Incompatible,"Questions measure fundamentally different constructs or have barriers that no statistical method can bridge. Not a bridge variable; the barrier code explains the specific obstacle."
+CC,barrier_code,Construct,"Construct/Concept differences. Questions measure different things. Most fundamental barrier; dominant category in the data. (Wolf 2016: concept differences; Fortier 2011: inferential equivalence)"
+TC,barrier_code,Temporal,"Reference period / temporal differences (e.g. hours worked last week vs. usual hours per year). (Wolf 2016: reference period differences; Fortier 2011: reference period)"
+RS,barrier_code,Response Scale,"Response scale / format differences (e.g. open dollar amount vs. bracketed income categories). (Saris & Gallhofer 2014)"
+PC,barrier_code,Population/Coverage,"Population or coverage differences (e.g. adults 18+ vs. persons 15+). (Slomczynski & Tomescu-Dubrow 2018: sampling design)"
+MC,barrier_code,Mode/Context,"Mode of administration or questionnaire context differences (e.g. self-administered web vs. interviewer telephone). (Wolf 2016: questionnaire context)"
+PM,barrier_code,Processing/Metadata,"Processing or metadata differences (e.g. SOC 2010 codes vs. SOC 2018 without crosswalk). Technical rather than conceptual. (Oleksiyenko 2018)"
