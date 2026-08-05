@@ -280,14 +280,18 @@ These behavioral differences are a feature, not a bug. They demonstrate that the
 
 ### 6.3 Stage 3: Findings and Triage
 
-*Source:* `output/report_03/analysis/stage4_survey_summary.json`
+*Source:* `docs/validation/question_counts.json` (`question_level_results`) for the consolidability rates; `output/report_03/analysis/stage4_survey_summary.json` for the triage distribution.
 
 **Question-level consolidability rates:**
 
-- CPS: 41.7% of source questions have at least one consolidable ACS match
-- FoodAPS: 48.6% of source questions have at least one consolidable ACS match
+Rates are per unique question text, over the questions whose subtopics gave them ACS territory to be compared against.
+
+- CPS: 86 of 157 unique source questions (54.8%) have at least one consolidable ACS match
+- FoodAPS: 56 of 118 unique source questions (47.5%) have at least one consolidable ACS match
 
 **Triage distribution:**
+
+The quadrant counts below are at the question-subtopic ID level from `stage4_survey_summary.json`, which carries the dedup inflation documented in `docs/validation/number_flow.md` (380 IDs for 275 unique questions). They are not directly comparable to the deduplicated rates above and have not been recomputed on the deduplicated unit.
 
 | Quadrant | Count | Percentage |
 |----------|-------|-----------|
@@ -306,7 +310,7 @@ These behavioral differences are a feature, not a bug. They demonstrate that the
 
 **Unexpected patterns investigated:**
 
-- FoodAPS-ACS and CPS-ACS show remarkably similar consolidability rates (48.6% vs 41.7%) despite very different survey purposes. This was initially surprising but explained by the fact that both surveys share substantial demographic content with ACS, and the rate difference reflects the proportion of specialized content.
+- FoodAPS-ACS and CPS-ACS show similar consolidability rates (47.5% vs 54.8%) despite very different survey purposes. This was initially surprising but explained by the fact that both surveys share substantial demographic content with ACS, and the rate difference reflects the proportion of specialized content.
 
 ---
 

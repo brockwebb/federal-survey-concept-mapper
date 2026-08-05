@@ -18,6 +18,7 @@ Usage:
   python build.py --validate   # run validation before assembly
 """
 
+import os
 import re
 import sys
 import subprocess
@@ -71,7 +72,11 @@ def sync_diagrams():
         if dst.is_symlink() or dst.exists():
             dst.unlink()  # refresh
         if src.exists():
-            dst.symlink_to(src.resolve())
+            # Relative, not absolute: these symlinks are committed, so an
+            # absolute target bakes in this machine's checkout path and breaks
+            # every other clone (the previously committed links still pointed at
+            # a ~/Documents/GitHub location that no longer exists).
+            dst.symlink_to(os.path.relpath(src.resolve(), dst.parent.resolve()))
         else:
             print(f"WARNING: diagram source missing: {src}", file=sys.stderr)
 

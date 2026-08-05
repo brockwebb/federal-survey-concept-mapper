@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "generated": "2026-06-03T12:36:07.146573",
+    "generated": "2026-08-05T11:48:41.867289",
     "script": "src/validation/validate_complete.py",
-    "repo_root": "/Users/brock/Documents/GitHub/federal-survey-concept-mapper"
+    "repo_root": "/Users/brock/GitHub/federal-survey-concept-mapper"
   },
   "summary": {
     "total": 112,
@@ -173,7 +173,7 @@
     {
       "name": "valid_feasibility_codes",
       "status": "PASS",
-      "message": "Feasibility codes: {'F1', 'F2', 'F3'} (expected subset of {'F1', 'F2', 'F3'})",
+      "message": "Feasibility codes: {'F1', 'F3', 'F2'} (expected subset of {'F1', 'F3', 'F2'})",
       "details": {}
     },
     {

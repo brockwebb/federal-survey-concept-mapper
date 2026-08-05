@@ -30,18 +30,23 @@ The approach holds all 47 surveys in view simultaneously, finding connections no
 
 ## Does it work?
 
-Three independent AI models from competing vendors reach near-perfect agreement on harmonization judgments, confirming the task is well-defined and results are not driven by any single model's bias.
-Harmonization rates are stable across different survey pairs (CPS and FoodAPS each scored against ACS), suggesting a general property of the data rather than a survey-specific artifact.
+Agreement between independent models from competing vendors is measured, not assumed: post-arbitration agreement on harmonization judgments reached $\kappa$ = 0.84, and a confirmation run one model generation later agreed with the original analysis on which pairs are harmonization candidates for 88\% to 91\% of shared pairs ($\kappa$ = 0.70 to 0.72).
+Results are not driven by any single model's bias.
+Among the questions that had ACS territory to be compared against, the rate at which a harmonization path is found is similar for both surveys (54.8\% for CPS, 47.5\% for FoodAPS), suggesting the rate reflects shared conceptual territory rather than a survey-specific artifact.
 The framework passes basic sanity checks: demographics like race and age score as near-100\% consolidable, while genuinely different constructs are correctly flagged with specific barrier diagnoses.
 The full pipeline, data, and code are public and reproducible.
 
 ## Key findings
 
-**\textasciitilde 45\% of questions** across two major survey pairs (CPS and FoodAPS vs. ACS) have at least one viable harmonization path:
+Across two major survey pairs (CPS and FoodAPS vs. ACS), 275 unique source questions had enough shared subtopic territory with ACS to be compared, and **142 of those 275 (\textasciitilde 52\%)** have at least one viable harmonization path.
+Each question is assigned its best tier across all of its ACS pairs:
 
-- **Tier 1 -- Direct recode** (\textasciitilde 16\%): Interchangeable with simple recoding. High-confidence bridge variables.
-- **Tier 2 -- Statistical adjustment** (\textasciitilde 29\%): Linkable with documented transformations. Usable bridges with known limitations.
-- **Tier 3 -- Not linkable** (\textasciitilde 55\%): Different constructs. The framework identifies these and explains why.
+- **Tier 1 -- Direct recode** (51 questions, \textasciitilde 19\%): Interchangeable with simple recoding. High-confidence bridge variables.
+- **Tier 2 -- Statistical adjustment** (91 questions, \textasciitilde 33\%): Linkable with documented transformations. Usable bridges with known limitations.
+- **Tier 3 -- Not linkable** (133 questions, \textasciitilde 48\%): Different constructs. The framework identifies these and explains why.
+
+Measured against each full instrument rather than the compared subset, questions with a harmonization path are 86 of 211 CPS questions (\textasciitilde 41\%) and 56 of 462 FoodAPS questions (\textasciitilde 12\%).
+The gap reflects how much of each survey's content shares no subtopic territory with ACS at all.
 
 These results give survey managers a scored inventory of where cross-survey integration adds value and where instruments can be aligned for better return on collection investment.
 

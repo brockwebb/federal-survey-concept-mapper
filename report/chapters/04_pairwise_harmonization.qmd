@@ -43,7 +43,7 @@ At the initial rating stage, the three models achieved moderate agreement (Fleis
 
 : Inter-model agreement before and after structured arbitration. {#tbl-arbitration-improvement}
 
-Post-arbitration feasibility agreement (κ = 0.843) falls in the "almost perfect" range. Both quality gates passed. The pattern — moderate initial agreement converging to near-perfect after structured arbitration — validates that the task is well-defined and that independent models can reach consensus when given a protocol for resolving ambiguity.
+Post-arbitration feasibility agreement (κ = 0.843) falls in the "almost perfect" range. Both quality gates passed. The pattern of moderate initial agreement converging to that range after structured arbitration validates that the task is well-defined and that independent models can reach consensus when given a protocol for resolving ambiguity.
 
 The full methodology, including prompt templates, model configurations, behavioral analysis, and the NIST AI Risk Management Framework crosswalk, is documented in the companion TEVV and Methodology documents. Appendix C provides the NIST trustworthiness mapping.
 
