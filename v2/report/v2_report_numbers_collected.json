@@ -115,15 +115,18 @@
   },
 
   "ahs": {
-    "source": "output/stage3/results/ahs/ahs_candidate_summary.json via ahs_rollup.md",
+    "source": "output/stage3/results/ahs/ahs_candidate_summary.json via ahs_rollup.md (regenerated 2026-06-12, text unit)",
     "scope": "net-new in v2; no v1 baseline; v2-only single-generation provenance",
-    "questions_entered_pairing": 744,
-    "questions_in_map": 744,
-    "dropped_at_master_join": 0,
-    "unique_questions_with_candidate": 92,
-    "question_reach_pct": 12.37,
-    "no_candidate_entered_all_f3": 389,
-    "no_pair_no_shared_subtopic": 263,
+    "unit": "unique_question_text",
+    "id_inflation_note": "Original rollup collapsed on survey_q_id and overstated question-level figures (92/744). Corrected per cc_tasks/2026-06-11_ahs_rollup_text_unit_fix.md after the best-tier split denominator assert failed on WORK (89 texts vs 92 ids). Pair-level figures unaffected.",
+    "questions_entered_pairing": 736,
+    "unique_questions_with_candidate": 89,
+    "question_reach_pct": 12.09,
+    "best_tier_f1": 47,
+    "best_tier_f2": 42,
+    "no_candidate_entered_all_f3": 388,
+    "no_pair_no_shared_subtopic": 259,
+    "id_diagnostics": {"entered_pairing_ids": 744, "with_candidate_ids": 92, "texts_with_multiple_ids": 4, "note": "inflated, do not cite"},
     "pairs_total": 1626,
     "candidate_pairs": 130,
     "candidate_pairs_pct": 8.0,
@@ -132,11 +135,12 @@
     "f3_pairs": 1496,
     "f3_share_pct": 92.0,
     "topic_reach": [
-      {"topic": "Housing", "entered": 362, "with_candidate": 41, "reach_pct": 11.33},
+      {"topic": "Housing", "entered": 360, "with_candidate": 40, "reach_pct": 11.11},
       {"topic": "Social", "entered": 61, "with_candidate": 16, "reach_pct": 26.23},
-      {"topic": "Demographic", "entered": 44, "with_candidate": 29, "reach_pct": 65.91},
+      {"topic": "Demographic", "entered": 42, "with_candidate": 27, "reach_pct": 64.29},
       {"topic": "Economic", "entered": 14, "with_candidate": 6, "reach_pct": 42.86}
     ],
+    "topic_reach_note": "topic denominators are questions that produced at least one pair (sum 477 = 736 - 259), per the rollup's stated convention",
     "candidate_barrier_top": [
       {"barrier": "NHB", "count": 46},
       {"barrier": "CC.4", "count": 24},
@@ -148,7 +152,8 @@
       {"decision_method": "pick_rater_a", "count": 32},
       {"decision_method": "agreement", "count": 30},
       {"decision_method": "new_classification", "count": 25}
-    ]
+    ],
+    "candidate_decision_method_unit": "candidate pairs (sums to 130), not questions"
   },
 
   "tevv": {
@@ -172,8 +177,9 @@
       "foodaps": "86 == 59 + 27 and 67 == 59 + 8: PASS"
     },
     "ahs_bucket_partition_check": {
-      "formula": "with_candidate + all_f3 + no_shared_subtopic == entered_pairing",
-      "value": "92 + 389 + 263 == 744: PASS"
+      "formula": "with_candidate + all_f3 + no_shared_subtopic == entered_pairing (unique_question_text unit)",
+      "value": "89 + 388 + 259 == 736: PASS",
+      "retired_id_based": "92 + 389 + 263 == 744 (id unit, superseded)"
     }
   }
 }

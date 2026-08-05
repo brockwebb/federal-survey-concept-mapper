@@ -983,7 +983,7 @@ def write_md(summary: dict[str, Any], cand: pd.DataFrame, out_md: Path,
              "follows as the AHS analogue of the confidence gating that "
              "produces the CPS and FoodAPS gold set.")
     L.append("")
-    L.append("| decision_method | candidate count |")
+    L.append("| decision_method | candidate pairs |")
     L.append("|---|---|")
     for method, n in s["candidate_decision_method"].items():
         L.append(f"| {method} | {n} |")

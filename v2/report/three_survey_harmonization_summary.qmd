@@ -40,7 +40,7 @@ independent model ensembles, one generation apart, reproduce the discard
 floor at 97 percent and agree on candidacy at 88 to 91 percent. AHS results
 come from a single model generation with no independent check, and are
 leads rather than findings. A pooled percentage across all three would
-put 744 unvalidated AHS questions into the same denominator as validated
+put 736 unvalidated AHS questions into the same denominator as validated
 results and is deliberately not reported.
 
 ## The funnel, per survey
@@ -53,19 +53,24 @@ with no ACS counterpart at all.
 
 | | CPS | FoodAPS | AHS |
 |---|---:|---:|---:|
-| questions in instrument | 211 | 462 | 744 |
-| entered pairing vs ACS | 157 | 118 | 744 |
+| questions in instrument | 211 | 462 | 736 |
+| entered pairing vs ACS | 157 | 118 | 736 |
 | share of instrument entering | 74.4% | 25.5% | 100% |
-| produced no pairs (no shared subtopic) | 0 | 0 | 263 |
-| at least one F1/F2 path | 86 | 56 | 92 |
-| reach, of entered | 54.8% | 47.5% | 12.4% |
-| reach, of instrument | 40.8% | 12.1% | 12.4% |
+| produced no pairs (no shared subtopic) | 0 | 0 | 259 |
+| at least one F1/F2 path | 86 | 56 | 89 |
+| reach, of entered | 54.8% | 47.5% | 12.1% |
+| reach, of instrument | 40.8% | 12.1% | 12.1% |
 | provenance | v1, v2-confirmed | v1, v2-confirmed | v2 only, unvalidated |
+
+All question counts are unique question texts, the project's certified
+unit. The AHS instrument figure is 736 unique texts; the survey-question
+map carries 744 AHS ids, of which 4 texts hold duplicate ids, and an
+earlier id-based rollup (92 of 744 with a path) was retired as inflated.
 
 The pairing-stage accounting differs by design generation. In v1, questions
 with no shared ACS subtopic were filtered before pairing, so CPS and
 FoodAPS enter-pairing counts already exclude them. In v2, all in-map AHS
-questions entered and the 263 with no shared subtopic surface as an
+questions entered and the 259 with no shared subtopic surface as an
 explicit bucket. The instrument-denominator rows are the comparable ones.
 
 ## Tier composition of questions with a path
@@ -76,15 +81,14 @@ adjustment, otherwise F3.
 
 | best tier | CPS | FoodAPS | AHS |
 |---|---:|---:|---:|
-| F1 direct recode | 32 | 19 | pending |
-| F2 statistical adjustment | 54 | 37 | pending |
-| F3 only (no path, but compared) | 71 | 62 | 389 |
-| never compared (no shared subtopic) | 54 | 344 | 263 |
+| F1 direct recode | 32 | 19 | 47 |
+| F2 statistical adjustment | 54 | 37 | 42 |
+| F3 only (no path, but compared) | 71 | 62 | 388 |
+| never compared (no shared subtopic) | 54 | 344 | 259 |
 
-The two AHS cells marked pending require a one-line count against
-`ahs_candidates.csv` on WORK (best feasibility per unique question over the
-92 candidates); the rollup reports pair-level counts (71 F1 pairs, 59 F2
-pairs) which are a different unit and are not substitutes. The CPS and
+The AHS column is from the text-unit rollup regenerated 2026-06-12; its
+pair-level counterpart (71 F1 pairs, 59 F2 pairs) is a different unit and
+lives in the pair tables of the rollup itself. The CPS and
 FoodAPS never-compared rows are the instrument count minus entered-pairing
 count (211 minus 157; 462 minus 118).
 
@@ -95,8 +99,11 @@ unique questions compared, 142 (51.6 percent) with at least one path, of
 which 51 (18.5 percent) are best-tier F1 and 91 (33.1 percent) best-tier
 F2; 133 (48.4 percent) are F3 throughout. On the ACS side, 48 of 115 ACS
 questions (41.7 percent) serve as targets for at least one source
-question, and 15 serve both CPS and FoodAPS simultaneously. No ACS-side
-participation figure exists yet for AHS.
+question, and 15 serve both CPS and FoodAPS simultaneously. The ACS-side
+figure is under review: the verification log (2026-08-05 note) records
+that a q_id join defect undercounts it, with the true value at or above
+50 of 115; treat 48 as a floor until `best_matches` is regenerated. No
+ACS-side participation figure exists yet for AHS.
 
 ## What the three surveys say together
 
@@ -106,16 +113,16 @@ and harmonizes at the highest rate. FoodAPS is a specialized instrument
 where only a quarter of the content can even be compared, but that quarter
 harmonizes nearly as well as CPS. AHS enters in full yet reaches only 12
 percent, because its bulk is housing-structure detail far deeper than
-anything ACS asks, and 263 of its questions have no ACS territory at all.
+anything ACS asks, and 259 of its questions have no ACS territory at all.
 Where AHS does touch ACS ground, the touch is close: its demographic
-questions reach 66 percent, in line with the validated surveys. The
+questions reach 64 percent, in line with the validated surveys. The
 consistent story is that harmonization reach is a property of shared
 conceptual territory, not of the survey as a whole, and each instrument's
 unique content is exactly the enrichment it offers the others.
 
 ## Caveats
 
-AHS figures are single-generation and unvalidated; treat the 92 candidates
+AHS figures are single-generation and unvalidated; treat the 89 candidates
 as leads. The CPS and FoodAPS tier splits predate the v2 run and reflect
 v1 final classifications; the v2 confirmation showed v2 is the stricter
 rater on candidacy, so a v2-final tier split would likely be smaller. The

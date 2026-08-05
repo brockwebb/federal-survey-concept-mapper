@@ -71,11 +71,13 @@ this report.
 6. The dual-generation gold set is 62 candidate pairs (40 CPS, 22 FoodAPS):
    pairs both generations independently rated harmonizable at high
    confidence. This is the defensible bridge-variable lead list.
-7. AHS, net-new in v2: of 744 AHS questions that entered pairing against
-   ACS, 92 (12.4 percent) have at least one candidate match. 263 of the 744
-   share no subtopic with ACS at all and are genuinely AHS-specific
-   territory. The AHS candidates carry single-generation provenance and are
-   unvalidated leads, not results.
+7. AHS, net-new in v2: of 736 unique AHS questions that entered pairing
+   against ACS, 89 (12.1 percent) have at least one candidate match, 47
+   best-tier F1 and 42 best-tier F2. 259 of the 736 share no subtopic with
+   ACS at all and are genuinely AHS-specific territory. Question counts are
+   unique question texts; an id-based version of these figures (92 of 744)
+   was retired as inflated. The AHS candidates carry single-generation
+   provenance and are unvalidated leads, not results.
 
 ## Stage 1: independent rater agreement (n = 6,987 questions)
 
@@ -193,18 +195,23 @@ agreement from both generations, is robust to the question.
 
 | metric | value |
 |---|---|
-| AHS questions entering pairing vs ACS | 744 |
-| questions with at least one candidate (F1/F2) | 92 (12.4%) |
-| entered pairing, all pairs F3 | 389 |
-| no shared subtopic with ACS | 263 |
+| unique AHS questions entering pairing vs ACS | 736 |
+| questions with at least one candidate (F1/F2) | 89 (12.1%) |
+| best tier F1 / F2 | 47 / 42 |
+| entered pairing, all pairs F3 | 388 |
+| no shared subtopic with ACS | 259 |
 | candidate pairs / total pairs | 130 / 1,626 (8.0%) |
 | F3 pair share | 92.0% |
 
-Reach is heavily structured by topic. Demographic questions reach 65.9
+Question counts are unique question texts, the project's certified unit; 4
+texts carrying duplicate ids previously inflated these figures to 92 of
+744, and the id-based numbers are retired to a diagnostics block.
+
+Reach is heavily structured by topic. Demographic questions reach 64.3
 percent because AHS asks the same age, race, sex, and relationship
-questions ACS does; Housing, the bulk of the survey at 362 questions
-entering pairing, reaches 11.3 percent because AHS's housing content goes
-far deeper than ACS's. The 263 no-shared-subtopic questions are the
+questions ACS does; Housing, the bulk of the survey at 360 questions
+producing pairs, reaches 11.1 percent because AHS's housing content goes
+far deeper than ACS's. The 259 no-shared-subtopic questions are the
 cleanest finding: genuinely AHS-specific content with no ACS counterpart
 territory, which is the enrichment case for AHS in one number. Full
 subtopic tables, candidate listings, and the unvalidated-floor caveat are
