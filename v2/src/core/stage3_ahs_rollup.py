@@ -48,10 +48,20 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from collections import defaultdict
 from pathlib import Path
 from typing import Any
 
 import pandas as pd
+
+# The entered-pairing population rule (which AHS questions count as in-map, and
+# which are dropped at the master-classification join) lives in the pair
+# builder. Import it rather than re-deriving it here: a second copy of that rule
+# would drift silently. The one filter step that must be restated locally is
+# asserted against pair_summary.json in build_question_level, so drift fails
+# loudly the first time it happens.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import stage3_pair_builder as pb  # noqa: E402
 
 
 # =============================================================================
@@ -104,6 +114,21 @@ CANDIDATE_COLS = [
 ]
 
 
+# Question-level unit. Project standard: question-level counts collapse on
+# unique question TEXT, never on id. Dual classification assigns multiple ids to
+# one text, so every id-based question count is inflated. This was certified and
+# corrected for v1 CPS/FoodAPS in 2026-02 and recurred here in the v2 AHS
+# rollup, caught by the ahs_best_tier_split.py denominator assert (89 texts vs
+# 92 ids). See docs/number_verification_log.md.
+QUESTION_UNIT = "unique_question_text"
+
+# AHS survey key in config/stage3.yaml -> source_surveys.
+AHS_CONFIG_KEY = "ahs"
+
+# Feasibility ordering for best-tier-per-question. Lower rank wins.
+FEAS_RANK = {"F1": 0, "F2": 1, "F3": 2}
+
+
 def die(msg: str) -> None:
     print(f"FATAL: {msg}", file=sys.stderr)
     sys.exit(1)
@@ -112,6 +137,34 @@ def die(msg: str) -> None:
 # =============================================================================
 # HELPERS
 # =============================================================================
+
+def _pl(n: int, singular: str, plural: str) -> str:
+    """Agreement helper so generated prose does not read '1 questions are'."""
+    return singular if n == 1 else plural
+
+
+def _norm_q(v: Any) -> str:
+    """Grouping key for question text: strip only.
+
+    Deliberately NOT casefolded and NOT internally re-spaced. Case and
+    punctuation are meaningful in question wording, and the v1 dedup rule this
+    matches is an exact full-text comparison. Texts that differ only by internal
+    whitespace are reported as a diagnostic, never merged.
+    """
+    if v is None or (isinstance(v, float) and pd.isna(v)):
+        return ""
+    return str(v).strip()
+
+
+def _internal_ws_collisions(texts: set[str]) -> list[list[str]]:
+    """Groups of distinct texts that would become identical if internal
+    whitespace were collapsed. Reported so a near-duplicate is visible, but they
+    stay separate questions: merging them is a judgment call for the author, not
+    for this script."""
+    buckets: dict[str, list[str]] = defaultdict(list)
+    for t in texts:
+        buckets[" ".join(t.split())].append(t)
+    return [sorted(v) for v in buckets.values() if len(v) > 1]
 
 def _norm_feas(v: Any) -> str:
     """Upper-cased, stripped feasibility token; '' for null/NaN."""
@@ -310,7 +363,9 @@ def load_pairs_ahs(pairs_dir: Path) -> pd.DataFrame:
         die(f"pairs_ahs.csv not found: {path.resolve()}. Pass --pairs-dir if it "
             f"lives elsewhere; this script never guesses alternative paths.")
     df = pd.read_csv(path, encoding="utf-8")
-    needed = ["survey_q_id", "shared_topic", "shared_subtopic"]
+    # survey_text is required: the question unit is the text, so the
+    # producing-pairs population has to be collapsed on it, not on the id.
+    needed = ["survey_q_id", "survey_text", "shared_topic", "shared_subtopic"]
     missing = [c for c in needed if c not in df.columns]
     if missing:
         die(f"pairs_ahs.csv missing column(s) {missing}; have {list(df.columns)}")
@@ -318,162 +373,328 @@ def load_pairs_ahs(pairs_dir: Path) -> pd.DataFrame:
     return df
 
 
-def _assert_single_subtopic(df: pd.DataFrame, label: str) -> None:
-    """Each AHS question carries a single final_subtopic (and therefore a single
-    topic), so a survey_q_id must map to exactly one (shared_topic,
-    shared_subtopic). If that invariant breaks, the reach numerators would
-    double-count and the per-cell sums would no longer reconcile to the
-    question total, so we fail loudly with the offenders rather than silently
-    over-count."""
-    g = df.groupby("survey_q_id")
-    multi_sub = g["shared_subtopic"].nunique()
-    multi_top = g["shared_topic"].nunique()
-    bad = sorted(set(multi_sub[multi_sub > 1].index)
-                 | set(multi_top[multi_top > 1].index))
-    if bad:
-        die(f"{label}: {len(bad)} survey_q_id(s) span >1 topic/subtopic "
-            f"(e.g. {bad[:10]}); the single-subtopic-per-question invariant is "
-            f"broken and the reach partition would over-count.")
+def load_entered_population(pairs_dir: Path) -> tuple[pd.DataFrame, int]:
+    """The AHS questions that entered pairing, with their text.
+
+    pairs_ahs.csv only carries questions that PRODUCED at least one pair, so it
+    cannot supply text for the questions with no shared ACS subtopic. Those are a
+    reported bucket, and on the text unit they have to be collapsed too, so their
+    text is needed. It comes from the same place the pair builder got it: the
+    questions map for the in-map population and the master dataset for the
+    classification join.
+
+    Returns (population indexed by id with question/final_topic/final_subtopic,
+    in_map id count). The id-level size of the returned frame is asserted
+    against pair_summary.json by the caller.
+    """
+    cfg = pb.load_config()
+    qmap = pb.load_questions_map(cfg)
+    master = pb.load_master(cfg)
+    match_on = cfg["match_on"]
+
+    surveys = cfg.get("source_surveys") or {}
+    if AHS_CONFIG_KEY not in surveys:
+        die(f"config/stage3.yaml has no source_surveys.{AHS_CONFIG_KEY} block; "
+            f"have {sorted(surveys)}")
+    s_cols = pb.survey_columns(surveys[AHS_CONFIG_KEY])
+    s_mask = pb.presence_mask(qmap, s_cols, f"{AHS_CONFIG_KEY} source")
+    in_map_ids = qmap.index[s_mask].tolist()
+
+    # Same three filter steps as the pair builder's attach(): a master row must
+    # exist with a non-null match key, the key must be resolvable, and the
+    # question text must be real. Restated here because attach() is a closure;
+    # the caller asserts the resulting count against pair_summary.json so any
+    # divergence from the pair builder surfaces immediately.
+    pop = master.reindex(in_map_ids).dropna(subset=[match_on])
+    pop = pop[~pop[match_on].isin(pb.UNRESOLVABLE_TOPICS)]
+    pop = pop[pop["question"].apply(pb._normalize_text).notna()]
+    return pop, len(in_map_ids)
 
 
-def _reach_by(group_col: str, pairs_ahs: pd.DataFrame,
-              cand: pd.DataFrame, sub_to_topic: dict[str, str] | None
-              ) -> list[dict[str, Any]]:
-    """Three-column reach cut on the UNIQUE-QUESTION unit:
-        entered        = distinct survey_q_id in pairs_ahs within the cell
-        with_candidate = distinct survey_q_id in the F1/F2 set within the cell
+def _assign_text_cells(pairs_ahs: pd.DataFrame,
+                       ) -> tuple[dict[str, tuple[str, str]], list[dict[str, Any]]]:
+    """Assign each unique question text exactly one (topic, subtopic) cell.
+
+    A text carrying more than one id can span more than one subtopic, because
+    each id was classified independently. Counting such a text in every cell it
+    touches would make the reach numerators sum to more than the question total.
+    Each text therefore gets one cell: the subtopic covering the most of its
+    pairs, ties broken by lexicographic order so the result is deterministic and
+    does not depend on row order. Every spanning text is reported rather than
+    silently resolved.
+    """
+    per_text: dict[str, dict[tuple[str, str], int]] = defaultdict(
+        lambda: defaultdict(int))
+    for text, topic, sub in zip(pairs_ahs["_qtext"],
+                                pairs_ahs["shared_topic"].astype(str),
+                                pairs_ahs["shared_subtopic"].astype(str)):
+        per_text[text][(topic, sub)] += 1
+
+    assignment: dict[str, tuple[str, str]] = {}
+    spanning: list[dict[str, Any]] = []
+    for text, cells in per_text.items():
+        # -count first so the largest cell wins; then (topic, sub) ascending.
+        best = sorted(cells.items(), key=lambda kv: (-kv[1], kv[0]))[0][0]
+        assignment[text] = best
+        if len(cells) > 1:
+            spanning.append({
+                "question_text": text if len(text) <= 200 else text[:200] + "...",
+                "cells": [{"shared_topic": t, "shared_subtopic": s,
+                           "pairs": n}
+                          for (t, s), n in sorted(cells.items(),
+                                                  key=lambda kv: (-kv[1], kv[0]))],
+                "assigned_topic": best[0],
+                "assigned_subtopic": best[1],
+            })
+    return assignment, spanning
+
+
+def _reach_rows(level: str, assignment: dict[str, tuple[str, str]],
+                producing_texts: set[str], cand_texts: set[str],
+                sub_to_topic: dict[str, str] | None) -> list[dict[str, Any]]:
+    """Reach cut on the unique-question-TEXT unit.
+
+        entered        = unique texts assigned to the cell that produced pairs
+        with_candidate = those with at least one F1/F2 pair
         reach_pct      = with_candidate / entered * 100
-    Denominator from pairs_ahs, numerator from the candidate set: same
-    population both sides (candidates are a subset of entered-pairing pairs).
-    Sorted by `entered` descending."""
-    den = pairs_ahs.groupby(group_col)["survey_q_id"].nunique()
-    num = cand.groupby(group_col)["survey_q_id"].nunique()
+
+    `level` is "shared_topic" or "shared_subtopic". Because assignment gives
+    each text exactly one cell, the numerators sum to len(cand_texts) and the
+    denominators to len(producing_texts); the caller asserts both.
+    """
+    idx = 0 if level == "shared_topic" else 1
+    den: dict[str, int] = defaultdict(int)
+    num: dict[str, int] = defaultdict(int)
+    for text in producing_texts:
+        cell = assignment.get(text)
+        if cell is None:
+            continue
+        key = cell[idx]
+        den[key] += 1
+        if text in cand_texts:
+            num[key] += 1
+
     rows: list[dict[str, Any]] = []
     for key, a in den.items():
-        a = int(a)
-        b = int(num.get(key, 0))
-        row: dict[str, Any] = {group_col: str(key)}
+        b = num.get(key, 0)
+        row: dict[str, Any] = {level: key}
         if sub_to_topic is not None:
-            row["shared_topic"] = sub_to_topic.get(str(key), "")
+            row["shared_topic"] = sub_to_topic.get(key, "")
         row["entered"] = a
         row["with_candidate"] = b
         row["reach_pct"] = round(b / a * 100, 2) if a else 0.0
         rows.append(row)
-    rows.sort(key=lambda r: r["entered"], reverse=True)
+    rows.sort(key=lambda r: (-r["entered"], r[level]))
     return rows
 
 
 def build_question_level(df: pd.DataFrame, b: dict[str, Any],
                          pairs_ahs: pd.DataFrame,
-                         ahs_block: dict[str, Any]) -> dict[str, Any]:
-    """Collapse the F1/F2 pair set to unique AHS questions and reconcile against
-    the Definition-B population from pair_summary.json. All denominators come
-    from pair_summary.json; the numerator collapses the candidate pairs onto
-    survey_q_id. The two no-candidate buckets are reported separately and the
-    three-way partition of the entered-pairing population is asserted."""
-    cand = df[b["cand_mask"]].copy()
-    cand["survey_q_id"] = cand["survey_q_id"].astype(int)
+                         ahs_block: dict[str, Any],
+                         population: pd.DataFrame,
+                         in_map_ids: int) -> dict[str, Any]:
+    """Question-level rollup on the unique-question-TEXT unit.
 
-    # Denominators -- read straight from the pair builder's summary.
+    Every headline count here collapses duplicate question text to one entry.
+    The id-based counts this function used to report are retained under
+    `id_diagnostics`, labeled, because they are what the earlier published AHS
+    numbers were and the magnitude of the correction has to stay visible.
+
+    The three buckets are derived by set difference on texts, which gives each
+    text its best outcome automatically: has-candidate beats all-F3 beats
+    no-pair. A text whose ids land in different buckets therefore counts once,
+    in the best one.
+    """
+    feas = b["feas"]
+    df = df.copy()
+    df["_qtext"] = df["survey_text"].map(_norm_q)
+    pairs_ahs = pairs_ahs.copy()
+    pairs_ahs["_qtext"] = pairs_ahs["survey_text"].map(_norm_q)
+
+    blank = int((df["_qtext"] == "").sum()) + int((pairs_ahs["_qtext"] == "").sum())
+    if blank:
+        die(f"{blank} row(s) across the classifications and pairs files have "
+            f"empty survey_text; the question unit is the text, so a blank "
+            f"cannot be grouped.")
+
+    # ---- id-level population, and the drift check against the pair builder ----
     in_map = int(ahs_block["source_questions_in_map"])
-    entered = int(ahs_block["source_after_master_join"])
+    entered_ids_summary = int(ahs_block["source_after_master_join"])
     shared_subtopics = int(ahs_block["shared_subtopics"])
 
-    # Entered-pairing questions that actually produced >=1 pair (shared a
-    # subtopic with ACS). The rest of `entered` shared no subtopic -> 0 pairs.
-    producing_ids = set(pairs_ahs["survey_q_id"].tolist())
-    producing = len(producing_ids)
+    if in_map_ids != in_map:
+        die(f"in-map id count recomputed from the questions map ({in_map_ids}) "
+            f"disagrees with pair_summary.json source_questions_in_map "
+            f"({in_map}); the pairs dir and the config point at different runs.")
+    if len(population) != entered_ids_summary:
+        die(f"entered-pairing id count recomputed from the master "
+            f"({len(population)}) disagrees with pair_summary.json "
+            f"source_after_master_join ({entered_ids_summary}). The population "
+            f"filter in load_entered_population has drifted from the pair "
+            f"builder's attach(), or the two outputs are from different runs. "
+            f"Refusing to report a denominator that cannot be reconciled.")
 
-    # Numerator: unique AHS questions with >=1 F1/F2 candidate pair.
-    cand_ids = set(cand["survey_q_id"].tolist())
-    with_candidate = len(cand_ids)
+    # ---- collapse each population to unique text ----
+    entered_texts = {t for t in population["question"].map(_norm_q) if t}
+    if len(entered_texts) > len(population):
+        die("more unique texts than ids in the entered population; impossible.")
 
-    # Integrity: candidates come from classified pairs, so every candidate
-    # survey_q_id must be among the questions that produced pairs.
-    stray = sorted(cand_ids - producing_ids)
+    producing_texts = set(pairs_ahs["_qtext"])
+    cand_texts = set(df.loc[b["cand_mask"], "_qtext"])
+
+    stray = sorted(producing_texts - entered_texts)
     if stray:
-        die(f"{len(stray)} candidate survey_q_id(s) are absent from pairs_ahs.csv "
-            f"(e.g. {stray[:10]}); candidate and pair populations disagree.")
-    if producing > entered:
-        die(f"questions producing pairs ({producing}) exceeds entered-pairing "
-            f"population ({entered}) from pair_summary.json; populations "
-            f"disagree -- pairs_dir and ahs_dir may be from different runs.")
-    if with_candidate > producing:
-        die(f"unique questions with candidate ({with_candidate}) exceeds "
-            f"questions producing pairs ({producing}); impossible.")
-    # Verification check 3: the question count cannot exceed the pair count.
+        preview = [s if len(s) <= 80 else s[:80] + "..." for s in stray[:5]]
+        die(f"{len(stray)} question text(s) in pairs_ahs.csv are absent from the "
+            f"entered-pairing population (e.g. {preview}); the pairs file and "
+            f"the master/questions-map population disagree.")
+    stray_cand = sorted(cand_texts - producing_texts)
+    if stray_cand:
+        die(f"{len(stray_cand)} candidate question text(s) are absent from "
+            f"pairs_ahs.csv; candidate and pair populations disagree.")
+
+    entered = len(entered_texts)
+    producing = len(producing_texts)
+    with_candidate = len(cand_texts)
+    all_f3_texts = producing_texts - cand_texts
+    no_pair_texts = entered_texts - producing_texts
+    no_candidate_entered_all_f3 = len(all_f3_texts)
+    no_pair_no_shared_subtopic = len(no_pair_texts)
+    dropped_at_master_join = in_map - entered_ids_summary
+
     if with_candidate > b["n_cand"]:
         die(f"unique questions with candidate ({with_candidate}) exceeds the "
             f"candidate PAIR count ({b['n_cand']}); a question collapses to one, "
             f"so this must be <=.")
 
-    # Two distinct no-candidate buckets (do not lump):
-    #   bucket 1 -- entered pairing AND produced pairs, but none are F1/F2.
-    #   bucket 2 -- entered pairing but produced zero pairs (no shared subtopic
-    #               with ACS): the genuinely AHS-unique territory.
-    no_candidate_entered_all_f3 = producing - with_candidate
-    no_pair_no_shared_subtopic = entered - producing
-    dropped_at_master_join = in_map - entered
+    # ---- best tier per unique text (task item 2) ----
+    # Ranked over ALL classified pairs of the text, so F1 beats F2 beats F3.
+    best_rank: dict[str, int] = {}
+    for text, f in zip(df["_qtext"], feas):
+        r = FEAS_RANK.get(f)
+        if r is None:
+            continue  # bucket() already proved every row is F1/F2/F3
+        if r < best_rank.get(text, 99):
+            best_rank[text] = r
+    best_tier_f1 = sum(1 for r in best_rank.values() if r == 0)
+    best_tier_f2 = sum(1 for r in best_rank.values() if r == 1)
+    best_tier_f3 = sum(1 for r in best_rank.values() if r == 2)
+    if best_tier_f1 + best_tier_f2 != with_candidate:
+        die(f"best-tier split does not reconcile: F1({best_tier_f1}) + "
+            f"F2({best_tier_f2}) = {best_tier_f1 + best_tier_f2} != "
+            f"with_candidate({with_candidate}).")
+    if best_tier_f3 != no_candidate_entered_all_f3:
+        die(f"best-tier F3 count ({best_tier_f3}) != all-F3 bucket "
+            f"({no_candidate_entered_all_f3}); the two derivations of the same "
+            f"set disagree.")
 
-    # Partition assertions -- fail loud if the population does not reconcile.
+    # ---- partition assert on the text unit (task item 4) ----
     part = with_candidate + no_candidate_entered_all_f3 + no_pair_no_shared_subtopic
     if part != entered:
-        die(f"question buckets do not partition entered-pairing population: "
-            f"with_candidate({with_candidate}) + all_f3({no_candidate_entered_all_f3}) "
-            f"+ no_pair({no_pair_no_shared_subtopic}) = {part} != {entered}.")
-    if entered + dropped_at_master_join != in_map:
-        die(f"in-map accounting does not reconcile: entered({entered}) + "
-            f"dropped_at_master_join({dropped_at_master_join}) != in_map({in_map}).")
+        die(f"question buckets do not partition the entered-pairing population "
+            f"on the text unit: with_candidate({with_candidate}) + "
+            f"all_f3({no_candidate_entered_all_f3}) + "
+            f"no_pair({no_pair_no_shared_subtopic}) = {part} != entered({entered}).")
+    if entered_ids_summary + dropped_at_master_join != in_map:
+        die(f"in-map accounting does not reconcile: entered ids"
+            f"({entered_ids_summary}) + dropped_at_master_join"
+            f"({dropped_at_master_join}) != in_map({in_map}).")
 
-    # Reach cuts on the unique-question unit. Both sides obey the
-    # one-subtopic-per-question invariant, so each question lands in exactly one
-    # topic row and one subtopic row, and the numerators sum to with_candidate.
-    _assert_single_subtopic(pairs_ahs, "pairs_ahs.csv")
-    _assert_single_subtopic(cand, "candidate set")
-    sub_to_topic = (
-        pairs_ahs.drop_duplicates("shared_subtopic")
-        .set_index(pairs_ahs.drop_duplicates("shared_subtopic")["shared_subtopic"]
-                   .astype(str))["shared_topic"].astype(str).to_dict()
-    )
-    topic_reach = _reach_by("shared_topic", pairs_ahs, cand, None)
-    subtopic_reach = _reach_by("shared_subtopic", pairs_ahs, cand, sub_to_topic)
-
-    # Verification check 4: numerators sum to the unique-question total.
-    tsum = sum(r["with_candidate"] for r in topic_reach)
-    ssum = sum(r["with_candidate"] for r in subtopic_reach)
-    if tsum != with_candidate:
-        die(f"topic_reach numerators sum to {tsum}, expected {with_candidate}.")
-    if ssum != with_candidate:
-        die(f"subtopic_reach numerators sum to {ssum}, expected {with_candidate}.")
-    # Denominators sum to the producing-pairs total (each producing question in
-    # exactly one topic/subtopic).
-    if sum(r["entered"] for r in topic_reach) != producing:
-        die("topic_reach denominators do not sum to questions-producing-pairs.")
-    if sum(r["entered"] for r in subtopic_reach) != producing:
-        die("subtopic_reach denominators do not sum to questions-producing-pairs.")
+    # ---- reach cuts, text unit ----
+    assignment, spanning = _assign_text_cells(pairs_ahs)
+    sub_to_topic = {sub: top for (top, sub) in assignment.values()}
+    topic_reach = _reach_rows("shared_topic", assignment, producing_texts,
+                              cand_texts, None)
+    subtopic_reach = _reach_rows("shared_subtopic", assignment, producing_texts,
+                                 cand_texts, sub_to_topic)
+    for label, rows in (("topic", topic_reach), ("subtopic", subtopic_reach)):
+        nsum = sum(r["with_candidate"] for r in rows)
+        dsum = sum(r["entered"] for r in rows)
+        if nsum != with_candidate:
+            die(f"{label}_reach numerators sum to {nsum}, expected "
+                f"{with_candidate}.")
+        if dsum != producing:
+            die(f"{label}_reach denominators sum to {dsum}, expected "
+                f"{producing}.")
 
     reach_pct = round(with_candidate / entered * 100, 2) if entered else 0.0
+
+    # ---- id diagnostics (task item 5) ----
+    text_to_ids: dict[str, set[int]] = defaultdict(set)
+    for text, qid in zip(pairs_ahs["_qtext"], pairs_ahs["survey_q_id"]):
+        text_to_ids[text].add(int(qid))
+    multi = {t: sorted(v) for t, v in text_to_ids.items() if len(v) > 1}
+    cand_text_to_ids = {t: sorted(text_to_ids.get(t, set())) for t in cand_texts}
+    cand_multi = {t: v for t, v in cand_text_to_ids.items() if len(v) > 1}
+
+    id_diagnostics = {
+        "note": "Id-based counts are the PREVIOUSLY PUBLISHED values and are "
+                "inflated: dual classification gives one question text several "
+                "survey_q_id values. They are retained only so the magnitude of "
+                "the correction stays visible. Do not cite them.",
+        "unit": "survey_q_id",
+        "entered_pairing_ids": entered_ids_summary,
+        "producing_pairs_ids": len(set(pairs_ahs["survey_q_id"])),
+        "with_candidate_ids": len(set(df.loc[b["cand_mask"], "survey_q_id"])),
+        "no_candidate_entered_all_f3_ids":
+            len(set(pairs_ahs["survey_q_id"]))
+            - len(set(df.loc[b["cand_mask"], "survey_q_id"])),
+        "no_pair_no_shared_subtopic_ids":
+            entered_ids_summary - len(set(pairs_ahs["survey_q_id"])),
+        "texts_with_multiple_ids": len(multi),
+        "ids_per_duplicated_text": {
+            (t if len(t) <= 200 else t[:200] + "..."): v
+            for t, v in sorted(multi.items(), key=lambda kv: kv[0])
+        },
+        "candidate_texts_with_multiple_ids": len(cand_multi),
+        "candidate_ids_per_duplicated_text": {
+            (t if len(t) <= 200 else t[:200] + "..."): v
+            for t, v in sorted(cand_multi.items(), key=lambda kv: kv[0])
+        },
+        "texts_spanning_multiple_cells": len(spanning),
+        "spanning_cell_detail": spanning,
+        "internal_whitespace_near_duplicates": [
+            [(t if len(t) <= 200 else t[:200] + "...") for t in group]
+            for group in _internal_ws_collisions(entered_texts)
+        ],
+    }
+
     return {
+        "unit": QUESTION_UNIT,
+        "unit_rule":
+            "Question-level counts collapse duplicate question text to one "
+            "entry (text.strip(), exact match, no casefolding). Id-based counts "
+            "are diagnostics only; see id_diagnostics.",
         "population_definition":
             "Definition B: AHS column non-empty in PublicSurveyQuestionsMap, "
-            "sourced from pair_summary.json (the population the pairing used).",
-        "denominator_source": str(pairs_dir_for_msg()),
+            "filtered by the same master-classification join the pair builder "
+            "applies, then collapsed to unique question text.",
+        "denominator_source":
+            f"questions map + master via stage3_pair_builder; id-level size "
+            f"reconciled against {pairs_dir_for_msg() / PAIR_SUMMARY_NAME}",
         "ahs_questions_in_map": in_map,
         "ahs_questions_entered_pairing": entered,
         "dropped_at_master_join": dropped_at_master_join,
         "ahs_questions_producing_pairs": producing,
         "unique_ahs_questions_with_candidate": with_candidate,
         "reach_pct": reach_pct,
+        "best_tier_f1": best_tier_f1,
+        "best_tier_f2": best_tier_f2,
+        "best_tier_f3": best_tier_f3,
         "no_candidate_entered_all_f3": no_candidate_entered_all_f3,
         "no_pair_no_shared_subtopic": no_pair_no_shared_subtopic,
         "shared_subtopics": shared_subtopics,
         "partition_ok": True,
         "subtopic_reach_convention":
-            "Each AHS question carries a single final_subtopic, so it is counted "
-            "in exactly one topic row and one subtopic row; numerators sum to "
-            "unique_ahs_questions_with_candidate.",
+            "Each unique question text is assigned exactly one (topic, "
+            "subtopic): the cell covering the most of its pairs, ties broken "
+            "lexicographically. Numerators sum to "
+            "unique_ahs_questions_with_candidate, denominators to "
+            "ahs_questions_producing_pairs. Texts that span more than one cell "
+            "are listed in id_diagnostics.spanning_cell_detail.",
         "topic_reach": topic_reach,
         "subtopic_reach": subtopic_reach,
+        "id_diagnostics": id_diagnostics,
     }
 
 
@@ -543,15 +764,40 @@ def write_md(summary: dict[str, Any], cand: pd.DataFrame, out_md: Path,
     # (0) HEADLINE -- question-level, the deliverable unit, stated first.
     L.append("## Harmonization reach")
     L.append("")
-    L.append(f"Of the {q['ahs_questions_entered_pairing']} AHS questions that "
+    L.append(f"Every question count in this document is a count of *unique "
+             f"question text* ({q['unit']}), not of question ids. Of the "
+             f"{q['ahs_questions_entered_pairing']} unique AHS questions that "
              f"entered harmonization pairing, "
              f"*{q['unique_ahs_questions_with_candidate']}* have at least one "
              f"candidate match into ACS, a feasibility F1 or F2 pair, which is a "
              f"reach of *{q['reach_pct']} percent*. The population that entered "
              f"pairing is the AHS questions present in the survey-question map "
-             f"that survived the master-classification join, read from the pair "
-             f"builder's `pair_summary.json` so the numerator and denominator "
-             f"describe the same Definition-B population.")
+             f"that survived the master-classification join, collapsed to unique "
+             f"text; its id-level size is reconciled against the pair builder's "
+             f"`pair_summary.json` so the numerator and denominator describe the "
+             f"same Definition-B population.")
+    L.append("")
+    idd = q["id_diagnostics"]
+    L.append(f"The earlier version of this rollup counted ids, not texts, and "
+             f"therefore overstated every question-level figure: "
+             f"{idd['with_candidate_ids']} rather than "
+             f"{q['unique_ahs_questions_with_candidate']} questions with a "
+             f"candidate, on an entered-pairing denominator of "
+             f"{idd['entered_pairing_ids']} rather than "
+             f"{q['ahs_questions_entered_pairing']}. "
+             f"{idd['texts_with_multiple_ids']} question "
+             f"{_pl(idd['texts_with_multiple_ids'], 'text carries', 'texts carry')} "
+             f"more than one id. The id counts are kept under `id_diagnostics` in "
+             f"the summary JSON so the size of the correction stays visible, and "
+             f"they are not to be cited.")
+    L.append("")
+    L.append(f"Of the {q['unique_ahs_questions_with_candidate']} questions with "
+             f"a path, *{q['best_tier_f1']}* "
+             f"{_pl(q['best_tier_f1'], 'is', 'are')} best-tier F1, a direct "
+             f"recode, and *{q['best_tier_f2']}* "
+             f"{_pl(q['best_tier_f2'], 'is', 'are')} best-tier F2, needing a "
+             f"statistical adjustment. Best tier is the best outcome across all "
+             f"of a question's pairs.")
     L.append("")
     L.append(f"That reach is the question-level result and is the unit to cite, "
              f"while the pair-level view is secondary, with "
@@ -580,15 +826,32 @@ def write_md(summary: dict[str, Any], cand: pd.DataFrame, out_md: Path,
     L.append(f"| entered pairing (total) | {q['ahs_questions_entered_pairing']} "
              f"| the three rows above partition this population |")
     L.append("")
+    L.append("Unique question texts throughout. A text whose ids fall in "
+             "different buckets is counted once, in its best bucket: having a "
+             "candidate beats all-F3, which beats no-pair.")
+    L.append("")
+    L.append("## Best tier per question with a path")
+    L.append("")
+    L.append("| best tier | questions |")
+    L.append("|---|---|")
+    L.append(f"| F1 direct recode | {q['best_tier_f1']} |")
+    L.append(f"| F2 statistical adjustment | {q['best_tier_f2']} |")
+    L.append(f"| F3 only (compared, no path) | {q['best_tier_f3']} |")
+    L.append("")
     L.append(f"The no-pair bucket is the actionable finding, since those "
              f"{q['no_pair_no_shared_subtopic']} questions sit in subtopics ACS "
              f"does not enter and are therefore AHS-unique content rather than a "
-             f"harmonization failure, while a further "
-             f"{q['dropped_at_master_join']} AHS questions present in the map were "
-             f"dropped before pairing at the master-classification join "
-             f"(Unresolvable or empty text), leaving "
-             f"{q['ahs_questions_entered_pairing']} of "
-             f"{q['ahs_questions_in_map']} in-map questions in the analysis.")
+             f"harmonization failure.")
+    L.append("")
+    L.append(f"The master-classification join is accounted at the id level, "
+             f"because that is the unit the questions map and the master use: "
+             f"{q['dropped_at_master_join']} of the {q['ahs_questions_in_map']} "
+             f"in-map AHS question ids "
+             f"{_pl(q['dropped_at_master_join'], 'was', 'were')} dropped before "
+             f"pairing (Unresolvable or empty text), leaving "
+             f"{idd['entered_pairing_ids']} ids, which "
+             f"collapse to the {q['ahs_questions_entered_pairing']} unique "
+             f"question texts this report counts.")
     L.append("")
 
     # (0c) Reach by topic and subtopic, on the unique-question unit.
@@ -800,11 +1063,14 @@ def main() -> int:
     b = bucket(df)
     summary = build_summary(df, b, input_path)
 
-    # Question-level rollup: denominators from the pair builder's summary, the
-    # numerator collapsed onto survey_q_id. This is the deliverable unit.
+    # Question-level rollup on the unique-question-text unit. The population
+    # comes from the questions map + master via the pair builder's own helpers,
+    # and its id-level size is reconciled against pair_summary.json.
     ahs_block = load_pair_summary_ahs(pairs_dir)
     pairs_ahs = load_pairs_ahs(pairs_dir)
-    summary["question_level"] = build_question_level(df, b, pairs_ahs, ahs_block)
+    population, in_map_ids = load_entered_population(pairs_dir)
+    summary["question_level"] = build_question_level(
+        df, b, pairs_ahs, ahs_block, population, in_map_ids)
 
     # write the source-of-truth JSON first, then read it back so the CSV and MD
     # are generated from the serialized numbers, never from a parallel path.
@@ -830,13 +1096,22 @@ def main() -> int:
     print("HEADLINE")
     print("=" * 70)
     # Question-level statement FIRST -- the deliverable unit.
-    print(f"  QUESTIONS: of {q['ahs_questions_entered_pairing']} AHS questions "
-          f"that entered pairing, {q['unique_ahs_questions_with_candidate']} have "
+    idd = q["id_diagnostics"]
+    print(f"  UNIT: {q['unit']} (question text, not id)")
+    print(f"  QUESTIONS: of {q['ahs_questions_entered_pairing']} unique AHS "
+          f"questions that entered pairing, "
+          f"{q['unique_ahs_questions_with_candidate']} have "
           f">=1 candidate (F1/F2) match into ACS ({q['reach_pct']}%).")
+    print(f"  best tier: F1 {q['best_tier_f1']} / F2 {q['best_tier_f2']} "
+          f"(F3 only: {q['best_tier_f3']})")
     print(f"  no candidate, entered + all F3 (bucket 1): "
           f"{q['no_candidate_entered_all_f3']}")
     print(f"  no pair, no shared subtopic (bucket 2, AHS-unique): "
           f"{q['no_pair_no_shared_subtopic']}")
+    print(f"  ID DIAGNOSTIC (inflated, do not cite): entered "
+          f"{idd['entered_pairing_ids']}, with candidate "
+          f"{idd['with_candidate_ids']}, texts with >1 id "
+          f"{idd['texts_with_multiple_ids']}")
     print(f"  PAIRS (intermediate unit): {tiers['candidate_count']} candidate "
           f"pairs of {summary['pairs_total']} total ({tiers['candidate_pct']}% "
           f"of pairs)")
