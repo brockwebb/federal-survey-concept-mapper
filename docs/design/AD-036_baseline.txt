@@ -1,0 +1,7 @@
+# AD-036-R4 baseline for federal-survey-concept-mapper: every gated design note on federal-survey-concept-mapper main when the prior-art gate reached this
+# repository (SQ-010 Part 0, 2026-10-11, main at 1a12347ca1b29470f1c471fc3f0f8c42b4a91b22; read from `git ls-files`,
+# so an untracked note is not baseline). These are grandfathered, not re-litigated: the gate
+# (the commit hook, `seldon verify`, `seldon cc register`) applies to a note NOT listed here. Addenda and errata are
+# exempt by glob and not listed. Never extended: a note added after this list needs a passing
+# `seldon prior-art verify`.
+# No gated design note was on main when the gate reached this repository.
